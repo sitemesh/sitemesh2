@@ -58,10 +58,9 @@
         </java>
     </target>
 
-    <target name="test" depends="tests-build" description="Run unit tests on deployed web-app">
+    <target name="test" depends="tests-build" description="Run acceptance tests on deployed web-app">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
         <mkdir dir="${test-results}"/>
-        <echo message="Running in-container unit tests..."/>
         <junit fork="no" haltonfailure="no">
             <classpath>
                 <fileset dir="lib"/>
