@@ -26,6 +26,7 @@ class MockTokenHandler implements TokenHandler {
     }
 
     public boolean shouldProcessTag(String name) {
+        Assert.assertNotNull("Name should not be null", name);
         return true;
     }
 

@@ -172,7 +172,7 @@ class Parser extends Lexer implements Text, Tag {
                         parsedText(start, position() - start);
                         return;
                     } else if (token == 0) {
-                        reportError("End of file while reading tag", line(), column());
+                        parsedText(start, position() - start); // eof
                         return;
                     }
                 }
@@ -180,6 +180,8 @@ class Parser extends Lexer implements Text, Tag {
 
         } else if (token == Parser.GT) {
             // Token ">" - an illegal <> or <  > tag. Ignore
+        } else if (token == 0) {
+            parsedText(start, position() - start); // eof
         } else {
             reportError("Could not recognise tag", line(), column());
         }
@@ -201,8 +203,11 @@ class Parser extends Lexer implements Text, Tag {
                 break; // no more attributes here
             } else if (token == Parser.WORD) {
                 parseAttribute(); // start of an attribute
+            } else if (token == 0) {
+                parsedText(start, position() - start); // eof
+                return;
             } else {
-                reportError("XXY", line(), column());
+                reportError("Illegal tag", line(), column());
                 break;
             }
         }
@@ -227,6 +232,8 @@ class Parser extends Lexer implements Text, Tag {
         if (token == Parser.GT) {
             // Token ">" - YAY! end of tag.. process it!
             parsedTag(type, name, start, position() - start + 1);
+        } else if (token == 0) {
+            parsedText(start, position() - start); // eof
         } else {
             reportError("Expected end of tag", line(), column());
             parsedTag(type, name, start, position() - start + 1);
@@ -276,7 +283,6 @@ class Parser extends Lexer implements Text, Tag {
                     }
                     if (next == Parser.WORD || next == Parser.EQUALS || next == Parser.SLASH) {
                         attributeBuffer.append(text());
-                        // TODO: how to handle <a x=c/> ?
                     } else {
                         pushBack(next);
                         break;
@@ -286,6 +292,8 @@ class Parser extends Lexer implements Text, Tag {
             } else if (token == Parser.SLASH || token == Parser.GT) {
                 // no more attributes
                 pushBack(token);
+            } else if (token == 0) {
+                return;
             } else {
                 reportError("Illegal attribute value", line(), column());
             }
@@ -293,6 +301,8 @@ class Parser extends Lexer implements Text, Tag {
             // it was a value-less HTML style attribute
             parsedAttribute(attributeName, null, false);
             pushBack(token);
+        } else if (token == 0) {
+            return;
         } else {
             reportError("Illegal attribute name", line(), column());
         }
@@ -323,7 +333,6 @@ class Parser extends Lexer implements Text, Tag {
     }
 
     protected void reportError(String message, int line, int column) {
-//        System.out.println(message);
         handler.warning(message, line, column);
     }
 

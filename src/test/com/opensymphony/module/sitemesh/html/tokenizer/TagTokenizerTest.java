@@ -200,13 +200,23 @@ public class TagTokenizerTest extends TestCase {
         handler.verify();
     }
 
-    /* TODO
     public void testTreatsUnterminatedTagAtEofAsText() {
         // expectations
         handler.expectText("hello");
         handler.expectText("<world");
         // execute
-        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world");
+        TagTokenizer tokenizer = new TagTokenizer("hello<world");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
+    public void testTreatsLtAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<");
+        // execute
+        TagTokenizer tokenizer = new TagTokenizer("hello<");
         tokenizer.start(handler);
         // verify
         handler.verify();
@@ -217,18 +227,31 @@ public class TagTokenizerTest extends TestCase {
         handler.expectText("hello");
         handler.expectText("<world x");
         // execute
-        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x");
+        TagTokenizer tokenizer = new TagTokenizer("hello<world x");
         tokenizer.start(handler);
         // verify
         handler.verify();
     }
 
+    /* TODO
     public void testTreatsUnterminatedQuotedAttributeValueAtEofAsText() {
         // expectations
         handler.expectText("hello");
         handler.expectText("<world x=\"fff");
         // execute
-        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x=\"fff");
+        TagTokenizer tokenizer = new TagTokenizer("hello<world x=\"fff");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+    */
+
+    public void testTreatsUnterminatedAttributeAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world x=");
+        // execute
+        TagTokenizer tokenizer = new TagTokenizer("hello<world x=");
         tokenizer.start(handler);
         // verify
         handler.verify();
@@ -239,12 +262,22 @@ public class TagTokenizerTest extends TestCase {
         handler.expectText("hello");
         handler.expectText("<world x=fff");
         // execute
-        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x=fff");
+        TagTokenizer tokenizer = new TagTokenizer("hello<world x=fff");
         tokenizer.start(handler);
         // verify
         handler.verify();
     }
-    */
+
+    public void testTreatsUnterminatedClosingTagAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world /");
+        // execute
+        TagTokenizer tokenizer = new TagTokenizer("hello<world /");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
 
     public void testIgnoresEvilMalformedPairOfAngleBrackets() {
         // expectations
@@ -268,8 +301,9 @@ public class TagTokenizerTest extends TestCase {
         handler.expectText("<bad>");
         handler.expectTag(Tag.CLOSE, "good");
         handler.expectText("<![bad]-->");
+        handler.expectText("<unfinished");
         // execute
-        TagTokenizer tokenizer = new TagTokenizer("<good><bad></good><![bad]-->");
+        TagTokenizer tokenizer = new TagTokenizer("<good><bad></good><![bad]--><unfinished");
         tokenizer.start(handler);
         // verify
         handler.verify();
