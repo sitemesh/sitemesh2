@@ -171,6 +171,9 @@ class Parser extends Lexer implements Text, Tag {
                         pushBack(yylex()); // take and replace the next token, so the position is correct  
                         parsedText(start, position() - start);
                         return;
+                    } else if (token == 0) {
+                        reportError("End of file while reading tag", line(), column());
+                        return;
                     }
                 }
             }
@@ -200,6 +203,7 @@ class Parser extends Lexer implements Text, Tag {
                 parseAttribute(); // start of an attribute
             } else {
                 reportError("XXY", line(), column());
+                break;
             }
         }
 
