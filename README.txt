@@ -63,6 +63,21 @@ Currently known containers that support this and SiteMesh was tested with:
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+ * ORION USERS ONLY. For performance reasons, Orion does not auto-load tab library descriptors
+   from Jars by default. To get passed this you will also have to copy sitemesh-decorator.tld
+   and sitemesh-page.tld to WEB-INF/lib and add the following to WEB-INF/web.xml:
+
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
+    </taglib>
+
+
 --------------------------
 -- Getting started      --
 --------------------------
