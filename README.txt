@@ -23,7 +23,7 @@ The latest version of SiteMesh can be obtained from:
 
     http://www.opensymphony.com/sitemesh/
         or
-    http://sourceforge.net/projects/opensymphony/
+    https://sitemesh.dev.java.net/
 
 --------------------------
 -- Requirements         --
