@@ -14,13 +14,11 @@
 			<blockquote><code>&lt;decorators&gt;<br>&lt;/decorators&gt;</code></blockquote></li>
 
 			<li>(Optional) Create the file <b><code>[web-app]/WEB-INF/sitemesh.xml</code></b> that contains the following:
-			
+
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;sitemesh&gt;
     &lt;page-parsers&gt;
-        &lt;parser default=&quot;true&quot; 
-            class=&quot;com.opensymphony.module.sitemesh.parser.DefaultPageParser&quot; /&gt;
-        &lt;parser content-type=&quot;text/html&quot; 
+        &lt;parser content-type=&quot;text/html&quot;
             class=&quot;com.opensymphony.module.sitemesh.parser.FastPageParser&quot; /&gt;
         &lt;parser content-type=&quot;text/html;charset=ISO-8859-1&quot;
             class=&quot;com.opensymphony.module.sitemesh.parser.FastPageParser&quot; /&gt;
