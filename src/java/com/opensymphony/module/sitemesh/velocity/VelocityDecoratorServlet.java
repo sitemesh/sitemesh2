@@ -29,12 +29,13 @@ import com.opensymphony.module.sitemesh.RequestConstants;
 import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Decorator;
+import com.opensymphony.module.sitemesh.util.OutputConverter;
 
 /**
  * Servlet that allows Velocity templates to be used as decorators.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class VelocityDecoratorServlet extends VelocityServlet {
     protected Properties loadConfiguration(ServletConfig config) throws IOException, FileNotFoundException {
@@ -66,12 +67,12 @@ public class VelocityDecoratorServlet extends VelocityServlet {
             context.put("title", htmlPage.getTitle());
             {
                 StringWriter buffer = new StringWriter();
-                htmlPage.writeBody(buffer);
+                htmlPage.writeBody(OutputConverter.getWriter(buffer));
                 context.put("body", buffer.toString());
             }
             {
                 StringWriter buffer = new StringWriter();
-                htmlPage.writeHead(buffer);
+                htmlPage.writeHead(OutputConverter.getWriter(buffer));
                 context.put("head", buffer.toString());
             }
             context.put("page", htmlPage);
