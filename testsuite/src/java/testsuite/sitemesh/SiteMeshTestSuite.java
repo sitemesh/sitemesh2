@@ -5,10 +5,14 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import testsuite.config.ConfigReader;
 import testsuite.config.Server;
+import testsuite.config.ConfigException;
 import testsuite.tester.Report;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 /**
  * Test suite for all web-app test cases.
@@ -17,38 +21,58 @@ import java.util.Iterator;
  */
 public class SiteMeshTestSuite {
 
-    private static Server currentServer;
+    private static URL currentBaseUrl;
 
-    public static Test suite() throws Exception {
-        final Report report = new Report(new File(System.getProperty("testsuite.results", "results.html")));
-        TestSuite result = new TestSuite() {
-            public void run(TestResult result) {
-                result.addListener(report);
-                report.startSuite();
-                super.run(result);
-                result.removeListener(report);
-                report.endSuite();
-            }
-        };
-        File configFile = new File(System.getProperty("testsuite.config", "tests.xml"));
-        ConfigReader config = new ConfigReader(configFile);
-        for ( Iterator servers = config.getServers().iterator(); servers.hasNext(); ) {
-            final Server server = (Server)servers.next();
-            final TestSuite serverSuite = new TestSuite((server.getName() + " " + server.getVersion()).replaceAll("\\.", "_")) {
+    public static class OnAllServers {
+        public static Test suite() throws Exception {
+            final Report report = new Report(new File(System.getProperty("testsuite.results", "results.html")));
+            TestSuite result = new TestSuite() {
                 public void run(TestResult result) {
-                    currentServer = server;
-                    report.startServer(server);
+                    result.addListener(report);
+                    report.startSuite();
                     super.run(result);
-                    report.endServer();
+                    result.removeListener(report);
+                    report.endSuite();
                 }
             };
-            buildSuite(serverSuite);
-            result.addTest(serverSuite);
+            File configFile = new File(System.getProperty("testsuite.config", "tests.xml"));
+            ConfigReader config = new ConfigReader(configFile);
+            for ( Iterator servers = config.getServers().iterator(); servers.hasNext(); ) {
+                final Server server = (Server)servers.next();
+                final TestSuite serverSuite = new TestSuite((server.getName() + " " + server.getVersion()).replaceAll("\\.", "_")) {
+                    public void run(TestResult result) {
+                        currentBaseUrl = server.getBaseURL();
+                        report.startServer(server);
+                        super.run(result);
+                        report.endServer();
+                    }
+                };
+                addTests(serverSuite);
+                result.addTest(serverSuite);
+            }
+            return result;
         }
-        return result;
     }
 
-    private static void buildSuite(TestSuite serverSuite) {
+    public static class OnEmbeddedServer {
+        public static Test suite() throws Exception {
+            final int port = Integer.parseInt(System.getProperty("testsuite.port", "9102"));
+            final WebServer server = new WebServer(port, "dist/webapp");
+            final URL baseUrl = new URL("http", "localhost", port, "");
+            final TestSuite result = new TestSuite() {
+                public void run(TestResult result) {
+                    currentBaseUrl = baseUrl;
+                    server.start();
+                    super.run(result);
+                    server.stop();
+                }
+            };
+            addTests(result);
+            return result;
+        }
+    }
+
+    private static void addTests(TestSuite serverSuite) {
         serverSuite.addTestSuite(BasicPageTest.class);
         serverSuite.addTestSuite(WelcomePageTest.class);
         serverSuite.addTestSuite(ContentLengthTest.class);
@@ -60,8 +84,7 @@ public class SiteMeshTestSuite {
         serverSuite.addTestSuite(FreemarkerDecoratorTest.class);
     }
 
-    public static Server currentServer() {
-        return currentServer;
+    public static URL currentBaseURL() {
+        return currentBaseUrl;
     }
-
 }

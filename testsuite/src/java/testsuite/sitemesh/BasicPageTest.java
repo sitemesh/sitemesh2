@@ -21,7 +21,7 @@ public class BasicPageTest extends WebTest {
 	 * Check plain page is working and contains correct title.
 	 */
 	public void testStandardJsp() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/page.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/basic/page.jsp" );
 		assertEquals( 200, rs.getResponseCode() );
 		assertEquals( "SiteMesh plain page", rs.getTitle() );
 	}
@@ -31,7 +31,7 @@ public class BasicPageTest extends WebTest {
 	 */
 	public void testErrorMessage() throws Exception {
 		try {
-			WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/error-500.jsp" );
+			WebResponse rs = wc.getResponse( baseUrl + "/basic/error-500.jsp" );
 			fail( "Expected 500" );
 		}
 		catch ( HttpInternalErrorException e ) {
@@ -43,7 +43,7 @@ public class BasicPageTest extends WebTest {
 	 */
 	public void testNotFound() throws Exception {
 		try {
-			WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/dfddgdfvdf.jsp" );
+			WebResponse rs = wc.getResponse( baseUrl + "/basic/dfddgdfvdf.jsp" );
 			fail( "Expected 404" );
 		}
 		catch ( HttpNotFoundException e ) {
@@ -51,7 +51,7 @@ public class BasicPageTest extends WebTest {
 	}
 
     public void testPlainTextPage() throws Exception {
-        WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/text.jsp" );
+        WebResponse rs = wc.getResponse( baseUrl + "/basic/text.jsp" );
         assertEquals("This is a plain page.", rs.getText().trim());
         assertEquals("text/plain", rs.getContentType());
 

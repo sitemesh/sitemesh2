@@ -6,11 +6,11 @@ import testsuite.tester.WebTest;
 
 /**
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class VelocityDecoratorTest  extends WebTest {
     public void testVelocityDecoratedPage() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/velocity/velocity.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/velocity/velocity.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple Velocity Page ::]", rs.getTitle() );
 		assertEquals( "Hello Velocity world", doc.getElementWithId( "p1" ).getText().toString() );

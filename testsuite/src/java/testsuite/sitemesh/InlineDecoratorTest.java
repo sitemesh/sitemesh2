@@ -18,7 +18,7 @@ public class InlineDecoratorTest extends WebTest
 
     public void testInlineContentDecoratedInDecorator() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page1.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page1.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline1} content 1", rs.getTitle());
         assertEquals("page 1 content", doc.getElementWithId("bod").getText("p").toString());
@@ -29,7 +29,7 @@ public class InlineDecoratorTest extends WebTest
 
     public void testJspIncludedContentedDecoratedInDecorator() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page2.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page2.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline2} content 2", rs.getTitle());
         assertEquals("page 2 content", doc.getElementWithId("bod").getText("p").toString());
@@ -40,7 +40,7 @@ public class InlineDecoratorTest extends WebTest
 
     public void testSitemeshIncludedContentDecoratedInDecorator() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page3.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page3.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline3} content 3", rs.getTitle());
         assertEquals("page 3 content", doc.getElementWithId("bod").getText("p").toString());
@@ -55,7 +55,7 @@ public class InlineDecoratorTest extends WebTest
      */
     public void testInlineContentedDecoratedInContent() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page5.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page5.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline5} content 5", rs.getTitle());
         assertEquals("page 5 content", doc.getElementWithId("bod").getText("p").toString());
@@ -70,7 +70,7 @@ public class InlineDecoratorTest extends WebTest
      */
     public void testInlineDecoratorWithInternationalizedCharacters() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page6.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page6.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline6} content 6", rs.getTitle());
         assertEquals("page 6 content", doc.getElementWithId("bod").getText("p").toString());
@@ -81,7 +81,7 @@ public class InlineDecoratorTest extends WebTest
 
     public void testIncludedContentFromOutputStreamAndWriterOnJspPage() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page7.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page7.jsp");
         Document doc = getDocument(rs);
         assertEquals("{inline7} content 7 jsp", rs.getTitle());
         assertEquals("Page 7 jsp content", doc.getElementWithId("bod").getText("p").toString());
@@ -96,7 +96,7 @@ public class InlineDecoratorTest extends WebTest
      */
     public void testIncludedContentFromOutputStreamAndWriterOnStaticPage() throws Exception
     {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page7.html");
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page7.html");
         Document doc = getDocument(rs);
         assertEquals("{inline7} content 7 static", rs.getTitle());
         assertEquals("Page 7 static content", doc.getElementWithId("bod").getText("p").toString());

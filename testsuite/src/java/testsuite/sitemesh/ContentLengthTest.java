@@ -10,12 +10,12 @@ import org.xml.sax.SAXException;
 public class ContentLengthTest extends WebTest {
 
     public void testCompleteContentFromUndecoratedPageUsingWriter() throws Exception {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/outputservlet?out=writer");
+        WebResponse rs = wc.getResponse(baseUrl + "/outputservlet?out=writer");
         assertTrue("Document is not complete: " + rs.getText(), rs.getText().trim().endsWith("</html>"));
     }
 
     public void testCompleteContentFromUndecoratedPageUsingStream() throws Exception {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/outputservlet?out=stream");
+        WebResponse rs = wc.getResponse(baseUrl + "/outputservlet?out=stream");
         assertTrue("Document is not complete: " + rs.getText(), rs.getText().trim().endsWith("</html>"));
     }
 
@@ -28,7 +28,7 @@ public class ContentLengthTest extends WebTest {
     }
 
      private void _testContentLength(String url) throws IOException, SAXException {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + url);
+        WebResponse rs = wc.getResponse(baseUrl + url);
         final String contentLengthHeader = rs.getHeaderField("Content-length");
         if (contentLengthHeader != null) {
             final String contentLength = String.valueOf(rs.getText().getBytes().length);

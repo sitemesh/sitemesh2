@@ -6,11 +6,11 @@ import testsuite.tester.WebTest;
 
 /**
  * @author <a href="mailto:richard.hallier@freesbee.fr">Richard Hallier</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FreemarkerDecoratorTest  extends WebTest {
     public void testFreemarkerDecoratedPage() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/freemarker/freemarker.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/freemarker/freemarker.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple Freemarker Page ::]", rs.getTitle() );
 		assertEquals( "Hello Freemarker World", doc.getElementWithId( "p1" ).getText().toString() );

@@ -20,7 +20,7 @@ public class WelcomePageTest extends WebTest {
 	}
 
   private void checkPage( String path ) throws Exception {
-    WebResponse rs = wc.getResponse( server.getBaseURL() + path );
+    WebResponse rs = wc.getResponse( baseUrl + path );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Welcome Page ::]", rs.getTitle() );
 		assertEquals( "Welcome to the page", doc.getElementWithId( "p1" ).getText().toString() );

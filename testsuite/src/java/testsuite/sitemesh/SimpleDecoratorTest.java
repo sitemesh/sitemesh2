@@ -19,7 +19,7 @@ import electric.xml.ParseException;
 public class SimpleDecoratorTest extends WebTest {
 
 	public void testCompleteHtmlPage() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page1.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/simple/page1.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple page1 ::]", rs.getTitle() );
 		assertEquals( "Hello world 1", doc.getElementWithId( "p1" ).getText().toString() );
@@ -28,7 +28,7 @@ public class SimpleDecoratorTest extends WebTest {
 	}
 
 	public void testHtmlWithTitleAndBodyContentsOnly() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page2.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/simple/page2.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple page2 ::]", rs.getTitle() );
 		assertEquals( "Hello world 2", doc.getElementWithId( "p2" ).getText().toString() );
@@ -37,7 +37,7 @@ public class SimpleDecoratorTest extends WebTest {
 	}
 
 	public void testHtmlWithBodyContentsOnly() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page3.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/simple/page3.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
 		assertEquals( "Hello world 3", doc.getElementWithId( "mainbody" ).getText().toString() );
@@ -50,7 +50,7 @@ public class SimpleDecoratorTest extends WebTest {
      * @throws Exception
      */
     public void testDocumentWithInternationalizedCharactersUsingInlineEncodingDeclaration() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page4.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/simple/page4.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
 		assertEquals( "\u0126\u0118\u0139\u0139\u0150 world 4", doc.getElementWithId( "mainbody" ).getText().toString() );
@@ -66,7 +66,7 @@ public class SimpleDecoratorTest extends WebTest {
      * @throws Exception
      */
     public void testDocumentWithInternationalizedCharactersUsingEncodingFilter() throws Exception {
-		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page5.jsp" );
+		WebResponse rs = wc.getResponse( baseUrl + "/simple/page5.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
 		assertEquals( "\u0126\u0118\u0139\u0139\u0150 world 5", doc.getElementWithId( "mainbody" ).getText().toString() );
@@ -78,13 +78,13 @@ public class SimpleDecoratorTest extends WebTest {
      * Test the exclude patterns in sitemesh.xml
      */
     public void testExcludePattern() throws Exception {
-        WebResponse rs = wc.getResponse(server.getBaseURL() + "/simple/exclude.jsp");
+        WebResponse rs = wc.getResponse(baseUrl + "/simple/exclude.jsp");
         Document doc = getDocument(rs);
         assertEquals("Undecorated Page", rs.getTitle());
         assertNull(doc.getElementWithId("mainbody"));
         assertNull(doc.getElementWithId("footer"));
 
-        rs = wc.getResponse(server.getBaseURL() + "/simple/exclude/page1.jsp");
+        rs = wc.getResponse(baseUrl + "/simple/exclude/page1.jsp");
         doc = getDocument(rs);
         assertEquals("Undecorated Page", rs.getTitle());
         assertNull(doc.getElementWithId("mainbody"));
@@ -101,7 +101,7 @@ public class SimpleDecoratorTest extends WebTest {
      * set the content type for '*.html' files.
      */
     public void testStaticPage() throws Exception {
-        WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/static.html" );
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/static.html" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple page ::]", rs.getTitle() );
 		assertEquals( "Hello world", doc.getElementWithId( "p" ).getText().toString() );

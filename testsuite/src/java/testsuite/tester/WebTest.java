@@ -2,6 +2,7 @@ package testsuite.tester;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
 
 import org.xml.sax.SAXException;
 
@@ -25,9 +26,9 @@ import electric.xml.ParseException;
 public class WebTest extends TestCase {
 
 	/**
-	 * The Server that is currently being tested.
+	 * The base URL of the server currently being tested against
 	 */
-	protected Server server;
+	protected URL baseUrl;
 
 	/**
 	 * The WebConversation in use for the session.
@@ -36,7 +37,7 @@ public class WebTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        server = SiteMeshTestSuite.currentServer();
+        baseUrl = SiteMeshTestSuite.currentBaseURL();
         wc = new WebConversation();
     }
 

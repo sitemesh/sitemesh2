@@ -13,32 +13,29 @@
     </target>
 
     <target name="webapp-build" depends="sitemesh-build,tests-build" description="Build web-app .war file">
-        <mkdir dir="tmp/webapp/WEB-INF/classes"/>
-        <javac srcdir="src/webapp/WEB-INF/src" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" />
-        <javac srcdir="src/java" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
+        <mkdir dir="dist/webapp/WEB-INF/classes"/>
+        <javac srcdir="src/webapp/WEB-INF/src" destdir="dist/webapp/WEB-INF/classes" classpathref="classpath" />
+        <javac srcdir="src/java" destdir="dist/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
+        
+        <copy todir="dist/webapp">
+            <fileset dir="src/webapp"/>
+        </copy>
 
-        <mkdir dir="dist"/>
-        <war destfile="dist/sitemesh-testsuite.war" webxml="src/webapp/WEB-INF/web.xml">
-            <lib dir="../dist">
+        <copy todir="dist/webapp/WEB-INF/lib">
+            <fileset dir="../dist">
                 <include name="sitemesh-*.jar"/>
-            </lib>
-            <lib dir="../lib">
+            </fileset>
+            <fileset dir="../lib">
                 <include name="commons-*.jar"/>
                 <include name="velocity-*.jar"/>
                 <include name="freemarker.jar"/>
-            </lib>
-	    <lib dir="../src/etc/tld/">
-	        <include name="*.tld"/>
-	    </lib>
-            <classes dir="tmp/webapp/WEB-INF/classes"/>
-            <webinf dir="src/webapp/WEB-INF/">
-                <include name="*.xml"/>
-                <exclude name="web.xml"/>
-            </webinf>
-            <fileset dir="src/webapp">
-                <exclude name="WEB-INF/**"/>
             </fileset>
-        </war>
+            <fileset dir="../src/etc/tld/">
+                <include name="*.tld"/>
+            </fileset>
+        </copy>
+
+        <jar jarfile="dist/sitemesh-testsuite.war" basedir="dist/webapp"/>
     </target>
 
     <target name="dist" depends="webapp-build"/>
@@ -73,7 +70,7 @@
             </classpath>
             <formatter type="plain" usefile="false"/>
             <formatter type="xml"/>
-            <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite"/>
+            <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite$OnAllServers"/>
         </junit>
     </target>
 

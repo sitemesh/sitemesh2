@@ -32,7 +32,7 @@ public class RedirectTest extends WebTest {
   }
 
   private void checkPage(String path) throws Exception {
-    WebResponse rs = wc.getResponse( server.getBaseURL() + path );
+    WebResponse rs = wc.getResponse( baseUrl + path );
     Document doc = getDocument( rs );
     assertEquals( "[:: Another page ::]", rs.getTitle() );
     assertEquals( "A different page", doc.getElementWithId( "p1" ).getText().toString() );
