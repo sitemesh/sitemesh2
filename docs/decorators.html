@@ -71,7 +71,7 @@
 	Basically, all you need to know is what <a href="tags.html">decorator tags</a> you can use.
 	The <a href="tags.html#decorator:title">title</a>, <a href="tags.html#decorator:head">head</a> and <a href="tags.html#decorator:body">body</a> tags are most used.<br>
 
-	Here is an example of a decorator (save it as main.jsp):
+	Here is an example of a decorator (save it as /decorators/main.jsp):
 <p>
 <code>
 1:	&lt;%--<br>
@@ -128,9 +128,9 @@
 
 	<p>Now open <code>WEB-INF/decorators.xml</code> with your favorite editor
 	and let SiteMesh know there is a decorator (with a mapping):</p>
-	
+
 <pre style="border: 1px solid #999999; padding: 5px">
-&lt;decorators&gt;
+&lt;decorators defaultdir="/decorators"&gt;
     &lt;decorator name="main" page="<b>main.jsp</b>"&gt;
         &nbsp;&nbsp;&lt;pattern&gt;<b>/*</b>&lt;/pattern&gt;
     &lt;/decorator&gt;
@@ -140,10 +140,10 @@
 	<p>Now deploy the web application, go to the welcome page, and the main decorator will be applied.</p>
 
 	<h3>More examples</h3>
-	
-	<p>More examples are included with the SiteMesh distribution, under the 
+
+	<p>More examples are included with the SiteMesh distribution, under the
 	<a href="https://sitemesh.dev.java.net/source/browse/sitemesh/src/example-webapp/">src/example-webapp</a> directory.
-	If the examples don't give you enough to go on, take a look at sitemesh in action, download the petsoar-app at
+	If the examples don't give you enough to go on, take a look at SiteMesh in action, download the petsoar-app at
 	<a href="http://www.wiley.com/legacy/compbooks/walnes/">http://www.wiley.com/legacy/compbooks/walnes/</a>.</p>
 </body>
 </html>
