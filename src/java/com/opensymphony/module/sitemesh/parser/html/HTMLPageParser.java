@@ -2,12 +2,16 @@ package com.opensymphony.module.sitemesh.parser.html;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
-import com.opensymphony.module.sitemesh.parser.AbstractHTMLPage;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.io.StringWriter;
 
+/**
+ * Builds an HTMLPage object from an HTML document.
+ *
+ * This is backed by the HTMLTagTokenizer which tokenizes an HTML page into a stream of tags and text.
+ * 
+ * @author Joe Walnes
+ */
 public class HTMLPageParser implements PageParser {
 
     public Page parse(char[] data) throws IOException {

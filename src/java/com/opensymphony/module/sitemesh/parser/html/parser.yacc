@@ -19,7 +19,7 @@ node:
     LT WORD attributes GT                                         { tokenizer.parsedTag(Tag.OPEN,  $2, $1, $4 + 1); } |
     LT SLASH WORD attributes GT                                   { tokenizer.parsedTag(Tag.CLOSE, $3, $1, $5 + 1); } |
     LT WORD attributes SLASH GT                                   { tokenizer.parsedTag(Tag.EMPTY, $2, $1, $5 + 1); } |
-    LT whitespace GT                                              { tokenizer.parsedText($1, $3 + 1);          } |
+    LT whitespace GT                                              { } |
     TEXT                                                          { tokenizer.parsedText($1);           } ;
 
 attributes:

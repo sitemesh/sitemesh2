@@ -160,12 +160,9 @@ public class HTMLTagTokenizerTest extends TestCase {
         handler.verify();
     }
 
-    public void testTreatsPairOfAngleBracketsAsText() {
+    public void testIgnoresEvilMalformedPairOfAngleBrackets() {
         // expectations
-        handler.expectText("<>");
-        handler.expectText("< >");
         handler.expectTag(Tag.OPEN, "good");
-        handler.expectText("<>");
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<>< ><good><>");
         tokenizer.start(handler);

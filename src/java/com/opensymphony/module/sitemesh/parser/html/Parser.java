@@ -446,7 +446,7 @@ case 5:
 break;
 case 6:
 //#line 22 "parser.yacc"
-{ tokenizer.parsedText(val_peek(2).ival, val_peek(0).ival + 1);          }
+{ }
 break;
 case 7:
 //#line 23 "parser.yacc"
