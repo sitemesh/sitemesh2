@@ -27,6 +27,9 @@
                 <include name="velocity-*.jar"/>
                 <include name="freemarker.jar"/>
             </lib>
+	    <lib dir="../src/etc/tld/">
+	        <include name="*.tld"/>
+	    </lib>
             <classes dir="tmp/webapp/WEB-INF/classes"/>
             <webinf dir="src/webapp/WEB-INF/">
                 <include name="*.xml"/>

@@ -102,4 +102,14 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
+    </taglib>
+
 </web-app>
