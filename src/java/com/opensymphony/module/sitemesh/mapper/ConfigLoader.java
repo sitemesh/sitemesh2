@@ -51,7 +51,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
@@ -176,10 +176,10 @@ public final class ConfigLoader {
 	                    if (role != null) {
 	                        // concatenate name and role to allow more
 	                        // than one decorator per role
-	                        pathMapper.put(name + role, pattern.trim());
+	                        pathMapper.put(name + role, pattern);
 	                    }
 	                    else {
-	                        pathMapper.put(name, pattern.trim());
+	                        pathMapper.put(name, pattern);
 	                    }
 	                }
                 }
