@@ -175,9 +175,9 @@ Please report bugs here: http://jira.opensymphony.com
 -- Changes from 2.0.1   --
 --------------------------
 
-- Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation).
-- The example and blank use Packaged Tag Libraries (specifying the URI of the taglib).
-- Documentation updates.
+- Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation and the example webapp).
+- The example webapp and blank webapp use Packaged Tag Libraries (specifying the URI of the taglib).
+- Hardened ConfigLoader to ignore whitespace inserted by XMLBuddy.
 
 JIRA issues fixed:
     - SIM-73 PageFilter is not final and you can now subclass the newly protected applyDecorator and parsePage methods
