@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -79,20 +79,13 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
      * be passed to the {@link com.opensymphony.module.sitemesh.PageParser}.
      */
     public void setContentType(String type) {
-        int index = -1;
-
         if (type != null) {
-            if ((index = type.lastIndexOf("charset=")) != -1) {
-                encoding = type.substring(index + 8).trim();
-            }
+            int offset = type.lastIndexOf("charset=");
+            if (offset != -1)
+               encoding = extractContentTypeValue(type, offset + 8);
+            contentType = extractContentTypeValue(type, 0);
 
-            if ((index = type.indexOf(';')) > 0) {
-                contentType = type.substring(0, index);
-            } else {
-                contentType = type;
-            }
-
-            // this is the content type + charset. eg: text/html;charset=utf-8
+            // this is the content type + charset. eg: text/html;charset=UTF-8
             super.setContentType(type);
         }
 
@@ -102,6 +95,38 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
             getBufferStream().discardBuffer();
             parseablePage = false;
         }
+    }
+
+    private String extractContentTypeValue(String type, int startIndex) {
+        if (startIndex < 0)
+            return null;
+
+        // Skip over any leading spaces
+        while (startIndex < type.length() && type.charAt(startIndex) == ' ')
+            startIndex++;
+
+        if (startIndex >= type.length())
+            return null;
+
+        int endIndex = startIndex;
+
+        if (type.charAt(startIndex) == '"') {
+            startIndex++;
+            endIndex = type.indexOf('"', startIndex);
+            if (endIndex == -1)
+                endIndex = type.length();
+        } else {
+            // Scan through until we hit either  the end of the string or a
+            // special character (as defined in RFC-2045). Note that we ignore '/'
+            // since we want to capture it as part of the value.
+            char ch;
+            while (endIndex < type.length() && (ch = type.charAt(endIndex)) != ' ' && ch != ';'
+                  && ch != '(' && ch != ')' && ch != '[' && ch != ']' && ch != '<' && ch != '>'
+                  && ch != ':' && ch != ',' && ch != '=' && ch != '?' && ch != '@' && ch!= '"'
+                  && ch !='\\')
+               endIndex++;
+        }
+        return type.substring(startIndex, endIndex);
     }
 
     /** Prevent content-length being set if page is parseable. */
