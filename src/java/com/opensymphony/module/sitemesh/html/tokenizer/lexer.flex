@@ -35,15 +35,17 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
 
 /* Initial state of lexer. */
 <YYINITIAL> {
-    "<!--" ~"-->"       { return Parser.TEXT; }
+    "<!--" [^\[] ~"-->" { return Parser.TEXT; } /* All comments unless they start with <!--[ */
     "<?" ~"?>"          { return Parser.TEXT; }
-    "<!" ~">"           { return Parser.TEXT; }
+    "<!" [^\[\-] ~">"     { return Parser.TEXT; }
     "<![CDATA[" ~"]]>"  { return Parser.TEXT; }
     "<xmp" ~"</xmp" ~">" { return Parser.TEXT; }
     "<xml" ~"</xml" ~">" { return Parser.TEXT; }
     "<script" ~"</script" ~">" { return Parser.TEXT; }
     [^<]+               { return Parser.TEXT; }
-    "<"                 { yybegin(ELEMENT); return Parser.LT; } /* Switch state to ELEMENT */
+    "<"                 { yybegin(ELEMENT); return Parser.LT; }
+    "<!--["             { yybegin(ELEMENT); return Parser.LT_OPEN_MAGIC_COMMENT; }
+    "<!["               { yybegin(ELEMENT); return Parser.LT_CLOSE_MAGIC_COMMENT; }
 }
 
 /* State of lexer when inside an element/tag. */
@@ -53,9 +55,12 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
     "="                 { return Parser.EQUALS; }
     "\"" ~"\""          { return Parser.QUOTED; }
     "'" ~"'"            { return Parser.QUOTED; }
-    [^>/=\"\'\n\r \t\b\012][^>/=\n\r \t\b\012]* { return Parser.WORD; }
-    ">"                 { yybegin(YYINITIAL); return Parser.GT; } /* Switch state back to YYINITIAL */
+    [^>\]/=\"\'\n\r \t\b\012][^>\]/=\n\r \t\b\012]* { return Parser.WORD; }
+    ">"                 { yybegin(YYINITIAL); return Parser.GT; }
+    "]>"                { yybegin(YYINITIAL); return Parser.GT; }
+    "]-->"              { yybegin(YYINITIAL); return Parser.GT; }
 }
 
 /* Fallback rule - if nothing else matches. */
 .|\n                    { reportError("Illegal character <"+ yytext() +">", line(), column()); return Parser.TEXT; }
+/* <!--[if gte mso 9]><stuff><![endif]--> */

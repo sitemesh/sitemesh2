@@ -36,6 +36,8 @@ class Parser extends Lexer implements Text, Tag {
     public final static short QUOTED=263;
     public final static short LT=264;
     public final static short GT=265;
+    public final static short LT_OPEN_MAGIC_COMMENT=266;
+    public final static short LT_CLOSE_MAGIC_COMMENT=267;
 
     private final char[] input;
 
@@ -108,7 +110,13 @@ class Parser extends Lexer implements Text, Tag {
                     parsedText(position(), length());
                 } else if (token == Parser.LT) {
                     // Token "<" - start of tag
-                    parseTag();
+                    parseTag(Tag.OPEN);
+                } else if (token == Parser.LT_OPEN_MAGIC_COMMENT) {
+                    // Token "<!--[" - start of open magic comment
+                    parseTag(Tag.OPEN_MAGIC_COMMENT);
+                } else if (token == Parser.LT_CLOSE_MAGIC_COMMENT) {
+                    // Token "<![" - start of close magic comment
+                    parseTag(Tag.CLOSE_MAGIC_COMMENT);
                 } else {
                     reportError("Unexpected token from lexer, was expecting TEXT or LT", line(), column());
                 }
@@ -118,7 +126,7 @@ class Parser extends Lexer implements Text, Tag {
         }
     }
 
-    private void parseTag() throws IOException {
+    private void parseTag(int type) throws IOException {
         // Start parsing a TAG
 
         int start = position();
@@ -130,7 +138,6 @@ class Parser extends Lexer implements Text, Tag {
             token = pushbackToken;
             pushbackToken = -1;
         }
-        int type = Tag.OPEN;
         String name;
 
         if (token == Parser.SLASH) {
@@ -161,8 +168,9 @@ class Parser extends Lexer implements Text, Tag {
                         pushbackToken = -1;
                     }
                     if (token == Parser.GT) {
-                        parsedText(start, position() - start + 1);
-                        break;
+                        pushBack(yylex()); // take and replace the next token, so the position is correct  
+                        parsedText(start, position() - start);
+                        return;
                     }
                 }
             }

@@ -15,6 +15,8 @@ public interface Tag {
     int OPEN = 1;
     int CLOSE = 2;
     int EMPTY = 3;
+    int OPEN_MAGIC_COMMENT = 4;
+    int CLOSE_MAGIC_COMMENT = 5;
 
     /**
      * Get the complete tag in its original form, preserving original formatting.

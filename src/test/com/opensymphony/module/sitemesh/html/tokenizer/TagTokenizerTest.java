@@ -267,12 +267,25 @@ public class TagTokenizerTest extends TestCase {
         handler.expectTag(Tag.OPEN, "good");
         handler.expectText("<bad>");
         handler.expectTag(Tag.CLOSE, "good");
-        handler.expectText("</bad>");
+        handler.expectText("<![bad]-->");
         // execute
-        TagTokenizer tokenizer = new TagTokenizer("<good><bad></good></bad>");
+        TagTokenizer tokenizer = new TagTokenizer("<good><bad></good><![bad]-->");
         tokenizer.start(handler);
         // verify
         handler.verify();
+    }
+
+    public void testParsesMagicCommentBlocks() {
+        // expectations
+        handler.expectTag(Tag.OPEN_MAGIC_COMMENT, "if", new String[] {"gte", null, "mso", null, "9", null});
+        handler.expectTag(Tag.OPEN, "stuff");
+        handler.expectTag(Tag.CLOSE_MAGIC_COMMENT, "endif");
+        // execute
+        TagTokenizer tokenizer = new TagTokenizer("<!--[if gte mso 9]><stuff><![endif]-->");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+
     }
 }
 
