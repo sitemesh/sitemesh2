@@ -25,19 +25,18 @@ public class TagReplaceRule extends BasicRule {
 
     public void process(Tag tag) {
         // TODO: copy attributes as well
-        CharArray buffer = context.currentBuffer();
         switch (tag.getType()) {
             case Tag.OPEN:
-                buffer.append("<" + newTagName + ">");
+                currentBuffer().append("<" + newTagName + ">");
                 break;
             case Tag.CLOSE:
-                buffer.append("</" + newTagName + ">");
+                currentBuffer().append("</" + newTagName + ">");
                 break;
             case Tag.EMPTY:
-                buffer.append("<" + newTagName + "/>");
+                currentBuffer().append("<" + newTagName + "/>");
                 break;
             default:
-                tag.writeTo(buffer); // leave as is
+                tag.writeTo(currentBuffer()); // leave as is
         }
     }
 }

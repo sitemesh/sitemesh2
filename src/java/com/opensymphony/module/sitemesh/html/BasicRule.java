@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh.html;
 
+import com.opensymphony.module.sitemesh.html.util.CharArray;
+
 public abstract class BasicRule implements TagRule {
 
     private final String[] acceptableTagNames;
@@ -35,5 +37,9 @@ public abstract class BasicRule implements TagRule {
     }
 
     public abstract void process(Tag tag);
+
+    protected CharArray currentBuffer() {
+        return context.currentBuffer();
+    }
 
 }
