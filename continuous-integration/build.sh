@@ -1,4 +1,4 @@
-#!sh
+#!/bin/bash
 
 (cd testsuite; ant clean)            # clean everything, main sitemesh and acceptance tests
 ant test                             # unit tests
