@@ -73,7 +73,7 @@ import java.io.Writer;
  * </pre>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface HTMLPage extends Page {
 
@@ -95,4 +95,13 @@ public interface HTMLPage extends Page {
      * <a href="http://www.w3.org/TR/html4/present/frames.html">HTML frameset</a>.
      */
     boolean isFrameSet();
+
+    /**
+     * Marks this page as a frameset.
+     *
+     * @since 2.3
+     * @see #isFrameSet()
+     */
+    void setFrameSet(boolean frameset);
+    
 }

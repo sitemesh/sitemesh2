@@ -18,20 +18,19 @@ import java.util.Map;
  * HTMLPage implementation produced by FastPageParser.
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public final class FastPage extends AbstractHTMLPage
 {
    private String head;
    private String body;
-   private boolean frameSet;
 
    public FastPage(Map sitemeshProps, Map htmlProps, Map metaProps, Map bodyProps,
                    String title, String head, String body, boolean frameSet)
    {
       this.head = head;
       this.body = body;
-      this.frameSet = frameSet;
+      setFrameSet(frameSet);
       addAttributeList("", htmlProps);
       addAttributeList("page.", sitemeshProps);
       addAttributeList("body.", bodyProps);
@@ -72,11 +71,6 @@ public final class FastPage extends AbstractHTMLPage
    public void setVerbatimPage(char[] v)
    {
       this.pageData = v;
-   }
-
-   public boolean isFrameSet()
-   {
-      return frameSet;
    }
 
    public String getBody()

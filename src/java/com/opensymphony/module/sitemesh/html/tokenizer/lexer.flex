@@ -6,7 +6,7 @@
  */
 
 // class headers
-package com.opensymphony.module.sitemesh.parser.tokenizer;
+package com.opensymphony.module.sitemesh.html.tokenizer;
 %%
 
 // class and lexer definitions

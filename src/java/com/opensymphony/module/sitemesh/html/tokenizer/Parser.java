@@ -4,9 +4,11 @@
  * Use 'ant jflex' to generate the file.
  */
 
-package com.opensymphony.module.sitemesh.parser.tokenizer;
+package com.opensymphony.module.sitemesh.html.tokenizer;
 
-import com.opensymphony.module.sitemesh.util.CharArray;
+import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.html.Text;
+import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.util.CharArrayReader;
 
 import java.io.IOException;
@@ -62,7 +64,13 @@ class Parser extends Lexer implements Text, Tag {
 
     private void skipWhiteSpace() throws IOException {
         while (true) {
-            int next = takeNextToken();
+            int next;
+            if (pushbackToken == -1) {
+                next = yylex();
+            } else {
+                next = pushbackToken;
+                pushbackToken = -1;
+            }
             if (next != Parser.WHITESPACE) {
                 pushBack(next);
                 break;
@@ -82,26 +90,16 @@ class Parser extends Lexer implements Text, Tag {
         }
     }
 
-    private int takeNextToken() throws IOException {
-        if (pushbackToken == -1) {
-            int result = yylex();
-            if (result == 0) {
-                throw new IOException();
-            } else {
-                return result;
-            }
-        } else {
-            int result = pushbackToken;
-            pushbackToken = -1;
-            pushbackText = null;
-            return result;
-        }
-    }
-
     public void start() {
         try {
             while (true) {
-                int token = takeNextToken();
+                int token;
+                if (pushbackToken == -1) {
+                    token = yylex();
+                } else {
+                    token = pushbackToken;
+                    pushbackToken = -1;
+                }
                 if (token == 0) {
                     // EOF
                     return;
@@ -116,7 +114,7 @@ class Parser extends Lexer implements Text, Tag {
                 }
             }
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -125,14 +123,25 @@ class Parser extends Lexer implements Text, Tag {
 
         int start = position();
         skipWhiteSpace();
-        int token = takeNextToken();
+        int token;
+        if (pushbackToken == -1) {
+            token = yylex();
+        } else {
+            token = pushbackToken;
+            pushbackToken = -1;
+        }
         int type = Tag.OPEN;
         String name;
 
         if (token == Parser.SLASH) {
             // Token "/" - it's a closing tag
             type = Tag.CLOSE;
-            token = takeNextToken();
+            if (pushbackToken == -1) {
+                token = yylex();
+            } else {
+                token = pushbackToken;
+                pushbackToken = -1;
+            }
         }
 
         if (token == Parser.WORD) {
@@ -145,7 +154,12 @@ class Parser extends Lexer implements Text, Tag {
 
                 // don't care about this tag... scan to the end and treat it as text
                 while(true)  {
-                    token = takeNextToken();
+                    if (pushbackToken == -1) {
+                        token = yylex();
+                    } else {
+                        token = pushbackToken;
+                        pushbackToken = -1;
+                    }
                     if (token == Parser.GT) {
                         parsedText(start, position() - start + 1);
                         break;
@@ -164,7 +178,12 @@ class Parser extends Lexer implements Text, Tag {
         int token;
         while (true) {
             skipWhiteSpace();
-            token = takeNextToken();
+            if (pushbackToken == -1) {
+                token = yylex();
+            } else {
+                token = pushbackToken;
+                pushbackToken = -1;
+            }
             pushBack(token);
 
             if (token == Parser.SLASH || token == Parser.GT) {
@@ -176,11 +195,21 @@ class Parser extends Lexer implements Text, Tag {
             }
         }
 
-        token = takeNextToken();
+        if (pushbackToken == -1) {
+            token = yylex();
+        } else {
+            token = pushbackToken;
+            pushbackToken = -1;
+        }
         if (token == Parser.SLASH) {
             // Token "/" - it's an empty tag
             type = Tag.EMPTY;
-            token = takeNextToken();
+            if (pushbackToken == -1) {
+                token = yylex();
+            } else {
+                token = pushbackToken;
+                pushbackToken = -1;
+            }
         }
 
         if (token == Parser.GT) {
@@ -192,15 +221,31 @@ class Parser extends Lexer implements Text, Tag {
     }
 
     private void parseAttribute() throws IOException {
-        int token = takeNextToken();
+        int token;
+        if (pushbackToken == -1) {
+            token = yylex();
+        } else {
+            token = pushbackToken;
+            pushbackToken = -1;
+        }
         // Token WORD - start of an attribute
         String attributeName = text();
         skipWhiteSpace();
-        token = takeNextToken();
+        if (pushbackToken == -1) {
+            token = yylex();
+        } else {
+            token = pushbackToken;
+            pushbackToken = -1;
+        }
         if (token == Parser.EQUALS) {
             // Token "=" - the attribute has a value
             skipWhiteSpace();
-            token = takeNextToken();
+            if (pushbackToken == -1) {
+                token = yylex();
+            } else {
+                token = pushbackToken;
+                pushbackToken = -1;
+            }
             if (token == Parser.QUOTED) {
                 // token QUOTED - a quoted literal as the attribute value
                 parsedAttribute(attributeName, text(), true);
@@ -209,7 +254,13 @@ class Parser extends Lexer implements Text, Tag {
                 attributeBuffer.clear();
                 attributeBuffer.append(text());
                 while (true) {
-                    int next = takeNextToken();
+                    int next;
+                    if (pushbackToken == -1) {
+                        next = yylex();
+                    } else {
+                        next = pushbackToken;
+                        pushbackToken = -1;
+                    }
                     if (next == Parser.WORD || next == Parser.EQUALS || next == Parser.SLASH) {
                         attributeBuffer.append(text());
                         // TODO: how to handle <a x=c/> ?

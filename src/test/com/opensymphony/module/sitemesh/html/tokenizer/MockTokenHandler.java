@@ -1,5 +1,7 @@
-package com.opensymphony.module.sitemesh.parser.tokenizer;
+package com.opensymphony.module.sitemesh.html.tokenizer;
 
+import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.html.Text;
 import junit.framework.Assert;
 
 class MockTokenHandler implements TokenHandler {

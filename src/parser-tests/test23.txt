@@ -12,13 +12,12 @@
   
    <p>This is a pretty simple page.</p>
 
-   <parameter name="icon" value="thing.gif" />
-   <PARAMETER NAME=category value=news>
+   x<parameter name="icon" value="thing.gif" />y
+   x<PARAMETER NAME=category value=news>y
 
-   <content tag=somecontent>
-     This is some more content....
-     Woo.</content>
-
+   x<content tag=somecontent>
+     This is some more content.... <!-- comment -->
+     <b>Woo.</b></content><content tag="more">xxx</content>y
    <p>Bye.</p>
  
  </body>
@@ -35,7 +34,8 @@ meta.author=Someone
 body.bgcolor=black
 page.icon=thing.gif
 page.category=news
-page.somecontent=\n     This is some more content....\n     Woo.
+page.somecontent=\n     This is some more content.... <!-- comment -->\n     <b>Woo.</b>
+page.more=xxx
 
 ~~~ HEAD ~~~
 
@@ -45,14 +45,12 @@ page.somecontent=\n     This is some more content....\n     Woo.
   </style>
 
 ~~~ BODY ~~~
-  
+
    <p>This is a pretty simple page.</p>
 
-   
-   
+   xy
+   xy
 
-   
-
+   xy
    <p>Bye.</p>
- 
 

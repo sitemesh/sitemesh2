@@ -1,10 +1,6 @@
 package com.opensymphony.module.sitemesh.parser;
 
-import com.opensymphony.module.sitemesh.parser.AbstractHTMLPage;
-import com.opensymphony.module.sitemesh.parser.tokenizer.Tag;
-import com.opensymphony.module.sitemesh.parser.tokenizer.TokenHandler;
-import com.opensymphony.module.sitemesh.parser.tokenizer.Text;
-import com.opensymphony.module.sitemesh.util.CharArray;
+import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -14,112 +10,21 @@ import java.io.Writer;
  * HTMLTagTokenizer.
  *
  * @see com.opensymphony.module.sitemesh.parser.HTMLPageParser
- * @see com.opensymphony.module.sitemesh.parser.tokenizer.TagTokenizer
+ * @see com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer
  *
  * @author Joe Walnes
  */
-public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler {
+public class TokenizedHTMLPage extends AbstractHTMLPage {
 
-    private final CharArray head = new CharArray(512);
-    private final CharArray body = new CharArray(4096);
+    private CharArray body;
+    private CharArray head;
 
-    private boolean inTitle;
-    private boolean inHead;
-    private String contentBlockId;
-    private boolean titleWritten;
-    private boolean bodyWritten;
-    private boolean frameSet;
-
-    public TokenizedHTMLPage(char[] original) {
+    public TokenizedHTMLPage(char[] original, CharArray body, CharArray head) {
         this.pageData = original;
+        this.body = body;
+        this.head = head;
         addProperty("title", "");
     }
-
-
-    // ****** Methods to process incoming tags and text (required to implement TokenHandler) ******
-
-    public boolean shouldProcessTag(String name) {
-        name = name.toLowerCase();
-        return name.equals("title")
-                || name.equals("html")
-                || name.equals("head")
-                || name.equals("body")
-                || name.equals("meta")
-                || name.equals("content")
-                || name.equals("parameter")
-                || name.equals("frame")
-                || name.equals("frameset");
-    }
-
-    public void tag(Tag tag) {
-        String name = tag.getName().toLowerCase();
-        if (name.equals("title")) {
-            inTitle = tag.getType() == Tag.OPEN;
-        } else if (name.equals("head")) {
-            inHead = tag.getType() == Tag.OPEN;
-        } else if (name.equals("content")) {
-            if (tag.getType() == Tag.OPEN) {
-                contentBlockId = tag.getAttributeValue("tag");
-            } else {
-                contentBlockId = null;
-            }
-        } else if (name.equals("meta")) {
-            if (tag.hasAttribute("name")) {
-                addProperty("meta." + tag.getAttributeValue("name"), tag.getAttributeValue("content"));
-            } else if (tag.hasAttribute("http-equiv")) {
-                addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv"), tag.getAttributeValue("content"));
-            }
-        } else if (name.equals("body")) {
-            if (tag.getType() == Tag.OPEN || tag.getType() == Tag.EMPTY) {
-                for (int i = 0; i < tag.getAttributeCount(); i++) {
-                    addProperty("body." + tag.getAttributeName(i), tag.getAttributeValue(i));
-                }
-                body.clear();
-            } else {
-                bodyWritten = true;
-            }
-        } else if (name.equals("html")) {
-            for (int i = 0; i < tag.getAttributeCount(); i++) {
-                addProperty(tag.getAttributeName(i), tag.getAttributeValue(i));
-            }
-        } else if (name.equals("parameter")) {
-            addProperty("page." + tag.getAttributeValue("name"), tag.getAttributeValue("value"));
-        } else if (name.equals("frame") || name.equals("frameset")) {
-            frameSet = true;
-        }
-
-        if (inHead && !name.equals("head") && !name.equals("title")) {
-            tag.writeTo(head);
-        }
-        if (!inHead && !bodyWritten && !name.equals("body") && !name.equals("html")
-                && !name.equals("head") && !name.equals("title") && !name.equals("parameter") && !name.equals("content")) {
-            tag.writeTo(body);
-        }
-    }
-
-    public void text(Text text) {
-        if (inTitle && !titleWritten) {
-            addProperty("title", text.getContents());
-            titleWritten = true;
-        } else if (contentBlockId != null) {
-            addProperty("page." + contentBlockId, text.getContents());
-        }
-
-        if (inHead && !inTitle) {
-            text.writeTo(head);
-        }
-        if (!inHead && !inTitle && !bodyWritten && contentBlockId == null) {
-            text.writeTo(body);
-        }
-    }
-
-    public void warning(String message, int line, int column) {
-        // TODO
-//        System.out.println(line + "," + column + ": " + message);
-    }
-
-
-    // ****** Methods to access captured page data (required to implement HTMLPage) ******
 
     public void writeHead(Writer out) throws IOException {
         out.write(head.toString());
@@ -133,16 +38,12 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
         return head.toString();
     }
 
-    public boolean isFrameSet() {
-        return frameSet;
+    public String getBody() {
+        return body.toString();
     }
 
     public String getPage() {
         return new String(pageData);
-    }
-
-    public String getBody() {
-        return body.toString();
     }
 
 }

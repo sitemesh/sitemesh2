@@ -1,12 +1,12 @@
-package com.opensymphony.module.sitemesh.parser.tokenizer;
+package com.opensymphony.module.sitemesh.html;
 
-import com.opensymphony.module.sitemesh.util.CharArray;
+import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 /**
  * Tag returned by HTMLTagTokenizer. Allows easy access to element name and attributes.
  *
- * @see TokenHandler
- * @see TagTokenizer
+ * @see com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler
+ * @see com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer
  *
  * @author Joe Walnes
  */
@@ -21,7 +21,7 @@ public interface Tag {
      *
      * This has a slight overhead in that it needs to construct a String. For improved performance, use writeTo() instead.
      *
-     * @see #writeTo(com.opensymphony.module.sitemesh.util.CharArray)
+     * @see #writeTo(com.opensymphony.module.sitemesh.html.util.CharArray)
      */
     String getContents();
 

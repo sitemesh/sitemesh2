@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.parser.tokenizer;
+package com.opensymphony.module.sitemesh.html.tokenizer;
 
 /**
  * Splits a chunk of HTML into 'text' and 'tag' tokens, for easy processing. Is VERY tolerant to badly formed HTML.
