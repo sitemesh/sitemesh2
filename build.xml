@@ -85,9 +85,23 @@
     </target>
 
     <target name="example" depends="jar" description="Builds sample web-app">
+    	<!-- Temporary work-around for the Tomcat bug. Changes all html files to jsp. -->
+    	<mkdir dir="${build.dir}/example-temp" />
+    	<copy todir="${build.dir}/example-temp">
+    		<fileset dir="${example.dir}"/>
+  		</copy>
+  		<move todir="${build.dir}/example-temp">
+    		<fileset dir="${build.dir}/example-temp"/>
+			<mapper type="glob" from="*.html" to="*.jsp"/>
+  		</move>
+    	<replace dir="${build.dir}/example-temp" >
+  			<replacefilter token=".html" value=".jsp"/>
+		</replace>
+
     	<mkdir dir="${dist.dir}" />
+    	
     	<war warfile="${dist.dir}/${name}-example.war" webxml="${example.dir}/WEB-INF/web.xml">
-            <fileset dir="${example.dir}">
+            <fileset dir="${build.dir}/example-temp">
                 <exclude name="WEB-INF/web.xml" />
             </fileset>
             <lib dir="${dist.dir}">
