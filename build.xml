@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
-
 <project name="sitemesh" default="jar">
 
     <property name="build.compiler" value="modern" />
-
     <property file="build.properties"/>
 
     <!-- Classpath -->
@@ -12,15 +10,6 @@
             <include name="**/*.jar"/>
         </fileset>
     </path>
-
-    <target name="pre-compile">
-        <!-- Determine if lexer needs regenerating -->
-        <uptodate
-            property="lexer.uptodate"
-            srcfile="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/lexer.flex"
-            targetfile="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java"/>
-        <antcall target="jflex"/>
-    </target>
 
     <target name="jflex" unless="lexer.uptodate">
         <echo message="Generating HTML lexer using JFlex"/>
@@ -32,7 +21,14 @@
         <delete file="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java~"/>
     </target>
 
-    <target name="compile" depends="pre-compile">
+    <target name="compile">
+        <!-- Determine if lexer needs regenerating -->
+        <uptodate
+            property="lexer.uptodate"
+            srcfile="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/lexer.flex"
+            targetfile="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java"/>
+        <antcall target="jflex"/>
+
         <mkdir dir="build/classes"/>
 
         <javac destdir="build/classes"
@@ -167,28 +163,6 @@
                   <include name="sitemesh*.tld" />
             </lib>
         </war>
-    </target>
-
-    <target name="changelog" description="Generates a changelog for the last 80 days">
-        <mkdir dir="build"/>
-
-        <cvschangelog dir="." destfile="build/changelog.xml" daysinpast="80">
-            <user displayname="Hani Suleiman" userid="hani"/>
-            <user displayname="Mathias Bogaert" userid="mbogaert"/>
-            <user displayname="Scott Farquhar" userid="farkas"/>
-            <user displayname="Mike Cannon-Brookes" userid="rebelutionary"/>
-            <user displayname="Richard Hallier" userid="rhallier"/>
-            <user displayname="Chris Miller" userid="chris_miller"/>
-            <user displayname="Joe Walnes" userid="jwalnes1"/>
-        </cvschangelog>
-
-        <mkdir dir="dist/docs"/>
-
-        <style in="build/changelog.xml" out="dist/docs/changelog.html" style="${ant.home}/etc/changelog.xsl">
-            <param name="title" expression="SiteMesh changelog for the last 80 days"/>
-            <param name="module" expression="sitemesh"/>
-            <param name="cvsweb" expression="https://sitemesh.dev.java.net/source/browse/"/>
-        </style>
     </target>
 
     <target name="dist" depends="clean, test, jar, docs, blank, example" description="Builds distribution archives">
