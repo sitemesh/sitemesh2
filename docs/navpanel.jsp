@@ -3,8 +3,8 @@
     <a href="<%= request.getContextPath() %>/sitemesh/">Overview</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/requirements.html">Requirements</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/features.html">Feature List</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/about.html">History and Crew</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a><br>    
+    <a href="<%= request.getContextPath() %>/sitemesh/history.html">History and Crew</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a>
 </p>
 
 <p>
@@ -15,7 +15,7 @@
     <a href="<%= request.getContextPath() %>/sitemesh/dm.html">Decorator Mappers</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/faq.html">FAQ</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/tags.html">Tag Reference</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/api/">API Reference</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/api/">API Reference</a>
 </p>
 
 <p>
