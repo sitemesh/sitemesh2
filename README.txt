@@ -186,7 +186,7 @@ Please report bugs here: http://jira.opensymphony.com
 --------------------------
 
 Thank these guys:
-* Mathias Bogaert         <NOSPAMpathos@pandora.be>
+* Mathias Bogaert         <NOSPAMm.bogaert@memenco.com>
 * Mike Cannon-Brookes     <mikeNOSPAM@atlassian.com>
 * Victor Salaman          <salamanNOSPAM@teknos.com>
 * Joseph Ottinger         <joeoNOSPAM@adjacency.org>
