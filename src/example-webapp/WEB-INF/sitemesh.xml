@@ -1,7 +1,6 @@
 <sitemesh>
 
 	<page-parsers>
-		<parser default="true" class="com.opensymphony.module.sitemesh.parser.DefaultPageParser" />
 		<parser content-type="text/html" class="com.opensymphony.module.sitemesh.parser.FastPageParser" />
 	</page-parsers>
 

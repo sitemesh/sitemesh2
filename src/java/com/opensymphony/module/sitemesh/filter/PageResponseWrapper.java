@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -51,6 +51,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     private boolean aborted = false;
     private boolean parseablePage = false;
+    private boolean setContentTypeCalled = false;
 
     // verbose debugging of PageWriter
     private boolean debug;
@@ -75,6 +76,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
      * be passed to the {@link com.opensymphony.module.sitemesh.PageParser}.
      */
     public void setContentType(String type) {
+        setContentTypeCalled = true;
         if (type != null) {
             int offset = type.lastIndexOf("charset=");
             if (offset != -1)
@@ -127,7 +129,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     /** Prevent content-length being set if page is parseable. */
     public void setContentLength(int contentLength) {
-        if (!parseablePage()) super.setContentLength(contentLength);
+        if (!parseablePage) super.setContentLength(contentLength);
     }
 
     /**
@@ -136,23 +138,29 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
      */
     public void setStatus(int sc) {
         if (sc == HttpServletResponse.SC_NOT_MODIFIED) {
-            if (!parseablePage()) super.setStatus(sc);
+            if (!parseablePage) super.setStatus(sc);
         } else {
             super.setStatus(sc);
         }
     }
 
     /**
-     * If the server is Orion, Resin or Tomcat, return a wrapped ServletOutputStream, else return the
-     * default ServletOutputStream.
+     * <p>If the page is parseable, return a wrapped ServletOutputStream, else return the
+     * default ServletOutputStream.</p>
      *
      * <p>This is called internally by Orion 1.5.4, Resin 2.1.0, Tomcat 4.1.12 - naughty!</p>
      *
      * @throws IOException
      */
     public ServletOutputStream getOutputStream() throws IOException {
-        return getPageOutputStream();
+        // If setContentType hasn't been called (which it should have by now)
+        // we'll have to capture the page regardless
+        parseablePage |= !setContentTypeCalled;
 
+        if (parseablePage)
+            return getPageOutputStream();
+        else
+            return super.getOutputStream();
     }
 
     private PageOutputStream getPageOutputStream() throws IOException {
@@ -168,14 +176,23 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /**
-     * Return instance of {@link com.opensymphony.module.sitemesh.filter.PageWriter}
-     * allowing all data written to stream to be stored in temporary buffer.
+     * <p>If the page is parseable we return an instance of
+     * {@link com.opensymphony.module.sitemesh.filter.PageWriter} allowing all
+     * data written to stream to be stored in temporary buffer.</p>
      */
     public PrintWriter getWriter() throws IOException {
-        if (debug) {
-            return new DebugPageWriter(getPageWriter()); // verbose debugging of PageWriter
+       // If setContentType hasn't been called (which it should have by now)
+       // we'll have to capture the page regardless
+       parseablePage |= !setContentTypeCalled;
+
+       if (parseablePage) {
+            if (debug) {
+                return new DebugPageWriter(getPageWriter()); // verbose debugging of PageWriter
+            }
+            return getPageWriter();
+        } else {
+            return super.getWriter();
         }
-        return getPageWriter();
     }
 
     /**
@@ -196,14 +213,9 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     /** Flush and close output stream of wrapped response. */
     public void closeWriter() throws IOException {
-        if (parseablePage()) {
+        if (parseablePage) {
             getBufferStream().flush();
         }
-    }
-
-    /** Determine whether to contents of this request are parseable by SiteMesh. */
-    private boolean parseablePage() {
-        return parseablePage;
     }
 
     private OutputBuffer getBufferStream() {
@@ -229,17 +241,18 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
      * {@link com.opensymphony.module.sitemesh.Page} instance. If the
      * {@link com.opensymphony.module.sitemesh.Page} is not parseable,
      * null will be returned.
-     *
-     * @see #parseablePage()
      */
     public Page getPage() throws IOException {
         getBufferStream().flush();
         Factory factory = Factory.getInstance(config);
-        if (contentType == null || !factory.shouldParsePage(contentType)) {
+        if (!parseablePage) {
             // just in case setContentType was never called, or called before content was written to output
             getBufferStream().discardBuffer();
+            return null;
         }
-        if (aborted || !parseablePage()) return null;
+        if (aborted)
+            return null;
+
         if (page == null) {
             PageParser parser = factory.getPageParser(contentType);
             return parser.parse(getBufferStream().getBuffer());

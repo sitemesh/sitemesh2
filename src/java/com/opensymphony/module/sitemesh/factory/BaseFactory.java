@@ -22,7 +22,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -38,9 +38,6 @@ public abstract class BaseFactory extends Factory {
 
     /** Map that associates content-types with PageParser instances. */
     protected Map pageParsers = null;
-
-    /** Default PageParser to use if none other can be determined. */
-    protected PageParser defaultPageParser = null;
 
     /**
      * Constructor for default implementation of Factory.
@@ -64,23 +61,19 @@ public abstract class BaseFactory extends Factory {
      * Create a PageParser suitable for the given content-type.
      *
      * <p>For example, if the supplied parameter is <code>text/html</code>
-     * a parser shall be returned that can parse HTML accordingly. Never
-     * returns null.</p>
+     * a parser shall be returned that can parse HTML accordingly. Returns
+     * null if no parser can be found for the supplied content type.</p>
      *
      * @param contentType The MIME content-type of the data to be parsed
-     * @return Appropriate <code>PageParser</code> for reading data
+     * @return Appropriate <code>PageParser</code> for reading data, or
+     * <code>null</code> if no suitable parser was found.
      *
      * @associates PageParser
      * @directed
      * @label creates suitable
      */
     public PageParser getPageParser(String contentType) {
-        if (pageParsers.containsKey(contentType)) {
-            return (PageParser)pageParsers.get(contentType);
-        }
-        else {
-            return defaultPageParser;
-        }
+        return (PageParser) pageParsers.get(contentType);
     }
 
     /** Determine whether a Page of given content-type should be parsed or not. */
@@ -117,7 +110,6 @@ public abstract class BaseFactory extends Factory {
 
     /** Clear all PageParser mappings. */
     protected void clearParserMappings() {
-        defaultPageParser = null;
         pageParsers = new HashMap();
     }
 
@@ -127,13 +119,11 @@ public abstract class BaseFactory extends Factory {
      */
     protected void mapParser(String contentType, String className) {
         try {
-            PageParser pp = (PageParser)Class.forName(className).newInstance();
-            if (contentType == null) {
-                defaultPageParser = pp;
-            }
-            else {
-                pageParsers.put(contentType, pp);
-            }
+            PageParser pp = (PageParser) Class.forName(className).newInstance();
+            // Store the parser even if the content type is NULL. [This
+            // is most probably the legacy default page parser which
+            // we no longer have a use for]
+            pageParsers.put(contentType, pp);
         }
         catch (ClassNotFoundException e) {
             report("Could not load PageParser class : " + className, e);
