@@ -23,10 +23,17 @@ import java.io.Reader;
 /**
  * Very fast PageParser implementation for parsing HTML.
  *
+ * Note that this implementation uses hashcode comparisons instead of String.equals()
+ * comparisons to squeeze out more performance. This opens up the (remote) possibility
+ * of a hashcode collision causing unexpected behaviour while parsing. In practice
+ * we don't think this will be a problem since most tags are only a few characters
+ * long and hence likely to give unique hashcode values. (If collisions are encountered
+ * in practice, this code will have to be changed back to using String comparisons).
+ *
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -56,6 +63,31 @@ public final class FastPageParser implements PageParser
    private static final int TAG_STATE_BODY = -4;
    private static final int TAG_STATE_XML = -6;
    private static final int TAG_STATE_XMP = -7;
+
+   // These hashcodes are hardcoded because swtich statements can only
+   // switch on compile-time constants.
+   // In theory it is possible for there to be a hashcode collision with
+   // other HTML tags, however in practice it is *very* unlikely because
+   // tags are generally only a few characters long and hence are likely
+   // to produce unique values.
+
+   private static final int SLASH_XML_HASH = 1518984; // "/xml".hashCode();
+   private static final int XML_HASH = 118807; // "xml".hashCode();
+   private static final int SLASH_XMP_HASH = 1518988; // "/xmp".hashCode();
+   private static final int XMP_HASH = 118811; // "xmp".hashCode();
+   private static final int HTML_HASH = 3213227; // "html".hashCode();
+   private static final int SLASH_HTML_HASH = 46618714; // "/html".hashCode();
+   private static final int HEAD_HASH = 3198432; // "head".hashCode();
+   private static final int TITLE_HASH = 110371416; // "title".hashCode();
+   private static final int SLASH_TITLE_HASH = 1455941513; // "/title".hashCode();
+   private static final int PARAMETER_HASH = 1954460585; // "parameter".hashCode();
+   private static final int META_HASH = 3347973; // "meta".hashCode();
+   private static final int SLASH_HEAD_HASH = 46603919; // "/head".hashCode();
+   private static final int FRAMESET_HASH = -1644953643; // "frameset".hashCode();
+   private static final int FRAME_HASH = 97692013; // "frame".hashCode();
+   private static final int BODY_HASH = 3029410; // "body".hashCode();
+   private static final int SLASH_BODY_HASH = 46434897; // "/body".hashCode();
+   private static final int CONTENT_HASH = 951530617; // "content".hashCode();
 
    public Page parse(char[] data) throws IOException
    {
@@ -154,142 +186,130 @@ public final class FastPageParser implements PageParser
 
                if(tag == null)
                   continue;
-               else if(state == TAG_STATE_XML || state == TAG_STATE_XMP)
+
+               int tagHash = tag.hashCode();
+
+               if(state == TAG_STATE_XML || state == TAG_STATE_XMP)
                {
                   writeTag(state, laststate, hide, _head, _buffer, _body);
-                  if( (state == TAG_STATE_XML && tag.equals("/xml"))
-                    ||(state == TAG_STATE_XMP && tag.equals("/xmp")) )
+                  if( (state == TAG_STATE_XML && tagHash == SLASH_XML_HASH)
+                    ||(state == TAG_STATE_XMP && tagHash == SLASH_XMP_HASH) )
                   {
                      state = laststate;
                   }
-               }
-               else if(tag.equals("html"))
-               {
-                  state = TAG_STATE_HTML;
-                  _htmlProperties = tagObject.properties;
-               }
-               else if(tag.equals("head"))
-               {
-                  state = TAG_STATE_HEAD;
-               }
-               else if(tag.equals("xml"))
-               {
-                  laststate = state;
-                  writeTag(state, laststate, hide, _head, _buffer, _body);
-                  state = TAG_STATE_XML;
-               }
-               else if(tag.equals("xmp"))
-               {
-                  laststate = state;
-                  writeTag(state, laststate, hide, _head, _buffer, _body);
-                  state = TAG_STATE_XMP;
-               }
-               else if(tag.equals("title"))
-               {
-                  if ( doneTitle )
-                  {
-                     hide = true;
-                  }
-                  else
-                  {
-                     laststate = state;
-                     state = TAG_STATE_TITLE;
-                  }
-               }
-               else if(tag.equals("/title"))
-               {
-                  if ( doneTitle )
-                  {
-                     hide = false;
-                  }
-                  else
-                  {
-                     doneTitle = true;
-                     state = laststate;
-                  }
-               }
-               else if(tag.equals("parameter"))
-               {
-                  String name = ( String ) tagObject.properties.get("name");
-                  String value = ( String ) tagObject.properties.get("value");
-
-                  if(name != null && value != null)
-                  {
-                     _sitemeshProperties.put(name, value);
-                  }
-               }
-               else if(tag.equals("meta"))
-               {
-                  CharArray metaDestination = state == TAG_STATE_HEAD ? _head : _body;
-                  metaDestination.append('<');
-                  metaDestination.append(_buffer);
-                  metaDestination.append('>');
-
-                  String name = ( String ) tagObject.properties.get("name");
-                  String value = ( String ) tagObject.properties.get("content");
-
-                  if(name == null)
-                  {
-                     String httpEquiv = ( String ) tagObject.properties.get("http-equiv");
-
-                     if(httpEquiv != null)
-                     {
-                        name = "http-equiv." + httpEquiv;
-                     }
-                  }
-
-                  if(name != null && value != null)
-                  {
-                     _metaProperties.put(name, value);
-                  }
-               }
-               else if(tag.equals("/head"))
-               {
-                  state = TAG_STATE_HTML;
-               }
-               else if(tag.equals("frameset") || tag.equals("frame"))
-               {
-                  _frameSet = true;
-               }
-               else if(tag.equals("body"))
-               {
-                  if (_tokenType == TOKEN_EMPTYTAG)
-                  {
-                     state = TAG_STATE_BODY;
-                  }
-                  _bodyProperties = tagObject.properties;
-               }
-               else if(tag.equals("content"))
-               {
-                  state = TAG_STATE_NONE;
-                  Map props = tagObject.properties;
-                  if(props != null)
-                  {
-                     tagged = true;
-                     _contentTagId = ( String ) props.get("tag");
-                  }
-               }
-               else if(tag.equals("xmp"))
-               {
-                  hide = true;
-               }
-               else if(tag.equals("/xmp"))
-               {
-                  hide = false;
-               }
-               else if(tag.equals("/body"))
-               {
-                  state = TAG_STATE_NONE;
-                  hide = true;
-               }
-               else if(tag.equals("/html"))
-               {
-                  state = TAG_STATE_NONE;
-                  hide = true;
                }
                else
-               {
-                  writeTag(state, laststate, hide, _head, _buffer, _body);
+
+               switch (tagHash) {
+                  case HTML_HASH:
+                     state = TAG_STATE_HTML;
+                     _htmlProperties = tagObject.properties;
+                     break;
+                  case HEAD_HASH:
+                     state = TAG_STATE_HEAD;
+                     break;
+                  case XML_HASH:
+                     laststate = state;
+                     writeTag(state, laststate, hide, _head, _buffer, _body);
+                     state = TAG_STATE_XML;
+                     break;
+                  case XMP_HASH:
+                     laststate = state;
+                     writeTag(state, laststate, hide, _head, _buffer, _body);
+                     state = TAG_STATE_XMP;
+                     hide = true; // Not sure if this line should be here or not? The old FastPageParser had some dodgy code...
+                     break;
+                  case TITLE_HASH:
+                     if (doneTitle)
+                     {
+                        hide = true;
+                     }
+                     else
+                     {
+                        laststate = state;
+                        state = TAG_STATE_TITLE;
+                     }
+                     break;
+                  case SLASH_TITLE_HASH:
+                     if (doneTitle)
+                     {
+                        hide = false;
+                     }
+                     else
+                     {
+                        doneTitle = true;
+                        state = laststate;
+                     }
+                     break;
+                  case PARAMETER_HASH:
+                     String name = (String) tagObject.properties.get("name");
+                     String value = (String) tagObject.properties.get("value");
+
+                     if (name != null && value != null)
+                     {
+                        _sitemeshProperties.put(name, value);
+                     }
+                     break;
+                  case META_HASH:
+                     CharArray metaDestination = state == TAG_STATE_HEAD ? _head : _body;
+                     metaDestination.append('<');
+                     metaDestination.append(_buffer);
+                     metaDestination.append('>');
+
+                     name = (String) tagObject.properties.get("name");
+                     value = (String) tagObject.properties.get("content");
+
+                     if (name == null)
+                     {
+                        String httpEquiv = (String) tagObject.properties.get("http-equiv");
+
+                        if (httpEquiv != null)
+                        {
+                           name = "http-equiv." + httpEquiv;
+                        }
+                     }
+
+                     if (name != null && value != null)
+                     {
+                        _metaProperties.put(name, value);
+                     }
+                     break;
+                  case SLASH_HEAD_HASH:
+                     state = TAG_STATE_HTML;
+                     break;
+                  case FRAME_HASH:
+                  case FRAMESET_HASH:
+                     _frameSet = true;
+                     break;
+                  case BODY_HASH:
+                     if (_tokenType == TOKEN_EMPTYTAG)
+                     {
+                        state = TAG_STATE_BODY;
+                     }
+                     _bodyProperties = tagObject.properties;
+                     break;
+                  case CONTENT_HASH:
+                     state = TAG_STATE_NONE;
+                     Map props = tagObject.properties;
+                     if (props != null)
+                     {
+                        tagged = true;
+                        _contentTagId = (String) props.get("tag");
+                     }
+                     break;
+                  case SLASH_XMP_HASH:
+                     hide = false;
+                     break;
+                  case SLASH_BODY_HASH:
+                     state = TAG_STATE_NONE;
+                     hide = true;
+                     break;
+                  case SLASH_HTML_HASH:
+                     state = TAG_STATE_NONE;
+                     hide = true;
+                     break;
+                  default:
+                     writeTag(state, laststate, hide, _head, _buffer, _body);
                }
             }
             else if (!hide)
