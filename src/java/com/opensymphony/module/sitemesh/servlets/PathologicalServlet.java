@@ -20,7 +20,7 @@ public class PathologicalServlet extends HttpServlet {
         String mode = request.getParameter("out");
         PrintWriter pw = null;
 
-        if (mode.equals("writer")) {
+        if (mode.equals("stream")) {
             OutputStreamWriter osw = new OutputStreamWriter(response.getOutputStream());
             pw = new PrintWriter(osw);
         }
