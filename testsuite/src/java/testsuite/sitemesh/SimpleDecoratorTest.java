@@ -76,4 +76,17 @@ public class SimpleDecoratorTest extends WebTest {
         assertNull(doc.getElementWithId("footer"));
     }
 
+    /**
+     * Tomcat 5 has problems serving static pages through sitemesh.  See SIM-74 and SIM-82.
+     * This test case is to demonstrate this problem
+     */
+    public void testStaticPage() throws Exception {
+        WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/static.html" );
+		Document doc = getDocument( rs );
+		assertEquals( "[:: Simple page ::]", rs.getTitle() );
+		assertEquals( "Hello world", doc.getElementWithId( "p" ).getText().toString() );
+		assertEquals( "footer", doc.getElementWithId( "footer" ).getText().toString() );
+		assertEquals( "Simple page", doc.getElementWithId( "header" ).getText().toString() );
+    }
+
 }
