@@ -4,7 +4,23 @@
 	</head>
 	
 	<body>
-		<h3>The SiteMesh crew:</h3>
+	    <h3>Some History</h3>
+    
+        <p>SiteMesh was originally written about 5 years ago, after Joe Walnes 
+        downloaded the first sun servlet engine and wrote it using servlet 
+        chains (before filters).</p>
+    
+        <p>He had been using it internally for about 2 years and by the time it 
+        was opensourced it was quite mature. Over the years, the basic design 
+        remained the same; content was intercepted, parsed, a decorator mapper 
+        was used to find a decorator and they were merged together.</p>
+        
+        <p>There were 2 main leaps that helped make it succesful - the rewrite 
+        from servlet-chain to servlet-filter when the first draft of the Servlet 
+        2.3 API came out about 3 years ago and Victor Salaman rewriting the 
+        parser to make it about 12 times faster.</p>
+	
+		<h3>The SiteMesh Crew</h3>
 	
 		<ul>
 		    <li>Joe Walnes &lt;joe@truemesh.com&gt;</li>
