@@ -15,6 +15,7 @@ import com.opensymphony.module.sitemesh.PageParser;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * Very fast PageParser implementation for parsing HTML.
@@ -22,7 +23,7 @@ import java.util.Map;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -55,9 +56,7 @@ public final class FastPageParser implements PageParser
 
    public Page parse(char[] data) throws IOException
    {
-      Reader reader = null;
-
-      reader = new BufferedReader(new CharArrayReader(data));
+      Reader reader = new BufferedReader(new CharArrayReader(data));
 
       FastPage page = internalParse(reader);
       page.setVerbatimPage(data);
@@ -625,34 +624,33 @@ public final class FastPageParser implements PageParser
 
    private Tag parseTag(StringBuffer buf)
    {
-      String buffer = buf.toString();
       int len = buf.length();
       int idx = 0;
-      int begin = 0;
+      int begin;
 
       Tag tag = new Tag();
 
-      while (idx < len && Character.isWhitespace(buffer.charAt(idx))) idx++;
+      while (idx < len && Character.isWhitespace(buf.charAt(idx))) idx++;
 
       if(idx == len) return null;
 
       begin = idx;
-      while (idx < len && !Character.isWhitespace(buffer.charAt(idx))) idx++;
-      String name = buffer.substring(begin, buffer.charAt(idx - 1) == '/' ? idx - 1 : idx);
+      while (idx < len && !Character.isWhitespace(buf.charAt(idx))) idx++;
+      String name = buf.substring(begin, buf.charAt(idx - 1) == '/' ? idx - 1 : idx);
 
       tag.name = name == null ? null : name.toLowerCase();
 
-      while (idx < len && Character.isWhitespace(buffer.charAt(idx))) idx++;
+      while (idx < len && Character.isWhitespace(buf.charAt(idx))) idx++;
 
       if(idx == len) return tag;
 
-      return parseProperties(tag, buffer, idx);
+      return parseProperties(tag, buf, idx);
    }
 
-   private static Tag parseProperties(Tag tag, String buffer, int idx)
+   private static Tag parseProperties(Tag tag, StringBuffer buffer, int idx)
    {
       int len = buffer.length();
-      int begin = 0;
+      int begin;
 
       while (idx < len)
       {
@@ -702,7 +700,7 @@ public final class FastPageParser implements PageParser
          }
 
          begin = idx;
-         int end = begin;
+         int end;
          if(buffer.charAt(idx) == '"')
          {
             idx++;
@@ -738,11 +736,15 @@ public final class FastPageParser implements PageParser
    class Tag
    {
       public String name;
-      public Map properties = new HashMap(8);
+      public Map properties = Collections.EMPTY_MAP;
 
       public void addProperty(String name, String value)
       {
-         properties.put(name, value);
+        if(properties==Collections.EMPTY_MAP)
+        {
+          properties = new HashMap(8);
+        }
+        properties.put(name, value);
       }
    }
 }
