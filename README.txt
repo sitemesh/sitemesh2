@@ -225,7 +225,7 @@ JIRA bugs/tasks fixed (http://jira.opensymphony.com):
 
 - New (shorter!) decorator xml format (backward compability is maintained),
   check above or the decorators.xml file in the /example/WEB-INF directory for an example.
-  DTD: http://www.opensymphony.com/dtds/sitemesh_1_5_decorators.dtd
+  DTD: http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd
 - Default SiteMesh configuration if sitemesh.xml is not present.
 - When the request contains a Page object (under the key RequestConstants.PAGE)
   use this one (supports SiteMesh aware applications) so we don't need to parse.
