@@ -73,13 +73,22 @@ import java.io.Writer;
  * </pre>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface HTMLPage extends Page {
+
     /**
      * Write the contents of the <code>&lt;head&gt;</code> tag.
      */
     void writeHead(Writer out) throws IOException;
+
+    /**
+     * Convenience method to return the contents of the <code>&lt;head&gt;</code> tag as a String.
+     *
+     * @since 2.1.1
+     * @see #writeHead(java.io.Writer) 
+     */
+    String getHead();
 
     /**
      * Check to see if this page contains an

@@ -29,7 +29,7 @@ import java.util.Map;
  * be added to the system by extending Page and implementing an appropriate PageParser.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface Page {
     /**
@@ -42,9 +42,25 @@ public interface Page {
     void writePage(Writer out) throws IOException;
 
     /**
+     * Convenience method to return the contents of the <code>Page</code> in its original format.
+     *
+     * @since 2.1.1
+     * @see #writePage(java.io.Writer)
+     */
+    String getPage();
+
+    /**
      * Write the contents of the <code>&lt;body&gt;</code> tag.
      */
     void writeBody(Writer out) throws IOException;
+
+    /**
+     * Convenience method to return the contents of the <code>&lt;body&gt;</code> tag.
+     *
+     * @since 2.1.1
+     * @see #writeBody(java.io.Writer)
+     */
+    String getBody();
 
     /**
      * Get the Title of the document

@@ -30,7 +30,7 @@ import java.util.Set;
  * add all the required information.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.Page
  */
@@ -51,6 +51,16 @@ public abstract class AbstractPage implements Page {
         out.write(pageData);
     }
 
+    public String getPage() {
+        try {
+            StringWriter writer = new StringWriter();
+            writePage(writer);
+            return writer.toString();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not get page " + e.getMessage());
+        }
+    }
+
     /**
      * Write data of html <code>&lt;body&gt;</code> tag.
      *
@@ -58,6 +68,16 @@ public abstract class AbstractPage implements Page {
      * body tags, but all the data in between.
      */
     public abstract void writeBody(Writer out) throws IOException;
+
+    public String getBody() {
+        try {
+            StringWriter writer = new StringWriter();
+            writeBody(writer);
+            return writer.toString();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not get body " + e.getMessage());
+        }
+    }
 
     /** Return title of from "title" property. Never returns null. */
     public String getTitle() {
