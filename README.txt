@@ -46,9 +46,7 @@ Currently known containers that support this and SiteMesh was tested with:
 -- Installation         --
 --------------------------
 
-* Copy sitemesh.jar to the WEB-INF/lib/ directory of your web-app.
-
-* Copy sitemesh-decorator.tld and sitemesh-page.tld to the WEB-INF/ directory of your web-app.
+* Copy sitemesh-@VERSION@.jar to the WEB-INF/lib/ directory of your web-app.
 
 * OPTIONAL: Copy sitemesh.xml to the WEB-INF/ directory if you need to specify a custom
   decorator mapper configuration then the default configuration.
@@ -64,16 +62,6 @@ Currently known containers that support this and SiteMesh was tested with:
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <taglib>
-        <taglib-uri>sitemesh-decorator</taglib-uri>
-        <taglib-location>/WEB-INF/sitemesh-decorator.tld</taglib-location>
-    </taglib>
-
-    <taglib>
-        <taglib-uri>sitemesh-page</taglib-uri>
-        <taglib-location>/WEB-INF/sitemesh-page.tld</taglib-location>
-    </taglib>
 
 --------------------------
 -- Getting started      --
@@ -96,7 +84,7 @@ If you don't, here's a JSP to get you started (test.jsp).
 Once you have some content (preferably more imaginative than the example above),
 a decorator should be created (decorator.jsp).
 
-    <%@ taglib uri="sitemesh-decorator" prefix="decorator" %>
+    <%@ taglib uri="/sitemesh-decorator" prefix="decorator" %>
     <html>
         <head>
             <title>My Site - <decorator:title default="Welcome!" /></title>
@@ -187,6 +175,7 @@ Please report bugs here: http://jira.opensymphony.com
 -- Changes from 2.0.1   --
 --------------------------
 
+- The example and blank use Packaged Tag Libraries (specifying the URI of the taglib)
 - Documentation updates.
 
 JIRA bugs/tasks fixed:

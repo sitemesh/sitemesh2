@@ -6,11 +6,9 @@
 		<p>Once SiteMesh has been <a href="download.html">downloaded (or built)</a>, configuration is simple.</p>
 
 		<ul>
-			<li>Setup a new web-app as usual (or use an existing web-app).</li>
+			<li>Setup a web-app as usual (or skip all this by using the pre-configured <a href="download.html">sitemesh-blank.war</a>).</li>
 
 			<li>Copy <b><code>sitemesh-@VERSION@.jar</code></b> into <b><code>[web-app]/WEB-INF/lib</code></b>.</li>
-
-			<li>Copy <b><code>sitemesh-page.tld</code></b> and <b><code>sitemesh-decorator.tld</code></b> into <b><code>[web-app]/WEB-INF</code></b>.</li>
 
 			<li>Create the file <b><code>[web-app]/WEB-INF/decorators.xml</code></b> that contains the following:</p>
 			<blockquote><code>&lt;decorators&gt;<br>&lt;/decorators&gt;</code></blockquote></li>
@@ -48,16 +46,6 @@
     &lt;filter-name&gt;sitemesh&lt;/filter-name&gt;
     &lt;url-pattern&gt;<b>/*</b>&lt;/url-pattern&gt;
 &lt;/filter-mapping&gt;
-
-&lt;taglib&gt;
-    &lt;taglib-uri&gt;sitemesh-page&lt;/taglib-uri&gt;
-    &lt;taglib-location&gt;/WEB-INF/sitemesh-page.tld&lt;/taglib-location&gt;
-&lt;/taglib&gt;
-
-&lt;taglib&gt;
-    &lt;taglib-uri&gt;sitemesh-decorator&lt;/taglib-uri&gt;
-    &lt;taglib-location&gt;/WEB-INF/sitemesh-decorator.tld&lt;/taglib-location&gt;
-&lt;/taglib&gt;
 </pre>
 		</ul>
 
