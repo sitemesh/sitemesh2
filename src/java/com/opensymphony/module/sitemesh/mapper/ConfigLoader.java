@@ -46,7 +46,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
@@ -114,10 +114,13 @@ public final class ConfigLoader {
             throw new ServletException("Could not get XML parser", e);
         }
         catch (IOException e) {
-            throw new ServletException("Could not read config file: " + configFileName, e);
+            throw new ServletException("Could not read the config file: " + configFileName, e);
         }
         catch (SAXException e) {
-            throw new ServletException("Could not parse config file: " + configFileName, e);
+            throw new ServletException("Could not parse the config file: " + configFileName, e);
+        }
+        catch (IllegalArgumentException e) {
+            throw new ServletException("Could not find the config file: " + configFileName, e);
         }
     }
 
