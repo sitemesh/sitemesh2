@@ -1,0 +1,29 @@
+~~~ INPUT ~~~
+
+<?xml version="1.0"?>
+<html>
+ <head>
+  <title>Some page</title>
+ </head>
+ <body>
+  
+   <p>This is a pretty simple page with an XML processing instruction header.</p>
+
+ </body>
+</html>
+
+~~~ TITLE ~~~
+
+Some page
+
+~~~ PROPERTIES ~~~
+
+title=Some page
+
+~~~ HEAD ~~~
+
+
+~~~ BODY ~~~
+
+   <p>This is a pretty simple page with an XML processing instruction header.</p>
+
