@@ -11,11 +11,13 @@ package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.util.CharArrayReader;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Very fast PageParser implementation for parsing HTML.
@@ -23,7 +25,7 @@ import java.util.Collections;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -56,9 +58,7 @@ public final class FastPageParser implements PageParser
 
    public Page parse(char[] data) throws IOException
    {
-      Reader reader = new BufferedReader(new CharArrayReader(data));
-
-      FastPage page = internalParse(reader);
+      FastPage page = internalParse(new CharArrayReader(data));
       page.setVerbatimPage(data);
       return page;
    }
