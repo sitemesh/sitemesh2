@@ -18,7 +18,7 @@ import java.util.Map;
  * HTMLPage implementation produced by FastPageParser.
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public final class FastPage extends AbstractHTMLPage
 {
@@ -47,11 +47,6 @@ public final class FastPage extends AbstractHTMLPage
    public void writeBody(Writer out) throws IOException
    {
       out.write(body);
-   }
-
-   public void writePage(Writer out) throws IOException
-   {
-      out.write(this.pageData);
    }
 
    private void addAttributeList(String prefix, Map attributes)
