@@ -29,5 +29,5 @@
     - <a href="http://jira.opensymphony.com/secure/BrowseProject.jspa?id=10000&report=roadmap">Roadmap</a><br>
     - <a href="http://jira.opensymphony.com/secure/BrowseProject.jspa?id=10000&report=changelog">Changelog</a><br>
     <b>Wiki</b><br>
-    - <a href="http://wiki.opensymphony.com/space/SiteMesh">SiteMesh Page</a>
+    - <a href="http://wiki.opensymphony.com/display/SM/Index">SiteMesh Page</a>
 </p>
