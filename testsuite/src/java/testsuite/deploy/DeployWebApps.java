@@ -74,21 +74,17 @@ public class DeployWebApps {
 	private void copyFile( File src, File dest ) throws IOException {
 		FileInputStream in = new FileInputStream( src );
 		FileOutputStream out = new FileOutputStream( dest );
-		for (int c; (c = in.read()) != -1; out.write(c)); // empty loop
+    pipe(in, out);
 		in.close();
 		out.close();
 	}
 
-	/**
-	 * Delete a directory and its contents recursively. Use with care :)
-	 */
-	private void delTree( File file ) throws IOException {
-		if ( file.exists() ) {
-			File[] children = file.listFiles();
-			for ( int i=0; children != null && i < children.length; i++) delTree( children[i] );
-			file.delete();
-		}
-	}
+  private void pipe(InputStream in, OutputStream out) throws IOException {
+    int lengthRead;
+    byte[] buffer = new byte[10240];
+    while((lengthRead = in.read(buffer)) >= 0)
+      out.write(buffer, 0, lengthRead);
+  }
 
 	/**
 	 * Unpack war file as a directory.
@@ -105,7 +101,7 @@ public class DeployWebApps {
 			else {
 				InputStream in = jar.getInputStream( entry );
 				FileOutputStream out = new FileOutputStream( file );
-				for (int c; (c = in.read()) != -1; out.write(c)); // empty loop
+        pipe(in, out);
 				in.close();
 				out.close();
 			}
@@ -121,7 +117,7 @@ public class DeployWebApps {
 		File configFile = new File( args.length == 0 ? "tests.xml" : args[0] );
 		ConfigReader config = new ConfigReader( configFile );
 
-		DeployWebApps d = new DeployWebApps( config );
+		new DeployWebApps( config );
 
 	}
 
