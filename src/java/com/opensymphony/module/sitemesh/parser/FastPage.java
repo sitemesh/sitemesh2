@@ -18,7 +18,7 @@ import java.util.Map;
  * HTMLPage implementation produced by FastPageParser.
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public final class FastPage extends AbstractHTMLPage
 {
@@ -32,11 +32,11 @@ public final class FastPage extends AbstractHTMLPage
       this.head = head;
       this.body = body;
       this.frameSet = frameSet;
-      addAttributeList(null, htmlProps);
-      addAttributeList("page", sitemeshProps);
-      addAttributeList("body", bodyProps);
-      addAttributeList("meta", metaProps);
-      addProperty("title", title);
+      addAttributeList("", htmlProps);
+      addAttributeList("page.", sitemeshProps);
+      addAttributeList("body.", bodyProps);
+      addAttributeList("meta.", metaProps);
+      addProperty("title.", title);
    }
 
    public void writeHead(Writer out) throws IOException
@@ -58,16 +58,14 @@ public final class FastPage extends AbstractHTMLPage
    {
       if(attributes == null || attributes.isEmpty()) return;
 
-      if(prefix == null) prefix = "";
-      if(prefix.length() > 0) prefix += '.';
-
       String name, value;
-      Iterator i = attributes.keySet().iterator();
+      Iterator i = attributes.entrySet().iterator();
 
       while (i.hasNext())
       {
-         name = ( String ) i.next();
-         value = ( String ) attributes.get(name);
+         Map.Entry entry = (Map.Entry) i.next();
+         name = (String) entry.getKey();
+         value = (String) entry.getValue();
 
          if(value != null && value.trim().length() > 0)
          {
