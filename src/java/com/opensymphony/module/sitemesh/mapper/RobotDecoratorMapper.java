@@ -24,10 +24,10 @@ import java.util.Properties;
  * is identified as a robot (also known as spider, crawler, ferret) of a search engine.
  *
  * <p>The name of this decorator should be supplied in the <code>decorator</code>
- * property.
+ * property.</p>
  *
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
@@ -44,9 +44,10 @@ public final class RobotDecoratorMapper extends AbstractDecoratorMapper {
 
     /**
      * All known robot user-agent headers (list can be found
-     * <a href="http://info.webcrawler.com/mak/projects/robots/active.html">here</a>).
-     * <br><br>
-     * NOTE: To avoid bad detection:
+     * <a href="http://www.robotstxt.org/wc/active.html">here</a>).
+     *
+     * <p>NOTE: To avoid bad detection:</p>
+     *
      * <ul>
      *  <li>Robots with ID of 2 letters only were removed</li>
      *  <li>Robot called "webs" were removed</li>
