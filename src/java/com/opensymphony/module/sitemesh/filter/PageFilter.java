@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
@@ -140,7 +140,7 @@ public class PageFilter implements Filter, RequestConstants {
                 // parse the page
                 result = pageResponse.getPage();
             }
-            request.setAttribute(USING_STREAM, new Boolean(pageResponse.isUsingStream()));
+            request.setAttribute(USING_STREAM, pageResponse.isUsingStream() ? Boolean.TRUE : Boolean.FALSE);
             pageResponse.closeWriter();
             return result;
         }
