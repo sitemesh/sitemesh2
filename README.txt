@@ -189,10 +189,10 @@ Please report bugs here: http://jira.opensymphony.com
 
 Chris Miller has been working like a demon on FastPageParser, and it's now as 
 fast and efficient as it can get. To give you a rough idea, 2.0 is about 3 times 
-faster than 1.7. 2.0.1 is about 5 times faster than 1.7.
+faster than 1.5. 2.0.1 is about 5 times faster than 1.5.
 
 With regards to memory usage, it's basically been knocked down to be negligible. 
-Previously (1.7), a 50k page parsed 250 times (separate instances strongly 
+Previously (1.5), a 50k page parsed 250 times (separate instances strongly 
 referenced, with an explicit gc call to remove temporary objects) used up 37mb. 
 Currently, it uses 25mb (and it's no coincidence that 50k * 250 * 2 bytes per 
 char == 25mb).
