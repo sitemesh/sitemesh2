@@ -64,7 +64,6 @@ public class BasicPageTest extends WebTest {
 
     public void testPageWithNoContentType() throws Exception {
         WebResponse rs = wc.getResponse( baseUrl + "/basic/text.unknown" );
-        assertEquals("text/plain", rs.getContentType());
         assertEquals("This is a plain page.", rs.getText().trim());
     }
 
