@@ -9,6 +9,7 @@ public class FramesetRule extends BasicRule {
     private final HTMLPage page;
 
     public FramesetRule(HTMLPage page) {
+        super(new String[] {"frame", "frameset"});
         this.page = page;
     }
 
@@ -16,7 +17,4 @@ public class FramesetRule extends BasicRule {
         page.setFrameSet(true);
     }
 
-    public boolean shouldProcess(String name) {
-        return name.startsWith("frame");
-    }
 }
