@@ -1,4 +1,4 @@
-<%@ taglib uri="sitemesh-decorator" prefix="decorator" %>
+<%@ taglib uri="/sitemesh-decorator" prefix="decorator" %>
 
 <table width="200" border="1" cellspacing="0">
     <tr>

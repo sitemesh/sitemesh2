@@ -1,4 +1,4 @@
-<%@ taglib prefix="page" uri="sitemesh-page" %>
+<%@ taglib prefix="page" uri="/sitemesh-page" %>
 
 <html>
 	<head>
