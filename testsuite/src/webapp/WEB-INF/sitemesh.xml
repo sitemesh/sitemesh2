@@ -4,6 +4,10 @@
 
     <page-parsers>
         <parser content-type="text/html" class="com.opensymphony.module.sitemesh.parser.FastPageParser"/>
+
+        <!-- testing backwards compatability -->
+        <parser default="true" class="com.opensymphony.module.sitemesh.parser.DefaultPageParser" />
+
     </page-parsers>
     <decorator-mappers>
         <mapper class="com.opensymphony.module.sitemesh.mapper.PageDecoratorMapper">

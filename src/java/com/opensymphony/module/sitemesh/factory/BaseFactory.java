@@ -23,7 +23,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -149,6 +149,9 @@ public abstract class BaseFactory extends Factory {
      * PageParser for unknown content-types.
      */
     protected void mapParser(String contentType, String className) {
+        if (className.endsWith(".DefaultPageParser")) {
+            return; // Backwards compatability - this can safely be ignored.
+        }
         try {
             PageParser pp = (PageParser) Class.forName(className).newInstance();
             // Store the parser even if the content type is NULL. [This
