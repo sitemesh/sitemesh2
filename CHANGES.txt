@@ -1,4 +1,23 @@
 --------------------------
+-- Changes in 2.2       --
+--------------------------
+This release fixes a number of minor bugs, and no code changes are required
+from 2.1. 
+
+The following improvements have been made:
+    - The <excludes> tag in decorators.xml now takes into account ServletPath, PathInfo and QueryString.
+    - Overhaul of the main Servlet Filter to remove unnecessary complexity and more gracefully handle situations
+      where the order of calls on the HttpServletResponse, PrintWriter and ServletOutputStream occur in an 
+      awkward order.
+
+JIRA issues fixed:
+    - SIM-125 Internal Tomcat CGI throws NullPointerException.
+    - SIM-128 HTML parser cannot handle attributes that span multiple lines.
+    - SIM-86  Requests that use setHeader("Content-type") instead of setContentType() do not get decorated.
+    - SIM-134 Not calling setContentType() caused NullPointerException.
+
+
+--------------------------
 -- Changes in 2.1       --
 --------------------------
 This release fixes a number of major bugs, and no code changes are required

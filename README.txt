@@ -22,8 +22,6 @@ things.
 The latest version of SiteMesh can be obtained from:
 
     http://www.opensymphony.com/sitemesh/
-        or
-    https://sitemesh.dev.java.net/
 
 --------------------------
 -- Requirements         --
