@@ -12,6 +12,7 @@ package com.opensymphony.module.sitemesh.filter;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.CharBuffer;
@@ -23,24 +24,28 @@ import java.nio.ByteBuffer;
  *
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
  * @author <a href="mailto:hani@formicary.net">Hani Suleiman</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PageOutputStream extends ServletOutputStream implements OutputBuffer {
 
     private ByteArrayOutputStream buffer = null;
-    private OutputStream original = null;
     private OutputStream target = null;
     private static final String DEFAULT_ENCODING = System.getProperty("file.encoding");
     private static final boolean JDK14 = System.getProperty("java.version").startsWith("1.4");
 
-  /**
-     * Construct an PageOutputStream around the specified PrintWriter.  If the encoding is
-     * null, then the systems default encoding is used.
-     *
-     * @param original  The underlying outputStream
+    /**
+     * The reason we use a response, rather than just getting the outputstream directly is that under Tomcat, when
+     * serving static resources, we need to avoid calling getOutputStream() if we are going to use a decorator.
+     * <p>
+     * More information: http://marc.theaimsgroup.com/?l=tomcat-user&m=107569601410973&w=2, SIM-74, SIM-82
      */
-    public PageOutputStream(OutputStream original) {
-        this.original = original;
+    private final ServletResponse response;
+
+    /**
+     * Construct an OutputStream that will buffer the content written to it.
+     */
+    public PageOutputStream(ServletResponse response) {
+        this.response = response;
         this.buffer = new FastByteArrayOutputStream();
         target = buffer;
     }
@@ -52,8 +57,9 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
     public void discardBuffer() {
         //allow multiple calls to this method without duplicating content to target
         if (target == buffer) {
-            target = original;
             try {
+                OutputStream original = response.getOutputStream();
+                target = original;
                 // copy any bytes written to buffer so far to original stream.
                 original.write(buffer.toByteArray());
                 original.flush();
@@ -131,26 +137,4 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
         }
     }
 
-  public static void main(String[] args) throws IOException
-  {
-    OutputStream bos = new ByteArrayOutputStream();
-    String val = "abcdefsdoihsdifhu saiudfg qqwe ";
-    val+="\\u0126\\u0118\\u0139\\u0139\\u0150";
-    StringBuffer sb = new StringBuffer(1000);
-    for(int i=0;i<500;i++)
-    {
-      sb.append(val);
-    }
-    bos.write(val.getBytes(DEFAULT_ENCODING));
-    PageOutputStream os = new PageOutputStream(bos);
-    int iterations = 10000;
-    long[] blah = new long[iterations];
-    long now = System.currentTimeMillis();
-    for(int i=0;i<iterations;i++)
-    {
-      char[] chars = os.getBuffer(DEFAULT_ENCODING);
-      blah[i] = chars.length;
-    }
-    System.out.println("time taken for buffer=" + (double)(System.currentTimeMillis()-now)/iterations);
-  }
 }
