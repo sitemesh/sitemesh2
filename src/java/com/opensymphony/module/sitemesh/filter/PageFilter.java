@@ -23,9 +23,9 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public final class PageFilter implements Filter, RequestConstants {
+public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
     private Factory factory = null;
 
@@ -122,7 +122,7 @@ public final class PageFilter implements Filter, RequestConstants {
      * </pre>
      * </p>
      */
-    private Page parsePage(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected Page parsePage(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         boolean debug = Boolean.valueOf(filterConfig.getInitParameter("debug.pagewriter")).booleanValue();
         try {
             PageResponseWrapper pageResponse = new PageResponseWrapper(response, new Config(filterConfig), debug);
@@ -151,7 +151,7 @@ public final class PageFilter implements Filter, RequestConstants {
      * Apply {@link com.opensymphony.module.sitemesh.Decorator} to
      * {@link com.opensymphony.module.sitemesh.Page} and write to the response.
      */
-    private void applyDecorator(Page page, Decorator decorator, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void applyDecorator(Page page, Decorator decorator, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             request.setAttribute(PAGE, page);
             ServletContext context = filterConfig.getServletContext();
