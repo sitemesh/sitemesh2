@@ -22,10 +22,10 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <p>It will check the request attribute value defined by the key
  * {@link com.opensymphony.module.sitemesh.RequestConstants#DECORATOR} and use the appropriate named
- * Decorator. This is passed across from the page:apply-decorator tag.</p>
+ * Decorator. This is passed across from the page:applyDecorator tag.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */

@@ -8,9 +8,9 @@
 
 		<p>page 5 content</p>
 
-		<page:apply-decorator name="inline-panel" id="inline1" title="Inline external content 5">
+		<page:applyDecorator name="inline-panel" id="inline1" title="Inline external content 5">
 			Some more inline stuff.
-		</page:apply-decorator>
+		</page:applyDecorator>
 
 		<p >Bye</p>
 
