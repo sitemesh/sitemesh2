@@ -21,8 +21,9 @@ import java.util.Properties;
  * The ParameterDecoratorMapper will map a suitable decorator based on request
  * parameters.
  *
- * <p>The ParameterDecoratorMapper is configured via three properties.
- * <code>decorator.parameter</code> - the parameter which contains the name of the decorator which will be mapped.
+ * <p>The ParameterDecoratorMapper is configured via three properties.</p>
+ *
+ * <p><code>decorator.parameter</code> - the parameter which contains the name of the decorator which will be mapped.
  * The default is "decorator".</p>
  *
  * <p>For example if <code>decorator.parameter</code> is "foobar" then
@@ -39,7 +40,7 @@ import java.util.Properties;
  * not return any decorator.</p>
  *
  * @author <a href="mailto:mcannon@internet.com">Mike Cannon-Brookes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */

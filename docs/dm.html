@@ -101,11 +101,29 @@
 		    </tr>
 		    <tr>
 		        <td valign="top"><strong>ParameterDecoratorMapper</strong></td>
-
-		        <td>Will choose the decorator based on request parameters. <p>The
-		        ParameterDecoratorMapper is configured via three properties.
-		        <code>decorator.parameter</code> - the parameter which contains the name
-		        of the decorator which will be mapped. The default is "decorator".</td>
+		        <td>Will choose the decorator based on request parameters.
+		        <p>The ParameterDecoratorMapper is configured via three properties.</p>
+		        <p><code>decorator.parameter</code> - the parameter which contains the name
+		        of the decorator which will be mapped. The default is "decorator".</p>
+                <p>For example if <code>decorator.parameter</code> is "foobar" then
+                myurl.jsp?foobar=mydecorator will map to the decorator named "mydecorator".</p>
+                <p>You can also supply an optional 'confirmation parameter'.
+                The decorator will only be mapped if the parameter named <code>parameter.name</code> is
+                in the request URI and the value of that parameter is equal to the
+                <code>parameter.value</code> property.</p>
+                <p>For example assuming parameter.name=confirm and parameter.value=true
+                the URI myurl.jsp?decorator=mydecorator&confirm=true will map the decorator mydecorator.
+                where as the URIs myurl.jsp?decorator=mydecorator and myurl.jsp?decorator=mydecorator&confirm=false will
+                not return any decorator.</p>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>SessionDecoratorMapper</strong></td>
+		        <td><p>Will look at a session attribute to find the name of an appropriate decorator to use. If the 
+		        session attribute is present, the mapper will not do anything and allow the next mapper in the chain
+		        to select a decorator.</p>
+		        <p>By default, it will look at the 'decorator' session attribute, however this can be overriden by
+		        configuring the mapper with a 'decorator.parameter' property.</p></td>
 		    </tr>
 		    <tr>
 		        <td valign="top"><strong>PrintableDecoratorMapper</strong></td>
