@@ -10,6 +10,7 @@
 package com.opensymphony.module.sitemesh.taglib.page;
 
 import com.opensymphony.module.sitemesh.*;
+import com.opensymphony.module.sitemesh.filter.PageRequestWrapper;
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 
 import javax.servlet.RequestDispatcher;
@@ -49,7 +50,7 @@ import java.net.MalformedURLException;
  * {@link com.opensymphony.module.sitemesh.DecoratorMapper} can overide this.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstants {
     private String page = null;
@@ -209,6 +210,7 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
 
                 // include page using filter response
                 RequestDispatcher rd = pageContext.getServletContext().getRequestDispatcher(fullPath);
+                PageRequestWrapper pageRequest = new PageRequestWrapper((HttpServletRequest) pageContext.getRequest());
                 PageResponseWrapper pageResponse = new PageResponseWrapper((HttpServletResponse) pageContext.getResponse(), config);
 
                 StringBuffer sb = new StringBuffer(contentType != null ? contentType : "text/html");
@@ -222,7 +224,7 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
                 if (rd == null) {
                     throw new ApplyDecoratorException("The specified resource in applyDecorator tag (" + fullPath + ") was not found.");
                 }
-                rd.include(pageContext.getRequest(), pageResponse);
+                rd.include(pageRequest, pageResponse);
                 pageObj = pageResponse.getPage();
                 pageResponse.closeWriter();
             }
