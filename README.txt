@@ -166,7 +166,7 @@ SiteMesh does work correctly on WebLogic 7.0 SP2, 8.1 and 8.1 SP2.
 * SiteMesh does not work on Weblogic 8.1 SP1 because of various bugs in the JSP
 compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
 
-* SiteMesh does not work on WebSphere 5.0.1 and 5.0.2. Apply patch IBM iFix 
+* SiteMesh does not work on WebSphere 5.0.1 and 5.0.2. Apply patch IBM iFix
 PQ80592 to your WebSphere installation.
 
 Please report bugs here: http://jira.opensymphony.com
@@ -175,65 +175,59 @@ Please report bugs here: http://jira.opensymphony.com
 -- Changes from 2.0.1   --
 --------------------------
 
-- Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation)
-- The example and blank use Packaged Tag Libraries (specifying the URI of the taglib)
+- Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation).
+- The example and blank use Packaged Tag Libraries (specifying the URI of the taglib).
 - Documentation updates.
 
-JIRA bugs/tasks fixed:
+JIRA issues fixed:
     - SIM-73 PageFilter is not final and you can now subclass the newly protected applyDecorator and parsePage methods
-    - SIM-83 RequestDispatcher.forward() support 
-    - SIM-91 Remove singleton configuration 
-    - SIM-55 applyDecorator tag doesn't work on resin 
+    - SIM-83 RequestDispatcher.forward() support
+    - SIM-91 Remove singleton configuration
+    - SIM-55 applyDecorator tag doesn't work on resin
     - SIM-73 Make PageFilter subclassable
-    - SIM-89 <url-pattern> mapping on deployment descriptor    
+    - SIM-89 <url-pattern> mapping on deployment descriptor
 
 --------------------------
 -- Changes from 2.0     --
 --------------------------
 
-Chris Miller has been working like a demon on FastPageParser, and it's now as 
-fast and efficient as it can get. To give you a rough idea, 2.0 is about 3 times 
+Chris Miller has been working like a demon on FastPageParser, and it's now as
+fast and efficient as it can get. To give you a rough idea, 2.0 is about 3 times
 faster than 1.5. 2.0.1 is about 5 times faster than 1.5.
 
-With regards to memory usage, it's basically been knocked down to be negligible. 
-Previously (1.5), a 50k page parsed 250 times (separate instances strongly 
-referenced, with an explicit gc call to remove temporary objects) used up 37mb. 
-Currently, it uses 25mb (and it's no coincidence that 50k * 250 * 2 bytes per 
+With regards to memory usage, it's basically been knocked down to be negligible.
+Previously (1.5), a 50k page parsed 250 times (separate instances strongly
+referenced, with an explicit gc call to remove temporary objects) used up 37mb.
+Currently, it uses 25mb (and it's no coincidence that 50k * 250 * 2 bytes per
 char == 25mb).
 
 - Minor DTD fix.
-
 - Updates to documentation and build process.
-
 - Added ParserGrinder to load test FastPageParser.
 
 --------------------------
 -- Changes from 1.5     --
 --------------------------
 - SiteMesh now hosted at http://sitemesh.dev.java.net.
-
 - FastPageParser performance improvements.
-
 - DTD location has changed; now http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd
-
 - API change in Decorator (check your custom written Decorator classes):
   Added new method getRole() to enable role based decorators.
+- Updated documentation to align with new Opensymphony website.
 
-- Updated documentation to align with new Opensymphony Website.
-
-JIRA bugs/tasks fixed:
-    SIM-16 Tomcat IllegalStateException      
-    SIM-41 NoSuchMethodException with Orion      
-    SIM-2  Response bug on WebLogic 6.1      
-    SIM-13 Tomcat4 throws IOException after response.sendRedirect()      
-    SIM-29 WebLogic 7 doesn't work      
-    SIM-40 Let properties be retrieved programatically      
-    SIM-27 Example apps don't work in Pramati      
-    SIM-17 Can't set headers from decorator page.      
-    SIM-8  body tag not correctly parsed      
-    SIM-56 Decorator taglibs allowed to contain body      
-    SIM-37 role based decorators      
-    SIM-46 Place TLDs in Jar file.      
+JIRA issues fixed:
+    SIM-16 Tomcat IllegalStateException
+    SIM-41 NoSuchMethodException with Orion
+    SIM-2  Response bug on WebLogic 6.1
+    SIM-13 Tomcat4 throws IOException after response.sendRedirect()
+    SIM-29 WebLogic 7 doesn't work
+    SIM-40 Let properties be retrieved programatically
+    SIM-27 Example apps don't work in Pramati
+    SIM-17 Can't set headers from decorator page.
+    SIM-8  body tag not correctly parsed
+    SIM-56 Decorator taglibs allowed to contain body
+    SIM-37 role based decorators
+    SIM-46 Place TLDs in Jar file.
 
 --------------------------
 -- Changes from 1.4.1   --
@@ -267,7 +261,7 @@ JIRA bugs/tasks fixed:
 - BUGFIX: small fixes to make SiteMesh work better on Tomcat
 - BUGFIX: javadoc fixes
 
-JIRA bugs/tasks fixed:
+JIRA issues fixed:
     SIM-1  Finalize RE support in PathMapper
     SIM-3  Page filter strips <xmp> tags
     SIM-4  PathMapper order is incorrect
@@ -302,21 +296,20 @@ JIRA bugs/tasks fixed:
 - various bug fixes and small performance improvements
 
 - BUGFIX: memory leak in PageFilter
-- BUGFIX: meta http-equiv tags are now added as properties with prefix meta.http-equiv.x where x 
+- BUGFIX: meta http-equiv tags are now added as properties with prefix meta.http-equiv.x where x
   is the value of the http-equiv attribute (eg refresh)
 - BUGFIX: the configuration files are not case-sensitive anymore
-
 
 --------------------------
 -- Credits              --
 --------------------------
 
 Thank these guys:
-* Mathias Bogaert     <pathos@pandora.be>
-* Mike Cannon-Brookes <mike@atlassian.com>
-* Victor Salaman      <salaman@teknos.com>
-* Joseph Ottinger     <joeo@adjacency.org>
-* Hani Suleiman       <fate@users.sourceforge.net>
-* Scott Farquhar      <scott@atlassian.com>
+* Mathias Bogaert         <NOSPAMpathos@pandora.be>
+* Mike Cannon-Brookes     <mikeNOSPAM@atlassian.com>
+* Victor Salaman          <salamanNOSPAM@teknos.com>
+* Joseph Ottinger         <joeoNOSPAM@adjacency.org>
+* Hani Suleiman           <NOSPAMfate@users.sourceforge.net>
+* Scott Farquhar          <scottNOSPAM@atlassian.com>
 
-                                            - Joe Walnes <joe@truemesh.com>
+                                            - Joe Walnes <joe@NOSPAMtruemesh.com>
