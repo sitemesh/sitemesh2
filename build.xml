@@ -11,7 +11,7 @@
         </fileset>
     </path>
 
-    <target name="jflex" unless="lexer.uptodate">
+    <target name="jflex" unless="lexer.uptodate" description="Generate Lexer class">
         <echo message="Generating HTML lexer using JFlex"/>
         <java classpath="lib/jflex.jar" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
@@ -21,7 +21,7 @@
         <delete file="src/java/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java~"/>
     </target>
 
-    <target name="compile">
+    <target name="compile" description="Compile Java">
         <!-- Determine if lexer needs regenerating -->
         <uptodate
             property="lexer.uptodate"
@@ -47,7 +47,7 @@
     <target name="test" depends="compile" description="Run all unit tests">
         <mkdir dir="build/test-classes"/>
         <mkdir dir="build/test-results"/>
-        <javac srcdir="src/test" destdir="build/classes" classpathref="cp" classpath="build/classes"/>
+        <javac srcdir="src/test" destdir="build/test-classes" classpathref="cp" classpath="build/classes"/>
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="cp"/>
         <echo message="Running unit tests..."/>
         <junit printsummary="no" haltonfailure="yes" fork="no">
@@ -107,12 +107,8 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="dist"/>
-
         <copy todir="build/classes/com/opensymphony/module/sitemesh/factory" file="src/java/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
-
-        <jar jarfile="dist/${name}-${version}.jar" basedir="build/classes"
-            excludes="**/servlets/**"
-            >
+        <jar jarfile="dist/${name}-${version}.jar" basedir="build/classes" excludes="**/servlets/**">
             <metainf dir="src/etc/tld/jsp1.2" includes="*.tld"/>
         </jar>
     </target>
@@ -166,14 +162,28 @@
     </target>
 
     <target name="dist" depends="clean, test, jar, docs, blank, example" description="Builds distribution archives">
-        <zip zipfile="dist/${name}-${version}-sources.zip"
-            basedir="${basedir}"
-            excludes="dist/**, build/**, **/*.log"
-            />
+        <zip zipfile="dist/${name}-${version}.zip">
+            <zipfileset dir=".">
+                <include name="build.xml"/>
+                <include name="build.properties"/>
+                <include name="LICENSE.txt"/>
+                <include name="CHANGES.txt"/>
+                <include name="README.txt"/>
+                <include name="src/**"/>
+                <include name="lib/**"/>
+            </zipfileset>
+            <zipfileset dir="build">
+                <include name="${name}-${version}.jar"/>
+                <include name="${name}-example.war"/>
+                <include name="${name}-blank.war"/>
+            </zipfileset>
+            <zipfileset dir="dist/docs" prefix="docs"/>
+        </zip>
     </target>
 
     <target name="clean" description="Removes all build artifacts">
         <delete dir="build"/>
         <delete dir="dist"/>
     </target>
+
 </project>
