@@ -21,7 +21,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -72,6 +72,9 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
     }
 
     private void activateSiteMesh(String contentType, String encoding) {
+        if (parseablePage) {
+            return; // already activated
+        }
         parseablePage = true;
         buffer = new Buffer(factory, contentType, encoding);
         routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
