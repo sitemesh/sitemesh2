@@ -35,16 +35,23 @@ public class HTMLPageParserTest extends TestCase {
         TestSuite result = new TestSuite(HTMLPageParserTest.class.getName());
 
         File[] files = listParserTests(new File("src/parser-tests"));
+        PageParser[] parsers = new PageParser[] { new FastPageParser(), new HTMLPageParser() };
 
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            TestSuite suiteForFile = new TestSuite(file.getName().replace('.', '_'));
-            suiteForFile.addTest(new HTMLPageParserTest(file, "testTitle"));
-            suiteForFile.addTest(new HTMLPageParserTest(file, "testBody"));
-            suiteForFile.addTest(new HTMLPageParserTest(file, "testHead"));
-            suiteForFile.addTest(new HTMLPageParserTest(file, "testFullPage"));
-            suiteForFile.addTest(new HTMLPageParserTest(file, "testProperties"));
-            result.addTest(suiteForFile);
+        for (int i = 0; i < parsers.length; i++) {
+            PageParser parser = parsers[i];
+            String name = parser.getClass().getName();
+            TestSuite suiteForParser = new TestSuite(name);
+            for (int j = 0; j < files.length; j++) {
+                File file = files[j];
+                TestSuite suiteForFile = new TestSuite(file.getName().replace('.', '_'));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testTitle"));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testBody"));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testHead"));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testFullPage"));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testProperties"));
+                suiteForParser.addTest(suiteForFile);
+            }
+            result.addTest(suiteForParser);
         }
 
         return result;
@@ -53,14 +60,14 @@ public class HTMLPageParserTest extends TestCase {
     private HTMLPage page;
     private Map blocks;
     private String encoding;
+    private final PageParser parser;
     private File file;
-    private String parserClass;
 
-    public HTMLPageParserTest(File inputFile, String test) {
+    public HTMLPageParserTest(PageParser parser, File inputFile, String test) {
         super(test);
+        this.parser = parser;
         file = inputFile;
         encoding = "UTF8";
-        parserClass = "com.opensymphony.module.sitemesh.parser.FastPageParser";
     }
 
     protected void setUp() throws Exception {
@@ -69,7 +76,6 @@ public class HTMLPageParserTest extends TestCase {
         this.blocks = readBlocks(new FileReader(file));
         // create PageParser and parse input block into HTMLPage object.
         String input = (String) blocks.get("INPUT");
-        PageParser parser = (PageParser) Class.forName(parserClass).newInstance();
         this.page = (HTMLPage) parser.parse(input.toCharArray());
     }
 
@@ -111,7 +117,9 @@ public class HTMLPageParserTest extends TestCase {
             String pageKey = pageKeys[i];
             String blockValue = props.getProperty(pageKey);
             String pageValue = page.getProperty(pageKey);
-            assertEquals(file.getName(), pageValue, blockValue);
+            assertEquals(file.getName(),
+                    pageValue == null ? null : pageValue.trim(),
+                    blockValue == null ? null : blockValue.trim());
         }
     }
 
