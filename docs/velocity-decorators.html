@@ -10,15 +10,17 @@
         <p>Here is an example of how such a decorator might look:</p>
 
 <pre style="border: 1px solid #999999; padding: 5px">
-#parse ("/decorators/includes/header.vmd")
-    &lt;h2&gt;$title&lt;/h2&gt;
+#parse ("/includes/decorators/header.vm")
+    &lt;h2&gt;<b>$title</b>&lt;/h2&gt;
+    <b>$head</b>
+    &lt;img src="<b>$base</b>/images/logo.gif" border="0"&gt;
     &lt;td valign="top" class="body"&gt;
         &lt;div class="header"&gt;
-            &lt;span class="pagetitle"&gt;$title&lt;/span&gt;
+            &lt;span class="pagetitle"&gt;<b>$title</b>&lt;/span&gt;
         &lt;/div&gt;
-        $body
+        <b>$body</b>
     &lt;/td&gt;
-#parse ("/decorators/includes/footer.vmd")
+#parse ("/includes/decorators/footer.vm")
 </pre>
 
         <h3>Installation</h3>
