@@ -20,10 +20,15 @@ declaration
 The decorators element is the root element of the file.
 It contains decorator and decorator mapping elements.
 -->
-<!ELEMENT decorators (decorator+)>
+<!ELEMENT decorators (excludes?, decorator+)>
 <!ATTLIST decorators
 	defaultdir CDATA #IMPLIED
 >
+
+<!--
+A list of patterns to exclude
+-->
+<!ELEMENT excludes (pattern*)>
 
 <!--
 The decorator element contains the declarative data of a
