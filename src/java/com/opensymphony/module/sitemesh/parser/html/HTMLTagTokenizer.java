@@ -33,7 +33,7 @@ public class HTMLTagTokenizer implements Tag, Text {
 
     private String name;
     private int type;
-    private List currentAttributes = new ArrayList();
+    private final List attributes = new ArrayList();
 
     public HTMLTagTokenizer(char[] input) {
         this.input = input;
@@ -66,22 +66,26 @@ public class HTMLTagTokenizer implements Tag, Text {
     }
 
     public int getAttributeCount() {
-        return currentAttributes == null ? 0 : currentAttributes.size();
+        return attributes == null ? 0 : attributes.size() / 2;
     }
 
     public String getAttributeName(int index) {
-        return ((Attribute) currentAttributes.get(index)).name;
+        return (String) attributes.get(index * 2);
     }
 
     public String getAttributeValue(int index) {
-        return ((Attribute) currentAttributes.get(index)).value;
+        return (String) attributes.get(index * 2 + 1);
     }
 
     public String getAttributeValue(String name) {
         // todo: optimize
-        for (int i = 0; i < getAttributeCount(); i++) {
-            if (getAttributeName(i).equalsIgnoreCase(name)) {
-                return getAttributeValue(i);
+        if (attributes == null) {
+            return null;
+        }
+        final int len = attributes.size();
+        for (int i = 0; i < len; i+=2) {
+            if (name.equalsIgnoreCase((String) attributes.get(i))) {
+                return (String) attributes.get(i + 1);
             }
         }
         return null;
@@ -103,31 +107,20 @@ public class HTMLTagTokenizer implements Tag, Text {
         this.position = start;
         this.length = length;
         handler.tag((Tag) this);
-        currentAttributes = null;
+        attributes.clear();
     }
 
     public void parsedAttribute(String name, String value, boolean quoted) {
-        // TODO: optimize this... most attributes are ignored, so only bother initializing a heavy Map when
-        // absolutely positively necessary.
-        if (currentAttributes == null) {
-            currentAttributes = new ArrayList();
-        }
-        Attribute attribute = new Attribute();
-        attribute.name = name;
+        attributes.add(name);
         if (quoted) {
-            attribute.value = value.substring(1, value.length() - 1);
+            attributes.add(value.substring(1, value.length() - 1));
         } else {
-            attribute.value = value;
+            attributes.add(value);
         }
-        currentAttributes.add(attribute);
     }
 
     public void error(String message, int line, int column) {
         handler.error(message, line, column);
     }
 
-    private static class Attribute {
-        String name;
-        String value;
-    }
 }
