@@ -30,6 +30,7 @@
 
     <decorator name="inline-7" page="/inline/dec-7.jsp" >
     	<pattern>/inline/page7.jsp</pattern>
+    	<pattern>/inline/page7.html</pattern>
    	</decorator>
 
     <decorator name="velocity" page="/decorators/velocity.vm">
