@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Velocity Decorators</title>
+    </head>
+
+    <body>
+        As of SiteMesh 2.0.2 <a href="http://jakarta.apache.org/velocity/">Velocity</a> (.vm)
+        decorators are supported.
+
+        <p>Here is an example of how such a decorator might look:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+#parse ("/decorators/includes/header.vmd")
+    &lt;h2&gt;$title&lt;/h2&gt;
+    &lt;td valign="top" class="body"&gt;
+        &lt;div class="header"&gt;
+            &lt;span class="pagetitle"&gt;$title&lt;/span&gt;
+        &lt;/div&gt;
+        $body
+    &lt;/td&gt;
+#parse ("/decorators/includes/footer.vmd")
+</pre>
+
+        <h3>Installation</h3>
+
+        Add the following to <b><code>[web-app]/WEB-INF/web.xml</code></b>
+        within the <b><code>&lt;web-app&gt;</code></b> tag:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;servlet&gt;
+    &lt;servlet-name&gt;<b>sitemesh-velocity</b>&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;<b>com.opensymphony.module.sitemesh.velocity.VelocityDecoratorServlet</b>&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;sitemesh-velocity&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;<b>/decorators/*.vm</b>&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</pre>
+
+		<p>Now you can reference any .vm under the decorators directory from your decorators.xml.</p>
+		
+		<h3>Context</h3>
+		
+		VelocityDecoratorServlet puts some things into the context object that you should be aware of: 
+		
+		<table border="0" cellspacing="10">
+		    <tr>
+		        <td valign="top"><strong>$req</strong> (from <a href="http://jakarta.apache.org/velocity/api/org/apache/velocity/servlet/VelocityServlet.html">VelocityServlet</a>)</td>
+		        <td>The HttpServletRequest object</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$res</strong> (from <a href="http://jakarta.apache.org/velocity/api/org/apache/velocity/servlet/VelocityServlet.html">VelocityServlet</a>)</td>
+		        <td>The HttpServletResponse object</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$base</strong></td>
+		        <td>request.getContextPath()</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$title</strong></td>
+		        <td>Parsed page title (&lt;title&gt;...&lt;title&gt;)</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$head</strong></td>
+		        <td>Parsed page head</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$body</strong></td>
+		        <td>Parsed page body</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$page</strong></td>
+		        <td>SiteMesh's internal Page object</td>
+		    </tr>
+		</table>
+	</body>
+</html>
