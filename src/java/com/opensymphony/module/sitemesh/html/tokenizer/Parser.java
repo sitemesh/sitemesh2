@@ -156,30 +156,13 @@ class Parser extends Lexer {
         if (token == Parser.WORD) {
             // Token WORD - name of tag
             name = text();
-
             if (handler.shouldProcessTag(name)) {
                 parseFullTag(type, name, start);
             } else {
-
-                // don't care about this tag... scan to the end and treat it as text
-                while(true)  {
-                    if (pushbackToken == -1) {
-                        token = yylex();
-                    } else {
-                        token = pushbackToken;
-                        pushbackToken = -1;
-                    }
-                    if (token == Parser.GT) {
-                        pushBack(yylex()); // take and replace the next token, so the position is correct  
-                        parsedText(start, position() - start);
-                        return;
-                    } else if (token == 0) {
-                        parsedText(start, position() - start); // eof
-                        return;
-                    }
-                }
+                resetLexerState();
+                pushBack(yylex()); // take and replace the next token, so the position is correct
+                parsedText(start, position() - start);
             }
-
         } else if (token == Parser.GT) {
             // Token ">" - an illegal <> or <  > tag. Ignore
         } else if (token == 0) {

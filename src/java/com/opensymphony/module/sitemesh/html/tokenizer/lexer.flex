@@ -25,6 +25,7 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
     protected int length()   { return yy_markedPos - yy_startRead; }
     protected int line()     { return yyline; }
     protected int column()   { return yycolumn; }
+    protected void resetLexerState() { yybegin(YYINITIAL); }
     protected abstract void reportError(String message, int line, int column);
 %}
 
