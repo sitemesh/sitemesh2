@@ -175,11 +175,17 @@ Please report bugs here: http://jira.opensymphony.com
 -- Changes from 2.0.1   --
 --------------------------
 
+- Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation)
 - The example and blank use Packaged Tag Libraries (specifying the URI of the taglib)
 - Documentation updates.
 
 JIRA bugs/tasks fixed:
     - SIM-73 PageFilter is not final and you can now subclass the newly protected applyDecorator and parsePage methods
+    - SIM-83 RequestDispatcher.forward() support 
+    - SIM-91 Remove singleton configuration 
+    - SIM-55 applyDecorator tag doesn't work on resin 
+    - SIM-73 Make PageFilter subclassable
+    - SIM-89 <url-pattern> mapping on deployment descriptor    
 
 --------------------------
 -- Changes from 2.0     --
