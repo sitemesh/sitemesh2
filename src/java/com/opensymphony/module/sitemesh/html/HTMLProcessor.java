@@ -5,6 +5,8 @@ import com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.CharArrayWriter;
@@ -92,7 +94,7 @@ public class HTMLProcessor {
             }
 
             public void text(Text text) {
-                text.writeTo(context.currentBuffer());
+                currentState.handleText(text, context);
             }
 
             public void warning(String message, int line, int column) {
@@ -105,4 +107,9 @@ public class HTMLProcessor {
             outStream.write(out.toString());
         }
     }
+
+    public void addTextFilter(TextFilter textFilter) {
+        currentState.addTextFilter(textFilter);
+    }
+
 }

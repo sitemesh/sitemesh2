@@ -9,14 +9,23 @@ public final class State {
     private TagRule[] rules = new TagRule[16]; // List is too slow, according to profiler
     private int ruleCount = 0;
     private final ArrayList listeners = new ArrayList();
+    private List textFilters = new ArrayList(); // lazily instantiated to reduce overhead for most cases where it's not needed.
 
     public void addRule(TagRule rule) {
         if (ruleCount == rules.length) {
+            // grow array if necessary
             TagRule[] longerArray = new TagRule[rules.length * 2];
             System.arraycopy(rules, 0, longerArray, 0, ruleCount);
             rules = longerArray;
         }
         rules[ruleCount++] = rule;
+    }
+
+    public void addTextFilter(TextFilter textFilter) {
+        if (textFilters == null) {
+            textFilters = new ArrayList(); // lazy instantiation
+        }
+        textFilters.add(textFilter);
     }
 
     public boolean shouldProcessTag(String tagName) {
@@ -47,5 +56,18 @@ public final class State {
 			listener.stateFinished();			
 		}
 	}
-    
+
+    public void handleText(Text text, HTMLProcessorContext context) {
+        if (textFilters == null) {
+            text.writeTo(context.currentBuffer());
+        } else {
+            String asString = text.getContents();
+            for (Iterator iterator = textFilters.iterator(); iterator.hasNext();) {
+                TextFilter textFilter = (TextFilter) iterator.next();
+                asString = textFilter.filter(asString);
+            }
+            context.currentBuffer().append(asString);
+        }
+    }
+
 }

@@ -3,7 +3,7 @@ package com.opensymphony.module.sitemesh.html;
 public class StateTransitionRule extends BasicRule {
 
     private final State newState;
-    private final boolean includeEnclosingTags;
+    private final boolean writeEnclosingTag;
 
     private State lastState;
 
@@ -11,10 +11,10 @@ public class StateTransitionRule extends BasicRule {
         this(tagName, newState, true);
     }
 
-    public StateTransitionRule(String tagName, State newState, boolean includeEnclosingTags) {
+    public StateTransitionRule(String tagName, State newState, boolean writeEnclosingTag) {
         super(tagName);
         this.newState = newState;
-        this.includeEnclosingTags = includeEnclosingTags;
+        this.writeEnclosingTag = writeEnclosingTag;
     }
 
     public void process(Tag tag) {
@@ -26,7 +26,7 @@ public class StateTransitionRule extends BasicRule {
             context.changeState(lastState);
             lastState = null;
         }
-        if (includeEnclosingTags) {
+        if (writeEnclosingTag) {
             tag.writeTo(context.currentBuffer());
         }
     }

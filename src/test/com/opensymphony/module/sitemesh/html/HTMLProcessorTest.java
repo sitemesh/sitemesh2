@@ -63,5 +63,43 @@ public class HTMLProcessorTest extends TestCase {
         assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", out.toString());
     }
 
+    public void testSupportsChainedFilteringOfTextContent() throws IOException {
+        Reader in = new StringReader("<hello>world</hello>");
+        Writer out = new StringWriter();
+
+        HTMLProcessor processor = new HTMLProcessor(in, out);
+        processor.addTextFilter(new TextFilter() {
+            public String filter(String text) {
+                return text.toUpperCase();
+            }
+        });
+        processor.addTextFilter(new TextFilter() {
+            public String filter(String text) {
+                return text.replaceAll("O", "o");
+            }
+        });
+
+        processor.process();
+        assertEquals("<HELLo>WoRLD</HELLo>", out.toString());
+    }
+
+    public void testSupportsTextFiltersForSpecificStates() throws IOException {
+        Reader in = new StringReader("la la<br> la la <capitalism>laaaa<br> laaaa</capitalism> la la");
+        Writer out = new StringWriter();
+
+        HTMLProcessor processor = new HTMLProcessor(in, out);
+
+        State capsState = new State();
+        processor.addRule(new StateTransitionRule("capitalism", capsState, true));
+
+        capsState.addTextFilter(new TextFilter() {
+            public String filter(String text) {
+                return text.toUpperCase();
+            }
+        });
+
+        processor.process();
+        assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", out.toString());
+    }
 
 }
