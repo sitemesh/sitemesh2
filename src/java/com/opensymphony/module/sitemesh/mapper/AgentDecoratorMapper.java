@@ -43,7 +43,7 @@ import java.util.Properties;
  * For example: 'match.MSIE'=ie , 'match.Lynx'=plain .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
@@ -80,10 +80,11 @@ public final class AgentDecoratorMapper extends AbstractDecoratorMapper {
 
     /** Get extention for user-agent. */
     private String getExt(String userAgent) {
-        Iterator i = map.keySet().iterator();
+        Iterator i = map.entrySet().iterator();
         while (i.hasNext()) {
-            String curr = (String)i.next();
-            if (userAgent.indexOf(curr) > -1) return (String)map.get(curr);
+            Map.Entry entry = (Map.Entry) i.next();
+            String curr = (String) entry.getKey();
+            if (userAgent.indexOf(curr) > -1) return (String) entry.getValue();
         }
         return null;
     }
@@ -101,12 +102,13 @@ public final class AgentDecoratorMapper extends AbstractDecoratorMapper {
 
     /** Initialize user-agent mappings. */
     private void initMap(Properties props) {
-        Iterator i = props.keySet().iterator();
+        Iterator i = props.entrySet().iterator();
         while (i.hasNext()) {
-            String key = (String)i.next();
+            Map.Entry entry = (Map.Entry) i.next();
+            String key = (String) entry.getKey();
             if (key.startsWith("match.")) {
                 String match = key.substring(6);
-                String ext = props.getProperty(key);
+                String ext = (String) entry.getValue();
                 map.put(match, ext);
             }
         }

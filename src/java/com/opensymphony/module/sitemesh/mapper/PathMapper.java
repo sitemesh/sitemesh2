@@ -11,6 +11,7 @@ package com.opensymphony.module.sitemesh.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 /**
  * The PathMapper is used to map file patterns to keys, and find an approriate
@@ -36,7 +37,7 @@ import java.util.Map;
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:mcannon@internet.com">Mike Cannon-Brookes</a>
  * @author <a href="mailto:hani@formicary.net">Hani Suleiman</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public final class PathMapper {
     private Map mappings = new HashMap();
@@ -71,10 +72,10 @@ public final class PathMapper {
     }
 
     private static String findComplexKey(String path, Map mappings) {
-        String[] keys = (String[]) mappings.keySet().toArray(new String[mappings.keySet().size()]);
+        Iterator i = mappings.keySet().iterator();
         String result = null, key = null;
-        for (int i = 0; i < keys.length; i++) {
-            key = keys[i];
+        while (i.hasNext()) {
+            key = (String) i.next();
             if (key.length() > 1 && (key.indexOf('?') != -1 || key.indexOf('*') != -1) && match(key, path, false)) {
                 if (result == null || key.length() > result.length()) {
                     // longest key wins

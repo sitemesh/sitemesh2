@@ -75,15 +75,15 @@ public final class LanguageDecoratorMapper extends AbstractDecoratorMapper {
 
     /** Get extention for the language. */
     private String getExt(String acceptLanguage) {
-        Iterator i = map.keySet().iterator();
+        Iterator i = map.entrySet().iterator();
         while (i.hasNext()) {
-            String current = (String)i.next();
+            Map.Entry entry = (Map.Entry) i.next();
 
-            // Get the first language (preferred one) in the header, and
+           // Get the first language (preferred one) in the header, and
             // only check the first two chars (the acceptLanguage could be en-gb, but
             // we don't support this for now).
-            if (acceptLanguage.substring(0, 2).equals(current)) {
-                return (String)map.get(current);
+            if (acceptLanguage.substring(0, 2).equals(entry.getKey())) {
+                return (String) entry.getValue();
             }
 
             // When the user-agent has multiple accept-languages (separated by ;),
@@ -109,13 +109,13 @@ public final class LanguageDecoratorMapper extends AbstractDecoratorMapper {
 
     /** Initialize language mappings. */
     private void initMap(Properties props) {
-        Iterator i = props.keySet().iterator();
+        Iterator i = props.entrySet().iterator();
         while (i.hasNext()) {
-            String key = (String)i.next();
+            Map.Entry entry = (Map.Entry) i.next();
+            String key = (String) entry.getKey();
             if (key.startsWith("match.")) {
                 String match = key.substring(6);
-                String ext = props.getProperty(key);
-                map.put(match, ext);
+               map.put(match, entry.getValue());
             }
         }
     }

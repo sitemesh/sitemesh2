@@ -15,10 +15,7 @@ import com.opensymphony.module.sitemesh.DecoratorMapper;
 import com.opensymphony.module.sitemesh.Page;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * The PageDecoratorMapper allows the actual Page to determine the Decorator to be
@@ -37,7 +34,7 @@ import java.util.Properties;
  * Example: property.1=decorator, property.2=meta.decorator .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
@@ -47,11 +44,12 @@ public class PageDecoratorMapper extends AbstractDecoratorMapper {
     public void init(Config config, Properties properties, DecoratorMapper parent) throws InstantiationException {
         super.init(config, properties, parent);
         pageProps = new ArrayList();
-        Iterator i = properties.keySet().iterator();
+        Iterator i = properties.entrySet().iterator();
         while (i.hasNext()) {
-            String key = (String)i.next();
+            Map.Entry entry = (Map.Entry) i.next();
+            String key = (String) entry.getKey();
             if (key.startsWith("property")) {
-                pageProps.add(properties.getProperty(key));
+                pageProps.add(entry.getValue());
             }
         }
     }
