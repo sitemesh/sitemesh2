@@ -4,8 +4,24 @@ import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Splits a chunk of HTML into 'text' and 'tag' tokens, for easy processing. Is VERY tolerant to badly formed HTML.
+ * <p/>
+ * <h3>Usage</h3>
+ * <p/>
+ * You need to supply a custom {@link TokenHandler}.
+ * <p/>
+ * <pre>char[] input = ...;
+ * HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(input);
+ * TokenHandler handler = new MyTokenHandler();
+ * tokenizer.start(handler);</pre>
+ *
+ * @author Joe Walnes
+ * @see TokenHandler
+ * @see HTMLPageParser
+ */
 public class HTMLTagTokenizer implements Tag, Text {
-    
+
     private final char[] input;
 
     private TokenHandler handler;
@@ -78,7 +94,7 @@ public class HTMLTagTokenizer implements Tag, Text {
         this.currentName = name;
         this.currentStart = start;
         this.currentEnd = end;
-        handler.tag((Tag)this);
+        handler.tag((Tag) this);
         this.currentAttributes = null;
         this.currentName = null;
         this.currentType = Tag.UNKNOWN;
@@ -88,13 +104,13 @@ public class HTMLTagTokenizer implements Tag, Text {
 
     public void parsedText(String text) {
         this.currentText = text;
-        handler.text((Text)this);
+        handler.text((Text) this);
         this.currentText = null;
     }
 
     public void parsedText(int start, int end) {
         this.currentText = new String(input, start, end - start);
-        handler.text((Text)this);
+        handler.text((Text) this);
         this.currentText = null;
     }
 

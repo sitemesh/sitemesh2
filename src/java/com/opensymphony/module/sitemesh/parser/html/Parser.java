@@ -251,7 +251,7 @@ final static String yyrule[] = {
 "whitespace :",
 };
 
-//#line 46 "parser.yacc"
+//#line 53 "parser.yacc"
 private HTMLTagTokenizer tokenizer;
 
 public Parser(HTMLTagTokenizer tokenizer, java.io.Reader input) {
@@ -283,7 +283,7 @@ protected void reportError(String message, int line, int column) {
     tokenizer.error(message, line, column);
 }
 
-private class Value {
+private static class Value {
     String sval;
     int ival;
     int line;
@@ -442,51 +442,51 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 3:
-//#line 20 "parser.yacc"
+//#line 27 "parser.yacc"
 { tokenizer.parsedTag(Tag.OPEN,  val_peek(2).sval, val_peek(3).ival, val_peek(0).ival + 1); }
 break;
 case 4:
-//#line 21 "parser.yacc"
+//#line 28 "parser.yacc"
 { tokenizer.parsedTag(Tag.CLOSE, val_peek(2).sval, val_peek(4).ival, val_peek(0).ival + 1); }
 break;
 case 5:
-//#line 22 "parser.yacc"
+//#line 29 "parser.yacc"
 { tokenizer.parsedTag(Tag.EMPTY, val_peek(3).sval, val_peek(4).ival, val_peek(0).ival + 1); }
 break;
 case 6:
-//#line 23 "parser.yacc"
+//#line 30 "parser.yacc"
 { }
 break;
 case 7:
-//#line 24 "parser.yacc"
+//#line 31 "parser.yacc"
 { tokenizer.parsedText(val_peek(0).sval);           }
 break;
 case 8:
-//#line 27 "parser.yacc"
+//#line 34 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(5).sval, val_peek(1).sval  , false); }
 break;
 case 9:
-//#line 28 "parser.yacc"
+//#line 35 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(5).sval, val_peek(1).sval  , true);  }
 break;
 case 10:
-//#line 29 "parser.yacc"
+//#line 36 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(1).sval, null, false); }
 break;
 case 12:
-//#line 33 "parser.yacc"
+//#line 40 "parser.yacc"
 { yyval.sval = val_peek(1).sval + val_peek(0).sval; }
 break;
 case 13:
-//#line 34 "parser.yacc"
+//#line 41 "parser.yacc"
 { yyval.sval = val_peek(1).sval + "/"; }
 break;
 case 14:
-//#line 35 "parser.yacc"
+//#line 42 "parser.yacc"
 { yyval.sval = val_peek(1).sval + "="; }
 break;
 case 15:
-//#line 36 "parser.yacc"
+//#line 43 "parser.yacc"
 { yyval.sval = ""; }
 break;
 //#line 433 "Parser.java"

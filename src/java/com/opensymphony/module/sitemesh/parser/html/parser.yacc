@@ -1,6 +1,13 @@
+/*
+ * This is the definition (parser.yacc) for the auto-generated lexer (Parser.java)
+ * created by BYacc/J <http://byaccj.sourceforge.net/>.
+ * To regenerate Parser.java, run 'ant yacc'.
+ *
+ * @author Joe Walnes
+ */
 
 
-/********** TOKEN DEFINITIONS *********/
+/********** TOKEN DEFINITIONS (produced by lexer) *********/
 
 %token SLASH WHITESPACE EQUALS QUOTE
 %token <sval> WORD TEXT QUOTED    /* string contains text */
@@ -10,7 +17,7 @@
 
 
 
-/********** GRAMMAR *********/
+/********** GRAMMAR (BNF form, with Java snippets to execute on match) *********/
 
 document:
     document node |

@@ -1,3 +1,10 @@
+/*
+ * This is the definition (lexer.flex) for the auto-generated lexer (Lexer.java) created by JFlex <http://jflex.de/>.
+ * To regenerate Lexer.java, run 'ant jflex'.
+ *
+ * @author Joe Walnes
+ */
+
 // class headers
 package com.opensymphony.module.sitemesh.parser.html;
 %%
@@ -13,17 +20,19 @@ package com.opensymphony.module.sitemesh.parser.html;
 %ignorecase
 
 %{
+    // Additional methods to add to generated Lexer to aid in error reporting.
     protected int position() { return yychar; }
     protected int line()     { return yyline; }
     protected int column()   { return yycolumn; }
     protected abstract void reportError(String message, int line, int column);
 %}
 
+/* Additional states that the lexer can switch into. */
 %state ELEMENT
-
 
 %%
 
+/* Initial state of lexer. */
 <YYINITIAL> {
     "<!--" ~"-->"       { return Parser.TEXT; }
     "<?" ~"?>"          { return Parser.TEXT; }
@@ -36,6 +45,7 @@ package com.opensymphony.module.sitemesh.parser.html;
     "<"                 { yybegin(ELEMENT); return Parser.LT; } /* Switch state to ELEMENT */
 }
 
+/* State of lexer when inside an element/tag. */
 <ELEMENT> {
     "/"                 { return Parser.SLASH; }
     [\n\r \t\b\012]+    { return Parser.WHITESPACE; }
@@ -46,5 +56,5 @@ package com.opensymphony.module.sitemesh.parser.html;
     ">"                 { yybegin(YYINITIAL); return Parser.GT; } /* Switch state back to YYINITIAL */
 }
 
-/* not matched by anything else */
+/* Fallback rule - if nothing else matches. */
 .|\n                    { reportError("Illegal character <"+ yytext() +">", line(), column()); return Parser.TEXT; }
