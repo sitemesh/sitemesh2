@@ -50,7 +50,7 @@ class Parser extends Lexer {
 
     private String name;
     private int type;
-    private final List attributes = new ArrayList();
+    private final List attributes = new ArrayList(); // name1, value1, name2, value2...
 
     public Parser(char[] input, TokenHandler handler) {
         super(new CharArrayReader(input));
@@ -367,7 +367,12 @@ class Parser extends Lexer {
         }
 
         public String getAttributeValue(String name, boolean caseSensitive) {
-            return (String) attributes.get(getAttributeIndex(name, caseSensitive) * 2 + 1);
+            int attributeIndex = getAttributeIndex(name, caseSensitive);
+            if (attributeIndex == -1) {
+                return null;
+            } else {
+                return (String) attributes.get(attributeIndex * 2 + 1);
+            }
         }
 
         public boolean hasAttribute(String name, boolean caseSensitive) {
