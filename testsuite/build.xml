@@ -25,6 +25,7 @@
             <lib dir="../lib">
                 <include name="commons-*.jar"/>
                 <include name="velocity-*.jar"/>
+                <include name="freemarker.jar"/>
             </lib>
             <classes dir="tmp/webapp/WEB-INF/classes"/>
             <webinf dir="src/webapp/WEB-INF/">

@@ -115,6 +115,7 @@
             <lib dir="${lib.dir}">
                 <include name="commons-*.jar"/>
                 <include name="velocity-*.jar"/>
+                <include name="freemarker.jar"/>
             </lib>
         </war>
     </target>
@@ -127,6 +128,7 @@
             <user displayname="Mathias Bogaert" userid="mbogaert"/>
             <user displayname="Scott Farquhar" userid="farkas"/>
             <user displayname="Mike Cannon-Brookes" userid="rebelutionary"/>
+            <user displayname="Richard Hallier" userid="rhallier"/>
         </cvschangelog>
 
         <mkdir dir="${dist.dir}/docs"/>

@@ -1,0 +1,124 @@
+<html>
+    <head>
+        <title>Freemarker Decorators</title>
+    </head>
+
+    <body>
+        As of SiteMesh 2.0.2 <a href="http://freemarker.sourceforge.net/" target="_blank">Freemarker</a> (.ftl)
+        decorators are supported.
+
+        <p>Here is an example of how such a decorator might look like:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+<#include "/includes/decorators/header.dec">
+    &lt;h2&gt;<b>${title}</b>&lt;/h2&gt;
+    <b>${head}</b>
+    &lt;img src="<b>${base}</b>/images/logo.gif" border="0"&gt;
+    &lt;td valign="top" class="body"&gt;
+        &lt;div class="header"&gt;
+            &lt;span class="pagetitle"&gt;<b>${title}</b>&lt;/span&gt;
+        &lt;/div&gt;
+        <b>${body}</b>
+    &lt;/td&gt;
+<#include "/includes/decorators/footer.dec">
+</pre>
+
+        <h3>Installation</h3>
+        
+        <ul>
+        
+        	<li>Download <a 
+        	href="http://freemarker.sourceforge.net/" target="_blank">Freemarker</a> 2.3 (recommended) and copy it into <b><code>[web-app]/WEB-INF/lib</code></b>. 
+        	The SiteMesh distribution comes with <b>freemarker.jar</b> v2.3rc3</p></li>
+        	
+        	<li>Add the following to <b><code>[web-app]/WEB-INF/web.xml</code></b>
+        	within the <b><code>&lt;web-app&gt;</code></b> tag:</li>
+       	</ul>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;servlet&gt;
+    &lt;servlet-name&gt;sitemesh-freemarker&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.opensymphony.module.sitemesh.freemarker.FreemarkerDecoratorServlet&lt;/servlet-class&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;TemplatePath&lt;/param-name&gt;
+		&lt;param-value&gt;/&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;default_encoding&lt;/param-name&gt;
+		&lt;param-value&gt;ISO-8859-1&lt;/param-value&gt;
+	&lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;sitemesh-freemarker&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.dec&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</pre>
+
+		<ul>
+			<li>Modify <b><code>decorators.xml</code></b> to reference a .dec file.</li>
+		</ul>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+<#include "/includes/decorators/header.dec">
+    &lt;h2&gt;<b>${title}</b>&lt;/h2&gt;
+    <b>${head}</b>
+    &lt;img src="<b>${base}</b>/images/logo.gif" border="0"&gt;
+    &lt;td valign="top" class="body"&gt;
+        &lt;div class="header"&gt;
+            &lt;span class="pagetitle"&gt;<b>${title}</b>&lt;/span&gt;
+        &lt;/div&gt;
+        <b>${body}</b>
+    &lt;/td&gt;
+<#include "/includes/decorators/footer.dec">
+</pre>
+		
+	<h3>Context</h3>
+		
+		<p>FreemarkerDecoratorServlet puts some things into the context object that you should be aware of: </p>
+
+		<h4>Basic context attributes</h4>
+		<p>
+			<li>It makes all request, request parameters, session, and servlet context attributes available to templates through Request, RequestParameters, Session, and Application variables. For example : 
+			<pre style="border: 1px solid #999999; padding: 5px">${Session["user"]}</pre>
+			</li> 
+		
+			<li>The scope variables are also available via automatic scope discovery. That is, writing Application.attrName, Session.attrName, Request.attrName is not mandatory; it's enough to write attrName, and if no such variable was created in the template, it will search the variable in Request, and then in Session, and finally in Application. </li>
+			<pre style="border: 1px solid #999999; padding: 5px">
+&lt;#assign ww=JspTaglibs["/WEB-INF/webwork.tld"]&gt;</pre>
+			</li>
+
+			<li>It creates a variable with name JspTaglibs, that can be used to load JSP taglibs. For example:
+			<pre style="border: 1px solid #999999; padding: 5px">
+&lt;#assign ww=JspTaglibs["/WEB-INF/webwork.tld"]&gt;
+...
+&lt;@ww.property value="myVar"/&gt;	</pre>
+			</li>
+		</p>
+		
+		<h4>Sitemesh context attributes</h4>
+			<table border="0" cellspacing="10">
+		    <tr>
+		        <td valign="top"><strong>base</strong></td>
+		        <td>request.getContextPath()</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>title</strong></td>
+		        <td>Parsed page title (&lt;title&gt;...&lt;title&gt;)</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>head</strong></td>
+		        <td>Parsed page head</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>body</strong></td>
+		        <td>Parsed page body</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>page</strong></td>
+		        <td>SiteMesh's internal Page object</td>
+		    </tr>
+			</table>
+</body>
+</html>

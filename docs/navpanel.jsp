@@ -15,6 +15,7 @@
     <a href="<%= request.getContextPath() %>/sitemesh/charsets.html">Character Sets</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/decorators.html">Building Decorators</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/velocity-decorators.html">Velocity Decorators</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/freemarker-decorators.html">Freemarker Decorators</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/dm.html">Decorator Mappers</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/testsuite.html">Test Suite</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/faq.html">FAQ</a><br>

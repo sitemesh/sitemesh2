@@ -17,7 +17,6 @@ import com.opensymphony.module.sitemesh.util.CharArrayReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
-import java.util.Collection;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -27,7 +26,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public final class FastPageParser implements PageParser
 {

@@ -10,7 +10,6 @@
 package com.opensymphony.module.sitemesh.mapper;
 
 import com.opensymphony.module.sitemesh.Decorator;
-import com.opensymphony.module.sitemesh.Page;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
  * </ol>
  *
  * @author <a href="mailto:joeo@enigmastation.com">Joseph B. Ottinger</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  */

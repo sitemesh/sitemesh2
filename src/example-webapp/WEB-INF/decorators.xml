@@ -15,6 +15,10 @@
         <pattern>/velocity.html</pattern>
     </decorator>
 
+    <decorator name="freemarker" page="freemarker.ftl">
+        <pattern>/freemarker.html</pattern>
+    </decorator>
+
     <decorator name="test" page="test.jsp">
         <pattern>/agent.jsp</pattern>
     </decorator>
