@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName = "/WEB-INF/sitemesh.xml";
@@ -48,6 +48,11 @@ public class DefaultFactory extends BaseFactory {
         super(config);
 
         // configFilePath is null if loaded from war file
+        String initParamConfigFile = config.getConfigFile();
+        if(initParamConfigFile != null) {
+          configFileName = initParamConfigFile;
+        }
+        
         String configFilePath = config.getServletContext().getRealPath(configFileName);
 
         if (configFilePath != null) { // disable config auto reloading for .war files

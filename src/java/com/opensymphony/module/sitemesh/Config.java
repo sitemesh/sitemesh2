@@ -18,23 +18,30 @@ import javax.servlet.ServletContext;
  * (since javax.servlet.Config was removed from 2.3 spec).
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Config {
     private ServletConfig servletConfig;
     private FilterConfig filterConfig;
-
+    private String configFile;
+  
     public Config(ServletConfig servletConfig) {
         if (servletConfig == null) throw new NullPointerException("ServletConfig cannot be null");
         this.servletConfig = servletConfig;
+        this.configFile = servletConfig.getInitParameter("configFile");
     }
 
     public Config(FilterConfig filterConfig) {
         if (filterConfig == null) throw new NullPointerException("FilterConfig cannot be null");
         this.filterConfig = filterConfig;
+      this.configFile = filterConfig.getInitParameter("configFile");
     }
 
     public ServletContext getServletContext() {
         return servletConfig != null ? servletConfig.getServletContext() : filterConfig.getServletContext();
+    }
+
+    public String getConfigFile() {
+        return configFile;
     }
 }
