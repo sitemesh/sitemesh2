@@ -29,7 +29,7 @@ It contains decorator and decorator mapping elements.
 The decorator element contains the declarative data of a
 decorator.
 -->
-<!ELEMENT decorator (pattern?)>
+<!ELEMENT decorator (pattern*)>
 <!ATTLIST decorator
 	name CDATA #REQUIRED
 	page CDATA  #IMPLIED
