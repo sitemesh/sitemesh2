@@ -36,8 +36,8 @@
 		<code>weblogic.httpd.inputCharset</code>. See your application server 
 		documentation for more details. If the application server of choice does 
 		not allow to set the default charset for all web-apps, then every page 
-		will need to specify the content-type. This is done by specifying a page 
-		header tag like this:</p>
+		(including the decorators) will need to specify the content-type. This 
+		is done by specifying a page header tag like this:</p>
 		
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;%@ page contentType=&quot;text/html; charset=<b>utf-8</b>&quot;%&gt;
