@@ -1,3 +1,9 @@
+/*
+ * IF YOU ARE HAVING TROUBLE COMPILING THIS CLASS, IT IS PROBABLY BECAUSE Lexer.java IS MISSING.
+ *
+ * Use 'ant jflex' to generate the file.
+ */
+
 package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import com.opensymphony.module.sitemesh.util.CharArray;
