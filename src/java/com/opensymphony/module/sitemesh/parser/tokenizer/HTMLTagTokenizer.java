@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import com.opensymphony.module.sitemesh.util.CharArray;
 
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Joe Walnes
  * @see TokenHandler
- * @see HTMLPageParser
+ * @see com.opensymphony.module.sitemesh.parser.HTMLPageParser
  */
 public class HTMLTagTokenizer implements Tag, Text {
 

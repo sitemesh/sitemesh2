@@ -1,11 +1,11 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import com.opensymphony.module.sitemesh.util.CharArray;
 
 import java.io.IOException;
 import java.io.Reader;
 
-public class Parser extends Lexer {
+class Parser extends Lexer {
 
     private final HTMLTagTokenizer tokenizer;
     private final CharArray attributeBuffer = new CharArray(64);

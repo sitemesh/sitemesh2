@@ -1,6 +1,9 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.parser.AbstractHTMLPage;
+import com.opensymphony.module.sitemesh.parser.tokenizer.Tag;
+import com.opensymphony.module.sitemesh.parser.tokenizer.TokenHandler;
+import com.opensymphony.module.sitemesh.parser.tokenizer.Text;
 import com.opensymphony.module.sitemesh.util.CharArray;
 
 import java.io.IOException;
@@ -10,8 +13,8 @@ import java.io.Writer;
  * HTMLPage implementation that builds itself based on the incoming 'tag' and 'text' tokens fed to it from the
  * HTMLTagTokenizer.
  *
- * @see HTMLPageParser
- * @see HTMLTagTokenizer
+ * @see com.opensymphony.module.sitemesh.parser.HTMLPageParser
+ * @see com.opensymphony.module.sitemesh.parser.tokenizer.HTMLTagTokenizer
  *
  * @author Joe Walnes
  */

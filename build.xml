@@ -28,8 +28,8 @@
         <!-- Determine if lexer needs regenerating -->
         <uptodate
             property="lexer.uptodate"
-            srcfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/lexer.flex"
-            targetfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/Lexer.java"/>
+            srcfile="${java.dir}/com/opensymphony/module/sitemesh/parser/tokenizer/lexer.flex"
+            targetfile="${java.dir}/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java"/>
         <antcall target="jflex"/>
     </target>
 
@@ -37,10 +37,10 @@
         <echo message="Generating HTML lexer using JFlex"/>
         <java classpath="${lib.dir}/jflex.jar" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
-            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/html"/>
-            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/html/lexer.flex"/>
+            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/tokenizer"/>
+            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/tokenizer/lexer.flex"/>
         </java>
-        <delete file="${java.dir}/com/opensymphony/module/sitemesh/parser/html/Lexer.java~"/>
+        <delete file="${java.dir}/com/opensymphony/module/sitemesh/parser/tokenizer/Lexer.java~"/>
     </target>
 
     <target name="compile" depends="pre-compile">

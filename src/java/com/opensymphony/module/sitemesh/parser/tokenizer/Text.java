@@ -1,12 +1,12 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import com.opensymphony.module.sitemesh.util.CharArray;
 
 /**
  * Text returned by HTMLTagTokenizer. Hidden behind interface to allow for lazy-loading.
  *
- * @see TokenHandler
- * @see HTMLTagTokenizer
+ * @see com.opensymphony.module.sitemesh.parser.tokenizer.TokenHandler
+ * @see com.opensymphony.module.sitemesh.parser.tokenizer.HTMLTagTokenizer
  *
  * @author Joe Walnes
  */

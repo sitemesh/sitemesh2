@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import com.opensymphony.module.sitemesh.util.CharArray;
 

@@ -1,7 +1,8 @@
-package com.opensymphony.module.sitemesh.parser.html;
+package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.parser.tokenizer.HTMLTagTokenizer;
 
 import java.io.IOException;
 
