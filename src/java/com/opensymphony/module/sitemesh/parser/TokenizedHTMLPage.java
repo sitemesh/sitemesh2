@@ -28,6 +28,7 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
     private String contentBlockId;
     private boolean titleWritten;
     private boolean bodyWritten;
+    private boolean frameSet;
 
     public TokenizedHTMLPage(char[] original) {
         this.pageData = original;
@@ -45,7 +46,9 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
                 || name.equals("body")
                 || name.equals("meta")
                 || name.equals("content")
-                || name.equals("parameter");
+                || name.equals("parameter")
+                || name.equals("frame")
+                || name.equals("frameset");
     }
 
     public void tag(Tag tag) {
@@ -81,6 +84,8 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
             }
         } else if (name.equals("parameter")) {
             addProperty("page." + tag.getAttributeValue("name"), tag.getAttributeValue("value"));
+        } else if (name.equals("frame") || name.equals("frameset")) {
+            frameSet = true;
         }
 
         if (inHead && !name.equals("head") && !name.equals("title")) {
@@ -129,8 +134,7 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
     }
 
     public boolean isFrameSet() {
-        // TODO
-        return false;
+        return frameSet;
     }
 
     public String getPage() {
