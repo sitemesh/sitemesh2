@@ -71,12 +71,20 @@
 
 		<table border="0" cellspacing="10">
 		    <tr>
-		        <td valign="top"><strong>$req</strong> (from <a href="http://jakarta.apache.org/velocity/api/org/apache/velocity/servlet/VelocityServlet.html">VelocityServlet</a>)</td>
+		        <td valign="top"><strong>$request</strong> (from <a href="http://jakarta.apache.org/velocity/tools/javadoc/org/apache/velocity/tools/view/servlet/VelocityViewServlet.html">VelocityViewServlet</a>)</td>
 		        <td>The HttpServletRequest object</td>
 		    </tr>
 		    <tr>
-		        <td valign="top"><strong>$res</strong> (from <a href="http://jakarta.apache.org/velocity/api/org/apache/velocity/servlet/VelocityServlet.html">VelocityServlet</a>)</td>
+		        <td valign="top"><strong>$response</strong> (from <a href="http://jakarta.apache.org/velocity/tools/javadoc/org/apache/velocity/tools/view/servlet/VelocityViewServlet.html">VelocityViewServlet</a>)</td>
 		        <td>The HttpServletResponse object</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$session</strong> (from <a href="http://jakarta.apache.org/velocity/tools/javadoc/org/apache/velocity/tools/view/servlet/VelocityViewServlet.html">VelocityViewServlet</a>)</td>
+		        <td>The HttpSession object</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>$application</strong> (from <a href="http://jakarta.apache.org/velocity/tools/javadoc/org/apache/velocity/tools/view/servlet/VelocityViewServlet.html">VelocityViewServlet</a>)</td>
+		        <td>The ServletContext object</td>
 		    </tr>
 		    <tr>
 		        <td valign="top"><strong>$base</strong></td>
@@ -98,6 +106,10 @@
 		        <td valign="top"><strong>$page</strong></td>
 		        <td>SiteMesh's internal Page object</td>
 		    </tr>
+		    <tr>
+		        <td valign="top"><strong>Anything else</strong></td>
+		        <td>Search for the attribute by that name in the request, session and application scopes</td>
+            </tr>
 		</table>
 	</body>
 </html>
