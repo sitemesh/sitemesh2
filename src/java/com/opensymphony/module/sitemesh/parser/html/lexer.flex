@@ -7,12 +7,13 @@ package com.opensymphony.module.sitemesh.parser.html;
 %abstract
 %unicode
 %byaccj
+%char
 %line
 %column
 %ignorecase
 
 %{
-    protected int position() { return yy_currentPos; }
+    protected int position() { return yychar; }
     protected int line()     { return yyline; }
     protected int column()   { return yycolumn; }
     protected abstract void reportError(String message, int line, int column);
