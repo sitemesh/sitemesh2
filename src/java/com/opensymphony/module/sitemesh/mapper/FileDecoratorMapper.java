@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mike@atlassian.com">Mike Cannon-Brookes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.DefaultDecorator
@@ -55,7 +55,7 @@ public class FileDecoratorMapper extends AbstractDecoratorMapper {
         else if (filePath != null) { // do we really need this disk file check?!
             File file = new File(filePath);
 
-            if (file.exists() && file.canRead()) {
+            if (file.exists() && file.canRead() && file.isFile()) {
                 // if filename exists with name of supplied decorator, return Decorator
                 return new DefaultDecorator(name, name, null);
             }
