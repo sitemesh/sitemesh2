@@ -24,7 +24,7 @@ import java.io.StringWriter;
  * Servlet that allows Velocity templates to be used as decorators.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class VelocityDecoratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request, HttpServletResponse response, Context context) throws Exception {
@@ -32,6 +32,12 @@ public class VelocityDecoratorServlet extends VelocityViewServlet {
         String template;
 
         context.put("base", request.getContextPath());
+
+        // For backwards compatability with apps that used the old VelocityDecoratorServlet
+        // that extended VelocityServlet instead of VelocityViewServlet
+        context.put("req", request);
+        context.put("res", response);
+
         if (htmlPage == null) {
             context.put("title", "Title?");
             context.put("body", "<p>Body?</p>");
