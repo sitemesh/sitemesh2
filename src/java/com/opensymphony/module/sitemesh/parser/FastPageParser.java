@@ -23,17 +23,10 @@ import java.io.Reader;
 /**
  * Very fast PageParser implementation for parsing HTML.
  *
- * Note that this implementation uses hashcode comparisons instead of String.equals()
- * comparisons to squeeze out more performance. This opens up the (remote) possibility
- * of a hashcode collision causing unexpected behaviour while parsing. In practice
- * we don't think this will be a problem since most tags are only a few characters
- * long and hence likely to give unique hashcode values. (If collisions are encountered
- * in practice, this code will have to be changed back to using String comparisons).
- *
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -199,115 +192,185 @@ public final class FastPageParser implements PageParser
                   }
                }
                else
-
-               switch (tagHash) {
-                  case HTML_HASH:
-                     state = TAG_STATE_HTML;
-                     _htmlProperties = tagObject.properties;
-                     break;
-                  case HEAD_HASH:
-                     state = TAG_STATE_HEAD;
-                     break;
-                  case XML_HASH:
-                     laststate = state;
-                     writeTag(state, laststate, hide, _head, _buffer, _body);
-                     state = TAG_STATE_XML;
-                     break;
-                  case XMP_HASH:
-                     laststate = state;
-                     writeTag(state, laststate, hide, _head, _buffer, _body);
-                     state = TAG_STATE_XMP;
-                     break;
-                  case TITLE_HASH:
-                     if (doneTitle)
-                     {
-                        hide = true;
-                     }
-                     else
-                     {
-                        laststate = state;
-                        state = TAG_STATE_TITLE;
-                     }
-                     break;
-                  case SLASH_TITLE_HASH:
-                     if (doneTitle)
-                     {
-                        hide = false;
-                     }
-                     else
-                     {
-                        doneTitle = true;
-                        state = laststate;
-                     }
-                     break;
-                  case PARAMETER_HASH:
-                     String name = (String) tagObject.properties.get("name");
-                     String value = (String) tagObject.properties.get("value");
-
-                     if (name != null && value != null)
-                     {
-                        _sitemeshProperties.put(name, value);
-                     }
-                     break;
-                  case META_HASH:
-                     CharArray metaDestination = state == TAG_STATE_HEAD ? _head : _body;
-                     metaDestination.append('<');
-                     metaDestination.append(_buffer);
-                     metaDestination.append('>');
-
-                     name = (String) tagObject.properties.get("name");
-                     value = (String) tagObject.properties.get("content");
-
-                     if (name == null)
-                     {
-                        String httpEquiv = (String) tagObject.properties.get("http-equiv");
-
-                        if (httpEquiv != null)
-                        {
-                           name = "http-equiv." + httpEquiv;
+               {
+                  boolean doDefault = false;
+                  switch (tagHash) {
+                     case HTML_HASH:
+                        if (!tag.equals("html")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
                         }
-                     }
+                        state = TAG_STATE_HTML;
+                        _htmlProperties = tagObject.properties;
+                        break;
+                     case HEAD_HASH:
+                        if (!tag.equals("head")) { // skip any accidental hash collisions
+                           doDefault = true;
+                              break;
+                        }
+                        state = TAG_STATE_HEAD;
+                        break;
+                     case XML_HASH:
+                        if (!tag.equals("xml")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        laststate = state;
+                        writeTag(state, laststate, hide, _head, _buffer, _body);
+                        state = TAG_STATE_XML;
+                        break;
+                     case XMP_HASH:
+                        if (!tag.equals("xmp")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        laststate = state;
+                        writeTag(state, laststate, hide, _head, _buffer, _body);
+                        state = TAG_STATE_XMP;
+                        break;
+                     case TITLE_HASH:
+                        if (!tag.equals("title")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        if (doneTitle)
+                        {
+                           hide = true;
+                        }
+                        else
+                        {
+                           laststate = state;
+                           state = TAG_STATE_TITLE;
+                        }
+                        break;
+                     case SLASH_TITLE_HASH:
+                        if (!tag.equals("/title")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        if (doneTitle)
+                        {
+                           hide = false;
+                        }
+                        else
+                        {
+                           doneTitle = true;
+                           state = laststate;
+                        }
+                        break;
+                     case PARAMETER_HASH:
+                        if (!tag.equals("parameter")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        String name = (String) tagObject.properties.get("name");
+                        String value = (String) tagObject.properties.get("value");
 
-                     if (name != null && value != null)
-                     {
-                        _metaProperties.put(name, value);
-                     }
-                     break;
-                  case SLASH_HEAD_HASH:
-                     state = TAG_STATE_HTML;
-                     break;
-                  case FRAME_HASH:
-                  case FRAMESET_HASH:
-                     _frameSet = true;
-                     break;
-                  case BODY_HASH:
-                     if (_tokenType == TOKEN_EMPTYTAG)
-                     {
-                        state = TAG_STATE_BODY;
-                     }
-                     _bodyProperties = tagObject.properties;
-                     break;
-                  case CONTENT_HASH:
-                     state = TAG_STATE_NONE;
-                     Map props = tagObject.properties;
-                     if (props != null)
-                     {
-                        tagged = true;
-                        _contentTagId = (String) props.get("tag");
-                     }
-                     break;
-                  case SLASH_XMP_HASH:
-                     hide = false;
-                     break;
-                  case SLASH_BODY_HASH:
-                     state = TAG_STATE_NONE;
-                     hide = true;
-                     break;
-                  case SLASH_HTML_HASH:
-                     state = TAG_STATE_NONE;
-                     hide = true;
-                     break;
-                  default:
+                        if (name != null && value != null)
+                        {
+                           _sitemeshProperties.put(name, value);
+                        }
+                        break;
+                     case META_HASH:
+                        if (!tag.equals("meta")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        CharArray metaDestination = state == TAG_STATE_HEAD ? _head : _body;
+                        metaDestination.append('<');
+                        metaDestination.append(_buffer);
+                        metaDestination.append('>');
+
+                        name = (String) tagObject.properties.get("name");
+                        value = (String) tagObject.properties.get("content");
+
+                        if (name == null)
+                        {
+                           String httpEquiv = (String) tagObject.properties.get("http-equiv");
+
+                           if (httpEquiv != null)
+                           {
+                              name = "http-equiv." + httpEquiv;
+                           }
+                        }
+
+                        if (name != null && value != null)
+                        {
+                           _metaProperties.put(name, value);
+                        }
+                        break;
+                     case SLASH_HEAD_HASH:
+                        if (!tag.equals("/head")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        state = TAG_STATE_HTML;
+                        break;
+                     case FRAME_HASH:
+                        if (!tag.equals("frame")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        _frameSet = true;
+                        break;
+                     case FRAMESET_HASH:
+                        if (!tag.equals("frameset")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        _frameSet = true;
+                        break;
+                     case BODY_HASH:
+                        if (!tag.equals("body")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        if (_tokenType == TOKEN_EMPTYTAG)
+                        {
+                           state = TAG_STATE_BODY;
+                        }
+                        _bodyProperties = tagObject.properties;
+                        break;
+                     case CONTENT_HASH:
+                        if (!tag.equals("content")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        state = TAG_STATE_NONE;
+                        Map props = tagObject.properties;
+                        if (props != null)
+                        {
+                           tagged = true;
+                           _contentTagId = (String) props.get("tag");
+                        }
+                        break;
+                     case SLASH_XMP_HASH:
+                        if (!tag.equals("/xmp")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        hide = false;
+                        break;
+                     case SLASH_BODY_HASH:
+                        if (!tag.equals("/body")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        state = TAG_STATE_NONE;
+                        hide = true;
+                        break;
+                     case SLASH_HTML_HASH:
+                        if (!tag.equals("/html")) { // skip any accidental hash collisions
+                           doDefault = true;
+                           break;
+                        }
+                        state = TAG_STATE_NONE;
+                        hide = true;
+                        break;
+                     default:
+                        doDefault = true;
+                  }
+                  if (doDefault)
                      writeTag(state, laststate, hide, _head, _buffer, _body);
                }
             }
