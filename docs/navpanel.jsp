@@ -10,7 +10,7 @@
 <p>
     <h3>Documentation</h3>
     <a href="<%= request.getContextPath() %>/sitemesh/flow.html">Flow Diagram</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/install.html">Installation</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/install.html">Installation and Configuration</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/decorators.html">Building Decorators</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/dm.html">Decorator Mappers</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/faq.html">FAQ</a><br>
