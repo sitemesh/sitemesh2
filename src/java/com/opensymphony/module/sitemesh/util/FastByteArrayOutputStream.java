@@ -21,9 +21,9 @@ import java.util.LinkedList;
  * does not copy buffers when it's expanded. There's also no copying of the internal buffer
  * if it's contents is extracted with the writeTo(stream) method.
  *
- * @author Rickard Öberg
+ * @author Rickard ï¿½berg
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FastByteArrayOutputStream extends ByteArrayOutputStream {
     private static final int DEFAULT_BLOCK_SIZE = 8192;
@@ -49,9 +49,9 @@ public class FastByteArrayOutputStream extends ByteArrayOutputStream {
     public void writeTo(OutputStream out) throws IOException {
         // check if we have a list of buffers
         if (buffers != null) {
-            Iterator enum = buffers.iterator();
-            while (enum.hasNext()) {
-                byte[] bytes = (byte[]) enum.next();
+            Iterator iterator = buffers.iterator();
+            while (iterator.hasNext()) {
+                byte[] bytes = (byte[]) iterator.next();
                 out.write(bytes, 0, blockSize);
             }
         }
@@ -71,9 +71,9 @@ public class FastByteArrayOutputStream extends ByteArrayOutputStream {
         // check if we have a list of buffers
         int pos = 0;
         if (buffers != null) {
-            Iterator enum = buffers.iterator();
-            while (enum.hasNext()) {
-                byte[] bytes = (byte[]) enum.next();
+            Iterator iterator = buffers.iterator();
+            while (iterator.hasNext()) {
+                byte[] bytes = (byte[]) iterator.next();
                 System.arraycopy(bytes, 0, data, pos, blockSize);
                 pos += blockSize;
             }
