@@ -1,0 +1,15 @@
+<decorators defaultdir="/decorators">
+    <decorator name="main" page="main.jsp">
+        <pattern>*</pattern>
+    </decorator>
+
+    <decorator name="panel" page="panel.jsp"/>
+    <decorator name="printable" page="printable.jsp"/>
+    <decorator name="black" page="black.jsp"/>
+    <decorator name="nopanelsource" page="nopanelsource.jsp"/>
+    <decorator name="badpanelsource" page="badpanelsource.jsp"/>
+
+    <decorator name="test" page="test.jsp">
+        <pattern>/agent.jsp</pattern>
+    </decorator>
+</decorators>
