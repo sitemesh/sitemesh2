@@ -19,14 +19,14 @@ import javax.servlet.http.Cookie;
 import java.util.Properties;
 
 /**
- * The CookieDecoratorMapper will map a suitable decorator based on a cookie.
+ * The CookieDecoratorMapper will map a suitable decorator based on a cookie value.
  *
  * <p>The CookieDecoratorMapper is configured via one properties.
  * <code>cookie.name</code> - the cookie which contains the name of the
  * decorator which will be mapped.</p>
  *
  * @author Paul Hammant
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */

@@ -159,7 +159,7 @@ map .html to the SSIServlet).
 * When working with charsets that aren't the default ones, issues may occur.
 Consult mailing list for help.
 
-* SiteMesh currently does not work flawlessly on Weblogic 6.1, 7.0 and 7.0 SP1. For more
+* SiteMesh does not work on Weblogic 6.1, 7.0 and 7.0 SP1. For more
 information, visit http://jira.opensymphony.com/secure/ViewIssue.jspa?id=10045. However,
 SiteMesh does work correctly on WebLogic 7.0 SP2, 8.1 and 8.1 SP2.
 
@@ -168,6 +168,8 @@ compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
 
 * SiteMesh does not work on WebSphere 5.0.1 and 5.0.2. Apply patch IBM iFix
 PQ80592 to your WebSphere installation.
+
+* SiteMesh's CookieDecoratorMapper does not work on Resin.
 
 Please report bugs here: http://jira.opensymphony.com
 
