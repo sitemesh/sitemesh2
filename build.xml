@@ -30,7 +30,7 @@
         </javac>
     </target>
 
-    <target name="javadoc" depends="init" description="Generates JavaDoc">
+    <target name="javadocs" depends="init" description="Generates JavaDoc">
         <mkdir dir="${dist.dir}/docs/api"/>
 
         <javadoc sourcepath="${java.dir}"
@@ -54,7 +54,7 @@
         </javadoc>
     </target>
 
-    <target name="docs" depends="javadoc">
+    <target name="docs" depends="javadocs">
         <copy todir="${dist.dir}/docs">
             <fileset dir="${docs.dir}" excludes="*.css"/>
         </copy>
