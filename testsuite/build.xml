@@ -1,0 +1,109 @@
+<project name="sitemesh-testsuite" default="tests-build" basedir=".">
+
+	<property name="test-results" value="test-results"/>
+
+	<path id="classpath">
+		<fileset dir="lib" />
+		<fileset dir="../lib" />
+		<fileset dir="../target" />
+	</path>
+
+	<target name="sitemesh-build" description="Build SiteMesh jar">
+		<ant dir=".." target="jar" />
+	</target>
+
+	<target name="webapp-build" depends="sitemesh-build" description="Build web-app .war file">
+		<mkdir dir="tmp/webapp" />
+		<mkdir dir="tmp/webapp/WEB-INF/classes" />
+		<mkdir dir="tmp/webapp/WEB-INF/lib" />
+		<copy todir="tmp/webapp">
+			<fileset dir="src/webapp">
+				<exclude name="WEB-INF/classes" />
+			</fileset>
+		</copy>
+		<copy todir="tmp/webapp/WEB-INF/lib">
+			<fileset dir="../target">
+				<include name="sitemesh.jar" />
+				<include name="*.tld" />
+			</fileset>
+		</copy>
+		<!--<javac srcdir="webapp/WEB-INF/classes" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" />-->
+		<javac srcdir="src" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
+		<mkdir dir="target" />
+		<jar jarfile="target/sitemesh-testsuite.war">
+			<fileset dir="tmp/webapp" />
+		</jar>
+	</target>
+
+	<target name="dist" depends="webapp-build"/>
+
+	<target name="tests-build" depends="sitemesh-build" description="Build test suite">
+		<mkdir dir="tmp/tests" />
+		<javac srcdir="src" destdir="tmp/tests" classpathref="classpath" debug="on" />
+		<mkdir dir="target" />
+		<jar jarfile="target/sitemesh-testsuite.jar">
+			<fileset dir="tmp/tests" />
+		</jar>
+	</target>
+
+	<target name="deploy" depends="tests-build, webapp-build" description="Deploy web-app to servers">
+		<java classname="testsuite.deploy.DeployWebApps" classpathref="classpath" fork="yes" dir=".">
+			<classpath>
+				<fileset dir="target" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="test" depends="test-standalone, test-container" description="Run standalone and in-container tests"/>
+
+	<target name="test-standalone" depends="tests-build" description="Run standalone unit tests">
+		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath" />
+		<mkdir dir="${test-results}" />
+		<echo message="Running standalone unit tests..."/>
+		<junit fork="yes" haltonfailure="yes" dir=".">
+			<classpath>
+				<fileset dir="lib" />
+				<fileset dir="target" />
+				<fileset dir="../lib" />
+				<fileset dir="../target" />
+			</classpath>
+			<formatter type="plain" usefile="false"/>
+			<formatter type="xml"/>
+			<test todir="${test-results}" name="testsuite.unittests.HTMLPageParserTestSuite" />
+		</junit>
+	</target>
+
+	<target name="test-container" depends="tests-build" description="Run unit tests on deployed web-app">
+		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath" />
+		<mkdir dir="${test-results}" />
+		<echo message="Running in-container unit tests..."/>
+		<junit fork="yes" haltonfailure="no" dir=".">
+			<classpath>
+				<fileset dir="lib" />
+				<fileset dir="target" />
+				<fileset dir="../lib" />
+				<fileset dir="../target" />
+			</classpath>
+			<formatter type="plain" usefile="false"/>
+			<formatter type="xml"/>
+			<test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite" />
+		</junit>
+	</target>
+
+	<target name="report">
+        <junitreport todir="${test-results}">
+            <fileset dir="${test-results}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test-results}"/>
+        </junitreport>
+    </target>
+
+	<target name="clean" description="Clean up all built files">
+        <ant dir=".." target="clean" />
+		<delete dir="tmp" />
+		<delete dir="target" />
+		<delete dir="${test-results}" />
+	</target>
+
+</project>

@@ -1,0 +1,127 @@
+<!--
+
+	Test Suite configuration.
+
+	Consists of one <application> and 0-* <server>s.
+
+	The application has a name and location of war file and ear file. The ear file is a standard J2EE application
+	that contains a single war module.
+
+	Each server contains a name and version (just for informational purposes), a base-url that the web-app is deployed
+	to (for the automated testing), and the location the web-app should be deployed to on the file-system. The
+	deployment also has a type which can be 'war', 'ear' or 'unpack' thats says what form the app-server expects the
+	web-app to be deployed as.
+
+	It is important that the web-applications are manually deployed at least once - the testsuite can then overwrite
+	the deployed files of the running application.
+
+	All paths are relative to the location of this config file.
+
+-->
+<web-tests-config>
+
+	<application>
+		<name>SiteMesh</name>
+		<war-location>dist/sitemesh-testsuite.war</war-location>
+		<ear-location>dist/sitemesh-testsuite.ear</ear-location>
+	</application>
+
+	<server disabled="true">
+		<name>Tomcat</name>
+		<version>4.1.24</version>
+		<base-url>http://localhost:8080/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/jakarta-tomcat-4.1.24/webapps/sitemesh-testsuite</deployment>
+	</server>
+	
+	<server disabled="true">
+		<name>Tomcat</name>
+		<version>5.0.3</version>
+		<base-url>http://localhost:8081/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/jakarta-tomcat-5.0.3/webapps/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Resin</name>
+		<version>2.0.5</version>
+		<base-url>http://localhost:20081/sitemesh-testsuite</base-url>
+		<deployment type="war">servers/resin-2.0.5/webapps/sitemesh-testsuite.war</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Orion</name>
+		<version>1.5.2</version>
+		<base-url>http://localhost:20082/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/orion1.5.2/orion/applications/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Orion</name>
+		<version>1.5.4</version>
+		<base-url>http://localhost:20083/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/orion1.5.4/orion/applications/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Oracle OC4J</name>
+		<version>1.0.2.2.1</version>
+		<base-url>http://localhost:20084/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/oc4j/j2ee/home/applications/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Oracle OC4J</name>
+		<version>Release 2 preview</version>
+		<base-url>http://localhost:20085/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/oc4j2/j2ee/home/applications/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>WebLogic</name>
+		<version>6.1</version>
+		<base-url>http://localhost:20086/sitemesh-testsuite</base-url>
+		<deployment type="war">/java/bea/wlserver6.1/config/mydomain/applications/sitemesh-testsuite.war</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>WebLogic</name>
+		<version>7.0 beta</version>
+		<base-url>http://localhost:20087/sitemesh-testsuite</base-url>
+		<deployment type="war">/java/bea/user_domains/mydomain/applications/sitemesh-testsuite.war</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Jetty</name>
+		<version>4.0 beta 2</version>
+		<base-url>http://localhost:20088/sitemesh-testsuite</base-url>
+		<deployment type="unpack">servers/Jetty-4.0.B2/webapps/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Rexip</name>
+		<version>1.0</version>
+		<base-url>http://localhost:20089/sitemesh-testsuite</base-url>
+		<deployment type="unpack">/java/tcc/rexip/config/default/applications/sitemesh-testsuite</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>HP-AS</name>
+		<version>8.0</version>
+		<base-url>http://localhost:20090/sitemesh-testsuite</base-url>
+		<deployment type="war">tmp/sitemesh-testsuite.war</deployment>
+	</server>
+
+	<server disabled="true">
+		<name>Pramati</name>
+		<version>3.0</version>
+		<base-url>http://localhost:20091/sitemesh-testsuite</base-url>
+		<deployment type="unpack"></deployment>
+	</server>
+
+	<server disabled="true">
+		<name>WebSphere</name>
+		<version>Technology Preview</version>
+		<base-url>http://localhost:20092/sitemesh-testsuite</base-url>
+		<deployment type="unpack"></deployment>
+	</server>
+
+</web-tests-config>

@@ -1,0 +1,31 @@
+<decorators>
+
+    <decorator name="simple" page="/decorators/simple.jsp">
+        <pattern>/simple/*</pattern>
+        <pattern>/welcomepage/*</pattern>
+        <pattern>/redirect/*</pattern>
+    </decorator>
+
+    <decorator name="inline-1" page="/inline/dec-1.jsp">
+        <pattern>/inline/page1.jsp</pattern>
+    </decorator>
+
+    <decorator name="inline-2" page="/inline/dec-2.jsp">
+        <pattern>/inline/page2.jsp</pattern>
+    </decorator>
+
+    <decorator name="inline-3" page="/inline/dec-3.jsp">
+        <pattern>/inline/page3.jsp</pattern>
+    </decorator>
+
+    <decorator name="inline-panel" page="/inline/dec-panel.jsp" />
+
+    <decorator name="inline-5" page="/inline/dec-5.jsp" >
+    	<pattern>/inline/page5.jsp</pattern>
+   	</decorator>
+
+    <decorator name="inline-6" page="/inline/dec-6.jsp" >
+    	<pattern>/inline/page6.jsp</pattern>
+   	</decorator>
+
+</decorators>

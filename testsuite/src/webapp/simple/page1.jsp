@@ -1,0 +1,10 @@
+<html>
+	<head>
+		<title>Simple page1</title>
+	</head>
+	<body>
+
+		<p id="p1">Hello world 1</p>
+
+	</body>
+</html>

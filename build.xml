@@ -1,0 +1,115 @@
+<project name="sitemesh" default="jar" basedir=".">
+    <property file="build.properties"/>
+
+    <!-- Classpath -->
+    <path id="cp">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <!-- Compile Java -->
+    <target name="compile">
+        <mkdir dir="${build.dir}" />
+
+        <javac srcdir="${java.dir}"
+               destdir="${build.dir}"
+               classpathref="cp"
+               optimize="${compile.optimize}"
+               debug="${compile.debug}"
+               nowarn="${compile.nowarn}"
+               deprecation="${compile.deprecation}"
+               />
+    </target>
+
+    <!-- Build jar archive -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${build.dir}/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
+        <jar jarfile="${dist.dir}/${name}.jar" basedir="${build.dir}">
+          <metainf dir="${tld.dir}/jsp1.2"/>
+        </jar>
+        <copy todir="${dist.dir}">
+            <fileset dir="${tld.dir}" />
+        </copy>
+    </target>
+
+    <!-- Generate JavaDoc -->
+    <target name="doc">
+        <mkdir dir="${doc.dir}" />
+        <javadoc sourcepath="${java.dir}"
+            destdir="${doc.dir}"
+            packagenames="${packages}"
+            classpathref="cp"
+            author="true"
+            version="true"
+            windowTitle="${Name} ${version} API"
+            doctitle="${Name}"
+            footer="See &lt;a href=&quot;http://www.opensymphony.com/&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information."
+            use="true"
+            verbose="false" />
+    </target>
+
+    <!-- Build simple web-app to get started with SiteMesh -->
+    <target name="blank" depends="jar">
+        <mkdir dir="${dist.dir}" />
+        <war warfile="${dist.dir}/${name}-blank.war" webxml="${example.dir}/WEB-INF/web.xml">
+            <fileset dir="${blank.dir}"/>
+            <lib dir="${dist.dir}">
+                <include name="${name}.jar" />
+            </lib>
+            <webinf dir="${dist.dir}">
+                <include name="*.tld" />
+            </webinf>
+        </war>
+    </target>
+
+    <!-- Build sample web-app -->
+    <target name="example" depends="jar">
+        <war warfile="${dist.dir}/${name}-example.war" webxml="${example.dir}/WEB-INF/web.xml">
+            <fileset dir="${example.dir}">
+                <exclude name="WEB-INF/web.xml" />
+            </fileset>
+            <lib dir="${dist.dir}">
+                <include name="${name}.jar" />
+            </lib>
+            <webinf dir="${dist.dir}">
+                <include name="*.tld" />
+            </webinf>
+        </war>
+    </target>
+
+    <!-- Build source jar to be included in distribution -->
+    <target name="src">
+        <mkdir dir="${dist.dir}" />
+        <jar jarfile="${dist.dir}/${name}-src.jar">
+            <fileset dir="${src.dir}" />
+        </jar>
+    </target>
+
+    <!-- Build distribution bundles -->
+    <target name="dist" depends="blank, example, src" description="Build distribution version">
+        <mkdir dir="${tmp.dir}/dist" />
+        <copy todir="${tmp.dir}/dist">
+            <fileset dir="${dist.dir}">
+                <exclude name="*.zip" />
+                <exclude name="*.tgz" />
+            </fileset>
+        </copy>
+
+        <copy todir="${tmp.dir}/dist"              file="README.txt" />
+
+        <zip  zipfile="${dist.dir}/${name}-${version}.zip" basedir="${tmp.dir}/dist" />
+        <tar  tarfile="${tmp.dir}/dist.tar" basedir="${tmp.dir}/dist" />
+        <gzip zipfile="${dist.dir}/${name}-${version}.tgz" src="${tmp.dir}/dist.tar" />
+    </target>
+
+    <!-- Remove all built files -->
+    <target name="clean">
+        <delete dir="${tmp.dir}" />
+        <delete dir="${doc.dir}" />
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+
+</project>

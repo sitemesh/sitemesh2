@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE orion-web-app PUBLIC "-//Evermind//DTD Orion Web Application 2.3//EN" "http://www.orionserver.com/dtds/orion-web.dtd">
+
+<!-- This file is only used because the default charset is '8859-1'  As utf-8 is a superset, we choose this as a default.
+
+    For other servers, we can use a servlet filter to set the charset in the page.  However, a bug in orion prevents this:
+    http://bugzilla.orionserver.com/bugzilla/show_bug.cgi?id=347
+
+    Change the charset below if you wish to use a character set other than utf-8 in orion
+-->
+<orion-web-app default-charset="utf-8" />

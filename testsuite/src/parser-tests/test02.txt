@@ -1,0 +1,28 @@
+~~~ INPUT ~~~
+<html>
+<body>Hi.
+
+<form action="blah">
+<input type=text name=thing>
+<input TYPE="submit"/>
+</FORM>
+
+Bye<br></BODY>
+</html>
+~~~ TITLE ~~~
+~~~ PROPERTIES ~~~
+title=
+
+
+~~~ HEAD ~~~
+
+
+~~~ BODY ~~~
+Hi.
+
+<form action="blah">
+<input type=text name=thing>
+<input TYPE="submit"/>
+</FORM>
+
+Bye<br>

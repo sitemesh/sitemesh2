@@ -1,0 +1,1 @@
+<% application.getRequestDispatcher( "/redirect/page.jsp" ).include( request, response ); %>
