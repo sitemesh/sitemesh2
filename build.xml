@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 
 <project name="sitemesh" default="dist">
+    <property name="lib.dir" location="lib" />
+    <property name="dist.dir" location="dist" />
+    <property name="docs.dir" location="docs" />
+    <property name="src.dir" location="src" />
+    <property name="build.dir" location="${dist.dir}/build" />
+
     <property file="build.properties"/>
 
     <!-- Classpath -->
@@ -39,16 +45,27 @@
     </target>
 
     <target name="yacc" unless="parser.uptodate">
+        <property name="yacc.args" value="-Jnorun -Jnoconstruct -Jclass=Parser -Jextends=Lexer -Jsemantic=String -Jsemantic=Value -Jpackage=com.opensymphony.module.sitemesh.parser.html parser.yacc" />
         <echo message="Generating HTML parser using BYacc/J"/>
-        <exec executable="${yacc.exe}" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true">
-            <arg value="-Jnorun"/>
-            <arg value="-Jnoconstruct"/>
-            <arg value="-Jclass=Parser"/>
-            <arg value="-Jextends=Lexer"/>
-            <arg value="-Jsemantic=String"/>
-            <arg value="-Jsemantic=Value"/>
-            <arg value="-Jpackage=com.opensymphony.module.sitemesh.parser.html"/>
-            <arg value="parser.yacc"/>
+        <exec vmlauncher="false" executable="lib/yacc.exe" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        os="Windows NT,Windows 98,Windows 95,Windows 2000"
+        >
+            <arg line="${yacc.args}"/>
+        </exec>
+        <exec vmlauncher="false" executable="${lib.dir}/yacc.solaris" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        os="SunOS,Solaris"
+        >
+            <arg line="${yacc.args}"/>
+        </exec>
+        <exec vmlauncher="false" executable="${lib.dir}/yacc.linux" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        os="Linux"
+        >
+            <arg line="${yacc.args}"/>
+        </exec>
+        <exec vmlauncher="false" executable="${lib.dir}/yacc.osx" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        os="Mac OS X"
+        >
+            <arg line="${yacc.args}"/>
         </exec>
     </target>
 
