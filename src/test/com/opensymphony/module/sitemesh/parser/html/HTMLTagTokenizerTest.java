@@ -159,11 +159,11 @@ public class HTMLTagTokenizerTest extends TestCase {
     public void testAllowsAwkwardCharsInElementAndAttribute() {
         // expectations
         handler.expectTag(Tag.OPEN, "name:space", new String[] { "foo:bar", "x:y%" });
-        handler.expectTag(Tag.EMPTY, "a_b-c$d", new String[] { "b_b-c$d", "c_b-c$d" });
+        handler.expectTag(Tag.EMPTY, "a_b-c$d", new String[] { "b_b-c$d", "c_b=c$d" });
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(""
                 + "<name:space foo:bar=x:y%>"
-                + "<a_b-c$d b_b-c$d=c_b-c$d />");
+                + "<a_b-c$d b_b-c$d=c_b=c$d />");
         tokenizer.start(handler);
         // verify
         handler.verify();

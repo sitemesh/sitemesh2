@@ -13,8 +13,8 @@
 /********** GRAMMAR *********/
 
 document:
-    node document |
-    empty ;
+    document node |
+    /*blank*/     ;
 
 node:
     LT WORD attributes GT                                         { tokenizer.parsedTag(Tag.OPEN,  $2, $1, $4 + 1); } |
@@ -29,17 +29,15 @@ attributes:
     attributes WORD whitespace                                       { tokenizer.parsedAttribute($2, null, false); } | /* a     */
     whitespace ;
 
-unquoted:  /* This is needed to deal with the annoying special case <a something=nasty/slash> */
-    unquoted WORD  { $$ = $1 + $2; } |
-    unquoted SLASH { $$ = $1 + "/"; } |
-    empty          { $$ = ""; };
+unquoted:  /* This is needed to deal with the annoying special cases <a something=nasty/slash href=blah?x=y> */
+    unquoted WORD   { $$ = $1 + $2; } |
+    unquoted SLASH  { $$ = $1 + "/"; } |
+    unquoted EQUALS { $$ = $1 + "="; } |
+    /*blank*/       { $$ = ""; };
 
 whitespace:
-    WHITESPACE whitespace |
-    empty ;
-
-empty:
-    /* this space intentionally left blank */ ;
+    whitespace WHITESPACE |
+    /*blank*/             ;
 
 
 
