@@ -62,7 +62,7 @@ Currently known containers that support this and SiteMesh was tested with:
 
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>*</url-pattern>
     </filter-mapping>
 
     <taglib>
@@ -216,6 +216,8 @@ Please report bugs here: http://jira.opensymphony.com
 -- Changes from 1.5     --
 --------------------------
 - SiteMesh now hosted at http://sitemesh.dev.java.net.
+
+- FastPageParser performance improvements.
 
 - DTD location has changed; now http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd
 
