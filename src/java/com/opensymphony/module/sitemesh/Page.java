@@ -29,7 +29,7 @@ import java.util.Map;
  * be added to the system by extending Page and implementing an appropriate PageParser.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface Page {
     /**
@@ -116,14 +116,6 @@ public interface Page {
      * @return Properties map
      */
     Map getProperties();
-
-    /**
-     * Determine whether this <code>Page</code> can be cached or not. If allowed to
-     * be cached for a specified period of time, <code>true</code> should be initially
-     * returned, and repeated calls to this method will determine whether the page
-     * is still allowed to remain cached.
-     */
-    boolean shouldCache();
 
     /**
      * Return the request of the original page.

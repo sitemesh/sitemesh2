@@ -30,7 +30,7 @@ import java.util.Set;
  * add all the required information.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.Page
  */
@@ -119,15 +119,6 @@ public abstract class AbstractPage implements Page {
 
     public Map getProperties() {
         return properties;
-    }
-
-    /**
-     * Returns false. Override as necessary.
-     *
-     * @see com.opensymphony.module.sitemesh.Page#shouldCache()
-     */
-    public boolean shouldCache() {
-        return false;
     }
 
     /** @see com.opensymphony.module.sitemesh.Page#getRequest() */

@@ -19,7 +19,7 @@ import java.io.Writer;
  * Wrapper class that relays all methods to an original Page.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PageWrapper extends AbstractPage implements Page {
     private Page original = null;
@@ -72,10 +72,6 @@ public class PageWrapper extends AbstractPage implements Page {
 
     public String[] getPropertyKeys() {
         return page().getPropertyKeys();
-    }
-
-    public boolean shouldCache() {
-        return page().shouldCache();
     }
 
     public HttpServletRequest getRequest() {
