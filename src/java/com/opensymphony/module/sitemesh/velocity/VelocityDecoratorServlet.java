@@ -35,7 +35,7 @@ import com.opensymphony.module.sitemesh.util.OutputConverter;
  * Servlet that allows Velocity templates to be used as decorators.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class VelocityDecoratorServlet extends VelocityServlet {
     protected Properties loadConfiguration(ServletConfig config) throws IOException, FileNotFoundException {
@@ -84,7 +84,7 @@ public class VelocityDecoratorServlet extends VelocityServlet {
             return getTemplate(template);
         }
         catch (ResourceNotFoundException e) {
-            response.sendError(404);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Decorator template " + template + " not found.");
             return null;
         }
     }
