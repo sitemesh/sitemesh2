@@ -5,26 +5,43 @@ import com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 import java.util.LinkedList;
+import java.io.Reader;
+import java.io.Writer;
+import java.io.CharArrayWriter;
+import java.io.IOException;
 
 public class HTMLProcessor {
 
-    private final char[] input;
-    private final CharArray body;
+    private final char[] in;
+    private final CharArray out;
     private final State defaultState = new State();
 
     private State currentState = defaultState;
+    private Writer outStream;
 
-    public HTMLProcessor(char[] input, CharArray body) {
-        this.input = input;
-        this.body = body;
+    public HTMLProcessor(char[] in, CharArray out) {
+        this.in = in;
+        this.out = out;
+    }
+
+    public HTMLProcessor(Reader in, Writer out) throws IOException {
+        CharArrayWriter inBuffer = new CharArrayWriter();
+        char[] buffer = new char[2048];
+        int n = 0;
+        while (-1 != (n = in.read(buffer))) {
+            inBuffer.write(buffer, 0, n);
+        }
+        this.in = inBuffer.toCharArray();
+        this.out = new CharArray(2048);
+        this.outStream = out;
     }
 
     public State defaultState() {
         return defaultState;
     }
 
-    public void process() {
-        TagTokenizer tokenizer = new TagTokenizer(input);
+    public void process() throws IOException {
+        TagTokenizer tokenizer = new TagTokenizer(in);
         final HTMLProcessorContext context = new HTMLProcessorContext() {
             public State currentState() {
                 return currentState;
@@ -54,7 +71,7 @@ public class HTMLProcessor {
                 nextDown.append(top);
             }
         };
-        context.pushBuffer(body);
+        context.pushBuffer(out);
         tokenizer.start(new TokenHandler() {
 
             public boolean shouldProcessTag(String name) {
@@ -77,5 +94,8 @@ public class HTMLProcessor {
             }
         });
         defaultState.endOfState();
+        if (outStream != null) {
+            outStream.write(out.toString());
+        }
     }
 }
