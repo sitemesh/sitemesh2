@@ -48,4 +48,7 @@ public class WebTest extends TestCase {
 		return new Document( new StringReader( XMLUtils.print( rs.getDOM() ) ) );
 	}
 
+    protected void assertStringContains(String expected, String actual) {
+        assertTrue("Could not find <" + expected + "> in <" + actual + ">", actual.indexOf(expected) > -1);
+    }
 }

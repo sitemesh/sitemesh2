@@ -1,17 +1,8 @@
 package testsuite.sitemesh;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.MalformedURLException;
-
-import org.xml.sax.SAXException;
-
-import com.opensymphony.util.XMLUtils;
-
-import testsuite.tester.WebTest;
 import com.meterware.httpunit.WebResponse;
 import electric.xml.Document;
-import electric.xml.ParseException;
+import testsuite.tester.WebTest;
 
 /**
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
@@ -106,6 +97,14 @@ public class SimpleDecoratorTest extends WebTest {
     public void testContentTypeSetUsingSetHeader() throws Exception {
         WebResponse rs = wc.getResponse( baseUrl + "/simple/DifferentWaysOfSpecifyingContentType?approach=setHeader" );
 		assertEquals( "[:: content-type ::]", rs.getTitle() );
+    }
+
+    public void testContentTypeSetMultipleTimes() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/multiple-set-content-type.jsp" );
+        System.out.println(rs.getText());
+        assertStringContains("END", rs.getText());
+        assertStringContains("MIDDLE", rs.getText());
+        assertStringContains("START", rs.getText());
     }
 
 }
