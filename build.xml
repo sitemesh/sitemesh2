@@ -98,6 +98,26 @@
             </lib>
         </war>
     </target>
+    
+    <target name="changelog" depends="init" description="Generates a changelog for the last 80 days">
+    	<mkdir dir="${build.dir}" />
+    
+    	<cvschangelog dir="." destfile="${build.dir}/changelog.xml" daysinpast="80">
+    		<user displayname="Hani Suleiman" userid="hani"/>
+    		<user displayname="Mathias Bogaert" userid="mbogaert"/>
+    		<user displayname="Scott Farquhar" userid="farkas"/>
+    		<user displayname="Mike Cannon-Brookes" userid="rebelutionary"/>
+		</cvschangelog>
+		
+		<mkdir dir="${dist.dir}/docs" />
+		
+		<style in="${build.dir}/changelog.xml" out="${dist.dir}/docs/changelog.html" style="${ant.home}/etc/changelog.xsl">
+        	<param name="title" expression="SiteMesh changelog for the last 80 days"/>
+        	<param name="module" expression="sitemesh"/>
+        	<param name="cvsweb" expression="https://sitemesh.dev.java.net/source/browse/"/>
+        </style>
+	</target>
+    	
 
     <target name="dist" depends="clean, docs, jar, blank, example" description="Builds distribution archives">
         <zip zipfile="${dist.dir}/${name}-${version}-sources.zip"
