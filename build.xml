@@ -13,12 +13,13 @@
 
     <target name="jflex" unless="lexer.uptodate" description="Generate Lexer class">
         <echo message="Generating HTML lexer using JFlex"/>
+        <mkdir dir="build/java"/>
         <java classpath="lib/jflex.jar" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
-            <arg value="src/java/com/opensymphony/module/sitemesh/html/tokenizer"/>
+            <arg value="build/java/com/opensymphony/module/sitemesh/html/tokenizer"/>
             <arg value="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"/>
         </java>
-        <delete file="src/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java~"/>
+        <delete file="build/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java~"/>
     </target>
 
     <target name="compile" description="Compile Java">
@@ -26,7 +27,7 @@
         <uptodate
             property="lexer.uptodate"
             srcfile="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"
-            targetfile="src/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java"/>
+            targetfile="build/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java"/>
         <antcall target="jflex"/>
 
         <mkdir dir="build/classes"/>
@@ -38,9 +39,8 @@
             nowarn="${compile.nowarn}"
             deprecation="${compile.deprecation}"
             >
-
             <src path="src/java"/>
-
+            <src path="build/java"/>
         </javac>
     </target>
 

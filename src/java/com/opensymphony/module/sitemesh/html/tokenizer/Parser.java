@@ -1,7 +1,7 @@
 /*
  * IF YOU ARE HAVING TROUBLE COMPILING THIS CLASS, IT IS PROBABLY BECAUSE Lexer.java IS MISSING.
  *
- * Use 'ant jflex' to generate the file.
+ * Use 'ant jflex' to generate the file, which will reside in build/java
  */
 
 package com.opensymphony.module.sitemesh.html.tokenizer;
