@@ -11,6 +11,7 @@ package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.util.CharArray;
 import com.opensymphony.module.sitemesh.util.CharArrayReader;
 
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -70,16 +71,16 @@ public final class FastPageParser implements PageParser
 
    private FastPage internalParse(Reader reader)
    {
-      StringBuffer _buffer    = new StringBuffer(4096);
-      StringBuffer _body      = new StringBuffer(4096);
-      StringBuffer _head      = new StringBuffer(512);
-      StringBuffer _title     = new StringBuffer(128);
+      CharArray _buffer    = new CharArray(4096);
+      CharArray _body      = new CharArray(4096);
+      CharArray _head      = new CharArray(512);
+      CharArray _title     = new CharArray(128);
       Map _htmlProperties     = null;
       Map _metaProperties     = new HashMap(6);
       Map _sitemeshProperties = new HashMap(6);
       Map _bodyProperties     = null;
 
-      StringBuffer _currentTaggedContent = new StringBuffer(1024);
+      CharArray _currentTaggedContent = new CharArray(1024);
       String _contentTagId = null;
       boolean tagged = false;
 
@@ -125,12 +126,12 @@ public final class FastPageParser implements PageParser
                }
                else
                {
-                  _currentTaggedContent.append('<').append(_buffer.toString()).append('>');
+                  _currentTaggedContent.append('<').append(_buffer).append('>');
                }
             }
             else
             {
-               if(_buffer.length() > 0) _currentTaggedContent.append(_buffer.toString());
+               if(_buffer.length() > 0) _currentTaggedContent.append(_buffer);
             }
          }
          else
@@ -169,10 +170,6 @@ public final class FastPageParser implements PageParser
                }
                else if(tag.equals("head"))
                {
-                  if (_tokenType == TOKEN_EMPTYTAG)
-                  {
-                     state = TAG_STATE_BODY;
-                  }
                   state = TAG_STATE_HEAD;
                }
                else if(tag.equals("xml"))
@@ -223,9 +220,9 @@ public final class FastPageParser implements PageParser
                }
                else if(tag.equals("meta"))
                {
-                  StringBuffer metaDestination = state == TAG_STATE_HEAD ? _head : _body;
+                  CharArray metaDestination = state == TAG_STATE_HEAD ? _head : _body;
                   metaDestination.append('<');
-                  metaDestination.append(_buffer.toString());
+                  metaDestination.append(_buffer);
                   metaDestination.append('>');
 
                   String name = ( String ) tagObject.properties.get("name");
@@ -295,57 +292,42 @@ public final class FastPageParser implements PageParser
                   writeTag(state, laststate, hide, _head, _buffer, _body);
                }
             }
-            else if(_tokenType == TOKEN_TEXT)
+            else if (!hide)
             {
-               if(state == TAG_STATE_TITLE)
+               if (_tokenType == TOKEN_TEXT)
                {
-                  if(!hide)
+                  if (state == TAG_STATE_TITLE)
                   {
-                     _title.append(_buffer.toString());
+                     _title.append(_buffer);
+                  }
+                  else if (shouldWriteToHead(state, laststate))
+                  {
+                     _head.append(_buffer);
+                  }
+                  else
+                  {
+                     _body.append(_buffer);
                   }
                }
-               else if(shouldWriteToHead(state, laststate))
+               else if (_tokenType == TOKEN_COMMENT)
                {
-                  if(!hide)
-                  {
-                     _head.append(_buffer.toString());
-                  }
-               }
-               else
-               {
-                  if(!hide)
-                  {
-                     _body.append(_buffer.toString());
-                  }
-               }
-            }
-            else if(_tokenType == TOKEN_COMMENT)
-            {
-               if(!hide)
-               {
-                  final StringBuffer commentDestination = shouldWriteToHead(state, laststate) ? _head : _body;
+                  final CharArray commentDestination = shouldWriteToHead(state, laststate) ? _head : _body;
                   commentDestination.append("<!--");
-                  commentDestination.append(_buffer.toString());
+                  commentDestination.append(_buffer);
                   commentDestination.append("-->");
                }
-            }
-            else if(_tokenType == TOKEN_CDATA)
-            {
-               if(!hide)
+               else if (_tokenType == TOKEN_CDATA)
                {
-                  final StringBuffer commentDestination = state == TAG_STATE_HEAD ? _head : _body;
+                  final CharArray commentDestination = state == TAG_STATE_HEAD ? _head : _body;
                   commentDestination.append("<![CDATA[");
-                  commentDestination.append(_buffer.toString());
+                  commentDestination.append(_buffer);
                   commentDestination.append("]]>");
                }
-            }
-            else if(_tokenType == TOKEN_SCRIPT)
-            {
-               if(!hide)
+               else if (_tokenType == TOKEN_SCRIPT)
                {
-                  final StringBuffer commentDestination = state == TAG_STATE_HEAD ? _head : _body;
+                  final CharArray commentDestination = state == TAG_STATE_HEAD ? _head : _body;
                   commentDestination.append('<');
-                  commentDestination.append(_buffer.toString());
+                  commentDestination.append(_buffer);
                }
             }
          }
@@ -424,17 +406,17 @@ public final class FastPageParser implements PageParser
                      _buffer.setLength(0);
                      _state = STATE_COMMENT;
                   }
-                  else if(c == '[' && buflen == 7 && _buffer.substring(0, 7).equalsIgnoreCase("![CDATA"))
+                  else if(c == '[' && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.charAt(1) == '[' &&  _buffer.compareUpper("CDATA", 2))
                   {
                      _buffer.setLength(0);
                      _state = STATE_CDATA;
                   }
-                  else if((c == 'e' || c == 'E') && buflen == 7 && _buffer.substring(0, 7).equalsIgnoreCase("!DOCTYP"))
+                  else if((c == 'e' || c == 'E') && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.compareUpper("DOCTYP", 1))
                   {
                      _buffer.append((char)c);
                      _state = STATE_DOCTYPE;
                   }
-                  else if((c == 'T' || c == 't') && buflen == 5 && _buffer.substring(0, 5).equalsIgnoreCase("SCRIP"))
+                  else if((c == 'T' || c == 't') && buflen == 5 && _buffer.compareUpper("SCRIP", 0))
                   {
                      _buffer.append((char)c);
                      _state = STATE_SCRIPT;
@@ -595,23 +577,16 @@ public final class FastPageParser implements PageParser
                           _frameSet);
    }
 
-   private static void writeTag(int state, int laststate, boolean hide, StringBuffer _head, StringBuffer _buffer, StringBuffer _body) {
-      if(shouldWriteToHead(state, laststate))
+   private static void writeTag(int state, int laststate, boolean hide, CharArray _head, CharArray _buffer, CharArray _body) {
+      if (!hide)
       {
-         if(!hide)
+         if (shouldWriteToHead(state, laststate))
          {
-            _head.append('<');
-            _head.append(_buffer.toString());
-            _head.append('>');
+            _head.append('<').append(_buffer).append('>');
          }
-      }
-      else
-      {
-         if(!hide)
+         else
          {
-            _body.append('<');
-            _body.append(_buffer.toString());
-            _body.append('>');
+            _body.append('<').append(_buffer).append('>');
          }
       }
    }
@@ -622,7 +597,7 @@ public final class FastPageParser implements PageParser
              ||(laststate == TAG_STATE_HEAD && (state == TAG_STATE_XML || state == TAG_STATE_XMP));
    }
 
-   private Tag parseTag(StringBuffer buf)
+   private Tag parseTag(CharArray buf)
    {
       int len = buf.length();
       int idx = 0;
@@ -647,7 +622,7 @@ public final class FastPageParser implements PageParser
       return parseProperties(tag, buf, idx);
    }
 
-   private static Tag parseProperties(Tag tag, StringBuffer buffer, int idx)
+   private static Tag parseProperties(Tag tag, CharArray buffer, int idx)
    {
       int len = buffer.length();
       int begin;
