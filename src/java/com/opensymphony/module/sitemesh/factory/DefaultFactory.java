@@ -28,15 +28,27 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * DefaultFactory, reads configuration from <code>/WEB-INF/sitemesh.xml</code>, or uses the
+ * DefaultFactory, reads configuration from the <code>sitemesh.configfile</code> init param,
+ * or <code>/WEB-INF/sitemesh.xml</code> if not specified, or uses the
  * default configuration if <code>sitemesh.xml</code> does not exist.
  *
+ * <p>To use the <code>sitemesh.configfile</code> parameter, add the following to your web.xml:
+ * <pre>
+ * &lt;context-param&gt;
+ *      &lt;param-name&gt;sitemesh.configfile&lt;/param-name&gt;
+ *      &lt;param-value&gt;/WEB-INF/etc/sitemesh.xml&lt;/param-value&gt;
+ *  &lt;/context-param&gt;
+ * </pre>
+ * </p>
+ * 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class DefaultFactory extends BaseFactory {
-    String configFileName = "/WEB-INF/sitemesh.xml";
+    String configFileName;
+    private static final String DEFAULT_CONFIG_FILENAME = "/WEB-INF/sitemesh.xml";
+
     File configFile;
     long configLastModified;
     Map configProps = new HashMap();
@@ -46,6 +58,11 @@ public class DefaultFactory extends BaseFactory {
 
     public DefaultFactory(Config config) {
         super(config);
+
+        configFileName = config.getServletContext().getInitParameter("sitemesh.configfile");
+        if (configFileName == null) {
+            configFileName = DEFAULT_CONFIG_FILENAME;
+        }
 
         // configFilePath is null if loaded from war file
         String initParamConfigFile = config.getConfigFile();
