@@ -1,93 +1,64 @@
-td, li, br, div, p
-{
-	font-family : verdana, arial, helvetica, sans-serif;
-	font-size: 11px;
+body {
+	background-color: #FFFFFF;
 }
 
-body
-{
-  margin:  0;
-  padding:  0;
-  color:  #333333;
-  background-color: white;
-  font-size: 11px;
-  font-family: verdana, arial, helvetica, sans-serif;
-  line-height: 19px;
+.TableHeadingColor {
+	background: #99CCFF;
 }
 
-TD.NavBarCell1
-{
-  font-size: 10px;
-  font-family: Verdana, Sans-Serif;
-  font-weight: bold;
-  color: #666666;
-  background-color: #99CCFF;
+.TableSubHeadingColor {
+	background: #BBBBBB;
+	color: #FFFFFF; /* Dark grey */
 }
 
-TD.NavBarCell1Rev
-{
-  font-family: Verdana, Sans-Serif;
-  font-size: 11px;
-  font-weight: bold;
-  color: #dedede;
-  background-color: #669900;
+.TableRowColor {
+	background: #EFEFEF; /* White */
 }
 
-TR.TableHeadingColor
-{
-	background-color: #99CCFF;
-}
-
-HR
-{
-	size: 1;
+/* Font used in left-hand frame lists */
+.FrameTitleFont {
+	font-size: normal;
+	font-family: normal;
 	color: #000000;
-	height: 1;
 }
 
-a
-{
-  text-decoration: none;
+.FrameHeadingFont {
+	font-size: normal;
+	font-family: normal;
+	color: #000000;
 }
 
-a:link
-{
-  color: #003366;
-}
-a:visited
-{
-  color: #cc6600;
-}
-a:active
-{
-  background-color: transparent;
-  color: #cc6600;
+.FrameItemFont {
+	font-size: normal;
+	font-family: normal;
+	color: #000000;
 }
 
-li
-{
-	padding-bottom: 2pt;
+/* Navigation bar fonts and colors */
+.NavBarCell1 {
+	background-color: #DDDDDD;
+}
+/* Light mauve */
+.NavBarCell1Rev {
+	background-color: #888888;
+}
+/* Dark Blue */
+.NavBarFont1 {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
 }
 
-h2
-{
-  color: #006699;
-  margin-bottom: 10px;
-  margin-top: 10px;
+.NavBarFont1Rev {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
 }
 
-h3
-{
-  color: #006699;
+.NavBarCell2 {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #FFFFFF;
 }
 
-h4
-{
-  font: 11px verdana, arial, helvetica, sans-serif;
-  font-weight: bold;
-  color: #cc6600;
-}
-h5, h6
-{
-  color: #032588;
+.NavBarCell3 {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #FFFFFF;
 }
