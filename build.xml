@@ -88,7 +88,10 @@
     </target>
 
     <target name="example" depends="jar" description="Builds sample web-app">
-        <war warfile="${dist.dir}/${name}-example.war" webxml="${example.dir}/WEB-INF/web.xml">
+        <copy todir="${build.dir}" file="${example.dir}/WEB-INF/web.xml"/>
+    	<replace file="${build.dir}/web.xml" token="@VERSION@" value="${version}"/>
+    	<mkdir dir="${dist.dir}" />
+    	<war warfile="${dist.dir}/${name}-example.war" webxml="${build.dir}/web.xml">
             <fileset dir="${example.dir}">
                 <exclude name="WEB-INF/web.xml" />
             </fileset>
@@ -98,10 +101,8 @@
             <lib dir="${lib.dir}">
             	<include name="velocity-*.jar" />
             </lib>
-            <webinf dir="${dist.dir}">
-                <include name="*.tld" />
-            </webinf>
         </war>
+        <delete file="${build.dir}/web.xml"/>
     </target>
 
     <target name="dist" depends="clean, docs, jar, blank, example" description="Builds distribution archives">

@@ -1,5 +1,5 @@
-<%@ taglib uri="sitemesh-decorator" prefix="decorator" %>
-<%@ taglib uri="sitemesh-page" prefix="page" %>
+<%@ taglib uri="/sitemesh-decorator" prefix="decorator" %>
+<%@ taglib uri="/sitemesh-page" prefix="page" %>
 <html>
 	<head>
 		<title><decorator:title default="Mysterious page..." /></title>

@@ -1,4 +1,4 @@
-<%@ taglib uri="sitemesh-page" prefix="page" %>
+<%@ taglib uri="/sitemesh-page" prefix="page" %>
 <html>
 	<head>
 		<title>Inline decorator example</title>
