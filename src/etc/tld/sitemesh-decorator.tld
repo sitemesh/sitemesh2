@@ -6,7 +6,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
 	<shortname>SiteMesh Decorator Tags</shortname>
-	<uri>sitemesh-decorator</uri>
+	<uri>http://www.opensymphony.com/sitemesh/decorator</uri>
 
 	<tag>
 		<name>head</name>

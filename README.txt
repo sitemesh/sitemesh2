@@ -84,7 +84,7 @@ If you don't, here's a JSP to get you started (test.jsp).
 Once you have some content (preferably more imaginative than the example above),
 a decorator should be created (decorator.jsp).
 
-    <%@ taglib uri="/sitemesh-decorator" prefix="decorator" %>
+    <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
     <html>
         <head>
             <title>My Site - <decorator:title default="Welcome!" /></title>
@@ -176,6 +176,14 @@ Please report bugs here: http://jira.opensymphony.com
 --------------------------
 -- Changes from 2.0.1   --
 --------------------------
+
+- The URI's for the SiteMesh tag libraries have changed:
+
+    sitemesh-decorator becomes   http://www.opensymphony.com/sitemesh/decorator
+    sitemesh-page      becomes   http://www.opensymphony.com/sitemesh/page
+
+  There have been no other changes to the tag library descriptors (.tld) files from
+  the previous version, so you don't need to replace you existing ones.
 
 - Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation and the example webapp).
 - The example webapp and blank webapp use Packaged Tag Libraries (specifying the URI of the taglib).

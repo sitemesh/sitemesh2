@@ -1,4 +1,4 @@
-<%@ taglib uri="/sitemesh-decorator" prefix="decorator" %>
+<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
 
 <html>
     <head>
