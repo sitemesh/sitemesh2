@@ -15,6 +15,10 @@ class HTMLPage extends AbstractHTMLPage {
         this.pageData = original;
     }
 
+    public void clearBody() {
+        body.getBuffer().setLength(0);
+    }
+
     public void appendToHead(String s) {
         head.write(s);
     }
@@ -32,14 +36,20 @@ class HTMLPage extends AbstractHTMLPage {
     }
 
     public String getHead() {
-        return null;
+        return head.toString();
     }
 
     public boolean isFrameSet() {
         return false;
     }
 
-    public void clearBody() {
-        body.getBuffer().setLength(0);
+    public String getPage() {
+        return body.toString();
     }
+
+    public String getBody() {
+        return new String(pageData);
+    }
+
+
 }
