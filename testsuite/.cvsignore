@@ -4,3 +4,5 @@ target
 velocity.log*
 maven.log*
 clover
+test-results
+tmp
