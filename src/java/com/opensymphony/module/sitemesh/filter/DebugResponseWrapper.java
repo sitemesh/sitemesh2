@@ -1,12 +1,6 @@
-/*
- * Title:        DebugResponseWrapper
- * Description:
- *
- * This software is published under the terms of the OpenSymphony Software
+/* This software is published under the terms of the OpenSymphony Software
  * License version 1.1, of which a copy has been included with this
- * distribution in the LICENSE.txt file.
- */
-
+ * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
 import javax.servlet.ServletOutputStream;
@@ -19,7 +13,7 @@ import java.util.Locale;
 
 /**
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class DebugResponseWrapper extends HttpServletResponseWrapper {
     private static int lastCount = 0;

@@ -49,7 +49,7 @@ import java.net.MalformedURLException;
  * {@link com.opensymphony.module.sitemesh.DecoratorMapper} can overide this.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstants {
     private String page = null;
@@ -61,6 +61,7 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
     private Map params = new HashMap(6);
     private Config config = null;
     private DecoratorMapper decoratorMapper = null;
+    private Factory factory;
 
     /**
      * Tag attribute: URI of page to include.
@@ -125,7 +126,8 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
         if (config == null) {
             // set context if not already set
             config = new Config(pageContext.getServletConfig());
-            decoratorMapper = Factory.getInstance(config).getDecoratorMapper();
+            factory = Factory.getInstance(config);
+            decoratorMapper = factory.getDecoratorMapper();
         }
         // return page == null ? EVAL_BODY_BUFFERED : SKIP_BODY;
         return EVAL_BODY_BUFFERED;
@@ -210,7 +212,7 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
                 // include page using filter response
                 RequestDispatcher rd = pageContext.getServletContext().getRequestDispatcher(fullPath);
                 PageRequestWrapper pageRequest = new PageRequestWrapper((HttpServletRequest) pageContext.getRequest());
-                PageResponseWrapper pageResponse = new PageResponseWrapper((HttpServletResponse) pageContext.getResponse(), config);
+                PageResponseWrapper pageResponse = new PageResponseWrapper((HttpServletResponse) pageContext.getResponse(), factory);
 
                 StringBuffer sb = new StringBuffer(contentType != null ? contentType : "text/html");
                 if (encoding != null) {
@@ -225,7 +227,6 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
                 }
                 rd.include(pageRequest, pageResponse);
                 pageObj = pageResponse.getPage();
-                pageResponse.closeWriter();
             }
 
             // If pageObj == null, then the panel source had some weird error in

@@ -1,12 +1,6 @@
-/*
- * Title:        PageFilter
- * Description:
- *
- * This software is published under the terms of the OpenSymphony Software
+/* This software is published under the terms of the OpenSymphony Software
  * License version 1.1, of which a copy has been included with this
- * distribution in the LICENSE.txt file.
- */
-
+ * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
 import com.opensymphony.module.sitemesh.*;
@@ -23,7 +17,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
@@ -111,28 +105,16 @@ public class PageFilter implements Filter, RequestConstants {
     /** Shutdown filter. */
     public void destroy() {
         factory = null;
-        filterConfig = null;
     }
 
     /**
      * Continue in filter-chain, writing all content to buffer and parsing
      * into returned {@link com.opensymphony.module.sitemesh.Page} object. If
      * {@link com.opensymphony.module.sitemesh.Page} is not parseable, null is returned.
-     *
-     * <p>To debug the {@link com.opensymphony.module.sitemesh.filter.PageWriter}, add
-     * the following to the servlet configuration:
-     * <pre>
-     * &lt;init-param&gt;
-     *     &lt;param-name&gt;debug.pagewriter&lt;/param-name&gt;
-     *     &lt;param-value&gt;true&lt;/param-value&gt;
-     * &lt;/init-param&gt;
-     * </pre>
-     * </p>
      */
     protected Page parsePage(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        boolean debug = Boolean.valueOf(filterConfig.getInitParameter("debug.pagewriter")).booleanValue();
         try {
-            PageResponseWrapper pageResponse = new PageResponseWrapper(response, new Config(filterConfig), debug);
+            PageResponseWrapper pageResponse = new PageResponseWrapper(response, factory);
             chain.doFilter(request, pageResponse);
             // check if another servlet or filter put a page object to the request
             Page result = (Page)request.getAttribute(PAGE);
@@ -140,8 +122,7 @@ public class PageFilter implements Filter, RequestConstants {
                 // parse the page
                 result = pageResponse.getPage();
             }
-            request.setAttribute(USING_STREAM, pageResponse.isUsingStream() ? Boolean.TRUE : Boolean.FALSE);
-            pageResponse.closeWriter();
+            request.setAttribute(USING_STREAM, new Boolean(pageResponse.isUsingStream()));
             return result;
         }
         catch (IllegalStateException e) {
@@ -182,7 +163,6 @@ public class PageFilter implements Filter, RequestConstants {
                 }
             }
 
-//            response.getWriter().flush(); //todo - do we really need this?
             request.removeAttribute(PAGE);
         }
         catch (RuntimeException e) {

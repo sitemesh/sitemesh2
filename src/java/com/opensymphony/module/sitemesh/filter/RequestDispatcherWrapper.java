@@ -1,3 +1,6 @@
+/* This software is published under the terms of the OpenSymphony Software
+ * License version 1.1, of which a copy has been included with this
+ * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
 import javax.servlet.RequestDispatcher;
@@ -13,11 +16,11 @@ import java.io.IOException;
  * @see com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag
  *
  * @author <a href="mailto:joeo@enigmastation.com">Joseph B. Ottinger</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class RequestDispatcherWrapper implements RequestDispatcher {
     private RequestDispatcher rd = null;
-    boolean done = false;
+    private boolean done = false;
 
     public RequestDispatcherWrapper(RequestDispatcher rd) {
         this.rd = rd;

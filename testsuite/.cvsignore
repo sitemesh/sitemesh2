@@ -6,3 +6,4 @@ maven.log*
 clover
 test-results
 tmp
+results.html
