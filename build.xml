@@ -26,7 +26,7 @@
     <target name="jar" depends="compile">
         <mkdir dir="${dist.dir}" />
         <copy todir="${build.dir}/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
-        <jar jarfile="${dist.dir}/${name}.jar" basedir="${build.dir}">
+        <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}">
             <metainf dir="${tld.dir}/jsp1.2" includes="*.tld" />
         </jar>
         <copy todir="${dist.dir}">
@@ -52,7 +52,7 @@
         <war warfile="${dist.dir}/${name}-blank.war" webxml="${example.dir}/WEB-INF/web.xml">
             <fileset dir="${blank.dir}"/>
             <lib dir="${dist.dir}">
-                <include name="${name}.jar" />
+                <include name="${name}-${version}.jar" />
             </lib>
             <webinf dir="${dist.dir}">
                 <include name="*.tld" />
@@ -67,7 +67,7 @@
                 <exclude name="WEB-INF/web.xml" />
             </fileset>
             <lib dir="${dist.dir}">
-                <include name="${name}.jar" />
+                <include name="${name}-${version}.jar" />
             </lib>
             <webinf dir="${dist.dir}">
                 <include name="*.tld" />
@@ -78,7 +78,7 @@
     <!-- Build source jar to be included in distribution -->
     <target name="src">
         <mkdir dir="${dist.dir}" />
-        <jar jarfile="${dist.dir}/${name}-src.jar">
+        <jar jarfile="${dist.dir}/${name}-${version}-sources.jar">
             <fileset dir="${src.dir}" />
         </jar>
     </target>
@@ -107,5 +107,4 @@
         <delete dir="${build.dir}" />
         <delete dir="${dist.dir}" />
     </target>
-
 </project>
