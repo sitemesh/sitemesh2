@@ -2,7 +2,7 @@ package com.opensymphony.module.sitemesh.parser.tokenizer;
 
 import junit.framework.Assert;
 
-public class MockTokenHandler implements TokenHandler {
+class MockTokenHandler implements TokenHandler {
 
     private StringBuffer expected = new StringBuffer();
     private StringBuffer actual = new StringBuffer();

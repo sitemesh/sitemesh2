@@ -14,7 +14,7 @@ import java.io.Writer;
  * HTMLTagTokenizer.
  *
  * @see com.opensymphony.module.sitemesh.parser.HTMLPageParser
- * @see com.opensymphony.module.sitemesh.parser.tokenizer.HTMLTagTokenizer
+ * @see com.opensymphony.module.sitemesh.parser.tokenizer.TagTokenizer
  *
  * @author Joe Walnes
  */

@@ -6,7 +6,7 @@ import com.opensymphony.module.sitemesh.util.CharArray;
  * Tag returned by HTMLTagTokenizer. Allows easy access to element name and attributes.
  *
  * @see TokenHandler
- * @see HTMLTagTokenizer
+ * @see TagTokenizer
  *
  * @author Joe Walnes
  */
