@@ -40,7 +40,7 @@ Currently known containers that support this and SiteMesh was tested with:
 * Oracle OC4J 2                              - http://www.oracle.com
 * WebLogic 7.0 SP2, 8.1 and 8.1 SP2          - http://www.bea.com
 * WebSphere 5.0                              - http://www.ibm.com
-* Jetty 4                                    - http://jetty.mortbay.org
+* Jetty 4.2.20                               - http://jetty.mortbay.org
 
 --------------------------
 -- Installation         --
