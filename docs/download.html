@@ -4,56 +4,56 @@
     </head>
 
     <body bgcolor="#FFFFFF">
-
-    <h3>Released Versions</h3>
-    <p>The following versions of SiteMesh are currently available. All source and API docs are included in the
-    download.</p>
-        
-    <p>Please see <a href="install.html">Installation and Configuration</a> for installation instructions.</p>
     
-    <ul>
-      <li>SiteMesh 2.0 - <a href="">binary zip</a> |
-        <a href="">full zip (with source)</a> |
-        <a href="">jar file only</a>
-        - November 20th, 2003</li>
+        <h3>Released Versions</h3>
         
-      <li>SiteMesh 1.5 -  <a href="hhttp://prdownloads.sourceforge.net/opensymphony/sitemesh_1_5.zip?download">zip</a>
-        | <a href="http://prdownloads.sourceforge.net/opensymphony/sitemesh_1_5.tgz?download">tgz</a>
-        - June 24, 2002</li>
-    </ul>
-
-    <h3>CVS Access</h3>
-    <p>The SiteMesh project is hosted at <a href="http://sitemesh.dev.java.net">http://sitemesh.dev.java.net</a>. You can
-    browse the CVS tree <a href="http://sitemesh.dev.java.net/source/browse/sitemesh">here</a>. Instructions for checking
-    the code out of CVS are available <a href="http://sitemesh.dev.java.net/servlets/ProjectSource">here</a>.</p>
+        <p>The following versions of SiteMesh are currently available.</p>
+            
+        <p>Please see <a href="install.html">Installation and Configuration</a> for installation instructions.</p>
+        
+        <ul>
+          <li>SiteMesh 2.0 - <a href="">binary zip</a> |
+            <a href="">full zip (with source)</a> |
+            <a href="">jar file only</a>
+            - November 20th, 2003</li>
+            
+          <li>SiteMesh 1.5 -  <a href="hhttp://prdownloads.sourceforge.net/opensymphony/sitemesh_1_5.zip?download">zip</a>
+            | <a href="http://prdownloads.sourceforge.net/opensymphony/sitemesh_1_5.tgz?download">tgz</a>
+            - June 24, 2002</li>
+        </ul>
+    
+        <h3>CVS Access</h3>
+        
+        <p>The SiteMesh project is hosted at <a href="http://sitemesh.dev.java.net">http://sitemesh.dev.java.net</a>. You can
+        browse the CVS tree <a href="http://sitemesh.dev.java.net/source/browse/sitemesh">here</a>. Instructions for checking
+        the code out of CVS are available <a href="http://sitemesh.dev.java.net/servlets/ProjectSource">here</a>.</p>
+        
+        <h3>Building</h3>
+        
+        <p>In order to build SiteMesh, you must have the JDK version 1.4 or above, 
+        and Jakarta Ant version 1.4 or above. To obtain and install Jakarta Ant, 
+        visit the <a href="http://ant.apache.org/">Ant website</a>.</p>
+        
+        <p>To build the SiteMesh binaries, change to the sitemesh directory, and type:</p>
+        
+        <blockquote><code><b>ant</b></code></blockquote>
+        
+        <p>If there are any errors, try clearing your classpath and retry.</p>
+        
+    	<p>Upon completion, a directory called <code>dist</code> should have been 
+    	created which contains <code>sitemesh-{version}.jar</code> (the actual library) and 2 
+    	<code>.tld</code> files (tag-library descriptors).</p>
+    	
+        <p>Other build targets include:</p>
+    
+    	<blockquote>
+    		<code><b>ant example</b></code><br>
+    		Build the sample web-app (<code>dist/sitemesh-example.war</code>).
+    	</blockquote>
+    		
+    	<blockquote>
+    		<code><b>ant docs</b></code><br>
+    		Build the API JavaDoc and copies the documentation (dir: <code>dist/docs/</code>).
+    	</blockquote>
     </body>
-    
-    <h3>Building</h3>
-    
-    <p>In order to build SiteMesh, you must have the JDK version 1.4 or above, 
-    and Jakarta Ant version 1.4 or above. To obtain and install Jakarta Ant, 
-    visit the <a href="http://ant.apache.org/">Ant website</a>.</p>
-    
-    <p>To build the SiteMesh binaries, change to the sitemesh directory, and type:</p>
-    
-    <blockquote><code><b>ant</b></code></blockquote>
-    
-    <p>If there are any errors, try clearing your classpath and retry.</p>
-    
-	<p>Upon completion, a directory called <code>dist</code> should have been 
-	created which contains <code>sitemesh-{version}.jar</code> (the actual library) and 2 
-	<code>.tld</code> files (tag-library descriptors).</p>
-	
-    <p>Other build targets include:</p>
-
-	<blockquote>
-		<code><b>ant example</b></code><br>
-		Build the sample web-app (<code>dist/sitemesh-example.war</code>).
-	</blockquote>
-		
-	<blockquote>
-		<code><b>ant docs</b></code><br>
-		Build the API JavaDoc and copies the documentation (dir: <code>dist/docs/</code>).
-	</blockquote>
-</body>
 </html>
