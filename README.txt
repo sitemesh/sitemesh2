@@ -62,7 +62,7 @@ Currently known containers that support this and SiteMesh was tested with:
 
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
-        <url-pattern>*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <taglib>
@@ -113,7 +113,7 @@ file WEB-INF/decorators.xml:
     <decorators>
 
         <decorator name="mydecorator" page="/decorator.jsp">
-            <pattern>*</pattern>
+            <pattern>/*</pattern>
         </decorator>
 
     </decorators>
@@ -127,7 +127,7 @@ You can define as many decorators as you want in decorators.xml. Example:
     <decorators defaultdir="/decorators">
 
         <decorator name="default" page="default.jsp">
-            <pattern>*</pattern>
+            <pattern>/*</pattern>
         </decorator>
 
         <decorator name="anotherdecorator" page="decorator2.jsp">

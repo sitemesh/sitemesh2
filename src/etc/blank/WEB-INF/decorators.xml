@@ -1,6 +1,6 @@
 <decorators defaultdir="/decorators">
     <decorator name="main" page="main.jsp">
-        <pattern>*</pattern>
+        <pattern>/*</pattern>
     </decorator>
 
     <decorator name="panel" page="panel.jsp"/>
