@@ -89,6 +89,10 @@ public class HTMLPageParser implements PageParser {
                     result.appendToBody(text.getText());
                 }
             }
+
+            public void error(String message, int line, int column) {
+                //fail("Encountered error");
+            }
         });
         return result;
     }

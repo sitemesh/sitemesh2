@@ -127,6 +127,10 @@ public class HTMLTagTokenizerTest extends TestCase {
             public void text(Text text) {
                 // ignoring text for this test
             }
+
+            public void error(String message, int line, int column) {
+                fail("Encountered error " + message);
+            }
         });
 
         assertTrue("tag() never called", called[0]);

@@ -15,6 +15,7 @@ package com.opensymphony.module.sitemesh.parser.html;
     protected int position() { return yy_currentPos; }
     protected int line()     { return yyline; }
     protected int column()   { return yycolumn; }
+    protected abstract void reportError(String message, int line, int column);
 %}
 
 %state ELEMENT
@@ -45,4 +46,4 @@ package com.opensymphony.module.sitemesh.parser.html;
 }
 
 /* not matched by anything else */
-.|\n                    { throw new ParserException("Illegal character <"+ yytext() +">", line(), column()); }
+.|\n                    { reportError("Illegal character <"+ yytext() +">", line(), column()); return Parser.TEXT; }

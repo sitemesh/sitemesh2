@@ -114,6 +114,10 @@ public class HTMLTagTokenizer implements Tag, Text {
         currentAttributes.add(attribute);
     }
 
+    public void error(String message, int line, int column) {
+        handler.error(message, line, column);
+    }
+
     private static class Attribute {
         String name;
         String value;

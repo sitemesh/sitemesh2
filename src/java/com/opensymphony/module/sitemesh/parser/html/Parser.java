@@ -279,10 +279,13 @@ public int yylex() {
     }
 }
 
-/* error reporting */
 public void yyerror(String error) {
     Value value = val_peek(0);
-    throw new ParserException(error, value.line, value.column);
+    reportError(error, value.line, value.column);
+}
+
+protected void reportError(String message, int line, int column) {
+    tokenizer.error(message, line, column);
 }
 
 private class Value {
@@ -291,7 +294,7 @@ private class Value {
     int line;
     int column;
 }
-//#line 240 "Parser.java"
+//#line 243 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -487,7 +490,7 @@ case 14:
 //#line 35 "parser.yacc"
 { yyval.sval = ""; }
 break;
-//#line 431 "Parser.java"
+//#line 434 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

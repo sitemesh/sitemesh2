@@ -35,6 +35,10 @@ public class MockTokenHandler implements TokenHandler {
         actual.append(text.getText());
     }
 
+    public void error(String message, int line, int column) {
+        Assert.fail("Encountered error");
+    }
+
     public void verify() {
         Assert.assertEquals(expected.toString(), actual.toString());
     }

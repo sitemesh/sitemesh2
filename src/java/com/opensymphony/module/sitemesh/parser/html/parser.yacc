@@ -67,10 +67,13 @@ public int yylex() {
     }
 }
 
-/* error reporting */
 public void yyerror(String error) {
     Value value = val_peek(0);
-    throw new ParserException(error, value.line, value.column);
+    reportError(error, value.line, value.column);
+}
+
+protected void reportError(String message, int line, int column) {
+    tokenizer.error(message, line, column);
 }
 
 private class Value {
