@@ -27,7 +27,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -139,9 +139,8 @@ public final class FastPageParser implements PageParser
                }
 
                if (parseTag(tagObject, _buffer) == null) continue;
-               String tag = tagObject.name;
 
-               if(tag.equals("/content"))
+               if (_buffer.compareLowerSubstr("/content"))   // Note that the '/' survives the | 32 operation
                {
                   tagged = false;
                   if(_contentTagId != null)
@@ -177,12 +176,7 @@ public final class FastPageParser implements PageParser
                   continue;
                }
 
-               String tag = tagObject.name;
-
-               if(tag == null)
-                  continue;
-
-               int tagHash = tag.hashCode();
+               int tagHash = _buffer.substrHashCode();
 
                if(state == TAG_STATE_XML || state == TAG_STATE_XMP)
                {
@@ -198,7 +192,7 @@ public final class FastPageParser implements PageParser
                   boolean doDefault = false;
                   switch (tagHash) {
                      case HTML_HASH:
-                        if (!tag.equals("html")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("html")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -206,14 +200,14 @@ public final class FastPageParser implements PageParser
                         _htmlProperties = parseProperties(tagObject, _buffer).properties;
                         break;
                      case HEAD_HASH:
-                        if (!tag.equals("head")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("head")) { // skip any accidental hash collisions
                            doDefault = true;
                               break;
                         }
                         state = TAG_STATE_HEAD;
                         break;
                      case XML_HASH:
-                        if (!tag.equals("xml")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("xml")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -222,7 +216,7 @@ public final class FastPageParser implements PageParser
                         state = TAG_STATE_XML;
                         break;
                      case XMP_HASH:
-                        if (!tag.equals("xmp")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("xmp")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -231,7 +225,7 @@ public final class FastPageParser implements PageParser
                         state = TAG_STATE_XMP;
                         break;
                      case TITLE_HASH:
-                        if (!tag.equals("title")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("title")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -246,7 +240,7 @@ public final class FastPageParser implements PageParser
                         }
                         break;
                      case SLASH_TITLE_HASH:
-                        if (!tag.equals("/title")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("/title")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -261,7 +255,7 @@ public final class FastPageParser implements PageParser
                         }
                         break;
                      case PARAMETER_HASH:
-                        if (!tag.equals("parameter")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("parameter")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -275,7 +269,7 @@ public final class FastPageParser implements PageParser
                         }
                         break;
                      case META_HASH:
-                        if (!tag.equals("meta")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("meta")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -303,28 +297,28 @@ public final class FastPageParser implements PageParser
                         }
                         break;
                      case SLASH_HEAD_HASH:
-                        if (!tag.equals("/head")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("/head")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
                         state = TAG_STATE_HTML;
                         break;
                      case FRAME_HASH:
-                        if (!tag.equals("frame")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("frame")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
                         _frameSet = true;
                         break;
                      case FRAMESET_HASH:
-                        if (!tag.equals("frameset")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("frameset")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
                         _frameSet = true;
                         break;
                      case BODY_HASH:
-                        if (!tag.equals("body")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("body")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -335,7 +329,7 @@ public final class FastPageParser implements PageParser
                         _bodyProperties = parseProperties(tagObject, _buffer).properties;
                         break;
                      case CONTENT_HASH:
-                        if (!tag.equals("content")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("content")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -348,14 +342,14 @@ public final class FastPageParser implements PageParser
                         }
                         break;
                      case SLASH_XMP_HASH:
-                        if (!tag.equals("/xmp")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("/xmp")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
                         hide = false;
                         break;
                      case SLASH_BODY_HASH:
-                        if (!tag.equals("/body")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("/body")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -363,7 +357,7 @@ public final class FastPageParser implements PageParser
                         hide = true;
                         break;
                      case SLASH_HTML_HASH:
-                        if (!tag.equals("/html")) { // skip any accidental hash collisions
+                        if (!_buffer.compareLowerSubstr("/html")) { // skip any accidental hash collisions
                            doDefault = true;
                            break;
                         }
@@ -491,17 +485,17 @@ public final class FastPageParser implements PageParser
                      _buffer.setLength(0);
                      _state = STATE_COMMENT;
                   }
-                  else if(c == '[' && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.charAt(1) == '[' &&  _buffer.compareUpper("CDATA", 2))
+                  else if(c == '[' && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.charAt(1) == '[' &&  _buffer.compareLower("cdata", 2))
                   {
                      _buffer.setLength(0);
                      _state = STATE_CDATA;
                   }
-                  else if((c == 'e' || c == 'E') && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.compareUpper("DOCTYP", 1))
+                  else if((c == 'e' || c == 'E') && buflen == 7 && _buffer.charAt(0) == '!' && _buffer.compareLower("doctyp", 1))
                   {
                      _buffer.append((char)c);
                      _state = STATE_DOCTYPE;
                   }
-                  else if((c == 'T' || c == 't') && buflen == 5 && _buffer.compareUpper("SCRIP", 0))
+                  else if((c == 'T' || c == 't') && buflen == 5 && _buffer.compareLower("scrip", 0))
                   {
                      _buffer.append((char)c);
                      _state = STATE_SCRIPT;
@@ -707,10 +701,10 @@ public final class FastPageParser implements PageParser
       // Find out where the non-whitespace characters end. This will give us the tag name.
       begin = idx;
       while (idx < len && !Character.isWhitespace(buf.charAt(idx))) idx++;
-      String name = buf.substring(begin, buf.charAt(idx - 1) == '/' ? idx - 1 : idx);
 
-      // Store the name as lowercase
-      tag.name = name.toLowerCase();
+      // Mark the tag name as a substring within the buffer. This allows us to perform
+      // a substring comparison against it at a later date
+      buf.setSubstr(begin, buf.charAt(idx - 1) == '/' ? idx - 1 : idx);
 
       // Remember where the name finishes so we can pull out the properties later if need be
       tag.nameEndIdx = idx;
@@ -766,7 +760,8 @@ public final class FastPageParser implements PageParser
             while (idx < len && !Character.isWhitespace(buffer.charAt(idx)) && buffer.charAt(idx) != '=') idx++;
          }
 
-         String name = buffer.substring(begin, idx).toLowerCase();
+         // Mark the substring. This is the attribute name
+         buffer.setSubstr(begin, idx);
 
          if(idx < len && Character.isWhitespace(buffer.charAt(idx)))
          {
@@ -810,7 +805,8 @@ public final class FastPageParser implements PageParser
             while (idx < len && !Character.isWhitespace(buffer.charAt(idx))) idx++;
             end = idx;
          }
-
+         // Extract the name and value as String objects and add them to the property map
+         String name = buffer.getLowerSubstr();
          String value = buffer.substring(begin, end);
 
          tag.addProperty(name, value);
@@ -820,11 +816,8 @@ public final class FastPageParser implements PageParser
 
    private class Tag
    {
-      // The name of the tag
-      public String name;
-
       // The index where the name string ends. This is used as the starting
-      // point if we need to continue processing to find the tag's properties
+      // offet if we need to continue processing to find the tag's properties
       public int nameEndIdx = 0;
 
       // This holds a map of the various properties for a particular tag.
