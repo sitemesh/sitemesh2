@@ -92,6 +92,9 @@
             <lib dir="${dist.dir}">
                 <include name="${name}-${version}.jar" />
             </lib>
+            <lib dir="${lib.dir}">
+            	<include name="velocity-*.jar" />
+            </lib>
             <webinf dir="${dist.dir}">
                 <include name="*.tld" />
             </webinf>
