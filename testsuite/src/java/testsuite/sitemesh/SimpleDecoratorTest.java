@@ -101,7 +101,6 @@ public class SimpleDecoratorTest extends WebTest {
 
     public void testContentTypeSetMultipleTimes() throws Exception {
         WebResponse rs = wc.getResponse( baseUrl + "/simple/multiple-set-content-type.jsp" );
-        System.out.println(rs.getText());
         assertStringContains("END", rs.getText());
         assertStringContains("MIDDLE", rs.getText());
         assertStringContains("START", rs.getText());
