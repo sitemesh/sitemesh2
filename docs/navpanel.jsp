@@ -1,9 +1,10 @@
 <p>
     <h3>About</h3>
     <a href="<%= request.getContextPath() %>/sitemesh/">Overview</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/features.html">Feature List</a><br>
-    <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/requirements.html">Requirements</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/features.html">Feature List</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/about.html">History and Crew</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a><br>    
 </p>
 
 <p>
