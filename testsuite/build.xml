@@ -12,34 +12,32 @@
 		<ant dir=".." target="jar" />
 	</target>
 
-	<target name="webapp-build" depends="sitemesh-build" description="Build web-app .war file">
-		<mkdir dir="tmp/webapp" />
+	<target name="webapp-build" depends="sitemesh-build,tests-build" description="Build web-app .war file">
 		<mkdir dir="tmp/webapp/WEB-INF/classes" />
-		<mkdir dir="tmp/webapp/WEB-INF/lib" />
-		<copy todir="tmp/webapp">
-			<fileset dir="src/webapp">
-				<exclude name="WEB-INF/classes" />
-			</fileset>
-		</copy>
-		<copy todir="tmp/webapp/WEB-INF/lib">
-			<fileset dir="../dist">
-				<include name="sitemesh.jar" />
-				<include name="*.tld" />
-			</fileset>
-		</copy>
 		<!--<javac srcdir="webapp/WEB-INF/classes" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" />-->
-		<javac srcdir="src" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
-		<mkdir dir="target" />
-		<jar jarfile="dist/sitemesh-testsuite.war">
-			<fileset dir="tmp/webapp" />
-		</jar>
+		<javac srcdir="src/java" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
+		<mkdir dir="dist" />
+		<war destfile="dist/sitemesh-testsuite.war" webxml="src/webapp/WEB-INF/web.xml">
+      <lib dir="../dist">
+        <include name="sitemesh-2.0.jar" />
+        <include name="*.tld"/>
+      </lib>
+      <classes dir="tmp/webapp/WEB-INF/classes" />
+      <webinf dir="src/webapp/WEB-INF/">
+        <include name="*.xml" />
+        <exclude name="web.xml"/>
+      </webinf>
+      <fileset dir="src/webapp">
+        <exclude name="WEB-INF/**" />
+      </fileset>
+		</war>
 	</target>
 
 	<target name="dist" depends="webapp-build"/>
 
 	<target name="tests-build" depends="sitemesh-build" description="Build test suite">
 		<mkdir dir="tmp/tests" />
-		<javac srcdir="src" destdir="tmp/tests" classpathref="classpath" debug="on" />
+		<javac srcdir="src/java" destdir="tmp/tests" classpathref="classpath" debug="on" />
 		<mkdir dir="dist" />
 		<jar jarfile="dist/sitemesh-testsuite.jar">
 			<fileset dir="tmp/tests" />
@@ -60,7 +58,7 @@
 		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath" />
 		<mkdir dir="${test-results}" />
 		<echo message="Running standalone unit tests..."/>
-		<junit fork="yes" haltonfailure="yes" dir=".">
+		<junit fork="no" haltonfailure="yes">
 			<classpath>
 				<fileset dir="lib" />
 				<fileset dir="dist" />
@@ -77,7 +75,7 @@
 		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath" />
 		<mkdir dir="${test-results}" />
 		<echo message="Running in-container unit tests..."/>
-		<junit fork="yes" haltonfailure="no" dir=".">
+		<junit fork="no" haltonfailure="no">
 			<classpath>
 				<fileset dir="lib" />
 				<fileset dir="dist" />
