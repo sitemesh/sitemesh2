@@ -188,6 +188,8 @@ Please report bugs here: http://jira.opensymphony.com
 - Added VelocityDecoratorServlet (SIM-62; see 'Velocity Decorators' in the documentation and the example webapp).
 - The example webapp and blank webapp use Packaged Tag Libraries (specifying the URI of the taglib).
 - Hardened ConfigLoader to ignore whitespace inserted by XMLBuddy.
+- A new method, isPathExcluded(), has been added to the Factory interface.
+- There is no longer the concept of a default parser for unknown content types.
 
 JIRA issues fixed:
     - SIM-73 PageFilter is not final and you can now subclass the newly protected applyDecorator and parsePage methods
@@ -196,6 +198,8 @@ JIRA issues fixed:
     - SIM-55 applyDecorator tag doesn't work on resin
     - SIM-73 Make PageFilter subclassable
     - SIM-89 <url-pattern> mapping on deployment descriptor
+    - SIM-97 Sitemesh captures the response even for non-parseable content
+    - SIM-98 Add the ability to exclude content from being decorated
 
 --------------------------
 -- Changes from 2.0     --

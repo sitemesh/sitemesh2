@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class Factory {
     /** @label Web context lookup key */
@@ -79,6 +79,11 @@ public abstract class Factory {
 
     /** Determine whether a Page of given content-type should be parsed or not. */
     public abstract boolean shouldParsePage(String contentType);
+
+    /**
+     * Determine whether the given path should be excluded from decoration or not.
+     */
+    public abstract boolean isPathExcluded(String path);
 
     /** Report a problem. */
     protected static void report(String msg, Exception e) {

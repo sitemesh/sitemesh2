@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
@@ -41,14 +41,13 @@ public class PageFilter implements Filter, RequestConstants {
     public void doFilter(ServletRequest rq, ServletResponse rs, FilterChain chain)
             throws IOException, ServletException {
 
-        if (rq.getAttribute(FILTER_APPLIED) != null) {
+        HttpServletRequest request = (HttpServletRequest) rq;
+
+        if (rq.getAttribute(FILTER_APPLIED) != null || factory.isPathExcluded(extractRequestPath(request))) {
             // ensure that filter is only applied once per request
             chain.doFilter(rq, rs);
         }
         else {
-            HttpServletRequest request = (HttpServletRequest) rq;
-            HttpServletResponse response = (HttpServletResponse) rs;
-
             request.setAttribute(FILTER_APPLIED, Boolean.TRUE);
 
             // force creation of the session now because Tomcat 4 had problems with
@@ -56,6 +55,7 @@ public class PageFilter implements Filter, RequestConstants {
             if (Container.get() == Container.TOMCAT) {
                 request.getSession(true);
             }
+            HttpServletResponse response = (HttpServletResponse) rs;
 
             // parse data into Page object (or continue as normal if Page not parseable)
             Page page = parsePage(request, response, chain);
@@ -77,6 +77,22 @@ public class PageFilter implements Filter, RequestConstants {
                 page = null;
             }
         }
+    }
+
+    private String extractRequestPath(HttpServletRequest request) {
+        String thisPath = request.getServletPath();
+
+        // getServletPath() returns null unless the mapping corresponds to a servlet
+        if (thisPath == null) {
+            String requestURI = request.getRequestURI();
+            if (request.getPathInfo() != null) {
+                // strip the pathInfo from the requestURI
+                thisPath = requestURI.substring(0, requestURI.indexOf(request.getPathInfo()));
+            } else {
+                thisPath = requestURI;
+            }
+        }
+        return thisPath;
     }
 
     /** Set FilterConfig, and get instance of {@link com.opensymphony.module.sitemesh.DecoratorMapper}. */

@@ -59,4 +59,21 @@ public class SimpleDecoratorTest extends WebTest {
 		assertEquals( "MySite", doc.getElementWithId( "header" ).getText().toString() );
 	}
 
+    /**
+     * Test the exclude patterns in sitemesh.xml
+     */
+    public void testPage5() throws Exception {
+        WebResponse rs = wc.getResponse(server.getBaseURL() + "/simple/exclude.jsp");
+        Document doc = getDocument(rs);
+        assertEquals("Undecorated Page", rs.getTitle());
+        assertNull(doc.getElementWithId("mainbody"));
+        assertNull(doc.getElementWithId("footer"));
+
+        rs = wc.getResponse(server.getBaseURL() + "/simple/exclude/page1.jsp");
+        doc = getDocument(rs);
+        assertEquals("Undecorated Page", rs.getTitle());
+        assertNull(doc.getElementWithId("mainbody"));
+        assertNull(doc.getElementWithId("footer"));
+    }
+
 }

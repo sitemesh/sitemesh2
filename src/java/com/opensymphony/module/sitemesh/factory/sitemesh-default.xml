@@ -1,4 +1,10 @@
 <sitemesh>
+    <!-- Any urls that are excluded will never be decorated by Sitemesh -->
+    <!--
+    <excludes>
+        <pattern>/simple/exclude/*</pattern>
+    </excludes>
+    -->
 	<page-parsers>
 		<parser content-type="text/html" class="com.opensymphony.module.sitemesh.parser.FastPageParser" />
 	</page-parsers>

@@ -13,6 +13,7 @@ import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.DecoratorMapper;
 import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.mapper.PathMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -39,6 +40,9 @@ public abstract class BaseFactory extends Factory {
     /** Map that associates content-types with PageParser instances. */
     protected Map pageParsers = null;
 
+    /** A map of paths that are excluded from decoration */
+    protected PathMapper excludeUrls = null;
+
     /**
      * Constructor for default implementation of Factory.
      * Should never be called by client. Singleton instance should be
@@ -50,6 +54,7 @@ public abstract class BaseFactory extends Factory {
         this.config = config;
         clearDecoratorMappers();
         clearParserMappings();
+        clearExcludeUrls();
     }
 
     /** Return instance of DecoratorMapper. */
@@ -67,21 +72,31 @@ public abstract class BaseFactory extends Factory {
      * @param contentType The MIME content-type of the data to be parsed
      * @return Appropriate <code>PageParser</code> for reading data, or
      * <code>null</code> if no suitable parser was found.
-     *
-     * @associates PageParser
-     * @directed
-     * @label creates suitable
      */
     public PageParser getPageParser(String contentType) {
         return (PageParser) pageParsers.get(contentType);
     }
 
-    /** Determine whether a Page of given content-type should be parsed or not. */
+    /**
+     * Determine whether a Page of given content-type should be parsed or not.
+     */
     public boolean shouldParsePage(String contentType) {
         return pageParsers.containsKey(contentType);
     }
 
-    /** Clear all current DecoratorMappers. */
+    /**
+     * Returns <code>true</code> if the supplied path matches one of the exclude
+     * URLs specified in sitemesh.xml, otherwise returns <code>false</code>.
+     * @param path
+     * @return
+     */
+    public boolean isPathExcluded(String path) {
+        return excludeUrls.get(path) != null;
+    }
+
+    /**
+     * Clear all current DecoratorMappers.
+     */
     protected void clearDecoratorMappers() {
         decoratorMapper = null;
     }
@@ -132,4 +147,16 @@ public abstract class BaseFactory extends Factory {
             report("Could not instantiate PageParser : " + className, e);
         }
     }
+
+    protected void addExcludeUrl(String path) {
+        excludeUrls.put("", path);
+    }
+
+    /**
+     * Clears all exclude URLs.
+     */
+    protected void clearExcludeUrls() {
+        excludeUrls = new PathMapper();
+    }
+
 }

@@ -16,6 +16,7 @@ import com.opensymphony.module.sitemesh.PageParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +33,7 @@ import java.util.Properties;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName = "/WEB-INF/sitemesh.xml";
@@ -68,6 +69,16 @@ public class DefaultFactory extends BaseFactory {
     public boolean shouldParsePage(String contentType) {
         refresh();
         return super.shouldParsePage(contentType);
+    }
+
+    /**
+     * Returns <code>true</code> if the supplied path matches one of the exclude
+     * URLs specified in sitemesh.xml, otherwise returns <code>false</code>. This
+     * method refreshes the config before delgating to the superclass.
+     */
+    public boolean isPathExcluded(String path) {
+        refresh();
+        return super.isPathExcluded(path);
     }
 
     /** Load configuration from file. */
@@ -121,6 +132,10 @@ public class DefaultFactory extends BaseFactory {
                     else if ("decorator-mappers".equalsIgnoreCase(curr.getTagName())) {
                         // handle <decorator-mappers>
                         loadDecoratorMappers(children);
+                    }
+                    else if ("excludes".equalsIgnoreCase(curr.getTagName())) {
+                        // handle <excludes>
+                        loadExcludeUrls(children);
                     }
                 }
             }
@@ -182,6 +197,27 @@ public class DefaultFactory extends BaseFactory {
         }
 
         pushDecoratorMapper("com.opensymphony.module.sitemesh.mapper.InlineDecoratorMapper", emptyProps);
+    }
+
+    /**
+     * Reads in all the url patterns to exclude from decoration.
+     */
+    private void loadExcludeUrls(NodeList nodes) {
+        clearExcludeUrls();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            if (nodes.item(i) instanceof Element) {
+                Element p = (Element) nodes.item(i);
+                if ("pattern".equalsIgnoreCase(p.getTagName()) || "url-pattern".equalsIgnoreCase(p.getTagName())) {
+                    Text patternText = (Text) p.getFirstChild();
+                    if (patternText != null) {
+                        String pattern = patternText.getData().trim();
+                        if (pattern != null) {
+                            addExcludeUrl(pattern);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /** Check if configuration file has been modified, and if so reload it. */
