@@ -23,7 +23,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -106,7 +106,7 @@ public abstract class BaseFactory extends Factory {
         try {
             Class decoratorMapperClass = null;
             try {
-                decoratorMapperClass = Class.forName(className);
+                decoratorMapperClass = loadClass(className, getClass());
             }
             catch (NoClassDefFoundError e) {
                 decoratorMapperClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
@@ -123,6 +123,22 @@ public abstract class BaseFactory extends Factory {
         }
     }
 
+    public static Class loadClass(String className, Class callingClass) throws ClassNotFoundException {
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException ex) {
+                try {
+                    return BaseFactory.class.getClassLoader().loadClass(className);
+                } catch (ClassNotFoundException exc) {
+                    return callingClass.getClassLoader().loadClass(className);
+                }
+            }
+        }
+    }
+  
     /** Clear all PageParser mappings. */
     protected void clearParserMappings() {
         pageParsers = new HashMap();
