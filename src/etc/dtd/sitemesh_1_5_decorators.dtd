@@ -13,7 +13,7 @@ mappings.
 Valid decorator.xml files must contain the following DOCTYPE
 declaration
 
-<!DOCTYPE decorators PUBLIC "-//OpenSymphony//SiteMesh 1.5 Decorators//EN" "http://www.opensymphony.com/dtds/sitemesh_1_5_decorators.dtd">
+<!DOCTYPE decorators PUBLIC "-//OpenSymphony//SiteMesh 1.5 Decorators//EN" "http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd">
 -->
 
 <!--

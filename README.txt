@@ -215,6 +215,9 @@ Please report bugs here: http://jira.opensymphony.com
 --------------------------
 -- Changes from 1.5     --
 --------------------------
+- SiteMesh now hosted at http://sitemesh.dev.java.net.
+
+- DTD location has changed; now http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd
 
 - API change in Decorator (check your custom written Decorator classes):
   Added new method getRole() to enable role based decorators.

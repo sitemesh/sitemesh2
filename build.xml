@@ -44,6 +44,10 @@
         <copy todir="${dist.dir}/docs">
             <fileset dir="${docs.dir}" excludes="*.css"/>
         </copy>
+        <mkdir dir="${dist.dir}/docs/dtd"/>
+        <copy todir="${dist.dir}/docs/dtd">
+            <fileset dir="${etc.dir}/dtd" />
+        </copy>
     </target>    
 
     <!-- Build simple web-app to get started with SiteMesh -->
