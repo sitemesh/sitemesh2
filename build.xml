@@ -76,8 +76,10 @@
 
     <target name="blank" depends="jar" description="Builds simple web-app to get started with SiteMesh">
         <mkdir dir="${dist.dir}" />
-        <war warfile="${dist.dir}/${name}-blank.war" webxml="${example.dir}/WEB-INF/web.xml">
-            <fileset dir="${blank.dir}"/>
+        <war warfile="${dist.dir}/${name}-blank.war" webxml="${blank.dir}/WEB-INF/web.xml">
+            <fileset dir="${blank.dir}">
+            	<exclude name="WEB-INF/web.xml" />
+           	</fileset>
             <lib dir="${dist.dir}">
                 <include name="${name}-${version}.jar" />
             </lib>
@@ -108,6 +110,7 @@
                 <include name="${name}-${version}.jar" />
             </lib>
             <lib dir="${lib.dir}">
+            	<include name="commons-*.jar" />
             	<include name="velocity-*.jar" />
             </lib>
         </war>

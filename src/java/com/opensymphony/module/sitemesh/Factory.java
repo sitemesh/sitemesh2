@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class Factory {
     /** @label Web context lookup key */
@@ -36,7 +36,7 @@ public abstract class Factory {
      * entry <code>sitemesh.factory</code>.
      */
     public static Factory getInstance(Config config) {
-	Factory instance = (Factory)config.getServletContext().getAttribute(SITEMESH_FACTORY);
+        Factory instance = (Factory)config.getServletContext().getAttribute(SITEMESH_FACTORY);
         if (instance == null) {
             String factoryClass = getEnvEntry("sitemesh.factory", "com.opensymphony.module.sitemesh.factory.DefaultFactory");
             try {

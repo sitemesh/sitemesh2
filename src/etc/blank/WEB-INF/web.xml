@@ -13,15 +13,4 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <servlet>
-        <servlet-name>sitemesh-velocity</servlet-name>
-        <servlet-class>com.opensymphony.module.sitemesh.velocity.VelocityDecoratorServlet</servlet-class>
-        <load-on-startup>10</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>sitemesh-velocity</servlet-name>
-        <url-pattern>*.vm</url-pattern>
-    </servlet-mapping>
-
 </web-app>
