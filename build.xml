@@ -50,7 +50,6 @@
         <mkdir dir="${dist.dir}/docs/api"/>
 
         <javadoc sourcepath="${java.dir}"
-            breakiterator="true"
             destdir="${dist.dir}/docs/api"
             stylesheetfile="${docs.dir}/api.css"
             packagenames="com.opensymphony.*"
@@ -133,6 +132,12 @@
                 <include name="velocity-*.jar"/>
                 <include name="freemarker.jar"/>
                 </lib>
+            <lib dir="${tld.dir}">
+                  <include name="sitemesh*.tld" />
+                </lib>
+            <classes dir="${build.dir}/classes">
+                <include name="**/PathologicalServlet.class"/>
+            </classes>
             <lib dir="${tld.dir}">
                   <include name="sitemesh*.tld" />
             </lib>
