@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -134,11 +134,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     /** Prevent content-length being set if page is parseable. */
     public void setHeader(String name, String value) {
-        if (name.toLowerCase().equals("content-length")) {
-            if (!parseablePage) {
-                super.setHeader(name, value);
-            }
-        } else {
+        if (!parseablePage || !name.toLowerCase().equals("content-length")) {
             super.setHeader(name, value);
         }
     }
@@ -148,9 +144,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
      * (so web-server/browser doesn't cache contents).
      */
     public void setStatus(int sc) {
-        if (sc == HttpServletResponse.SC_NOT_MODIFIED) {
-            if (!parseablePage) super.setStatus(sc);
-        } else {
+        if (!parseablePage || sc != HttpServletResponse.SC_NOT_MODIFIED) {
             super.setStatus(sc);
         }
     }
