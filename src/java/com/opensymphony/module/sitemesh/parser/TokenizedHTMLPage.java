@@ -37,7 +37,7 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
 
     // ****** Methods to process incoming tags and text (required to implement TokenHandler) ******
 
-    public boolean caresAboutTag(String name) {
+    public boolean shouldProcessTag(String name) {
         name = name.toLowerCase();
         return name.equals("title")
                 || name.equals("html")
@@ -94,10 +94,10 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
 
     public void text(Text text) {
         if (inTitle && !titleWritten) {
-            addProperty("title", text.getText());
+            addProperty("title", text.getContents());
             titleWritten = true;
         } else if (contentBlockId != null) {
-            addProperty("page." + contentBlockId, text.getText());
+            addProperty("page." + contentBlockId, text.getContents());
         }
 
         if (inHead && !inTitle) {
@@ -108,7 +108,7 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
         }
     }
 
-    public void error(String message, int line, int column) {
+    public void warning(String message, int line, int column) {
         // TODO
 //        System.out.println(line + "," + column + ": " + message);
     }

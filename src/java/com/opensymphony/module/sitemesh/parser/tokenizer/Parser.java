@@ -133,7 +133,7 @@ class Parser extends Lexer implements Text, Tag {
             // Token WORD - name of tag
             name = text();
 
-            if (handler.caresAboutTag(name)) {
+            if (handler.shouldProcessTag(name)) {
                 parseFullTag(type, name, start);
             } else {
 
@@ -253,7 +253,7 @@ class Parser extends Lexer implements Text, Tag {
     }
 
     public void error(String message, int line, int column) {
-        handler.error(message, line, column);
+        handler.warning(message, line, column);
     }
 
     protected void reportError(String message, int line, int column) {
@@ -274,7 +274,7 @@ class Parser extends Lexer implements Text, Tag {
         return type;
     }
 
-    public String getText() {
+    public String getContents() {
         return new String(input, position, length);
     }
 

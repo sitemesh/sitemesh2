@@ -3,7 +3,7 @@ package com.opensymphony.module.sitemesh.parser.tokenizer;
 import com.opensymphony.module.sitemesh.util.CharArray;
 
 /**
- * Text returned by HTMLTagTokenizer. Hidden behind interface to allow for lazy-loading.
+ * Text returned by HTMLTagTokenizer.
  *
  * @see com.opensymphony.module.sitemesh.parser.tokenizer.TokenHandler
  * @see com.opensymphony.module.sitemesh.parser.tokenizer.TagTokenizer
@@ -13,9 +13,17 @@ import com.opensymphony.module.sitemesh.util.CharArray;
 public interface Text {
 
     /**
-     * Contents of text
+     * Get the complete contents of the text block, preserving original formatting.
+     *
+     * This has a slight overhead in that it needs to construct a String. For improved performance, use writeTo() instead.
+     *
+     * @see #writeTo(com.opensymphony.module.sitemesh.util.CharArray)
      */
-    String getText();
+    String getContents();
 
+    /**
+     * Write out the complete contents of the text block, preserving original formatting.
+     */
     void writeTo(CharArray out);
+
 }

@@ -12,15 +12,22 @@ import com.opensymphony.module.sitemesh.util.CharArray;
  */
 public interface Tag {
 
-    int UNKNOWN = 0;
     int OPEN = 1;
     int CLOSE = 2;
     int EMPTY = 3;
 
     /**
-     * Get the complete tag in its original form, preserving whitespace.
+     * Get the complete tag in its original form, preserving original formatting.
+     *
+     * This has a slight overhead in that it needs to construct a String. For improved performance, use writeTo() instead.
+     *
+     * @see #writeTo(com.opensymphony.module.sitemesh.util.CharArray)
      */
-    String getText();
+    String getContents();
+
+    /**
+     * Write out the complete tag in its original form, preserving original formatting.
+     */
     void writeTo(CharArray out);
 
     /**

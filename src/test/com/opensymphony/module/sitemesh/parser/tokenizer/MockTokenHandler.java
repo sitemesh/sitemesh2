@@ -23,7 +23,7 @@ class MockTokenHandler implements TokenHandler {
         expected.append(' ').append(typeAsString(type)).append("}}");
     }
 
-    public boolean caresAboutTag(String name) {
+    public boolean shouldProcessTag(String name) {
         return true;
     }
 
@@ -36,10 +36,10 @@ class MockTokenHandler implements TokenHandler {
     }
 
     public void text(Text text) {
-        actual.append(text.getText());
+        actual.append(text.getContents());
     }
 
-    public void error(String message, int line, int column) {
+    public void warning(String message, int line, int column) {
         //Assert.fail("Encountered error: " + message);
     }
 

@@ -118,12 +118,12 @@ public class TagTokenizerTest extends TestCase {
 
         tokenizer.start(new TokenHandler() {
 
-            public boolean caresAboutTag(String name) {
+            public boolean shouldProcessTag(String name) {
                 return true;
             }
 
             public void tag(Tag tag) {
-                assertEquals(originalTag, tag.getText());
+                assertEquals(originalTag, tag.getContents());
                 called[0] = true;
             }
 
@@ -131,7 +131,7 @@ public class TagTokenizerTest extends TestCase {
                 // ignoring text for this test
             }
 
-            public void error(String message, int line, int column) {
+            public void warning(String message, int line, int column) {
                 fail("Encountered error " + message);
             }
         });
@@ -257,7 +257,7 @@ public class TagTokenizerTest extends TestCase {
     public void testDoesNotTryToParseTagsUnlessTheHandlerCares() {
         // setup
         handler = new MockTokenHandler() {
-            public boolean caresAboutTag(String name) {
+            public boolean shouldProcessTag(String name) {
                 return name.equals("good");
             }
         };
