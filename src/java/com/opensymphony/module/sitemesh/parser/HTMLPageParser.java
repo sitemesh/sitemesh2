@@ -13,7 +13,6 @@ import com.opensymphony.module.sitemesh.parser.rules.ContentBlockExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.FramesetRule;
 import com.opensymphony.module.sitemesh.parser.rules.HeadExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.HtmlAttributesRule;
-import com.opensymphony.module.sitemesh.parser.rules.MSOfficeDocumentPropertiesRule;
 import com.opensymphony.module.sitemesh.parser.rules.MetaTagRule;
 import com.opensymphony.module.sitemesh.parser.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.TitleExtractingRule;
@@ -52,7 +51,6 @@ public class HTMLPageParser implements PageParser {
         defaultState.addRule("frame", new FramesetRule(page));
         defaultState.addRule("frameset", new FramesetRule(page));
         defaultState.addRule("xml", new StateTransitionRule(xmlState, true));
-        defaultState.addRule("o:DocumentProperties", new MSOfficeDocumentPropertiesRule(page));
 
 
         // extended rules
