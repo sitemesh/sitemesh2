@@ -15,11 +15,31 @@
         remained the same; content was intercepted, parsed, a decorator mapper
         was used to find a decorator and they were merged together.</p>
 
-        <p>There were 2 main leaps that helped make it successful - the rewrite
+<p>The original version used a bunch of regular expressions to extract the necessary
+chunks of text from the document. This was easy to get running, but very error prone 
+as the matches had no context about where they were in a document. For example, a 
+&lt;title&gt; element in a &lt;head&gt; block is very important to SiteMesh, however sometimes
+they appear elsewhere, such as in a comment, &lt;script> or &lt;xml&gt; block.
+</p>
+<p>This was dumped, in favour of a DOM based parser, which initially used JTidy
+to convert HTML to XHTML so it could be traversed as a standard DOM tree. Much nicer, 
+but very, very sloow. Too slow, so sitemesh was switched to use OpenXML, an XML parser 
+that was tolerant to nasty HTML, giving a slight boost to performance. </p>
+<p>
+By this time, SiteMesh had been open-sourced, and along came Victor Salaman, 
+who was the third user to discover it (after Mike Cannon-Brookes and Joseph Ottinger). 
+He saw the potential but hated the parser. About three hours later, he'd produced
+his own version that used low-level string manipulation. It wasn't pretty, but it
+was very, very fast - twelve times faster than the OpenXML one, with the bonus
+feature of not rewriting great chunks of the document. This brought SiteMesh into
+the mainstream as it was now ready for use on high-traffic sites. 1.0 was released.</p>
+
+<p>There were 2 main leaps that helped make it successful - the rewrite
         from servlet-chain to servlet-filter when the first draft of the Servlet
         2.3 API came out and Victor Salaman rewriting the parser to make it
-        about 12 times faster. In December 2003, Chris Miller improved the parser
-        to make it again 6 times faster and further minimize memory usage.</p>
+        about 12 times faster. In December 2003, Chris Miller and Hani Suleiman
+        improved the parser to make it again 6 times faster and further 
+        minimize memory usage.</p>
 
 		<h3>The SiteMesh Crew</h3>
 
