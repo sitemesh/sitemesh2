@@ -6,8 +6,8 @@
 		
 		<p>When a page has been parsed, it then has to be mapped to a decorator. 
 		This mapping is performed by a chain of <a 
-		href="api/com/opensymphony/module/sitemesh/DecoratorMapper.html">Decorat
-		orMappers</a> (referred to as mappers from here on).</p>
+		href="api/com/opensymphony/module/sitemesh/DecoratorMapper.html">DecoratorMappers</a>
+		(referred to as mappers from here on).</p>
 		
 		<p>For each request, the first mapper in the chain is asked which 
 		decorator should be used. It is passed across a reference to the Page 
@@ -32,7 +32,7 @@
 		</ul>
 
 		<p>The main implementation of DecoratorMapper is <a href="api/com/opensymphony/module/sitemesh/mapper/ConfigDecoratorMapper.html">ConfigDecoratorMapper</a> which
-		reads the decorators and mappings from <code>/WEB-INF/decorators.xml</code>. The appropriate decorator is then applied
+		reads the decorators and mappings from <b><code>/WEB-INF/decorators.xml</code></b>. The appropriate decorator is then applied
 		depending on the URL pattern.</p>
 
 		<p>DecoratorMappers are simple to write and the distribution includes some
@@ -156,8 +156,9 @@
 		<h3>Default mapper configation</h3>
 		
 		<p>If sitemesh.xml is not found in the WEB-INF dir, the default mapper 
-		configuration will be used. The default mapper configuration exists out 
-		of the following mappers:</p>
+		configuration will be used. The default mapper configuration is defined 
+		in sitemesh-default.xml (packaged inside the jar) and exists out of the 
+		following mappers:</p>
 		
 		<ul>
 		    <li>PageDecoratorMapper</li>
