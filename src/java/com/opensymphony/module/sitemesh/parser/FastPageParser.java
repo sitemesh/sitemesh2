@@ -17,6 +17,7 @@ import com.opensymphony.module.sitemesh.util.CharArrayReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
+import java.util.Collection;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -26,7 +27,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -122,6 +123,9 @@ public final class FastPageParser implements PageParser
       int laststate = TAG_STATE_NONE;
       boolean doneTitle = false;
 
+      // This tag object gets reused each iteration.
+      Tag tagObject = new Tag();
+
       while (_tokenType != TOKEN_EOF)
       {
          if(tagged)
@@ -134,9 +138,8 @@ public final class FastPageParser implements PageParser
                   continue;
                }
 
-               Tag tagObject = parseTag(_buffer);
+               if (parseTag(tagObject, _buffer) == null) continue;
                String tag = tagObject.name;
-               if(tag==null) continue;
 
                if(tag.equals("/content"))
                {
@@ -168,9 +171,8 @@ public final class FastPageParser implements PageParser
                   _tokenType=TOKEN_NONE;
                   continue;
                }
-               Tag tagObject = parseTag(_buffer);
 
-               if(tagObject == null) {
+               if(parseTag(tagObject, _buffer) == null) {
                   _tokenType=TOKEN_TEXT;
                   continue;
                }
@@ -201,7 +203,7 @@ public final class FastPageParser implements PageParser
                            break;
                         }
                         state = TAG_STATE_HTML;
-                        _htmlProperties = tagObject.properties;
+                        _htmlProperties = parseProperties(tagObject, _buffer).properties;
                         break;
                      case HEAD_HASH:
                         if (!tag.equals("head")) { // skip any accidental hash collisions
@@ -263,6 +265,7 @@ public final class FastPageParser implements PageParser
                            doDefault = true;
                            break;
                         }
+                        parseProperties(tagObject, _buffer);
                         String name = (String) tagObject.properties.get("name");
                         String value = (String) tagObject.properties.get("value");
 
@@ -280,7 +283,7 @@ public final class FastPageParser implements PageParser
                         metaDestination.append('<');
                         metaDestination.append(_buffer);
                         metaDestination.append('>');
-
+                        parseProperties(tagObject, _buffer);
                         name = (String) tagObject.properties.get("name");
                         value = (String) tagObject.properties.get("content");
 
@@ -329,7 +332,7 @@ public final class FastPageParser implements PageParser
                         {
                            state = TAG_STATE_BODY;
                         }
-                        _bodyProperties = tagObject.properties;
+                        _bodyProperties = parseProperties(tagObject, _buffer).properties;
                         break;
                      case CONTENT_HASH:
                         if (!tag.equals("content")) { // skip any accidental hash collisions
@@ -337,7 +340,7 @@ public final class FastPageParser implements PageParser
                            break;
                         }
                         state = TAG_STATE_NONE;
-                        Map props = tagObject.properties;
+                        Map props = parseProperties(tagObject, _buffer).properties;
                         if (props != null)
                         {
                            tagged = true;
@@ -679,38 +682,66 @@ public final class FastPageParser implements PageParser
              ||(laststate == TAG_STATE_HEAD && (state == TAG_STATE_XML || state == TAG_STATE_XMP));
    }
 
-   private Tag parseTag(CharArray buf)
+   /**
+    * Populates a {@link Tag} object using data from the supplied {@link CharArray}.
+    *
+    * The supplied tag parameter is reset and reused - this avoids excess object
+    * creation which hwlps performance.
+    *
+    * @return the same tag instance that was passed in, except it will be populated
+    * with a new <tt>name</tt> value (and the corresponding <tt>nameEndIdx</tt> value).
+    * However if the tag contained nathing but whitespace, this method will return
+    * <tt>null</tt>.
+    */
+   private Tag parseTag(Tag tag, CharArray buf)
    {
       int len = buf.length();
       int idx = 0;
       int begin;
 
-      Tag tag = new Tag();
-
+      // Skip over any leading whitespace in the tag
       while (idx < len && Character.isWhitespace(buf.charAt(idx))) idx++;
 
       if(idx == len) return null;
 
+      // Find out where the non-whitespace characters end. This will give us the tag name.
       begin = idx;
       while (idx < len && !Character.isWhitespace(buf.charAt(idx))) idx++;
       String name = buf.substring(begin, buf.charAt(idx - 1) == '/' ? idx - 1 : idx);
 
-      tag.name = name == null ? null : name.toLowerCase();
+      // Store the name as lowercase
+      tag.name = name.toLowerCase();
 
-      while (idx < len && Character.isWhitespace(buf.charAt(idx))) idx++;
+      // Remember where the name finishes so we can pull out the properties later if need be
+      tag.nameEndIdx = idx;
 
-      if(idx == len) return tag;
-
-      return parseProperties(tag, buf, idx);
+      return tag;
    }
 
-   private static Tag parseProperties(Tag tag, CharArray buffer, int idx)
+   /**
+    * This is called when we need to extract the properties for the tag from the tag's HTML.
+    * We only call this when necessary since it has quite a lot of overhead.
+    *
+    * @param tag the tag that is currently being processed. This should be the
+    * tag that was returned as a result of a call to {@link #parseTag(FastPageParser.Tag, CharArray)}
+    * (ie, it has the <tt>name</tt> and <tt>nameEndIdx</tt> fields set correctly for the
+    * tag in question. The <tt>properties</tt> field can be in an undefined state - it
+    * will get replaced regardless).
+    * @param buffer a <tt>CharArray</tt> containing the entire tag that is being parsed.
+    * @return the same tag instance that was passed in, only it will now be populated
+    * with any properties that were specified in the tag's HTML.
+    */
+   private static Tag parseProperties(Tag tag, CharArray buffer)
    {
       int len = buffer.length();
-      int begin;
+      int idx = tag.nameEndIdx;
 
+      // Start with an empty hashmap. A new HashMap is lazy-created if we happen to find any properties
+      tag.properties = Collections.EMPTY_MAP;
+      int begin;
       while (idx < len)
       {
+         // Skip forward to the next non-whitespace character
          while (idx < len && Character.isWhitespace(buffer.charAt(idx))) idx++;
 
          if(idx == len) continue;
@@ -742,10 +773,8 @@ public final class FastPageParser implements PageParser
             while (idx < len && Character.isWhitespace(buffer.charAt(idx))) idx++;
          }
 
-         if(idx == len || buffer.charAt(idx) != '=')
-         {
-            continue;
-         }
+         if(idx == len || buffer.charAt(idx) != '=') continue;
+
          idx++;
 
          if(idx == len) continue;
@@ -787,14 +816,25 @@ public final class FastPageParser implements PageParser
          tag.addProperty(name, value);
       }
       return tag;
-
    }
 
-   class Tag
+   private class Tag
    {
+      // The name of the tag
       public String name;
+
+      // The index where the name string ends. This is used as the starting
+      // point if we need to continue processing to find the tag's properties
+      public int nameEndIdx = 0;
+
+      // This holds a map of the various properties for a particular tag.
+      // This map is only populated when required - normally it will remain empty
       public Map properties = Collections.EMPTY_MAP;
 
+      /**
+       * Adds a name/value property pair to this tag. Each property that is
+       * added represents a property that was parsed from the tag's HTML.
+       */
       public void addProperty(String name, String value)
       {
         if(properties==Collections.EMPTY_MAP)
