@@ -1,5 +1,5 @@
 *************************************
-** OpenSymphony SiteMesh 2.0.1     **
+** OpenSymphony SiteMesh 2.0.2     **
 *************************************
 
 SiteMesh is a web-page layout system that can be used to abstract common look
@@ -184,6 +184,15 @@ PQ80592 to your WebSphere installation.
 Please report bugs here: http://jira.opensymphony.com
 
 --------------------------
+-- Changes from 2.0.1   --
+--------------------------
+
+- Documentation updates.
+
+JIRA bugs/tasks fixed:
+    - SIM-73 PageFilter is not final and you can now subclass the newly protected applyDecorator and parsePage methods
+
+--------------------------
 -- Changes from 2.0     --
 --------------------------
 
@@ -217,7 +226,7 @@ char == 25mb).
 
 - Updated documentation to align with new Opensymphony Website.
 
-JIRA bugs/tasks fixed (http://jira.opensymphony.com):
+JIRA bugs/tasks fixed:
     SIM-16 Tomcat IllegalStateException      
     SIM-41 NoSuchMethodException with Orion      
     SIM-2  Response bug on WebLogic 6.1      
@@ -263,21 +272,21 @@ JIRA bugs/tasks fixed (http://jira.opensymphony.com):
 - BUGFIX: small fixes to make SiteMesh work better on Tomcat
 - BUGFIX: javadoc fixes
 
-JIRA bugs/tasks fixed (http://jira.opensymphony.com):
-    SIM-1  (Finalize RE support in PathMapper)
-    SIM-3  (Page filter strips <xmp> tags)
-    SIM-4  (PathMapper order is incorrect)
-    SIM-5  (Add a mapper that uses environment entries)
-    SIM-6  (When using the EnvEntryDecoratorMapper, decorations fail for html)
-    SIM-7  (Parsing of body should strip doctype)
-    SIM-8  (body tag not correctly parsed)
-    SIM-11 (Parsing the text "<>" causes problems)
-    SIM-16 (Define how charsets should work)
-    SIM-20 (Cross web-app support for decorators)
-    SIM-21 (FactoryException thrown when starting testsuite on WebLogic)
-    SIM-22 (Create template web-app)
-    SIM-23 (Distribution bundle)
-    SIM-32 (A smaller than sign (<) in javascript fails)
+JIRA bugs/tasks fixed:
+    SIM-1  Finalize RE support in PathMapper
+    SIM-3  Page filter strips <xmp> tags
+    SIM-4  PathMapper order is incorrect
+    SIM-5  Add a mapper that uses environment entries
+    SIM-6  When using the EnvEntryDecoratorMapper, decorations fail for html
+    SIM-7  Parsing of body should strip doctype
+    SIM-8  body tag not correctly parsed
+    SIM-11 Parsing the text "<>" causes problems
+    SIM-16 Define how charsets should work
+    SIM-20 Cross web-app support for decorators
+    SIM-21 FactoryException thrown when starting testsuite on WebLogic
+    SIM-22 Create template web-app
+    SIM-23 Distribution bundle
+    SIM-32 A smaller than sign (<) in javascript fails
 
 --------------------------
 -- Changes from 1.4     --
