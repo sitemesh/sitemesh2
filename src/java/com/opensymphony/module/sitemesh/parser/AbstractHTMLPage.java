@@ -22,7 +22,7 @@ import java.io.Writer;
  * abstract methods states below.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *
  * @see com.opensymphony.module.sitemesh.parser.AbstractPage
  * @see com.opensymphony.module.sitemesh.HTMLPage
@@ -42,6 +42,6 @@ public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage 
     }
 
     public void setFrameSet(boolean frameset) {
-        addProperty("frameset", "true");
+        addProperty("frameset", frameset ? "true" : "false");
     }
 }
