@@ -36,7 +36,7 @@ public class HTMLProcessorTest extends TestCase {
         Writer out = new StringWriter();
 
         HTMLProcessor processor = new HTMLProcessor(in, out);
-        processor.defaultState().addRule(new TagReplaceRule("b", "strong"));
+        processor.addRule(new TagReplaceRule("b", "strong"));
 
         processor.process();
         assertEquals("<hello><strong>world</strong></hello>", out.toString());
@@ -47,7 +47,7 @@ public class HTMLProcessorTest extends TestCase {
         Writer out = new StringWriter();
 
         HTMLProcessor processor = new HTMLProcessor(in, out);
-        processor.defaultState().addRule(new BasicRule("a") {
+        processor.addRule(new BasicRule("a") {
             public void process(Tag tag) {
                 CustomTag customTag = new CustomTag(tag);
                 String href = customTag.getAttributeValue("href", false);

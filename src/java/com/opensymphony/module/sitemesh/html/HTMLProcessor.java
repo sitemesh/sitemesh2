@@ -40,6 +40,13 @@ public class HTMLProcessor {
         return defaultState;
     }
 
+    /**
+     * Equivalent of htmlProcessor.defaultState().addRule()
+     */ 
+    public void addRule(TagRule rule) {
+        defaultState.addRule(rule);
+    }
+
     public void process() throws IOException {
         TagTokenizer tokenizer = new TagTokenizer(in);
         final HTMLProcessorContext context = new HTMLProcessorContext() {
