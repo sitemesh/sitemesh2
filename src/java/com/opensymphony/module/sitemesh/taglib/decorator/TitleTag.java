@@ -11,13 +11,11 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
-import javax.servlet.jsp.JspException;
-
 /**
  * Write the Page <code>&lt;title&gt;</code> value to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.HTMLPage#getTitle()
  */
@@ -29,11 +27,11 @@ public class TitleTag extends AbstractTag {
         this.defaultTitle = defaultTitle;
     }
 
-    public final int doEndTag() throws JspException {
+    public final int doEndTag() {
         try {
             String title = getPage().getTitle();
             if (title == null || title.trim().length() == 0) title = defaultTitle;
-            if (title != null) pageContext.getOut().print(title);
+            if (title != null) getOut().write(title);
         }
         catch (Exception e) {
             trace(e);

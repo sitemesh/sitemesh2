@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
  *
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
  * @author <a href="mailto:hani@formicary.net">Hani Suleiman</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PageOutputStream extends ServletOutputStream implements OutputBuffer {
 
@@ -115,7 +115,7 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
             else
                 reader = new InputStreamReader(new ByteArrayInputStream(buffer.toByteArray()));
 
-            int i = 0;
+            int i;
             while ((i = reader.read()) != -1) {
                 out.write(i);
             }

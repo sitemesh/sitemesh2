@@ -12,14 +12,13 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
+import java.io.Writer;
 
 /**
  * Write property of Page to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.Page#getProperty(java.lang.String)
  */
@@ -55,7 +54,7 @@ public class PropertyTag extends AbstractTag {
         }
     }
 
-    public final int doEndTag() throws JspException {
+    public final int doEndTag() {
         try {
             HTMLPage htmlPage = (HTMLPage)getPage();
             String propertyValue = htmlPage.getProperty(propertyName);
@@ -64,16 +63,16 @@ public class PropertyTag extends AbstractTag {
                 propertyValue = defaultValue;
 
             if (propertyValue != null) {
-                JspWriter out = pageContext.getOut();
+                Writer out = getOut();
                 if (writeEntireProperty) {
-                    out.print(" ");
-                    out.print(propertyName.substring(propertyName.lastIndexOf('.') + 1));
-                    out.print("=\"");
-                    out.print(propertyValue);
-                    out.print("\"");
+                    out.write(" ");
+                    out.write(propertyName.substring(propertyName.lastIndexOf('.') + 1));
+                    out.write("=\"");
+                    out.write(propertyValue);
+                    out.write("\"");
                 }
                 else {
-                    out.print(propertyValue);
+                    out.write(propertyValue);
                 }
             }
         }

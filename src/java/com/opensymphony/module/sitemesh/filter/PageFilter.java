@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
@@ -194,23 +194,6 @@ public class PageFilter implements Filter, RequestConstants {
         response.setContentLength(page.getContentLength());
         if (useStream)
         {
-//            //write the page to a temporary buffer
-//            CharArrayWriter buffer = new CharArrayWriter();
-//            page.writePage(buffer);
-//
-//            OutputStreamWriter writer;
-//            String encoding = "UTF-8";
-//            if (encoding != null)
-//                writer = new OutputStreamWriter(response.getOutputStream(), encoding);
-//            else
-//                writer = new OutputStreamWriter(response.getOutputStream());
-//
-//            CharArrayReader reader = new CharArrayReader(buffer.toCharArray());
-//
-//            int i = 0;
-//            while ((i = reader.read()) != -1) {
-//                writer.write(i);
-//            }
             PrintWriter writer = new PrintWriter(response.getOutputStream());
             page.writePage(writer);
             //flush writer to underlying outputStream

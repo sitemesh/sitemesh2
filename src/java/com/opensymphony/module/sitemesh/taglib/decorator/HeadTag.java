@@ -12,21 +12,19 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
-import javax.servlet.jsp.JspException;
-
 /**
  * Write original HTMLPage head to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.HTMLPage#writeHead(java.io.Writer)
  */
 public class HeadTag extends AbstractTag {
-    public final int doEndTag() throws JspException {
+    public final int doEndTag() {
         try {
             HTMLPage htmlPage = (HTMLPage)getPage();
-            htmlPage.writeHead(pageContext.getOut());
+            htmlPage.writeHead(getOut());
         }
         catch (Exception e) {
             trace(e);

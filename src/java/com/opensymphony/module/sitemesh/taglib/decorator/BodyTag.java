@@ -11,24 +11,24 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
-import javax.servlet.jsp.JspException;
-
 /**
  * Write original Page body to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @author <a href="scott@atlassian.com">Scott Farquhar</a>
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.HTMLPage#writeBody(java.io.Writer)
  */
 public class BodyTag extends AbstractTag {
-    public final int doEndTag() throws JspException {
+    public final int doEndTag() {
         try {
-            getPage().writeBody(pageContext.getOut());
+            getPage().writeBody(getOut());
         }
         catch (Exception e) {
             trace(e);
         }
         return EVAL_PAGE;
     }
+
 }
