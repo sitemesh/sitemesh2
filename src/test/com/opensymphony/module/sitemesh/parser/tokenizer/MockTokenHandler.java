@@ -40,7 +40,7 @@ class MockTokenHandler implements TokenHandler {
     }
 
     public void warning(String message, int line, int column) {
-        //Assert.fail("Encountered error: " + message);
+        Assert.fail("Encountered error: " + message);
     }
 
     public void verify() {

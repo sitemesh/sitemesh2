@@ -66,7 +66,7 @@ class Parser extends Lexer implements Text, Tag {
 
     private void pushBack(int next) {
         if (pushbackToken != -1) {
-            fatal("Cannot pushback more than once");
+            reportError("Cannot pushback more than once", line(), column());
         }
         pushbackToken = next;
         if (next == Parser.WORD || next == Parser.QUOTED || next == Parser.SLASH || next == Parser.EQUALS) {
@@ -106,7 +106,7 @@ class Parser extends Lexer implements Text, Tag {
                     // Token "<" - start of tag
                     parseTag();
                 } else {
-                    fatal("Unexpected token from lexer, was expecting TEXT or LT");
+                    reportError("Unexpected token from lexer, was expecting TEXT or LT", line(), column());
                 }
             }
         } catch (IOException e) {
@@ -150,7 +150,7 @@ class Parser extends Lexer implements Text, Tag {
         } else if (token == Parser.GT) {
             // Token ">" - an illegal <> or <  > tag. Ignore
         } else {
-            fatal("Could not recognise tag"); // TODO: this should be recoverable
+            reportError("Could not recognise tag", line(), column());
         }
     }
 
@@ -166,7 +166,7 @@ class Parser extends Lexer implements Text, Tag {
             } else if (token == Parser.WORD) {
                 parseAttribute(); // start of an attribute
             } else {
-                fatal("XXY");
+                reportError("XXY", line(), column());
             }
         }
 
@@ -181,7 +181,7 @@ class Parser extends Lexer implements Text, Tag {
             // Token ">" - YAY! end of tag.. process it!
             parsedTag(type, name, start, position() - start + 1);
         } else {
-            fatal("Expected end of tag");
+            reportError("Expected end of tag", line(), column());
         }
     }
 
@@ -217,14 +217,14 @@ class Parser extends Lexer implements Text, Tag {
                 // no more attributes
                 pushBack(token);
             } else {
-                fatal("Illegal attribute value"); // TODO: recover
+                reportError("Illegal attribute value", line(), column());
             }
         } else if (token == Parser.SLASH || token == Parser.GT || token == Parser.WORD) {
             // it was a value-less HTML style attribute
             parsedAttribute(attributeName, null, false);
             pushBack(token);
         } else {
-            fatal("Illegal attribute name"); // TODO: recover
+            reportError("Illegal attribute name", line(), column());
         }
     }
 
@@ -252,18 +252,9 @@ class Parser extends Lexer implements Text, Tag {
         }
     }
 
-    public void error(String message, int line, int column) {
-        handler.warning(message, line, column);
-    }
-
     protected void reportError(String message, int line, int column) {
 //        System.out.println(message);
-        error(message, line, column);
-    }
-
-    private void fatal(String message) {
-        error(message, line(), column());
-        throw new RuntimeException(message);
+        handler.warning(message, line, column);
     }
 
     public String getName() {
