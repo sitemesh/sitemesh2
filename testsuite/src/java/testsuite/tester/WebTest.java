@@ -19,7 +19,7 @@ import electric.xml.ParseException;
  * Extended JUnit TestCase. Has default constructor (for convenience), a setContext()
  * method called by the suite to set the name of the test, the WebConversation and the
  * Server.
- *
+ 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  */
 public class WebTest extends TestCase {
@@ -63,7 +63,8 @@ public class WebTest extends TestCase {
 	 * about current test and which server it's running on.
 	 */
 	public void run( TestResult result ) {
-		String cls = getClass().getName().substring( getClass().getPackage().getName().length() + 1 );
+    String name = getClass().getName();
+		String cls = name.substring( name.lastIndexOf('.')+1, name.length());
 		print( "\nRunning " + cls + "." + getName() + "() on " + server.getName() + " version " + server.getVersion() );
 		super.run( result );
 	}
