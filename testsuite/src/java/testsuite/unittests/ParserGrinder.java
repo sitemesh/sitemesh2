@@ -1,6 +1,8 @@
 package testsuite.unittests;
 
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.opensymphony.module.sitemesh.parser.FastPageParser;
 
@@ -38,11 +40,15 @@ public class ParserGrinder
     }
 
     //now go crazy
-    Thread[] threads = new Thread[10];
-    final int passes = 200;
+    final int threadCount = 5;
+    Thread[] threads = new Thread[threadCount];
+    final List[] lists = new ArrayList[threadCount];
+    final int passes = 50;
     for(int i=0;i<threads.length;i++)
     {
-      threads[i] = new Thread(new Runnable()
+      final int index = i;
+      lists[index] = new ArrayList(passes);
+      threads[index] = new Thread(new Runnable()
       {
         public void run()
         {
@@ -51,7 +57,7 @@ public class ParserGrinder
             FastPageParser parser = new FastPageParser();
             try
             {
-              parser.parse(chars);
+              lists[index].add(parser.parse(chars));
             }
             catch(IOException e)
             {
@@ -63,6 +69,8 @@ public class ParserGrinder
     }
     //we do this here instead of above just to not count the thread creation overhead
     long now = System.currentTimeMillis();
+    long startMemory = Runtime.getRuntime().freeMemory();
+    System.out.println("startMemory=" + startMemory);
     for(int i=0;i<threads.length;i++)
     {
       threads[i].start();
@@ -72,6 +80,8 @@ public class ParserGrinder
     {
       threads[i].join();
     }
-    System.out.println("time taken " + (System.currentTimeMillis()-now) + " for " + (threads.length * passes) + " parses.");
+    System.gc();
+    long endMemory = Runtime.getRuntime().freeMemory();
+    System.out.println("time taken " + (System.currentTimeMillis()-now) + " for " + (threads.length * passes) + " parses. Memory used=" + (startMemory-endMemory));
   }
 }
