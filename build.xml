@@ -9,17 +9,12 @@
             <include name="**/*.jar" />
         </fileset>
     </path>
-    
+
     <target name="init">
     </target>
 
     <target name="compile" depends="init">
-        <echo>+---------------------------------------------------+</echo>
-        <echo>|                                                   |</echo>
-        <echo>| C O M P I L I N G   S O U R C E S                 |</echo>
-        <echo>|                                                   |</echo>
-        <echo>+---------------------------------------------------+</echo>
-    
+
         <mkdir dir="${build.dir}/classes" />
 
         <javac destdir="${build.dir}/classes"
@@ -29,19 +24,14 @@
                nowarn="${compile.nowarn}"
                deprecation="${compile.deprecation}"
                >
-               
+
                <src path="${java.dir}"/>
-               
+
         </javac>
     </target>
-    
+
     <target name="javadocs" depends="init" description="Generates JavaDoc">
-        <echo>+---------------------------------------------------+</echo>
-        <echo>|                                                   |</echo>
-        <echo>| G E N E R A T I N G   J A V A D O C               |</echo>
-        <echo>|                                                   |</echo>
-        <echo>+---------------------------------------------------+</echo>
-    
+
         <mkdir dir="${dist.dir}/docs/api"/>
 		<javadoc sourcepath="${java.dir}" destdir="${dist.dir}/docs/api" stylesheetfile="${docs.dir}/api.css" packagenames="com.opensymphony.*" classpathref="cp" author="true" version="true" windowTitle="${Name} ${version} API" doctitle="${Name}" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
     </target>
@@ -50,7 +40,7 @@
         <copy todir="${dist.dir}/docs">
             <fileset dir="${docs.dir}" excludes="*.css"/>
         </copy>
-        
+
         <mkdir dir="${dist.dir}/docs/dtd"/>
         <copy todir="${dist.dir}/docs/dtd">
             <fileset dir="${etc.dir}/dtd" />
@@ -59,7 +49,7 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="${dist.dir}" />
-        
+
         <copy todir="${build.dir}/classes/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
         <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}/classes">
             <metainf dir="${tld.dir}/jsp1.2" includes="*.tld" />
@@ -96,9 +86,9 @@
         </war>
     </target>
 
-    <target name="dist" depends="clean, docs, jar, blank, example" description="Builds distribution archives">        
-        <zip zipfile="${dist.dir}/${name}-${version}-sources.zip" 
-             basedir="${basedir}" 
+    <target name="dist" depends="clean, docs, jar, blank, example" description="Builds distribution archives">
+        <zip zipfile="${dist.dir}/${name}-${version}-sources.zip"
+             basedir="${basedir}"
              excludes="${dist.dir}/**, ${build.dir}/**, **/*.log"
         />
     </target>
