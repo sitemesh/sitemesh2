@@ -88,6 +88,7 @@
         <delete dir="tmp"/>
         <delete dir="dist"/>
         <delete dir="${test-results}"/>
+        <delete file="results.html"/>
     </target>
 
 </project>
