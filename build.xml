@@ -122,18 +122,17 @@
             <lib dir="dist">
                 <include name="${name}-${version}.jar"/>
             </lib>
+            <lib dir="src/etc/tld">
+                <include name="sitemesh*.tld" />
+            </lib>
         </war>
     </target>
 
     <target name="example" depends="jar" description="Builds sample web-app">
-        <!-- Temporary work-around for the Tomcat bug. Changes all html files to jsp. -->
         <mkdir dir="build/example-temp"/>
         <copy todir="build/example-temp">
             <fileset dir="src/example-webapp"/>
         </copy>
-        <move todir="build/example-temp">
-            <fileset dir="build/example-temp"/>
-        </move>
 
         <mkdir dir="dist"/>
 
@@ -149,12 +148,6 @@
                 <include name="velocity-*.jar"/>
                 <include name="freemarker.jar"/>
                 </lib>
-            <lib dir="src/etc/tld">
-                  <include name="sitemesh*.tld" />
-                </lib>
-            <classes dir="build/classes">
-                <include name="**/PathologicalServlet.class"/>
-            </classes>
             <lib dir="src/etc/tld">
                   <include name="sitemesh*.tld" />
             </lib>
