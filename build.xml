@@ -50,7 +50,7 @@
         <javac srcdir="src/test" destdir="build/test-classes" classpathref="cp" classpath="build/classes"/>
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="cp"/>
         <echo message="Running unit tests..."/>
-        <junit printsummary="no" haltonfailure="yes" fork="no">
+        <junit printsummary="no" haltonfailure="yes" fork="yes" forkmode="once" dir=".">
             <classpath refid="cp"/>
             <classpath>
                 <pathelement location="build/classes"/>

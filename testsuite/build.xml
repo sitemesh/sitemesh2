@@ -62,7 +62,7 @@
     <target name="test" depends="tests-build" description="Run acceptance tests on deployed web-app">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
         <mkdir dir="${test-results}"/>
-        <junit fork="yes" haltonfailure="no">
+        <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
             <classpath>
                 <fileset dir="lib"/>
                 <fileset dir="dist"/>
@@ -78,7 +78,7 @@
     <target name="test-embedded" depends="tests-build, webapp-build" description="Run acceptance tests using embedded server">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
         <mkdir dir="${test-results}"/>
-        <junit fork="yes" haltonfailure="no">
+        <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
             <classpath>
                 <fileset dir="lib"/>
                 <fileset dir="dist"/>

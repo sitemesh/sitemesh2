@@ -1,0 +1,30 @@
+<!-- Build tasks for continuous integration server. -->
+
+<project name="sitemesh-ci">
+
+	<property name="version" value="SNAPSHOT"/>
+
+	<target name="clean">
+		<ant dir="../testsuite" target="clean"/>
+		<ant dir=".." target="clean"/>
+	</target>
+
+	<target name="unit-tests">
+		<ant dir=".." target="test"/>
+	</target>
+
+	<target name="acceptance-tests">
+		<ant dir="../testsuite" target="test-embedded"/>
+	</target>
+
+	<target name="snapshot">
+		<ant dir=".." target="jar"/>
+	</target>
+
+	<target name="publish" depends="snapshot">
+		<fail unless="publishDir" message="Specify path to publish: ant -DpublishDir=/some/path publish"/>
+		<mkdir dir="${publishDir}"/>
+		<copy file="../dist/sitemesh-${version}.jar" todir="${publishDir}"/>
+	</target>
+
+</project>
