@@ -19,7 +19,7 @@
 
     <filter-mapping>
         <filter-name>encoding</filter-name>
-        <url-pattern>/simple/page4.jsp</url-pattern>
+        <url-pattern>/simple/page5.jsp</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
