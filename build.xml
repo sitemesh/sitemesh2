@@ -141,9 +141,6 @@
             <lib dir="${tld.dir}">
                   <include name="sitemesh*.tld" />
             </lib>
-            <classes dir="${build.dir}/classes">
-                <include name="**/PathologicalServlet.class"/>
-            </classes>
         </war>
     </target>
 

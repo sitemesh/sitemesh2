@@ -78,6 +78,11 @@
 	    <load-on-startup>1</load-on-startup>
 	</servlet>
 	
+    <servlet>
+        <servlet-name>outputservlet</servlet-name>
+        <servlet-class>testsuite.servlets.OutputServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
         <servlet-name>sitemesh-velocity</servlet-name>
         <url-pattern>*.vm</url-pattern>
@@ -86,6 +91,11 @@
 	<servlet-mapping>
         <servlet-name>sitemesh-freemarker</servlet-name>
         <url-pattern>*.ftl</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>outputservlet</servlet-name>
+        <url-pattern>/outputservlet</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

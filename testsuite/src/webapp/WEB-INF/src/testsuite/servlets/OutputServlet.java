@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.servlets;
+package testsuite.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,14 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-/**
- * Created by IntelliJ IDEA.
- * User: joeo
- * Date: Jun 5, 2004
- * Time: 3:36:11 AM
- * To change this template use File | Settings | File Templates.
- */
-public class PathologicalServlet extends HttpServlet {
+public class OutputServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String mode = request.getParameter("out");
         PrintWriter pw = null;

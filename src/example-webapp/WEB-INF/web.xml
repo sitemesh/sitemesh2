@@ -14,11 +14,6 @@
     </filter-mapping>
 
     <servlet>
-        <servlet-name>pathologicalservlet</servlet-name>
-        <servlet-class>com.opensymphony.module.sitemesh.servlets.PathologicalServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>sitemesh-velocity</servlet-name>
         <servlet-class>com.opensymphony.module.sitemesh.velocity.VelocityDecoratorServlet</servlet-class>
         <load-on-startup>10</load-on-startup>
@@ -48,9 +43,4 @@
         <url-pattern>*.ftl</url-pattern>
     </servlet-mapping>
     
-    <servlet-mapping>
-        <servlet-name>pathologicalservlet</servlet-name>
-        <url-pattern>/pathologicalservlet</url-pattern>
-    </servlet-mapping>
-
 </web-app>

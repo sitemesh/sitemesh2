@@ -28,6 +28,10 @@
     	<pattern>/inline/page6.jsp</pattern>
    	</decorator>
 
+    <decorator name="inline-7" page="/inline/dec-7.jsp" >
+    	<pattern>/inline/page7.jsp</pattern>
+   	</decorator>
+
     <decorator name="velocity" page="/decorators/velocity.vm">
         <pattern>/velocity/velocity.jsp</pattern>
     </decorator>
