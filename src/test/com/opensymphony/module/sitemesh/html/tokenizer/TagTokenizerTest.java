@@ -177,10 +177,9 @@ public class TagTokenizerTest extends TestCase {
 
     }
 
-    public void testTreatsXmlXmpCdataScriptAndProcessingInstructionsAsText() {
+    public void testTreatsXmpCdataScriptAndProcessingInstructionsAsText() {
         // expectations
         handler.expectText("<script language=jscript> if (a < b & > c)\n alert(); </script>");
-        handler.expectText("<xml><evil \n<stuff<</xml>");
         handler.expectText("<xmp><evil \n<stuff<</xmp>");
         handler.expectText("<?some stuff ?>");
         handler.expectText("<![CDATA[ evil<>> <\n    ]]>");
@@ -189,7 +188,6 @@ public class TagTokenizerTest extends TestCase {
         // execute
         TagTokenizer tokenizer = new TagTokenizer(""
                 + "<script language=jscript> if (a < b & > c)\n alert(); </script>"
-                + "<xml><evil \n<stuff<</xml>"
                 + "<xmp><evil \n<stuff<</xmp>"
                 + "<?some stuff ?>"
                 + "<![CDATA[ evil<>> <\n    ]]>"

@@ -22,7 +22,7 @@ public class BodyTagRule extends BasicRule {
             }
             body.clear();
         } else {
-            bufferStack.pushBuffer(new CharArray(64)); // unused buffer: everything after </body> is discarded.
+            context.pushBuffer(new CharArray(64)); // unused buffer: everything after </body> is discarded.
         }
     }
 

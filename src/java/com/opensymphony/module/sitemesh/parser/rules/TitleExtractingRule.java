@@ -16,7 +16,7 @@ public class TitleExtractingRule extends BlockExtractingRule {
 
     protected void end(Tag tag) {
         if (!seenTitle) {
-            page.addProperty("title", bufferStack.current().toString());
+            page.addProperty("title", context.currentBuffer().toString());
             seenTitle = true;
         }
     }

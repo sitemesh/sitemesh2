@@ -1,20 +1,22 @@
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
-import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.HTMLProcessor;
+import com.opensymphony.module.sitemesh.html.State;
+import com.opensymphony.module.sitemesh.html.StateTransitionRule;
+import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
+import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.parser.rules.BodyTagRule;
 import com.opensymphony.module.sitemesh.parser.rules.ContentBlockExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.FramesetRule;
 import com.opensymphony.module.sitemesh.parser.rules.HeadExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.HtmlAttributesRule;
+import com.opensymphony.module.sitemesh.parser.rules.MSOfficeDocumentPropertiesRule;
 import com.opensymphony.module.sitemesh.parser.rules.MetaTagRule;
 import com.opensymphony.module.sitemesh.parser.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.TitleExtractingRule;
-import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
-import com.opensymphony.module.sitemesh.html.util.BufferStack;
-import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 import java.io.IOException;
 
@@ -35,19 +37,25 @@ public class HTMLPageParser implements PageParser {
 
         HTMLPage page = new TokenizedHTMLPage(data, body, head);
 
-        BufferStack bufferStack = new BufferStack();
-        bufferStack.pushBuffer(body);
+        HTMLProcessor htmlProcessor = new HTMLProcessor(data, body);
 
-        HTMLProcessor htmlProcessor = new HTMLProcessor(data, bufferStack);
-        htmlProcessor.addRule("html", new HtmlAttributesRule(page));
-        htmlProcessor.addRule("head", new HeadExtractingRule(head));
-        htmlProcessor.addRule("meta", new MetaTagRule(page));
-        htmlProcessor.addRule("title", new TitleExtractingRule(page));
-        htmlProcessor.addRule("body", new BodyTagRule(page, body));
-        htmlProcessor.addRule("parameter", new ParameterExtractingRule(page));
-        htmlProcessor.addRule("content", new ContentBlockExtractingRule(page));
-        htmlProcessor.addRule("frame", new FramesetRule(page));
-        htmlProcessor.addRule("frameset", new FramesetRule(page));
+        State defaultState = htmlProcessor.defaultState();
+        State xmlState = new State();
+
+        defaultState.addRule("html", new HtmlAttributesRule(page));
+        defaultState.addRule("head", new HeadExtractingRule(head));
+        defaultState.addRule("meta", new MetaTagRule(page));
+        defaultState.addRule("title", new TitleExtractingRule(page));
+        defaultState.addRule("body", new BodyTagRule(page, body));
+        defaultState.addRule("parameter", new ParameterExtractingRule(page));
+        defaultState.addRule("content", new ContentBlockExtractingRule(page));
+        defaultState.addRule("frame", new FramesetRule(page));
+        defaultState.addRule("frameset", new FramesetRule(page));
+        defaultState.addRule("xml", new StateTransitionRule(xmlState, true));
+        defaultState.addRule("o:DocumentProperties", new MSOfficeDocumentPropertiesRule(page));
+
+
+        // extended rules
 
         htmlProcessor.process();
 

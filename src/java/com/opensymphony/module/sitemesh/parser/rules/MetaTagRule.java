@@ -4,7 +4,7 @@ import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.BasicRule;
 import com.opensymphony.module.sitemesh.html.Tag;
 
-public class MetaTagRule extends BasicRule{
+public class MetaTagRule extends BasicRule {
 
     private final HTMLPage page;
 
@@ -18,6 +18,6 @@ public class MetaTagRule extends BasicRule{
         } else if (tag.hasAttribute("http-equiv")) {
             page.addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv"), tag.getAttributeValue("content"));
         }
-        tag.writeTo(bufferStack.current());
+        tag.writeTo(context.currentBuffer());
     }
 }

@@ -6,11 +6,11 @@ public abstract class BlockExtractingRule extends BasicRule {
 
     public void process(Tag tag) {
         if (tag.getType() == Tag.OPEN) {
-            bufferStack.pushBuffer(createBuffer());
+            context.pushBuffer(createBuffer());
             start(tag);
         } else if (tag.getType() == Tag.CLOSE) {
             end(tag);
-            bufferStack.popBuffer();
+            context.popBuffer();
         }
     }
 

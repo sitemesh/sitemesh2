@@ -1,13 +1,11 @@
 package com.opensymphony.module.sitemesh.html;
 
-import com.opensymphony.module.sitemesh.html.util.BufferStack;
-
 public abstract class BasicRule implements TagRule {
 
-    protected BufferStack bufferStack;
+    protected HTMLProcessorContext context;
 
-    public void setBufferStack(BufferStack bufferStack) {
-        this.bufferStack = bufferStack;
+    public void setContext(HTMLProcessorContext context) {
+        this.context = context;
     }
 
     public abstract void process(Tag tag);
