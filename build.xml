@@ -50,7 +50,7 @@
             <link href="http://java.sun.com/products/servlet/2.3/javadoc/"/>
             <link href="http://jakarta.apache.org/velocity/api/"/>
             <link href="http://jakarta.apache.org/velocity/tools/javadoc/"/>
-
+            <link href="http://freemarker.sourceforge.net/docs/api/"/>
         </javadoc>
     </target>
 
@@ -129,6 +129,7 @@
             <user displayname="Scott Farquhar" userid="farkas"/>
             <user displayname="Mike Cannon-Brookes" userid="rebelutionary"/>
             <user displayname="Richard Hallier" userid="rhallier"/>
+            <user displayname="Chris Miller" userid="chris_miller"/>
         </cvschangelog>
 
         <mkdir dir="${dist.dir}/docs"/>
