@@ -8,27 +8,19 @@ import java.io.IOException;
 
 class HTMLPage extends AbstractHTMLPage {
 
-    private Writer head = new StringWriter();
-    private Writer body = new StringWriter();
+    private StringWriter head = new StringWriter();
+    private StringWriter body = new StringWriter();
 
     public HTMLPage(char[] original) {
         this.pageData = original;
     }
 
     public void appendToHead(String s) {
-        try {
-            head.write(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        head.write(s);
     }
 
     public void appendToBody(String s) {
-        try {
-            body.write(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        body.write(s);
     }
 
     public void writeHead(Writer out) throws IOException {
@@ -47,4 +39,7 @@ class HTMLPage extends AbstractHTMLPage {
         return false;
     }
 
+    public void clearBody() {
+        body.getBuffer().setLength(0);
+    }
 }

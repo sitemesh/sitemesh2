@@ -49,6 +49,7 @@ public class HTMLPageParser implements PageParser {
                         for (int i = 0; i < tag.getAttributeCount(); i++) {
                             result.addProperty("body." + tag.getAttributeName(i), tag.getAttributeValue(i));
                         }
+                        result.clearBody();
                     } else {
                         bodyWritten = true;
                     }
