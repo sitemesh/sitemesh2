@@ -18,17 +18,17 @@ import java.lang.reflect.Constructor;
 
 /**
  * Factory responsible for creating appropriate instances of implementations.
- * This is a singleton and is obtained through {@link #getInstance(com.opensymphony.module.sitemesh.Config)}.
+ * This is specific to a web context and is obtained through {@link #getInstance(com.opensymphony.module.sitemesh.Config)}.
  *
  * <p>The actual Factory method used is determined by the enviroment entry <code>sitemesh.factory</code>.
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class Factory {
-    /** @label Singleton instance */
-    private static Factory instance = null;
+    /** @label Web context lookup key */
+    private static final String SITEMESH_FACTORY = "sitemesh.factory";
 
     /**
      * Entry-point for obtaining singleton instance of Factory. The default factory class
@@ -36,6 +36,7 @@ public abstract class Factory {
      * entry <code>sitemesh.factory</code>.
      */
     public static Factory getInstance(Config config) {
+	Factory instance = (Factory)config.getServletContext().getAttribute(SITEMESH_FACTORY);
         if (instance == null) {
             String factoryClass = getEnvEntry("sitemesh.factory", "com.opensymphony.module.sitemesh.factory.DefaultFactory");
             try {
@@ -49,6 +50,7 @@ public abstract class Factory {
 
                 Constructor con = cls.getConstructor(new Class[] { Config.class });
                 instance = (Factory)con.newInstance(new Config[] { config });
+                config.getServletContext().setAttribute(SITEMESH_FACTORY, instance);
             }
             catch (Exception e) {
                 report("Cannot construct Factory : " + factoryClass, e);
