@@ -38,6 +38,7 @@ Currently known containers that support this and SiteMesh was tested with:
 * Resin 2.1.11              - http://www.caucho.com
 * Tomcat 4.0 and 4.1        - http://jakarta.apache.org/tomcat
 * WebLogic 7.0 SP2 and 8.1  - http://www.bea.com
+* WebSphere 5.0             - http://www.ibm.com
 * Oracle OC4J               - http://www.oracle.com
 * Jetty 4                   - http://jetty.mortbay.org
 
@@ -205,6 +206,9 @@ SiteMesh does work correctly on WebLogic 7.0 SP2 and 8.1.
 
 * SiteMesh does not work on Weblogic 8.1 SP1 because of various bugs in the JSP
 compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
+
+* SiteMesh does not work on WebSphere 5.0.1 and 5.0.2. Apply patch IBM iFix 
+PQ80592 to your WebSphere installation.
 
 Please report bugs here: http://jira.opensymphony.com
 
