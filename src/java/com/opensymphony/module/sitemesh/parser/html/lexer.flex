@@ -13,9 +13,12 @@ package com.opensymphony.module.sitemesh.parser.html;
 
 %{
     protected int position() { return yy_currentPos; }
+    protected int line()     { return yyline; }
+    protected int column()   { return yycolumn; }
 %}
 
 %state ELEMENT
+
 
 %%
 
@@ -24,22 +27,22 @@ package com.opensymphony.module.sitemesh.parser.html;
     "<?" ~"?>"          { return Parser.TEXT; }
     "<!" ~">"           { return Parser.TEXT; }
     "<![CDATA[" ~"]]>"  { return Parser.TEXT; }
-    "<xmp" ~"</xmp>"    { return Parser.TEXT; }
-    "<xml" ~"</xml>"    { return Parser.TEXT; }
-    "<script" ~"</script>" { return Parser.TEXT; }
+    "<xmp" ~"</xmp" ~">" { return Parser.TEXT; }
+    "<xml" ~"</xml" ~">" { return Parser.TEXT; }
+    "<script" ~"</script" ~">" { return Parser.TEXT; }
     [^<]+               { return Parser.TEXT; }
     "<"                 { yybegin(ELEMENT); return Parser.LT; } /* Switch state to ELEMENT */
 }
 
 <ELEMENT> {
     "/"                 { return Parser.SLASH; }
-    [\n\r\ \t\b\012]+   { return Parser.WHITESPACE; }
-    [^<>=\"'/ ]+        { return Parser.WORD; }
+    [\n\r \t\b\012]+    { return Parser.WHITESPACE; }
     "="                 { return Parser.EQUALS; }
     "\"" ~"\""          { return Parser.QUOTED; }
     "'" ~"'"            { return Parser.QUOTED; }
+    [^>/=\"\'\n\r \t\b\012][^>/=\n\r \t\b\012]* { return Parser.WORD; }
     ">"                 { yybegin(YYINITIAL); return Parser.GT; } /* Switch state back to YYINITIAL */
 }
 
 /* not matched by anything else */
-.|\n                    { throw new Error("Illegal character <"+ yytext()+"> Line " + yyline + ", Column " + yycolumn); }
+.|\n                    { throw new ParserException("Illegal character <"+ yytext() +">", line(), column()); }

@@ -29,7 +29,7 @@ attributes:
     attributes WORD whitespace                                       { tokenizer.parsedAttribute($2, null, false); } | /* a     */
     whitespace ;
 
-unquoted:  /* This is needed to deal with the annoying special case <a something=nasty/slash>
+unquoted:  /* This is needed to deal with the annoying special case <a something=nasty/slash> */
     unquoted WORD  { $$ = $1 + $2; } |
     unquoted SLASH { $$ = $1 + "/"; } |
     empty          { $$ = ""; };
@@ -46,8 +46,6 @@ empty:
 /********** ADDITIONAL JAVA TO MIX INTO PARSER *********/
 %%
 private HTMLTagTokenizer tokenizer;
-private int start;
-private int end;
 
 public Parser(HTMLTagTokenizer tokenizer, java.io.Reader input) {
     super(input);
@@ -60,6 +58,8 @@ public int yylex() {
         yylval = new Value();
         yylval.sval = yytext();
         yylval.ival = position();
+        yylval.line = line();
+        yylval.column = column();
         return result;
     }
     catch(java.io.IOException e) {
@@ -69,10 +69,13 @@ public int yylex() {
 
 /* error reporting */
 public void yyerror(String error) {
-    throw new RuntimeException("state "+yystate+", reducing "+yym+" by rule "+yyn+" ("+yyrule[yyn]+"), text " + yytext + ", error " + error);
+    Value value = val_peek(0);
+    throw new ParserException(error, value.line, value.column);
 }
 
 private class Value {
     String sval;
     int ival;
+    int line;
+    int column;
 }

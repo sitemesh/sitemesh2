@@ -2,6 +2,8 @@ package com.opensymphony.module.sitemesh.parser.html;
 
 import junit.framework.TestCase;
 
+import java.io.StringReader;
+
 public class HTMLTagTokenizerTest extends TestCase {
 
     private MockTokenHandler handler;
@@ -94,13 +96,19 @@ public class HTMLTagTokenizerTest extends TestCase {
         // expectations
         handler.expectTag(Tag.OPEN, "hello", new String[] {"somestuff", "good", "foo", null, "x", "long\n string"});
         handler.expectTag(Tag.EMPTY, "empty");
+        handler.expectTag(Tag.OPEN, "HTML", new String[] {"notonnewline", "yo", "newline", "hello", "anotherline", "bye"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(""
                 + "<hello \n somestuff = \ngood \n   foo \nx=\"long\n string\"   >"
-                + "<empty      />");
+                + "<empty      />"
+                + "<HTML notonnewline=yo newline=\n"
+                + "hello anotherline=\n"
+                + "\"bye\">");
         tokenizer.start(handler);
         // verify
         handler.verify();
+
+
     }
 
     public void testExposesOriginalTagToHandler() {
@@ -134,13 +142,23 @@ public class HTMLTagTokenizerTest extends TestCase {
         handler.verify();
     }
 
+    public void testAllowsTrailingQuoteOnAttribute() {
+        // expectations
+        handler.expectTag(Tag.OPEN, "something", new String[] { "type", "bl'ah\"" });
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<something type=bl'ah\">");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
     public void testAllowsAwkwardCharsInElementAndAttribute() {
         // expectations
-        handler.expectTag(Tag.OPEN, "name:space", new String[] { "foo:bar", "x:y" });
+        handler.expectTag(Tag.OPEN, "name:space", new String[] { "foo:bar", "x:y%" });
         handler.expectTag(Tag.EMPTY, "a_b-c$d", new String[] { "b_b-c$d", "c_b-c$d" });
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(""
-                + "<name:space foo:bar=x:y>"
+                + "<name:space foo:bar=x:y%>"
                 + "<a_b-c$d b_b-c$d=c_b-c$d />");
         tokenizer.start(handler);
         // verify

@@ -256,10 +256,8 @@ final static String yyrule[] = {
 "empty :",
 };
 
-//#line 49 "parser.yacc"
+//#line 48 "parser.yacc"
 private HTMLTagTokenizer tokenizer;
-private int start;
-private int end;
 
 public Parser(HTMLTagTokenizer tokenizer, java.io.Reader input) {
     super(input);
@@ -272,6 +270,8 @@ public int yylex() {
         yylval = new Value();
         yylval.sval = yytext();
         yylval.ival = position();
+        yylval.line = line();
+        yylval.column = column();
         return result;
     }
     catch(java.io.IOException e) {
@@ -281,14 +281,17 @@ public int yylex() {
 
 /* error reporting */
 public void yyerror(String error) {
-    throw new RuntimeException("state "+yystate+", reducing "+yym+" by rule "+yyn+" ("+yyrule[yyn]+"), text " + yytext + ", error " + error);
+    Value value = val_peek(0);
+    throw new ParserException(error, value.line, value.column);
 }
 
 private class Value {
     String sval;
     int ival;
+    int line;
+    int column;
 }
-//#line 237 "Parser.java"
+//#line 240 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -484,7 +487,7 @@ case 14:
 //#line 35 "parser.yacc"
 { yyval.sval = ""; }
 break;
-//#line 428 "Parser.java"
+//#line 431 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
