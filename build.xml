@@ -11,11 +11,10 @@
     </path>
 
     <target name="init">
-      <tstamp /> 
+      <tstamp />
     </target>
 
     <target name="compile" depends="init">
-
         <mkdir dir="${build.dir}/classes" />
 
         <javac destdir="${build.dir}/classes"
@@ -32,9 +31,21 @@
     </target>
 
     <target name="javadocs" depends="init" description="Generates JavaDoc">
-
         <mkdir dir="${dist.dir}/docs/api"/>
-		<javadoc sourcepath="${java.dir}" destdir="${dist.dir}/docs/api" stylesheetfile="${docs.dir}/api.css" packagenames="com.opensymphony.*" classpathref="cp" author="true" version="true" windowTitle="${Name} ${version} API" doctitle="${Name} ${version} API" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
+
+        <javadoc sourcepath="${java.dir}"
+                 destdir="${dist.dir}/docs/api"
+                 stylesheetfile="${docs.dir}/api.css"
+                 packagenames="com.opensymphony.*"
+                 classpathref="cp"
+                 author="true"
+                 version="true"
+                 private="true"
+                 use="true"
+                 windowTitle="${Name} ${version} API"
+                 doctitle="${Name} ${version} API"
+                 footer="&lt;a href=&quot;http://www.opensymphony.com/sitemesh/&quot;&gt;www.opensymphony.com/sitemesh/&lt;/a&gt;"
+        />
     </target>
 
     <target name="docs" depends="javadocs">
