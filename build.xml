@@ -1,4 +1,6 @@
-<project name="sitemesh" default="jar" basedir=".">
+<?xml version="1.0"?>
+
+<project name="sitemesh" default="dist">
     <property file="build.properties"/>
 
     <!-- Classpath -->
@@ -7,26 +9,59 @@
             <include name="**/*.jar" />
         </fileset>
     </path>
+    
+    <target name="init">
+    </target>
 
-    <!-- Compile Java -->
-    <target name="compile">
-        <mkdir dir="${build.dir}" />
+    <target name="compile" depends="init">
+        <echo>+---------------------------------------------------+</echo>
+        <echo>|                                                   |</echo>
+        <echo>| C O M P I L I N G   S O U R C E S                 |</echo>
+        <echo>|                                                   |</echo>
+        <echo>+---------------------------------------------------+</echo>
+    
+        <mkdir dir="${build.dir}/classes" />
 
-        <javac srcdir="${java.dir}"
-               destdir="${build.dir}"
+        <javac destdir="${build.dir}/classes"
                classpathref="cp"
                optimize="${compile.optimize}"
                debug="${compile.debug}"
                nowarn="${compile.nowarn}"
                deprecation="${compile.deprecation}"
-               />
+               >
+               
+               <src path="${java.dir}"/>
+               
+        </javac>
+    </target>
+    
+    <target name="javadocs" depends="init" description="Generates JavaDoc">
+        <echo>+---------------------------------------------------+</echo>
+        <echo>|                                                   |</echo>
+        <echo>| G E N E R A T I N G   J A V A D O C               |</echo>
+        <echo>|                                                   |</echo>
+        <echo>+---------------------------------------------------+</echo>
+    
+        <mkdir dir="${dist.dir}/docs/api"/>
+		<javadoc sourcepath="${java.dir}" destdir="${dist.dir}/docs/api" stylesheetfile="${docs.dir}/api.css" packagenames="com.opensymphony.*" classpathref="cp" author="true" version="true" windowTitle="${Name} ${version} API" doctitle="${Name}" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
     </target>
 
-    <!-- Build jar archive -->
+    <target name="docs" depends="javadocs">
+        <copy todir="${dist.dir}/docs">
+            <fileset dir="${docs.dir}" excludes="*.css"/>
+        </copy>
+        
+        <mkdir dir="${dist.dir}/docs/dtd"/>
+        <copy todir="${dist.dir}/docs/dtd">
+            <fileset dir="${etc.dir}/dtd" />
+        </copy>
+    </target>
+
     <target name="jar" depends="compile">
         <mkdir dir="${dist.dir}" />
-        <copy todir="${build.dir}/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
-        <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}">
+        
+        <copy todir="${build.dir}/classes/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
+        <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}/classes">
             <metainf dir="${tld.dir}/jsp1.2" includes="*.tld" />
         </jar>
         <copy todir="${dist.dir}">
@@ -34,24 +69,7 @@
         </copy>
     </target>
 
-    <!-- Generate JavaDoc -->
-    <target name="javadocs">
-        <mkdir dir="${dist.dir}/docs/api"/>
-		<javadoc sourcepath="${java.dir}" destdir="${dist.dir}/docs/api" stylesheetfile="${docs.dir}/api.css" packagenames="com.opensymphony.*" classpathref="cp" author="true" version="true" windowTitle="${Name} ${version} API" doctitle="${Name}" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
-    </target>
-    
-    <target name="docs" depends="javadocs">
-        <copy todir="${dist.dir}/docs">
-            <fileset dir="${docs.dir}" excludes="*.css"/>
-        </copy>
-        <mkdir dir="${dist.dir}/docs/dtd"/>
-        <copy todir="${dist.dir}/docs/dtd">
-            <fileset dir="${etc.dir}/dtd" />
-        </copy>
-    </target>    
-
-    <!-- Build simple web-app to get started with SiteMesh -->
-    <target name="blank" depends="jar">
+    <target name="blank" depends="jar" description="Builds simple web-app to get started with SiteMesh">
         <mkdir dir="${dist.dir}" />
         <war warfile="${dist.dir}/${name}-blank.war" webxml="${example.dir}/WEB-INF/web.xml">
             <fileset dir="${blank.dir}"/>
@@ -64,8 +82,7 @@
         </war>
     </target>
 
-    <!-- Build sample web-app -->
-    <target name="example" depends="jar">
+    <target name="example" depends="jar" description="Builds sample web-app">
         <war warfile="${dist.dir}/${name}-example.war" webxml="${example.dir}/WEB-INF/web.xml">
             <fileset dir="${example.dir}">
                 <exclude name="WEB-INF/web.xml" />
@@ -79,35 +96,14 @@
         </war>
     </target>
 
-    <!-- Build source jar to be included in distribution -->
-    <target name="src">
-        <mkdir dir="${dist.dir}" />
-        <jar jarfile="${dist.dir}/${name}-${version}-sources.jar">
-            <fileset dir="${src.dir}" />
-        </jar>
+    <target name="dist" depends="clean, docs, jar, blank, example" description="Builds distribution archives">        
+        <zip zipfile="${dist.dir}/${name}-${version}-sources.zip" 
+             basedir="${basedir}" 
+             excludes="${dist.dir}/**, ${build.dir}/**, **/*.log"
+        />
     </target>
 
-    <!-- Build distribution bundles -->
-    <target name="dist" depends="blank, example, src" description="Build distribution version">
-        <mkdir dir="${tmp.dir}/dist" />
-        <copy todir="${tmp.dir}/dist">
-            <fileset dir="${dist.dir}">
-                <exclude name="*.zip" />
-                <exclude name="*.tgz" />
-            </fileset>
-        </copy>
-
-        <copy todir="${tmp.dir}/dist"              file="README.txt" />
-
-        <zip  zipfile="${dist.dir}/${name}-${version}.zip" basedir="${tmp.dir}/dist" />
-        <tar  tarfile="${tmp.dir}/dist.tar" basedir="${tmp.dir}/dist" />
-        <gzip zipfile="${dist.dir}/${name}-${version}.tgz" src="${tmp.dir}/dist.tar" />
-    </target>
-
-    <!-- Remove all built files -->
-    <target name="clean">
-        <delete dir="${tmp.dir}" />
-        <delete dir="${doc.dir}" />
+    <target name="clean" description="Removes all build artifacts">
         <delete dir="${build.dir}" />
         <delete dir="${dist.dir}" />
     </target>
