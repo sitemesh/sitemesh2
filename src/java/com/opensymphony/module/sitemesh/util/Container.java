@@ -15,14 +15,15 @@ import java.util.Map;
 
 /**
  * Utility for determining the Servlet Container the application is running in.
- * Currently supported containers: Tomcat, Resin, Orion, OC4J, WebLogic, HPAS, JRun.
+ * Currently supported containers: Tomcat, Resin, Orion, OC4J, WebLogic, HPAS, JRun,
+ * Websphere.
  *
  * <h3>Usage:</h3>
  *
  * <code>if (Container.get() == Container.TOMCAT) { .... }</code>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public final class Container {
     public static final int UNKNOWN   = 0;
@@ -32,6 +33,7 @@ public final class Container {
     public static final int WEBLOGIC  = 4;
     public static final int HPAS      = 5;
     public static final int JRUN      = 6;
+    public static final int WEBSPHERE = 7;
 
     private static int result = -1;
 
@@ -50,6 +52,7 @@ public final class Container {
         classMappings.put("weblogic.servlet.JSPServlet",                          new Integer(WEBLOGIC));
         classMappings.put("com.hp.mwlabs.j2ee.containers.servlet.jsp.JspServlet", new Integer(HPAS));
         classMappings.put("jrun.servlet.WebApplicationService",                   new Integer(JRUN));
+        classMappings.put("com.ibm.ws.webcontainer.jsp.servlet.JspServlet",       new Integer(WEBSPHERE));
     }
 
     /** Get the current container. */
