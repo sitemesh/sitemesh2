@@ -15,7 +15,7 @@ import com.opensymphony.module.sitemesh.taglib.AbstractTag;
  * Write the Page <code>&lt;title&gt;</code> value to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.HTMLPage#getTitle()
  */
@@ -39,8 +39,4 @@ public class TitleTag extends AbstractTag {
         return EVAL_PAGE;
     }
 
-    public void release() {
-        defaultTitle = null;
-        super.release();
-    }
 }
