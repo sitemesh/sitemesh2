@@ -80,10 +80,18 @@
         <mkdir dir="${test-results}"/>
         <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
             <classpath>
-                <fileset dir="lib"/>
-                <fileset dir="dist"/>
-                <fileset dir="../lib"/>
-                <fileset dir="../dist"/>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="dist">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="../lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="../dist">
+                    <include name="*.jar"/>
+                </fileset>
             </classpath>
             <formatter type="plain" usefile="false"/>
             <formatter type="xml"/>

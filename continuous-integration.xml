@@ -1,0 +1,31 @@
+<!-- Ant build for continuous integration server to auto deploy snapshot -->
+<project name="continuous-integration" default="publish">
+
+    <!-- Note: This are temporary paths used by the BeetleJuice server on
+               beaver.codehaus.org. These should switch over to the
+               opensymphony.com server when it's ready. -->
+
+    <!-- http://www.codehaus.org/~joe/sitemesh-SNAPSHOT.zip -->
+    <property name="dist.path" value="/home/users/joe/public_html"/>
+
+    <!-- http://www.codehaus.org/~joe/sitemesh-SNAPSHOT.jar -->
+    <property name="jar.path" value="/home/users/joe/public_html"/>
+
+    <property name="version" value="SNAPSHOT"/>
+
+    <target name="full-test">
+        <!-- clean -->
+        <ant dir="testsuite" target="clean"/>
+        <!-- build, test, jar and dist -->
+        <ant dir="." target="dist"/>
+        <!-- acceptance tests on embedded server -->
+        <ant dir="testsuite" target="test-embedded"/>
+    </target>
+
+    <target name="publish" depends="full-test">
+        <!-- publish -->
+        <copy file="dist/sitemesh-${version}.jar" todir="${jar.path}"/>
+        <copy file="dist/sitemesh-${version}.zip" todir="${dist.path}"/>
+    </target> 
+
+</project>
