@@ -9,6 +9,10 @@
     <decorator name="nopanelsource" page="nopanelsource.jsp"/>
     <decorator name="badpanelsource" page="badpanelsource.jsp"/>
 
+    <decorator name="velocity" page="velocity.vm">
+        <pattern>/velocity.html</pattern>
+    </decorator>
+
     <decorator name="test" page="test.jsp">
         <pattern>/agent.jsp</pattern>
     </decorator>
