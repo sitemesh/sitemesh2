@@ -2,7 +2,13 @@ package testsuite.sitemesh;
 
 import com.meterware.httpunit.WebResponse;
 import electric.xml.Document;
+import electric.xml.Element;
+import electric.xml.XPath;
+import electric.xml.Elements;
 import testsuite.tester.WebTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
@@ -71,6 +77,28 @@ public class InlineDecoratorTest extends WebTest
         assertEquals("Inline external content 6", doc.getElementWithId("inline1").getText().toString());
         assertEquals("\u0126\u0118\u0139\u0139\u0150", doc.getElementWithId("inline-content").getText().toString());
         assertEquals("footer", doc.getElementWithId("footer").getText().toString());
+    }
+
+    public void testIncludedContentFromOutputStreamAndWriterOnJspPage() throws Exception
+    {
+        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page7.jsp");
+        Document doc = getDocument(rs);
+        assertEquals("{inline7} content 7 jsp", rs.getTitle());
+        assertEquals("Page 7 jsp content", doc.getElementWithId("bod").getText("p").toString());
+        Elements inlineContents = doc.getElements(new XPath("//[@id='inline-content']"));
+        assertEquals("This is a servlet using writer to output", inlineContents.next().getText().toString());
+        assertEquals("This is a servlet using stream to output", inlineContents.next().getText().toString());
+    }
+
+    public void testIncludedContentFromOutputStreamAndWriterOnStaticPage() throws Exception
+    {
+        WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page7.html");
+        Document doc = getDocument(rs);
+        assertEquals("{inline7} content 7 static", rs.getTitle());
+        assertEquals("Page 7 static content", doc.getElementWithId("bod").getText("p").toString());
+        Elements inlineContents = doc.getElements(new XPath("//[@id='inline-content']"));
+        assertEquals("This is a servlet using writer to output", inlineContents.next().getText().toString());
+        assertEquals("This is a servlet using stream to output", inlineContents.next().getText().toString());
     }
 
 }
