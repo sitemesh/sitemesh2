@@ -24,11 +24,12 @@ document:
     /*blank*/     ;
 
 node:
-    LT WORD attributes GT                                         { tokenizer.parsedTag(Tag.OPEN,  $2, $1, $4 + 1); } |
-    LT SLASH WORD attributes GT                                   { tokenizer.parsedTag(Tag.CLOSE, $3, $1, $5 + 1); } |
-    LT WORD attributes SLASH GT                                   { tokenizer.parsedTag(Tag.EMPTY, $2, $1, $5 + 1); } |
-    LT whitespace GT                                              { } |
-    TEXT                                                          { tokenizer.parsedText($1);           } ;
+    LT WORD attributes GT            /* <tag ...> */              { tokenizer.parsedTag(Tag.OPEN,  $2, $1, $4 + 1); } |
+    LT SLASH WORD attributes GT      /* </tag ...> */             { tokenizer.parsedTag(Tag.CLOSE, $3, $1, $5 + 1); } |
+    LT WORD attributes SLASH GT      /* <tag ... /> */            { tokenizer.parsedTag(Tag.EMPTY, $2, $1, $5 + 1); } |
+    LT whitespace GT                 /* < > (strip error) */      { } |    /* TODO, I think this is wrong, <> is valid in VBScript */
+    LT error GT                      /* Malformed tag - text */   { tokenizer.parsedText($1, $3 + 1);   } |
+    TEXT                             /* Text */                   { tokenizer.parsedText($1);           } ;
 
 attributes:
     attributes WORD whitespace EQUALS whitespace unquoted whitespace { tokenizer.parsedAttribute($2, $6  , false); } | /* a=b   */

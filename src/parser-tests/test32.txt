@@ -7,7 +7,7 @@
             window.document.writeln ("</scr" + "ipt>");
         }
      </ScRIPT >
-
+     <link stuff>
    </head>
 </html>
 ~~~ TITLE ~~~
@@ -23,6 +23,7 @@ title=
             window.document.writeln ("</scr" + "ipt>");
         }
      </ScRIPT >
+     <link stuff>
 
 ~~~ BODY ~~~
 
