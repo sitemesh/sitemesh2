@@ -1,4 +1,22 @@
 --------------------------
+-- Changes in 2.2.1     --
+--------------------------  
+SiteMesh 2.2 introduced a few critical bugs, which have stopped it
+from being a seamless upgrade to many users.
+
+-- Fixed critical bugs --
+
+* ClassNotFound: DefaultPageParser
+This is a class that no longer exists but may still lurk in
+sitemesh.xml if based on a 1.0 version. The config loader now just
+silently ignores this.
+
+* Head of content page chopped off
+This was caused by setContentType() always resetting the buffer,
+however sometimes setContentType() was called half way through a page
+(for instance by the Servlet engine whilst doing an include).
+
+--------------------------
 -- Changes in 2.2       --
 --------------------------
 This release fixes a number of minor bugs, and no code changes are required

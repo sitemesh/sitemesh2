@@ -1,5 +1,5 @@
 *************************************
-** OpenSymphony SiteMesh @VERSION@     **
+** OpenSymphony SiteMesh 2.2.1     **
 *************************************
 
 SiteMesh is a web-page layout system that can be used to abstract common look
