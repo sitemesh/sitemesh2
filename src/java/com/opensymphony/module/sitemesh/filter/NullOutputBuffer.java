@@ -8,7 +8,7 @@ package com.opensymphony.module.sitemesh.filter;
  * @see PageOutputStream
  * @see PageResponseWrapper#getBufferStream
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class NullOutputBuffer implements OutputBuffer {
 
@@ -25,7 +25,7 @@ public class NullOutputBuffer implements OutputBuffer {
         //do nothing
     }
 
-    public char[] getBuffer() {
+    public char[] getBuffer(String encoding) {
         return new char[0];
     }
 

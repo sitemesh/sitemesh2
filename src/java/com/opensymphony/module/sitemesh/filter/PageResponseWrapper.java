@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -169,7 +169,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
                 throw new IllegalStateException("Cannot call getOutputStream() after getWriter()");
             } else {
                 usingStream = true;
-                pageOutputStream = new PageOutputStream(super.getOutputStream(), encoding);
+                pageOutputStream = new PageOutputStream(super.getOutputStream());
             }
         }
         return pageOutputStream;
@@ -255,7 +255,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
         if (page == null) {
             PageParser parser = factory.getPageParser(contentType);
-            return parser.parse(getBufferStream().getBuffer());
+            return parser.parse(getBufferStream().getBuffer(encoding));
         }
         return page;
     }

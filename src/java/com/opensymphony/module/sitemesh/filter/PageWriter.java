@@ -16,10 +16,10 @@ import java.io.Writer;
 
 /**
  * Implementation of PrintWriter that stores all data written
- * to it in a temporary buffer accessible from {@link #getBuffer()} .
+ * to it in a temporary buffer accessible from {@link #getBuffer(java.lang.String)} .
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PageWriter extends PrintWriter implements OutputBuffer {
     private CharArrayWriter buffer = null;
@@ -98,8 +98,7 @@ public class PageWriter extends PrintWriter implements OutputBuffer {
     }
 
     /** Return all data that has been written to this Writer. */
-    public char[] getBuffer() {
-        buffer.flush();
+    public char[] getBuffer(String encoding) {
         return buffer.toCharArray();
     }
 
@@ -109,7 +108,7 @@ public class PageWriter extends PrintWriter implements OutputBuffer {
             target = original;
             try {
                 // copy any bytes written to buffer so far to original stream.
-                original.write(getBuffer());
+                original.write(buffer.toCharArray());
                 original.flush();
             } catch (IOException e) {
                 e.printStackTrace(); // this should never happen.

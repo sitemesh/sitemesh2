@@ -19,18 +19,17 @@ import java.nio.ByteBuffer;
 
 /**
  * Implementation of ServletOutputStream that stores all data written
- * to it in a temporary buffer accessible from {@link #getBuffer()} .
+ * to it in a temporary buffer accessible from {@link #getBuffer(java.lang.String)} .
  *
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
  * @author <a href="mailto:hani@formicary.net">Hani Suleiman</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class PageOutputStream extends ServletOutputStream implements OutputBuffer {
 
     private ByteArrayOutputStream buffer = null;
     private OutputStream original = null;
     private OutputStream target = null;
-    private String encoding;
     private static final String DEFAULT_ENCODING = System.getProperty("file.encoding");
     private static final boolean JDK14 = System.getProperty("java.version").startsWith("1.4");
 
@@ -39,10 +38,8 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
      * null, then the systems default encoding is used.
      *
      * @param original  The underlying outputStream
-     * @param encoding  The encoding to use
      */
-    public PageOutputStream(OutputStream original, String encoding) {
-        this.encoding = encoding;
+    public PageOutputStream(OutputStream original) {
         this.original = original;
         this.buffer = new FastByteArrayOutputStream();
         target = buffer;
@@ -66,7 +63,7 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
         }
     }
 
-  public char[] get14Buffer() {
+  public char[] get14Buffer(String encoding) {
     String enc = encoding;
     if(enc == null) {
       enc = DEFAULT_ENCODING;
@@ -101,8 +98,8 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
     return tca;
   }
 
-    public char[] getBuffer() {
-      if(JDK14) return get14Buffer();
+    public char[] getBuffer(String encoding) {
+      if(JDK14) return get14Buffer(encoding);
         CharArrayWriter out = null;
         try {
             // Why all this indirection? Because we are being given bytes, and we have to then write
@@ -145,13 +142,13 @@ public class PageOutputStream extends ServletOutputStream implements OutputBuffe
       sb.append(val);
     }
     bos.write(val.getBytes(DEFAULT_ENCODING));
-    PageOutputStream os = new PageOutputStream(bos, DEFAULT_ENCODING);
+    PageOutputStream os = new PageOutputStream(bos);
     int iterations = 10000;
     long[] blah = new long[iterations];
     long now = System.currentTimeMillis();
     for(int i=0;i<iterations;i++)
     {
-      char[] chars = os.getBuffer();
+      char[] chars = os.getBuffer(DEFAULT_ENCODING);
       blah[i] = chars.length;
     }
     System.out.println("time taken for buffer=" + (double)(System.currentTimeMillis()-now)/iterations);
