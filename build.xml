@@ -11,6 +11,7 @@
     </path>
 
     <target name="init">
+      <tstamp /> 
     </target>
 
     <target name="compile" depends="init">
