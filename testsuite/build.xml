@@ -14,7 +14,7 @@
 
     <target name="webapp-build" depends="sitemesh-build,tests-build" description="Build web-app .war file">
         <mkdir dir="tmp/webapp/WEB-INF/classes"/>
-        <javac srcdir="webapp/WEB-INF/src" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" />
+        <javac srcdir="src/webapp/WEB-INF/src" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" />
         <javac srcdir="src/java" destdir="tmp/webapp/WEB-INF/classes" classpathref="classpath" includes="testsuite/i18n/EncodingFilter.java" debug="on"/>
 
         <mkdir dir="dist"/>

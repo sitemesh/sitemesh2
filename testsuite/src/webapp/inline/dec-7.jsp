@@ -16,13 +16,13 @@
 			</tr>
 			<tr>
 				<td width="150" valign="top">
-					<page:applyDecorator page="/pathologicalservlet?out=writer" name="panel" />
+					<page:applyDecorator page="/outputservlet?out=writer" name="panel" />
 				</td>
 				<td width="100%" valign="top" id="bod">
 					<decorator:body />
 				</td>
 				<td width="150" valign="top">
-					<page:applyDecorator page="/pathologicalservlet?out=stream" name="panel" />
+					<page:applyDecorator page="/outputservlet?out=stream" name="panel" />
 				</td>
 			</tr>
 			<tr>
