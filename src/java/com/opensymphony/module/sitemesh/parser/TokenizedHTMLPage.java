@@ -1,6 +1,7 @@
 package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 
 import java.io.IOException;
 import java.io.Writer;

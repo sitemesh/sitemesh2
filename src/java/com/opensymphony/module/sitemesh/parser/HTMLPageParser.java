@@ -7,15 +7,16 @@ import com.opensymphony.module.sitemesh.html.State;
 import com.opensymphony.module.sitemesh.html.StateTransitionRule;
 import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
-import com.opensymphony.module.sitemesh.parser.rules.BodyTagRule;
-import com.opensymphony.module.sitemesh.parser.rules.ContentBlockExtractingRule;
-import com.opensymphony.module.sitemesh.parser.rules.FramesetRule;
-import com.opensymphony.module.sitemesh.parser.rules.HeadExtractingRule;
-import com.opensymphony.module.sitemesh.parser.rules.HtmlAttributesRule;
-import com.opensymphony.module.sitemesh.parser.rules.MSOfficeDocumentPropertiesRule;
-import com.opensymphony.module.sitemesh.parser.rules.MetaTagRule;
-import com.opensymphony.module.sitemesh.parser.rules.ParameterExtractingRule;
-import com.opensymphony.module.sitemesh.parser.rules.TitleExtractingRule;
+import com.opensymphony.module.sitemesh.html.rules.BodyTagRule;
+import com.opensymphony.module.sitemesh.html.rules.ContentBlockExtractingRule;
+import com.opensymphony.module.sitemesh.html.rules.FramesetRule;
+import com.opensymphony.module.sitemesh.html.rules.HeadExtractingRule;
+import com.opensymphony.module.sitemesh.html.rules.HtmlAttributesRule;
+import com.opensymphony.module.sitemesh.html.rules.MSOfficeDocumentPropertiesRule;
+import com.opensymphony.module.sitemesh.html.rules.MetaTagRule;
+import com.opensymphony.module.sitemesh.html.rules.ParameterExtractingRule;
+import com.opensymphony.module.sitemesh.html.rules.TitleExtractingRule;
+import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 
 import java.io.IOException;
 
