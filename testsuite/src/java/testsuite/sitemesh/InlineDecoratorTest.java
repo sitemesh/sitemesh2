@@ -90,6 +90,10 @@ public class InlineDecoratorTest extends WebTest
         assertEquals("This is a servlet using stream to output", inlineContents.next().getText().toString());
     }
 
+    /**
+     * Note that this fails on Weblogic 7.0 SP4 for the same reason as {@link SimpleDecoratorTest#testStaticPage()}.
+     * @see SimpleDecoratorTest#testStaticPage() for more information
+     */
     public void testIncludedContentFromOutputStreamAndWriterOnStaticPage() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page7.html");

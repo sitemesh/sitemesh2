@@ -14,6 +14,7 @@ import electric.xml.ParseException;
 
 /**
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
+ * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
  */
 public class SimpleDecoratorTest extends WebTest {
 
@@ -45,14 +46,30 @@ public class SimpleDecoratorTest extends WebTest {
 	}
 
     /**
-     * Internationalisation Test
+     * Internationalisation Test - using inline declaration of the page's encoding
      * @throws Exception
      */
-    public void testDocumentWithInternationalizedCharacters() throws Exception {
+    public void testDocumentWithInternationalizedCharactersUsingInlineEncodingDeclaration() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page4.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
 		assertEquals( "\u0126\u0118\u0139\u0139\u0150 world 4", doc.getElementWithId( "mainbody" ).getText().toString() );
+		assertEquals( "footer", doc.getElementWithId( "footer" ).getText().toString() );
+		assertEquals( "MySite", doc.getElementWithId( "header" ).getText().toString() );
+	}
+
+    /**
+     * Internationalisation Test - using the encoding filter to specify the encoding.
+     * <p>
+     * If this test fails, but {@link #testDocumentWithInternationalizedCharactersUsingInlineEncodingDeclaration()} works
+     * then you can still use your i18n'd application with sitemesh, but you need to specify the encoding in each page
+     * @throws Exception
+     */
+    public void testDocumentWithInternationalizedCharactersUsingEncodingFilter() throws Exception {
+		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page5.jsp" );
+		Document doc = getDocument( rs );
+		assertEquals( "[:: MySite ::]", rs.getTitle() );
+		assertEquals( "\u0126\u0118\u0139\u0139\u0150 world 5", doc.getElementWithId( "mainbody" ).getText().toString() );
 		assertEquals( "footer", doc.getElementWithId( "footer" ).getText().toString() );
 		assertEquals( "MySite", doc.getElementWithId( "header" ).getText().toString() );
 	}
@@ -76,7 +93,12 @@ public class SimpleDecoratorTest extends WebTest {
 
     /**
      * Tomcat 5 has problems serving static pages through sitemesh.  See SIM-74 and SIM-82.
-     * This test case is to demonstrate this problem
+     * This test case is to demonstrate this problem.
+     * <p>
+     * Note that this fails on Weblogic 7.0 SP4, as response.setContentType() is never called, even
+     * though the content type is set by the server correctly to be text/html.  If you need this
+     * functionality, you may be able to get around the problem by using a filter yourself to manually
+     * set the content type for '*.html' files.
      */
     public void testStaticPage() throws Exception {
         WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/static.html" );
