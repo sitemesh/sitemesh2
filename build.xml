@@ -10,7 +10,49 @@
         </fileset>
     </path>
 
-    <target name="compile">
+    <target name="pre-compile">
+
+        <!-- Determine if lexer needs regenerating -->
+        <uptodate
+            property="lexer.uptodate"
+            srcfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/lexer.flex"
+            targetfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/Lexer.java"/>
+        <antcall target="jflex"/>
+
+        <!-- Determine if parser needs regenerating -->
+        <uptodate
+            property="parser.uptodate"
+            srcfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/parser.yacc"
+            targetfile="${java.dir}/com/opensymphony/module/sitemesh/parser/html/Parser.java"/>
+        <antcall target="yacc"/>
+
+    </target>
+
+    <target name="jflex" unless="lexer.uptodate">
+        <echo message="Generating HTML lexer using JFlex"/>
+        <java classpath="${lib.dir}/jflex.jar" classname="JFlex.Main" fork="yes">
+            <arg value="-d"/>
+            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/html"/>
+            <arg value="${java.dir}/com/opensymphony/module/sitemesh/parser/html/lexer.flex"/>
+        </java>
+        <delete file="${java.dir}/com/opensymphony/module/sitemesh/parser/html/Lexer.java~"/>
+    </target>
+
+    <target name="yacc" unless="parser.uptodate">
+        <echo message="Generating HTML parser using BYacc/J"/>
+        <exec executable="${yacc.exe}" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true">
+            <arg value="-Jnorun"/>
+            <arg value="-Jnoconstruct"/>
+            <arg value="-Jclass=Parser"/>
+            <arg value="-Jextends=Lexer"/>
+            <arg value="-Jsemantic=String"/>
+            <arg value="-Jsemantic=Value"/>
+            <arg value="-Jpackage=com.opensymphony.module.sitemesh.parser.html"/>
+            <arg value="parser.yacc"/>
+        </exec>
+    </target>
+
+    <target name="compile" depends="pre-compile">
         <mkdir dir="${build.dir}/classes"/>
 
         <javac destdir="${build.dir}/classes"

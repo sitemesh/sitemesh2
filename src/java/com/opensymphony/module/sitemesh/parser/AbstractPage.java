@@ -30,7 +30,7 @@ import java.util.Set;
  * add all the required information.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *
  * @see com.opensymphony.module.sitemesh.Page
  */
@@ -42,7 +42,7 @@ public abstract class AbstractPage implements Page {
     private Map properties = new HashMap();
 
     /** Date of page contents. */
-    char[] pageData = new char[0];
+    protected char[] pageData = new char[0];
 
     /** RequestURI of original Page. */
     private HttpServletRequest request;
