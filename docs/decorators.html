@@ -78,7 +78,7 @@
 2:	 % This is the main decorator for all SOMECOMPANY INTRANET pages.<br>
 3:	 % It includes standard caching, style sheet, header, footer and copyright notice.<br>
 4:	--%&gt;<br>
-5:	&lt;%@ taglib uri="sitemesh-decorator" prefix="decorator" %&gt;<br>
+5:	<b>&lt;%@ taglib uri="sitemesh-decorator" prefix="decorator" %&gt;</b><br>
 6:	&lt;%@ include file="<a href="cache.jsp.txt">/includes/cache.jsp</a>" %&gt;<br>
 7:	&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"&gt;<br>
 8:	&lt;html&gt;<br>
@@ -119,7 +119,7 @@
 </p>
 	<ul>
 		<li>Line <strong>1-4</strong>:<br>An explanation of the decorator. This way different people working on the decorator are quickly up to speed.</li>
-		<li>Line <strong>5</strong>:<br>This is needed for the <code>decorator:</code> tags to work (also needed on all pages that work with inline decorators (<a href="tags.html#page:applyDecorator">page:apply-decorator</a>).</li>
+		<li>Line <strong>5</strong>:<br>This is needed for the <code>decorator:</code> tags to work (also needed on all pages that work with inline decorators (<a href="tags.html#page:applyDecorator">page:applyDecorator</a>).</li>
 		<li>Line <strong>6</strong>:<br>Sets the necessary response headers to let the browser cache the page. Omit this line if your application is real dynamic (changing data).</li>
 		<li>Line <strong>10</strong>:<br>If the requested page doesn't have a title, the default title is used ("INTRANET").</li>
 		<li>Line <strong>15</strong>:<br>The status bar gets a message when the page is loading.</li>
