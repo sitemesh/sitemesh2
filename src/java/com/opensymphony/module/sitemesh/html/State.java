@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class State {
+public final class State {
 
-    private final List rules = new ArrayList();
+    private TagRule[] rules = new TagRule[16]; // List is too slow, according to profiler
+    private int ruleCount = 0;
     private final ArrayList listeners = new ArrayList();
 
     public void addRule(TagRule rule) {
-        rules.add(rule);
+        if (ruleCount == rules.length) {
+            TagRule[] longerArray = new TagRule[rules.length * 2];
+            System.arraycopy(rules, 0, longerArray, 0, ruleCount);
+            rules = longerArray;
+        }
+        rules[ruleCount++] = rule;
     }
 
     public boolean shouldProcessTag(String tagName) {
-        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
-            TagRule tagRule = (TagRule) iterator.next();
-            if (tagRule.shouldProcess(tagName)) {
+        for (int i = 0; i < ruleCount; i++) {
+            if (rules[i].shouldProcess(tagName)) {
                 return true;
             }
         }
@@ -24,10 +29,9 @@ public class State {
     }
 
     public TagRule getRule(String tagName) {
-        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
-            TagRule tagRule = (TagRule) iterator.next();
-            if (tagRule.shouldProcess(tagName)) {
-                return tagRule;
+        for (int i = 0; i < ruleCount; i++) {
+            if (rules[i].shouldProcess(tagName)) {
+                return rules[i];
             }
         }
         return null;
