@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * by all (or most) taglibs.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class AbstractTag extends BodyTagSupport implements RequestConstants {
     protected PageContext pageContext;
@@ -32,7 +32,7 @@ public abstract class AbstractTag extends BodyTagSupport implements RequestConst
     public abstract int doEndTag() throws JspException;
 
     /** Returns SKIP_BODY. */
-    public final int doStartTag() {
+    public int doStartTag() {
         return SKIP_BODY;
     }
 
