@@ -32,7 +32,7 @@
         <pattern>/velocity/velocity.jsp</pattern>
     </decorator>
 
-    <decorator name="freemarker" page="/decorators/freemarker.vm">
+    <decorator name="freemarker" page="/decorators/freemarker.ftl">
         <pattern>/freemarker/freemarker.jsp</pattern>
     </decorator>
 
