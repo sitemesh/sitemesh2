@@ -1,7 +1,7 @@
 package com.opensymphony.module.sitemesh.html;
 
 import com.opensymphony.module.sitemesh.html.util.CharArray;
-import com.opensymphony.module.sitemesh.parser.rules.TagReplaceRule;
+import com.opensymphony.module.sitemesh.html.rules.TagReplaceRule;
 
 import junit.framework.TestCase;
 

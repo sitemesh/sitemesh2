@@ -1,8 +1,7 @@
-package com.opensymphony.module.sitemesh.parser.rules;
+package com.opensymphony.module.sitemesh.html.rules;
 
 import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
 import com.opensymphony.module.sitemesh.html.Tag;
-import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 public class ContentBlockExtractingRule extends BlockExtractingRule {
 

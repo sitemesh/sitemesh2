@@ -1,8 +1,7 @@
-package com.opensymphony.module.sitemesh.parser.rules;
+package com.opensymphony.module.sitemesh.html.rules;
 
 import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
 import com.opensymphony.module.sitemesh.html.Tag;
-import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 /**
  * Extracts the extra properties saved in HTML from MS Office applications (Word and Excel),

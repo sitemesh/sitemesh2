@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.parser;
+package com.opensymphony.module.sitemesh.html.rules;
 
 /**
  * Allows a TagRule to add information to a Page object.

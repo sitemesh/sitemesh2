@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.parser.rules;
+package com.opensymphony.module.sitemesh.html.rules;
 
 import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
