@@ -285,5 +285,20 @@ public class TagTokenizerTest extends TestCase {
         handler.verify();
 
     }
+
+    public void testX() {
+        // expectations
+        handler = new MockTokenHandler() {
+            public void warning(String message, int line, int column) {
+
+            }
+        };
+        handler.expectTag(Tag.OPEN, "a", new String[] {"href", "something-with-a-naughty-quote"});
+        // execute
+        TagTokenizer tokenizer = new TagTokenizer("<a href=\"something-with-a-naughty-quote\"\">");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
 }
 

@@ -62,4 +62,3 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
 
 /* Fallback rule - if nothing else matches. */
 .|\n                    { reportError("Illegal character <"+ yytext() +">", line(), column()); return Parser.TEXT; }
-/* <!--[if gte mso 9]><stuff><![endif]--> */

@@ -229,6 +229,7 @@ class Parser extends Lexer implements Text, Tag {
             parsedTag(type, name, start, position() - start + 1);
         } else {
             reportError("Expected end of tag", line(), column());
+            parsedTag(type, name, start, position() - start + 1);
         }
     }
 
