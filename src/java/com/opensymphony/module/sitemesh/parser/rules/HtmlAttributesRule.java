@@ -9,6 +9,7 @@ public class HtmlAttributesRule extends BasicRule{
     private final HTMLPage page;
 
     public HtmlAttributesRule(HTMLPage page) {
+        super("html");
         this.page = page;
     }
 
@@ -19,4 +20,5 @@ public class HtmlAttributesRule extends BasicRule{
             }
         }
     }
+
 }

@@ -11,6 +11,7 @@ public class ContentBlockExtractingRule extends BlockExtractingRule {
     private String contentBlockId;
 
     public ContentBlockExtractingRule(HTMLPage page) {
+        super(false, "content");
         this.page = page;
     }
 

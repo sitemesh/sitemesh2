@@ -16,6 +16,7 @@ import com.opensymphony.module.sitemesh.parser.rules.HtmlAttributesRule;
 import com.opensymphony.module.sitemesh.parser.rules.MetaTagRule;
 import com.opensymphony.module.sitemesh.parser.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.parser.rules.TitleExtractingRule;
+import com.opensymphony.module.sitemesh.parser.rules.MSOfficeDocumentPropertiesRule;
 
 import java.io.IOException;
 
@@ -33,27 +34,24 @@ public class HTMLPageParser implements PageParser {
     public Page parse(char[] data) throws IOException {
         CharArray head = new CharArray(64);
         CharArray body = new CharArray(4096);
-
         HTMLPage page = new TokenizedHTMLPage(data, body, head);
 
         HTMLProcessor htmlProcessor = new HTMLProcessor(data, body);
-
         State defaultState = htmlProcessor.defaultState();
         State xmlState = new State();
 
-        defaultState.addRule("html", new HtmlAttributesRule(page));
-        defaultState.addRule("head", new HeadExtractingRule(head));
-        defaultState.addRule("meta", new MetaTagRule(page));
-        defaultState.addRule("title", new TitleExtractingRule(page));
-        defaultState.addRule("body", new BodyTagRule(page, body));
-        defaultState.addRule("parameter", new ParameterExtractingRule(page));
-        defaultState.addRule("content", new ContentBlockExtractingRule(page));
-        defaultState.addRule("frame", new FramesetRule(page));
-        defaultState.addRule("frameset", new FramesetRule(page));
-        defaultState.addRule("xml", new StateTransitionRule(xmlState, true));
+        defaultState.addRule(new HtmlAttributesRule(page));
+        defaultState.addRule(new HeadExtractingRule(head));
+        defaultState.addRule(new MetaTagRule(page));
+        defaultState.addRule(new TitleExtractingRule(page));
+        defaultState.addRule(new BodyTagRule(page, body));
+        defaultState.addRule(new ParameterExtractingRule(page));
+        defaultState.addRule(new ContentBlockExtractingRule(page));
+        defaultState.addRule(new FramesetRule(page));
+        defaultState.addRule(new FramesetRule(page));
+        defaultState.addRule(new StateTransitionRule("xml", xmlState, true));
 
-
-        // extended rules
+        xmlState.addRule(new MSOfficeDocumentPropertiesRule(page));
 
         htmlProcessor.process();
 

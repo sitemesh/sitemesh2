@@ -11,6 +11,7 @@ public class BodyTagRule extends BasicRule {
     private final CharArray body;
 
     public BodyTagRule(HTMLPage page, CharArray body) {
+        super("body");
         this.page = page;
         this.body = body;
     }

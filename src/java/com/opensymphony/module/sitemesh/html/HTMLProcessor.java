@@ -19,10 +19,6 @@ public class HTMLProcessor {
         this.body = body;
     }
 
-    public void addRule(String tagName, TagRule rule) {
-        defaultState.addRule(tagName, rule);
-    }
-
     public State defaultState() {
         return defaultState;
     }
@@ -50,6 +46,12 @@ public class HTMLProcessor {
 
             public CharArray popBuffer() {
                 return (CharArray) bufferStack.removeLast();
+            }
+
+            public void mergeBuffer() {
+                CharArray top = (CharArray) bufferStack.getLast();
+                CharArray nextDown = (CharArray) bufferStack.get(bufferStack.size() - 2);
+                nextDown.append(top);
             }
         };
         context.pushBuffer(body);

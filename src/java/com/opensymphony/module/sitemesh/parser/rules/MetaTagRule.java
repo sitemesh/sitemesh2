@@ -9,6 +9,7 @@ public class MetaTagRule extends BasicRule {
     private final HTMLPage page;
 
     public MetaTagRule(HTMLPage page) {
+        super("meta");
         this.page = page;
     }
 

@@ -16,4 +16,7 @@ public class FramesetRule extends BasicRule {
         page.setFrameSet(true);
     }
 
+    public boolean shouldProcess(String name) {
+        return name.toLowerCase().startsWith("frame");
+    }
 }

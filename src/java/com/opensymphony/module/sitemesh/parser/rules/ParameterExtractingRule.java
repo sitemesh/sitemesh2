@@ -9,6 +9,7 @@ public class ParameterExtractingRule extends BasicRule{
     private final HTMLPage page;
 
     public ParameterExtractingRule(HTMLPage page) {
+        super("parameter");
         this.page = page;
     }
 

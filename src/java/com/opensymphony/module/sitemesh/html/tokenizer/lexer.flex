@@ -40,7 +40,6 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
     "<!" [^\[\-] ~">"     { return Parser.TEXT; }
     "<![CDATA[" ~"]]>"  { return Parser.TEXT; }
     "<xmp" ~"</xmp" ~">" { return Parser.TEXT; }
-    "<xml" ~"</xml" ~">" { return Parser.TEXT; }
     "<script" ~"</script" ~">" { return Parser.TEXT; }
     [^<]+               { return Parser.TEXT; }
     "<"                 { yybegin(ELEMENT); return Parser.LT; }

@@ -8,6 +8,7 @@ public class HeadExtractingRule extends BlockExtractingRule {
     private final CharArray head;
 
     public HeadExtractingRule(CharArray head) {
+        super(false, "head");
         this.head = head;
     }
 

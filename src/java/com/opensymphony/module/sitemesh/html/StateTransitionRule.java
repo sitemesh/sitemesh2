@@ -7,7 +7,8 @@ public class StateTransitionRule extends BasicRule {
 
     private State lastState;
 
-    public StateTransitionRule(State newState, boolean includeEnclosingTags) {
+    public StateTransitionRule(String tagName, State newState, boolean includeEnclosingTags) {
+        super(tagName);
         this.newState = newState;
         this.includeEnclosingTags = includeEnclosingTags;
     }
@@ -16,7 +17,7 @@ public class StateTransitionRule extends BasicRule {
         if (tag.getType() == Tag.OPEN) {
             lastState = context.currentState();
             context.changeState(newState);
-            newState.addRule(tag.getName(), this);
+            newState.addRule(this);
         } else if (tag.getType() == Tag.CLOSE && lastState != null) {
             context.changeState(lastState);
             lastState = null;

@@ -11,6 +11,7 @@ public class TitleExtractingRule extends BlockExtractingRule {
     private boolean seenTitle;
 
     public TitleExtractingRule(HTMLPage page) {
+        super(false, "title");
         this.page = page;
     }
 

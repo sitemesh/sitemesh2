@@ -2,21 +2,36 @@ package com.opensymphony.module.sitemesh.html;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 public class State {
 
-    private final Map rules = new HashMap();
+    private final List rules = new ArrayList();
 
-    public void addRule(String tagName, TagRule rule) {
-        rules.put(tagName.toLowerCase(), rule);
+    public void addRule(TagRule rule) {
+        rules.add(rule);
     }
 
     public boolean shouldProcessTag(String tagName) {
-        return rules.containsKey(tagName.toLowerCase());
+        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
+            TagRule tagRule = (TagRule) iterator.next();
+            if (tagRule.shouldProcess(tagName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public TagRule getRule(String tagName) {
-        return (TagRule) rules.get(tagName.toLowerCase());
+        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
+            TagRule tagRule = (TagRule) iterator.next();
+            if (tagRule.shouldProcess(tagName)) {
+                return tagRule;
+            }
+        }
+        return null;
     }
     
 }

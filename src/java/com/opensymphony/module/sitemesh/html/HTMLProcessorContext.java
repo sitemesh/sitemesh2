@@ -10,5 +10,5 @@ public interface HTMLProcessorContext {
     void pushBuffer(CharArray buffer);
     CharArray currentBuffer();
     CharArray popBuffer();
-
+    void mergeBuffer();
 }
