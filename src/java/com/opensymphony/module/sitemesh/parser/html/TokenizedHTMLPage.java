@@ -70,11 +70,11 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
         }
 
         if (inHead && !name.equals("head") && !name.equals("title")) {
-            head.append(tag.getCompleteTag());
+            tag.writeTo(head);
         }
         if (!inHead && !bodyWritten && !name.equals("body") && !name.equals("html")
                 && !name.equals("head") && !name.equals("title") && !name.equals("parameter") && !name.equals("content")) {
-            body.append(tag.getCompleteTag());
+            tag.writeTo(body);
         }
     }
 
@@ -87,10 +87,10 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
         }
 
         if (inHead && !inTitle) {
-            head.append(text.getText());
+            text.writeTo(head);
         }
         if (!inHead && !inTitle && !bodyWritten && contentBlockId == null) {
-            body.append(text.getText());
+            text.writeTo(body);
         }
     }
 

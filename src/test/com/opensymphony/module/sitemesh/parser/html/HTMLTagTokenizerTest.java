@@ -2,8 +2,6 @@ package com.opensymphony.module.sitemesh.parser.html;
 
 import junit.framework.TestCase;
 
-import java.io.StringReader;
-
 public class HTMLTagTokenizerTest extends TestCase {
 
     private MockTokenHandler handler;
@@ -54,7 +52,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testExtractsUnquotedAttributesFromTag() {
         // expectations
-        handler.expectTag(Tag.OPEN, "hello", new String[] {"name", "world", "foo", "boo"});
+        handler.expectTag(Tag.OPEN, "hello", new String[]{"name", "world", "foo", "boo"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<hello name=world foo=boo>");
         tokenizer.start(handler);
@@ -64,7 +62,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testExtractsQuotedAttributesFromTag() {
         // expectations
-        handler.expectTag(Tag.OPEN, "hello", new String[] {"name", "the world", "foo", "boo"});
+        handler.expectTag(Tag.OPEN, "hello", new String[]{"name", "the world", "foo", "boo"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<hello name=\"the world\" foo=\"boo\">");
         tokenizer.start(handler);
@@ -74,7 +72,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testHandlesMixedQuoteTypesInAttributes() {
         // expectations
-        handler.expectTag(Tag.OPEN, "hello", new String[] {"name", "it's good", "foo", "say \"boo\""});
+        handler.expectTag(Tag.OPEN, "hello", new String[]{"name", "it's good", "foo", "say \"boo\""});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<hello name=\"it's good\" foo=\'say \"boo\"'>");
         tokenizer.start(handler);
@@ -84,7 +82,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testHandlesHtmlStyleEmptyAttributes() {
         // expectations
-        handler.expectTag(Tag.OPEN, "hello", new String[] {"isgood", null, "and", null, "stuff", null});
+        handler.expectTag(Tag.OPEN, "hello", new String[]{"isgood", null, "and", null, "stuff", null});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<hello isgood and stuff>");
         tokenizer.start(handler);
@@ -94,9 +92,9 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testSupportsWhitespaceInElements() {
         // expectations
-        handler.expectTag(Tag.OPEN, "hello", new String[] {"somestuff", "good", "foo", null, "x", "long\n string"});
+        handler.expectTag(Tag.OPEN, "hello", new String[]{"somestuff", "good", "foo", null, "x", "long\n string"});
         handler.expectTag(Tag.EMPTY, "empty");
-        handler.expectTag(Tag.OPEN, "HTML", new String[] {"notonnewline", "yo", "newline", "hello", "anotherline", "bye"});
+        handler.expectTag(Tag.OPEN, "HTML", new String[]{"notonnewline", "yo", "newline", "hello", "anotherline", "bye"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(""
                 + "<hello \n somestuff = \ngood \n   foo \nx=\"long\n string\"   >"
@@ -120,7 +118,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
         tokenizer.start(new TokenHandler() {
             public void tag(Tag tag) {
-                assertEquals(originalTag, tag.getCompleteTag());
+                assertEquals(originalTag, tag.getText());
                 called[0] = true;
             }
 
@@ -138,7 +136,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testAllowsSlashInUnquotedAttribute() {
         // expectations
-        handler.expectTag(Tag.OPEN, "something", new String[] { "type", "text/html" });
+        handler.expectTag(Tag.OPEN, "something", new String[]{"type", "text/html"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<something type=text/html>");
         tokenizer.start(handler);
@@ -148,7 +146,7 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testAllowsTrailingQuoteOnAttribute() {
         // expectations
-        handler.expectTag(Tag.OPEN, "something", new String[] { "type", "bl'ah\"" });
+        handler.expectTag(Tag.OPEN, "something", new String[]{"type", "bl'ah\""});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<something type=bl'ah\">");
         tokenizer.start(handler);
@@ -158,15 +156,18 @@ public class HTMLTagTokenizerTest extends TestCase {
 
     public void testAllowsAwkwardCharsInElementAndAttribute() {
         // expectations
-        handler.expectTag(Tag.OPEN, "name:space", new String[] { "foo:bar", "x:y%" });
-        handler.expectTag(Tag.EMPTY, "a_b-c$d", new String[] { "b_b-c$d", "c_b=c$d" });
+        handler.expectTag(Tag.OPEN, "name:space", new String[]{"foo:bar", "x:y%"});
+        handler.expectTag(Tag.EMPTY, "a_b-c$d", new String[]{"b_b-c$d", "c_b=c$d"});
+        handler.expectTag(Tag.OPEN, "a", new String[]{"href", "/exec/obidos/flex-sign-in/ref=pd_nfy_gw_si/026-2634699-7306802?opt=a&page=misc/login/flex-sign-in-secure.html&response=tg/new-for-you/new-for-you/-/main"});
         // execute
         HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(""
                 + "<name:space foo:bar=x:y%>"
-                + "<a_b-c$d b_b-c$d=c_b=c$d />");
+                + "<a_b-c$d b_b-c$d=c_b=c$d />"
+                + "<a href=/exec/obidos/flex-sign-in/ref=pd_nfy_gw_si/026-2634699-7306802?opt=a&page=misc/login/flex-sign-in-secure.html&response=tg/new-for-you/new-for-you/-/main>");
         tokenizer.start(handler);
         // verify
         handler.verify();
+
     }
 
     public void testTreatsXmlXmpCdataScriptAndProcessingInstructionsAsText() {
@@ -191,6 +192,52 @@ public class HTMLTagTokenizerTest extends TestCase {
         // verify
         handler.verify();
     }
+
+    /* TODO
+    public void testTreatsUnterminatedTagAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world");
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
+    public void testTreatsUnterminatedAttributeNameAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world x");
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
+    public void testTreatsUnterminatedQuotedAttributeValueAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world x=\"fff");
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x=\"fff");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
+    public void testTreatsUnterminatedUnquotedAttributeValueAtEofAsText() {
+        // expectations
+        handler.expectText("hello");
+        handler.expectText("<world x=fff");
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("hello<world x=fff");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+    */
 
     public void testIgnoresEvilMalformedPairOfAngleBrackets() {
         // expectations

@@ -22,6 +22,7 @@ package com.opensymphony.module.sitemesh.parser.html;
 %{
     // Additional methods to add to generated Lexer to aid in error reporting.
     protected int position() { return yychar; }
+    protected int length()   { return yy_markedPos - yy_startRead; }
     protected int line()     { return yyline; }
     protected int column()   { return yycolumn; }
     protected abstract void reportError(String message, int line, int column);

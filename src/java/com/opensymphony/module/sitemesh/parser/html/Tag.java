@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh.parser.html;
 
+import com.opensymphony.module.sitemesh.util.CharArray;
+
 /**
  * Tag returned by HTMLTagTokenizer. Allows easy access to element name and attributes.
  *
@@ -18,7 +20,8 @@ public interface Tag {
     /**
      * Get the complete tag in its original form, preserving whitespace.
      */
-    String getCompleteTag();
+    String getText();
+    void writeTo(CharArray out);
 
     /**
      * Name of tag (ie. element name).
@@ -38,5 +41,5 @@ public interface Tag {
     String getAttributeValue(int index);
     String getAttributeValue(String name);
     boolean hasAttribute(String name);
-    
+
 }

@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh.parser.html;
 
+import com.opensymphony.module.sitemesh.util.CharArray;
+
 import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,11 @@ public class HTMLTagTokenizer implements Tag, Text {
 
     private TokenHandler handler;
 
-    private int currentType;
-    private int currentStart;
-    private int currentEnd;
-    private String currentName;
-    private String currentText;
+    private int position;
+    private int length;
+
+    private String name;
+    private int type;
     private List currentAttributes = new ArrayList();
 
     public HTMLTagTokenizer(char[] input) {
@@ -41,26 +43,26 @@ public class HTMLTagTokenizer implements Tag, Text {
         this(input.toCharArray());
     }
 
-    public synchronized void start(TokenHandler handler) {
+    public void start(TokenHandler handler) {
         this.handler = handler;
         Parser parser = new Parser(this, new CharArrayReader(input));
-        parser.yyparse();
-    }
-
-    public String getCompleteTag() {
-        return new String(input, currentStart, currentEnd - currentStart);
+        parser.start();
     }
 
     public String getName() {
-        return currentName;
+        return name;
     }
 
     public int getType() {
-        return currentType;
+        return type;
     }
 
     public String getText() {
-        return currentText;
+        return new String(input, position, length);
+    }
+
+    public void writeTo(CharArray out) {
+        out.append(input, position, length);
     }
 
     public int getAttributeCount() {
@@ -89,29 +91,19 @@ public class HTMLTagTokenizer implements Tag, Text {
         return getAttributeValue(name) != null;
     }
 
-    public void parsedTag(int type, String name, int start, int end) {
-        this.currentType = type;
-        this.currentName = name;
-        this.currentStart = start;
-        this.currentEnd = end;
+    public void parsedText(int position, int length) {
+        this.position = position;
+        this.length = length;
+        handler.text((Text) this);
+    }
+
+    public void parsedTag(int type, String name, int start, int length) {
+        this.type = type;
+        this.name = name;
+        this.position = start;
+        this.length = length;
         handler.tag((Tag) this);
-        this.currentAttributes = null;
-        this.currentName = null;
-        this.currentType = Tag.UNKNOWN;
-        this.currentStart = 0;
-        this.currentEnd = 0;
-    }
-
-    public void parsedText(String text) {
-        this.currentText = text;
-        handler.text((Text) this);
-        this.currentText = null;
-    }
-
-    public void parsedText(int start, int end) {
-        this.currentText = new String(input, start, end - start);
-        handler.text((Text) this);
-        this.currentText = null;
+        currentAttributes = null;
     }
 
     public void parsedAttribute(String name, String value, boolean quoted) {

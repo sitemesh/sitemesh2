@@ -95,24 +95,27 @@ public class CharArray
     *
     * Passing in a <tt>null</tt> CharArray will result in a <tt>NullPointerException</tt>.
     */
-   public CharArray append(CharArray chars) {
-      return append(chars.buffer, chars.size);
+   public CharArray append(CharArray chars)
+   {
+      return append(chars.buffer, 0, chars.size);
    }
 
    /**
     * Appends the supplied characters to the end of the array.
     */
-   public CharArray append(char[] chars) {
-      return append(chars, chars.length);
+   public CharArray append(char[] chars)
+   {
+      return append(chars, 0, chars.length);
    }
 
-   private CharArray append(char[] chars, int length) {
-      int requiredSize = length + size;
-      if (requiredSize >= buffer.length)
-         grow(requiredSize);
-      System.arraycopy(chars, 0, buffer, size, length);
-      size = requiredSize;
-      return this;
+   public CharArray append(char[] chars, int position, int length)
+   {
+       int requiredSize = length + size;
+       if (requiredSize >= buffer.length)
+          grow(requiredSize);
+       System.arraycopy(chars, position, buffer, size, length);
+       size = requiredSize;
+       return this;
    }
 
    /**
@@ -271,4 +274,5 @@ public class CharArray
     {
         size = 0;
     }
+
 }
