@@ -197,6 +197,12 @@ referenced, with an explicit gc call to remove temporary objects) used up 37mb.
 Currently, it uses 25mb (and it's no coincidence that 50k * 250 * 2 bytes per 
 char == 25mb).
 
+- Minor DTD fix.
+
+- Updates to documentation and build process.
+
+- Added ParserGrinder to load test FastPageParser.
+
 --------------------------
 -- Changes from 1.5     --
 --------------------------
