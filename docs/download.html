@@ -27,4 +27,33 @@
     browse the CVS tree <a href="http://sitemesh.dev.java.net/source/browse/sitemesh">here</a>. Instructions for checking
     the code out of CVS are available <a href="http://sitemesh.dev.java.net/servlets/ProjectSource">here</a>.</p>
     </body>
+    
+    <h3>Building</h3>
+    
+    <p>In order to build SiteMesh, you must have the JDK version 1.4 or above, 
+    and Jakarta Ant version 1.4 or above. To obtain and install Jakarta Ant, 
+    visit the <a href="http://ant.apache.org/">Ant website</a>.</p>
+    
+    <p>To build the SiteMesh binaries, change to the sitemesh directory, and type:</p>
+    
+    <blockquote><code><b>ant</b></code></blockquote>
+    
+    <p>If there are any errors, try clearing your classpath and retry.</p>
+    
+	<p>Upon completion, a directory called <code>dist</code> should have been 
+	created which contains <code>sitemesh-{version}.jar</code> (the actual library) and 2 
+	<code>.tld</code> files (tag-library descriptors).</p>
+	
+    <p>Other build targets include:</p>
+
+	<blockquote>
+		<code><b>ant example</b></code><br>
+		Build the sample web-app (<code>dist/sitemesh-example.war</code>).
+	</blockquote>
+		
+	<blockquote>
+		<code><b>ant docs</b></code><br>
+		Build the API JavaDoc and copies the documentation (dir: <code>dist/docs/</code>).
+	</blockquote>
+</body>
 </html>
