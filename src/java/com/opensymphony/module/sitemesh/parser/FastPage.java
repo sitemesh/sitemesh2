@@ -18,7 +18,7 @@ import java.util.Map;
  * HTMLPage implementation produced by FastPageParser.
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public final class FastPage extends AbstractHTMLPage
 {
@@ -36,7 +36,7 @@ public final class FastPage extends AbstractHTMLPage
       addAttributeList("page.", sitemeshProps);
       addAttributeList("body.", bodyProps);
       addAttributeList("meta.", metaProps);
-      addProperty("title.", title);
+      addProperty("title", title);
    }
 
    public void writeHead(Writer out) throws IOException
