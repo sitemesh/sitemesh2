@@ -31,7 +31,7 @@ public class BasicPageTest extends WebTest {
 	 */
 	public void testErrorMessage() throws Exception {
 		try {
-			WebResponse rs = wc.getResponse( baseUrl + "/basic/error-500.jsp" );
+			wc.getResponse( baseUrl + "/basic/error-500.jsp" );
 			fail( "Expected 500" );
 		}
 		catch ( HttpInternalErrorException e ) {
@@ -43,7 +43,7 @@ public class BasicPageTest extends WebTest {
 	 */
 	public void testNotFound() throws Exception {
 		try {
-			WebResponse rs = wc.getResponse( baseUrl + "/basic/dfddgdfvdf.jsp" );
+			wc.getResponse( baseUrl + "/basic/dfddgdfvdf.jsp" );
 			fail( "Expected 404" );
 		}
 		catch ( HttpNotFoundException e ) {
@@ -54,7 +54,18 @@ public class BasicPageTest extends WebTest {
         WebResponse rs = wc.getResponse( baseUrl + "/basic/text.jsp" );
         assertEquals("This is a plain page.", rs.getText().trim());
         assertEquals("text/plain", rs.getContentType());
+    }
 
+    public void testStaticTxtPage() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/basic/text.txt" );
+        assertEquals("text/plain", rs.getContentType());
+        assertEquals("This is a plain page.", rs.getText().trim());
+    }
+
+    public void testPageWithNoContentType() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/basic/text.unknown" );
+        assertEquals("text/plain", rs.getContentType());
+        assertEquals("This is a plain page.", rs.getText().trim());
     }
 
 }
