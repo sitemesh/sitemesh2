@@ -1,9 +1,8 @@
 package com.opensymphony.module.sitemesh.parser.rules;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
-import com.opensymphony.module.sitemesh.html.BasicRule;
-import com.opensymphony.module.sitemesh.html.Tag;
 import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
+import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 /**
  * Extracts the extra properties saved in HTML from MS Office applications (Word and Excel),
@@ -13,10 +12,10 @@ import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
  */
 public class MSOfficeDocumentPropertiesRule extends BlockExtractingRule {
 
-    private final HTMLPage page;
+    private final PageBuilder page;
     private boolean inDocumentProperties;
 
-    public MSOfficeDocumentPropertiesRule(HTMLPage page) {
+    public MSOfficeDocumentPropertiesRule(PageBuilder page) {
         super(true);
         this.page = page;
     }

@@ -1,14 +1,14 @@
 package com.opensymphony.module.sitemesh.parser.rules;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.BasicRule;
 import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 public class MetaTagRule extends BasicRule {
 
-    private final HTMLPage page;
+    private final PageBuilder page;
 
-    public MetaTagRule(HTMLPage page) {
+    public MetaTagRule(PageBuilder page) {
         super("meta");
         this.page = page;
     }

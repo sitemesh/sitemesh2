@@ -22,14 +22,12 @@ import java.io.Writer;
  * abstract methods states below.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *
  * @see com.opensymphony.module.sitemesh.parser.AbstractPage
  * @see com.opensymphony.module.sitemesh.HTMLPage
  */
 public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage {
-
-    private boolean frameSet;
 
     /**
      * Write data of html <code>&lt;head&gt;</code> tag.
@@ -40,10 +38,10 @@ public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage 
     public abstract void writeHead(Writer out) throws IOException;
 
     public boolean isFrameSet() {
-        return frameSet;
+        return isPropertySet("frameset") && getProperty("frameset").equalsIgnoreCase("true");
     }
 
     public void setFrameSet(boolean frameset) {
-        this.frameSet = frameset;
+        addProperty("frameset", "true");
     }
 }

@@ -7,6 +7,10 @@ public class StateTransitionRule extends BasicRule {
 
     private State lastState;
 
+    public StateTransitionRule(String tagName, State newState) {
+        this(tagName, newState, true);
+    }
+
     public StateTransitionRule(String tagName, State newState, boolean includeEnclosingTags) {
         super(tagName);
         this.newState = newState;

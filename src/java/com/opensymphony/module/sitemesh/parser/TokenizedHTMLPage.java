@@ -14,7 +14,7 @@ import java.io.Writer;
  *
  * @author Joe Walnes
  */
-public class TokenizedHTMLPage extends AbstractHTMLPage {
+public class TokenizedHTMLPage extends AbstractHTMLPage implements PageBuilder {
 
     private CharArray body;
     private CharArray head;

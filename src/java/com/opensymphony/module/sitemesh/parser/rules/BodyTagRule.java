@@ -1,16 +1,16 @@
 package com.opensymphony.module.sitemesh.parser.rules;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.BasicRule;
 import com.opensymphony.module.sitemesh.html.Tag;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 public class BodyTagRule extends BasicRule {
 
-    private final HTMLPage page;
+    private final PageBuilder page;
     private final CharArray body;
 
-    public BodyTagRule(HTMLPage page, CharArray body) {
+    public BodyTagRule(PageBuilder page, CharArray body) {
         super("body");
         this.page = page;
         this.body = body;

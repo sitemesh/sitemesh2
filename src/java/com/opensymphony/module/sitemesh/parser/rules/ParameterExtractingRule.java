@@ -1,14 +1,14 @@
 package com.opensymphony.module.sitemesh.parser.rules;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.BasicRule;
 import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 public class ParameterExtractingRule extends BasicRule{
 
-    private final HTMLPage page;
+    private final PageBuilder page;
 
-    public ParameterExtractingRule(HTMLPage page) {
+    public ParameterExtractingRule(PageBuilder page) {
         super("parameter");
         this.page = page;
     }

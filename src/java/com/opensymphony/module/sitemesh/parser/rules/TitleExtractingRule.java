@@ -1,16 +1,16 @@
 package com.opensymphony.module.sitemesh.parser.rules;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.html.BlockExtractingRule;
 import com.opensymphony.module.sitemesh.html.Tag;
+import com.opensymphony.module.sitemesh.parser.PageBuilder;
 
 public class TitleExtractingRule extends BlockExtractingRule {
 
-    private final HTMLPage page;
+    private final PageBuilder page;
 
     private boolean seenTitle;
 
-    public TitleExtractingRule(HTMLPage page) {
+    public TitleExtractingRule(PageBuilder page) {
         super(false, "title");
         this.page = page;
     }
