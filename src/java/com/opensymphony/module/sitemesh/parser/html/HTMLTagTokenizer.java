@@ -69,6 +69,10 @@ public class HTMLTagTokenizer implements Tag, Text {
         return null;
     }
 
+    public boolean hasAttribute(String name) {
+        return getAttributeValue(name) != null;
+    }
+
     public void parsedTag(int type, String name, int start, int end) {
         this.currentType = type;
         this.currentName = name;

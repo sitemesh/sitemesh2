@@ -9,7 +9,7 @@ import java.io.IOException;
  * Builds an HTMLPage object from an HTML document.
  *
  * This is backed by the HTMLTagTokenizer which tokenizes an HTML page into a stream of tags and text.
- * 
+ *
  * @author Joe Walnes
  */
 public class HTMLPageParser implements PageParser {
@@ -39,7 +39,11 @@ public class HTMLPageParser implements PageParser {
                         contentBlockId = null;
                     }
                 } else if (name.equals("meta")) {
-                    result.addProperty("meta." + tag.getAttributeValue("name"), tag.getAttributeValue("content"));
+                    if (tag.hasAttribute("name")) {
+                        result.addProperty("meta." + tag.getAttributeValue("name"), tag.getAttributeValue("content"));
+                    } else if (tag.hasAttribute("http-equiv")) {
+                        result.addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv"), tag.getAttributeValue("content"));
+                    }
                 } else if (name.equals("body")) {
                     if (tag.getType() == Tag.OPEN || tag.getType() == Tag.EMPTY) {
                         for (int i = 0; i < tag.getAttributeCount(); i++) {

@@ -15,4 +15,5 @@ public interface Tag {
     String getAttributeName(int index);
     String getAttributeValue(int index);
     String getAttributeValue(String name);
+    boolean hasAttribute(String name);
 }

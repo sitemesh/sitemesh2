@@ -124,6 +124,16 @@ public class HTMLTagTokenizerTest extends TestCase {
         assertTrue("tag() never called", called[0]);
     }
 
+    public void testAllowsSlashInUnquotedAttribute() {
+        // expectations
+        handler.expectTag(Tag.OPEN, "something", new String[] { "type", "text/html" });
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<something type=text/html>");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
+
     public void testAllowsAwkwardCharsInElementAndAttribute() {
         // expectations
         handler.expectTag(Tag.OPEN, "name:space", new String[] { "foo:bar", "x:y" });

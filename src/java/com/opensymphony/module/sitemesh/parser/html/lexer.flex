@@ -34,7 +34,7 @@ package com.opensymphony.module.sitemesh.parser.html;
 <ELEMENT> {
     "/"                 { return Parser.SLASH; }
     [\n\r\ \t\b\012]+   { return Parser.WHITESPACE; }
-    [^<>=\"'/ ]+         { return Parser.WORD; }
+    [^<>=\"'/ ]+        { return Parser.WORD; }
     "="                 { return Parser.EQUALS; }
     "\"" ~"\""          { return Parser.QUOTED; }
     "'" ~"'"            { return Parser.QUOTED; }

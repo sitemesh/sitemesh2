@@ -5,6 +5,7 @@
 %token SLASH WHITESPACE EQUALS QUOTE
 %token <sval> WORD TEXT QUOTED    /* string contains text */
 %token <ival> LT GT               /* int contains position */
+%type <sval> unquoted
 %%
 
 
@@ -23,10 +24,15 @@ node:
     TEXT                                                          { tokenizer.parsedText($1);           } ;
 
 attributes:
-    attributes WORD whitespace EQUALS whitespace WORD   whitespace { tokenizer.parsedAttribute($2, $6  , false); } | /* a=b   */
-    attributes WORD whitespace EQUALS whitespace QUOTED whitespace { tokenizer.parsedAttribute($2, $6  , true);  } | /* a="b" */
-    attributes WORD whitespace                                     { tokenizer.parsedAttribute($2, null, false); } | /* a     */
+    attributes WORD whitespace EQUALS whitespace unquoted whitespace { tokenizer.parsedAttribute($2, $6  , false); } | /* a=b   */
+    attributes WORD whitespace EQUALS whitespace QUOTED   whitespace { tokenizer.parsedAttribute($2, $6  , true);  } | /* a="b" */
+    attributes WORD whitespace                                       { tokenizer.parsedAttribute($2, null, false); } | /* a     */
     whitespace ;
+
+unquoted:  /* This is needed to deal with the annoying special case <a something=nasty/slash>
+    unquoted WORD  { $$ = $1 + $2; } |
+    unquoted SLASH { $$ = $1 + "/"; } |
+    empty          { $$ = ""; };
 
 whitespace:
     WHITESPACE whitespace |

@@ -165,48 +165,53 @@ public final static short LT=264;
 public final static short GT=265;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
-    0,    0,    1,    1,    1,    1,    1,    3,    3,    3,
-    3,    4,    4,    2,
+    0,    0,    2,    2,    2,    2,    2,    4,    4,    4,
+    4,    1,    1,    1,    5,    5,    3,
 };
 final static short yylen[] = {                            2,
     2,    1,    4,    5,    5,    3,    1,    7,    7,    3,
-    1,    2,    1,    0,
+    1,    2,    2,    1,    2,    1,    0,
 };
 final static short yydefred[] = {                         0,
-    7,    0,    0,    0,    2,    0,    0,    0,   13,    0,
-    1,    0,   12,    0,   11,    6,    0,    0,    0,    3,
-    4,    5,    0,    0,    0,    0,    0,    8,    9,
+    7,    0,    0,    0,    2,    0,    0,    0,   16,    0,
+    1,    0,   15,    0,   11,    6,    0,    0,    0,    3,
+    4,    5,    0,    0,    0,    0,    0,   14,    9,   13,
+   12,    8,
 };
 final static short yydgoto[] = {                          3,
-    4,    9,   14,   15,
+   27,    4,    9,   14,   15,
 };
 final static short yysindex[] = {                      -261,
-    0, -229,    0, -261,    0, -248, -237, -237,    0, -223,
-    0, -237,    0, -245,    0,    0, -247, -221, -237,    0,
-    0,    0, -219, -237, -225, -237, -237,    0,    0,
+    0, -238,    0, -261,    0, -257, -237, -237,    0, -234,
+    0, -237,    0, -228,    0,    0, -247, -218, -237,    0,
+    0,    0, -207, -237, -235, -237, -208,    0,    0,    0,
+    0,    0,
 };
-final static short yyrindex[] = {                        43,
-    0, -220,    0,   43,    0,    0, -255, -238,    0,    0,
-    0, -230,    0,    0,    0,    0,    0,    0, -250,    0,
-    0,    0, -231, -222,    0, -238, -238,    0,    0,
+final static short yyrindex[] = {                        51,
+    0, -211,    0,   51,    0,    0, -250, -219,    0,    0,
+    0, -220,    0,    0,    0,    0,    0,    0, -249,    0,
+    0,    0, -217, -231, -222, -219, -211,    0,    0,    0,
+    0,    0,
 };
-final static short yygindex[] = {                        42,
-    0,   33,   35,   -2,
+final static short yygindex[] = {                        52,
+    0,    0,    2,   43,   -2,
 };
-final static int YYTABLESIZE=47;
+final static int YYTABLESIZE=56;
 final static short yytable[] = {                         10,
-    1,   14,    2,   14,   13,   14,   14,   14,   14,   14,
-   14,   18,   12,   19,   14,   19,   23,   21,   14,   20,
-    7,   25,   14,   28,   29,   10,   14,    6,    7,   10,
-   14,    8,    5,   10,   14,   26,    5,   27,   14,   24,
-   14,   16,   14,   22,   14,   11,   17,
+    1,    5,    2,   12,   13,    5,   17,   17,   17,   17,
+   17,   17,   17,   19,   17,   17,   23,   21,    6,    7,
+    7,   25,    8,   29,   32,   17,   28,   26,   18,   17,
+   16,   17,   19,   17,   17,   17,   20,   17,   17,   10,
+   17,   17,   17,   10,   17,   17,   22,   10,   30,    7,
+   17,   24,   31,   17,   17,   11,
 };
 final static short yycheck[] = {                          2,
-  262,  257,  264,  259,    7,  261,  257,  263,  259,  265,
-  261,  257,  261,  261,  265,  261,   19,  265,  257,  265,
-  258,   24,  261,   26,   27,  257,  265,  257,  258,  261,
-  261,  261,    0,  265,  265,  261,    4,  263,  261,  259,
-  263,  265,    0,  265,  265,    4,   12,
+  262,    0,  264,  261,    7,    4,  257,  257,  259,  259,
+  261,  261,  263,  261,  265,  265,   19,  265,  257,  258,
+  258,   24,  261,   26,   27,  257,   25,  263,  257,  261,
+  265,  263,  261,  265,  257,  258,  265,  257,  261,  257,
+  261,  261,  265,  261,  265,  265,  265,  265,  257,  258,
+    0,  259,  261,  265,   12,    4,
 };
 final static short YYFINAL=3;
 final static short YYMAXTOKEN=265;
@@ -239,16 +244,19 @@ final static String yyrule[] = {
 "node : LT WORD attributes SLASH GT",
 "node : LT whitespace GT",
 "node : TEXT",
-"attributes : attributes WORD whitespace EQUALS whitespace WORD whitespace",
+"attributes : attributes WORD whitespace EQUALS whitespace unquoted whitespace",
 "attributes : attributes WORD whitespace EQUALS whitespace QUOTED whitespace",
 "attributes : attributes WORD whitespace",
 "attributes : whitespace",
+"unquoted : unquoted WORD",
+"unquoted : unquoted SLASH",
+"unquoted : empty",
 "whitespace : WHITESPACE whitespace",
 "whitespace : empty",
 "empty :",
 };
 
-//#line 42 "parser.yacc"
+//#line 49 "parser.yacc"
 private HTMLTagTokenizer tokenizer;
 private int start;
 private int end;
@@ -280,7 +288,7 @@ private class Value {
     String sval;
     int ival;
 }
-//#line 229 "Parser.java"
+//#line 237 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -433,38 +441,50 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 3:
-//#line 19 "parser.yacc"
+//#line 20 "parser.yacc"
 { tokenizer.parsedTag(Tag.OPEN,  val_peek(2).sval, val_peek(3).ival, val_peek(0).ival + 1); }
 break;
 case 4:
-//#line 20 "parser.yacc"
+//#line 21 "parser.yacc"
 { tokenizer.parsedTag(Tag.CLOSE, val_peek(2).sval, val_peek(4).ival, val_peek(0).ival + 1); }
 break;
 case 5:
-//#line 21 "parser.yacc"
+//#line 22 "parser.yacc"
 { tokenizer.parsedTag(Tag.EMPTY, val_peek(3).sval, val_peek(4).ival, val_peek(0).ival + 1); }
 break;
 case 6:
-//#line 22 "parser.yacc"
+//#line 23 "parser.yacc"
 { }
 break;
 case 7:
-//#line 23 "parser.yacc"
+//#line 24 "parser.yacc"
 { tokenizer.parsedText(val_peek(0).sval);           }
 break;
 case 8:
-//#line 26 "parser.yacc"
+//#line 27 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(5).sval, val_peek(1).sval  , false); }
 break;
 case 9:
-//#line 27 "parser.yacc"
+//#line 28 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(5).sval, val_peek(1).sval  , true);  }
 break;
 case 10:
-//#line 28 "parser.yacc"
+//#line 29 "parser.yacc"
 { tokenizer.parsedAttribute(val_peek(1).sval, null, false); }
 break;
-//#line 408 "Parser.java"
+case 12:
+//#line 33 "parser.yacc"
+{ yyval.sval = val_peek(1).sval + val_peek(0).sval; }
+break;
+case 13:
+//#line 34 "parser.yacc"
+{ yyval.sval = val_peek(1).sval + "/"; }
+break;
+case 14:
+//#line 35 "parser.yacc"
+{ yyval.sval = ""; }
+break;
+//#line 428 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
