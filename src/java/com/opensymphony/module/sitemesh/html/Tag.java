@@ -5,8 +5,11 @@ import com.opensymphony.module.sitemesh.html.util.CharArray;
 /**
  * Tag returned by HTMLTagTokenizer. Allows easy access to element name and attributes.
  *
+ * This interface supports read-only operations on the tag. To change a tag, use {@link CustomTag}.
+ *
  * @see com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler
  * @see com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer
+ * @see CustomTag
  *
  * @author Joe Walnes
  */

@@ -41,4 +41,27 @@ public class HTMLProcessorTest extends TestCase {
         processor.process();
         assertEquals("<hello><strong>world</strong></hello>", out.toString());
     }
+
+    public void testAllowsRulesToModifyAttributes() throws IOException {
+        Reader in = new StringReader("<hello><a href=\"modify-me\">world</a></hello>");
+        Writer out = new StringWriter();
+
+        HTMLProcessor processor = new HTMLProcessor(in, out);
+        processor.defaultState().addRule(new BasicRule("a") {
+            public void process(Tag tag) {
+                CustomTag customTag = new CustomTag(tag);
+                String href = customTag.getAttributeValue("href", false);
+                if (href != null) {
+                    href = href.toUpperCase();
+                    customTag.setAttributeValue("href", true, href);
+                }
+                customTag.writeTo(currentBuffer());
+            }
+        });
+
+        processor.process();
+        assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", out.toString());
+    }
+
+
 }
