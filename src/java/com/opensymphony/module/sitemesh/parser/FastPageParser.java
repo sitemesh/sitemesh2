@@ -33,7 +33,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -217,7 +217,6 @@ public final class FastPageParser implements PageParser
                      laststate = state;
                      writeTag(state, laststate, hide, _head, _buffer, _body);
                      state = TAG_STATE_XMP;
-                     hide = true; // Not sure if this line should be here or not? The old FastPageParser had some dodgy code...
                      break;
                   case TITLE_HASH:
                      if (doneTitle)
