@@ -28,6 +28,7 @@
 
     <target name="test" depends="compile" description="Run all unit tests">
         <mkdir dir="${build.dir}/test-classes"/>
+        <mkdir dir="${build.dir}/test-results"/>
         <javac srcdir="${test.dir}" destdir="${build.dir}/classes" classpathref="cp" classpath="${build.dir}/classes"/>
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="cp"/>
         <echo message="Running unit tests..."/>
@@ -38,7 +39,8 @@
                 <pathelement location="${build.dir}/test-classes"/>
             </classpath>
             <formatter type="brief" usefile="no"/>
-            <batchtest>
+            <formatter type="xml"/>
+            <batchtest todir="${build.dir}/test-results">
                 <fileset dir="${test.dir}">
                     <include name="**/*Test.java"/>
                 </fileset>
