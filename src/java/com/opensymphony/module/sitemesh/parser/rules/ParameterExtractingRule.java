@@ -14,6 +14,6 @@ public class ParameterExtractingRule extends BasicRule{
     }
 
     public void process(Tag tag) {
-        page.addProperty("page." + tag.getAttributeValue("name"), tag.getAttributeValue("value"));
+        page.addProperty("page." + tag.getAttributeValue("name", false), tag.getAttributeValue("value", false));
     }
 }

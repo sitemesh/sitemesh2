@@ -360,6 +360,21 @@ class Parser extends Lexer {
             return attributes == null ? 0 : attributes.size() / 2;
         }
 
+        public int getAttributeIndex(String name, boolean caseSensitive) {
+            // todo: optimize
+            if (attributes == null) {
+                return -1;
+            }
+            final int len = attributes.size();
+            for (int i = 0; i < len; i+=2) {
+                final String current = (String) attributes.get(i);
+                if (caseSensitive ? name.equals(current) : name.equalsIgnoreCase(current)) {
+                    return i / 2;
+                }
+            }
+            return -1;
+        }
+
         public String getAttributeName(int index) {
             return (String) attributes.get(index * 2);
         }
@@ -368,22 +383,12 @@ class Parser extends Lexer {
             return (String) attributes.get(index * 2 + 1);
         }
 
-        public String getAttributeValue(String name) {
-            // todo: optimize
-            if (attributes == null) {
-                return null;
-            }
-            final int len = attributes.size();
-            for (int i = 0; i < len; i+=2) {
-                if (name.equalsIgnoreCase((String) attributes.get(i))) {
-                    return (String) attributes.get(i + 1);
-                }
-            }
-            return null;
+        public String getAttributeValue(String name, boolean caseSensitive) {
+            return (String) attributes.get(getAttributeIndex(name, caseSensitive) * 2 + 1);
         }
 
-        public boolean hasAttribute(String name) {
-            return getAttributeValue(name) != null;
+        public boolean hasAttribute(String name, boolean caseSensitive) {
+            return getAttributeIndex(name, caseSensitive) > -1;
         }
 
     }

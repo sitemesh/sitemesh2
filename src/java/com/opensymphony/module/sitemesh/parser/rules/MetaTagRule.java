@@ -14,10 +14,10 @@ public class MetaTagRule extends BasicRule {
     }
 
     public void process(Tag tag) {
-        if (tag.hasAttribute("name")) {
-            page.addProperty("meta." + tag.getAttributeValue("name"), tag.getAttributeValue("content"));
-        } else if (tag.hasAttribute("http-equiv")) {
-            page.addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv"), tag.getAttributeValue("content"));
+        if (tag.hasAttribute("name", false)) {
+            page.addProperty("meta." + tag.getAttributeValue("name", false), tag.getAttributeValue("content", false));
+        } else if (tag.hasAttribute("http-equiv", false)) {
+            page.addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv", false), tag.getAttributeValue("content", false));
         }
         tag.writeTo(context.currentBuffer());
     }

@@ -16,7 +16,7 @@ public class ContentBlockExtractingRule extends BlockExtractingRule {
     }
 
     protected void start(Tag tag) {
-        contentBlockId = tag.getAttributeValue("tag");
+        contentBlockId = tag.getAttributeValue("tag", false);
     }
 
     protected void end(Tag tag) {
