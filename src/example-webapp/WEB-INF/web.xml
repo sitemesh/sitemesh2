@@ -3,8 +3,6 @@
 
 <web-app>
 
-    <!-- Start of SiteMesh stuff -->
-
     <filter>
         <filter-name>sitemesh</filter-name>
         <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
@@ -14,7 +12,5 @@
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <!-- End of SiteMesh stuff -->
 
 </web-app>
