@@ -74,6 +74,7 @@ public class SiteMeshTestSuite {
 
     private static void addTests(TestSuite serverSuite) {
         serverSuite.addTestSuite(BasicPageTest.class);
+        serverSuite.addTestSuite(ExcludesPatternTest.class);
         serverSuite.addTestSuite(WelcomePageTest.class);
         serverSuite.addTestSuite(ContentLengthTest.class);
         serverSuite.addTestSuite(SimpleDecoratorTest.class);

@@ -2,6 +2,7 @@ package testsuite.sitemesh;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 
 import org.xml.sax.SAXException;
 
@@ -75,23 +76,6 @@ public class SimpleDecoratorTest extends WebTest {
 	}
 
     /**
-     * Test the exclude patterns in sitemesh.xml
-     */
-    public void testExcludePattern() throws Exception {
-        WebResponse rs = wc.getResponse(baseUrl + "/simple/exclude.jsp");
-        Document doc = getDocument(rs);
-        assertEquals("Undecorated Page", rs.getTitle());
-        assertNull(doc.getElementWithId("mainbody"));
-        assertNull(doc.getElementWithId("footer"));
-
-        rs = wc.getResponse(baseUrl + "/simple/exclude/page1.jsp");
-        doc = getDocument(rs);
-        assertEquals("Undecorated Page", rs.getTitle());
-        assertNull(doc.getElementWithId("mainbody"));
-        assertNull(doc.getElementWithId("footer"));
-    }
-
-    /**
      * Tomcat 5 has problems serving static pages through sitemesh.  See SIM-74 and SIM-82.
      * This test case is to demonstrate this problem.
      * <p>
@@ -107,6 +91,21 @@ public class SimpleDecoratorTest extends WebTest {
 		assertEquals( "Hello world", doc.getElementWithId( "p" ).getText().toString() );
 		assertEquals( "footer", doc.getElementWithId( "footer" ).getText().toString() );
 		assertEquals( "Simple page", doc.getElementWithId( "header" ).getText().toString() );
+    }
+
+    public void testContentTypeSetCorrectly() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/DifferentWaysOfSpecifyingContentType?approach=setContentType" );
+		assertEquals( "[:: content-type ::]", rs.getTitle() );
+    }
+
+    public void testContentTypeSetUsingAddHeader() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/DifferentWaysOfSpecifyingContentType?approach=addHeader" );
+		assertEquals( "[:: content-type ::]", rs.getTitle() );
+    }
+
+    public void testContentTypeSetUsingSetHeader() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/DifferentWaysOfSpecifyingContentType?approach=setHeader" );
+		assertEquals( "[:: content-type ::]", rs.getTitle() );
     }
 
 }

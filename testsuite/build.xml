@@ -35,6 +35,7 @@
             </fileset>
         </copy>
 
+        <touch file="dist/webapp/WEB-INF/web.xml"/> 
         <jar jarfile="dist/sitemesh-testsuite.war" basedir="dist/webapp"/>
     </target>
 

@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
@@ -77,19 +77,9 @@ public class PageFilter implements Filter, RequestConstants {
     }
 
     private String extractRequestPath(HttpServletRequest request) {
-        String thisPath = request.getServletPath();
-
-        // getServletPath() returns null unless the mapping corresponds to a servlet
-        if (thisPath == null) {
-            String requestURI = request.getRequestURI();
-            if (request.getPathInfo() != null) {
-                // strip the pathInfo from the requestURI
-                thisPath = requestURI.substring(0, requestURI.indexOf(request.getPathInfo()));
-            } else {
-                thisPath = requestURI;
-            }
-        }
-        return thisPath;
+        String servletPath = request.getServletPath();
+        String pathInfo = request.getPathInfo();
+        return (servletPath == null ? "" : servletPath) + (pathInfo == null ? "" : pathInfo);
     }
 
     /** Set FilterConfig, and get instance of {@link com.opensymphony.module.sitemesh.DecoratorMapper}. */

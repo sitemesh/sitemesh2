@@ -83,6 +83,16 @@
         <servlet-class>testsuite.servlets.OutputServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>DifferentWaysOfSpecifyingContentType</servlet-name>
+        <servlet-class>testsuite.servlets.DifferentWaysOfSpecifyingContentType</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>StandardServlet</servlet-name>
+        <servlet-class>testsuite.servlets.StandardServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
         <servlet-name>sitemesh-velocity</servlet-name>
         <url-pattern>*.vm</url-pattern>
@@ -95,7 +105,17 @@
 
     <servlet-mapping>
         <servlet-name>outputservlet</servlet-name>
-        <url-pattern>/outputservlet</url-pattern>
+        <url-pattern>outputservlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DifferentWaysOfSpecifyingContentType</servlet-name>
+        <url-pattern>/simple/DifferentWaysOfSpecifyingContentType</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StandardServlet</servlet-name>
+        <url-pattern>/simple/exclude-partial/*</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

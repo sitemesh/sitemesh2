@@ -3,6 +3,7 @@
     <excludes>
         <pattern>/simple/exclude.jsp</pattern>
         <pattern>/simple/exclude/*</pattern>
+        <pattern>/simple/exclude-partial/excluded</pattern>
     </excludes>
 
     <decorator name="simple" page="/decorators/simple.jsp">

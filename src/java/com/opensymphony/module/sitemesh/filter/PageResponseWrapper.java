@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -134,8 +134,19 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     /** Prevent content-length being set if page is parseable. */
     public void setHeader(String name, String value) {
-        if (!parseablePage || !name.toLowerCase().equals("content-length")) {
+        if (name.toLowerCase().equals("content-type")) { // ensure ContentType is always set through setContentType()
+            setContentType(value);
+        } else if (!parseablePage || !name.toLowerCase().equals("content-length")) {
             super.setHeader(name, value);
+        }
+    }
+
+    /** Prevent content-length being set if page is parseable. */
+    public void addHeader(String name, String value) {
+        if (name.toLowerCase().equals("content-type")) { // ensure ContentType is always set through setContentType()
+            setContentType(value);
+        } else if (!parseablePage || !name.toLowerCase().equals("content-length")) {
+            super.addHeader(name, value);
         }
     }
 
