@@ -1,11 +1,13 @@
 package com.opensymphony.module.sitemesh.parser.html;
 
 /**
- * 
+ *
  * @author Joe Walnes
  */
 public interface TokenHandler {
 
+    boolean caresAboutTag(String name);
+    
     /**
      * Called when tokenizer encounters an HTML tag (open, close or empty).
      */

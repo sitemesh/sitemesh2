@@ -123,4 +123,7 @@ public class HTMLTagTokenizer implements Tag, Text {
         handler.error(message, line, column);
     }
 
+    public boolean caresAboutTag(String name) {
+        return handler.caresAboutTag(name);
+    }
 }

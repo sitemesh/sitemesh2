@@ -117,6 +117,11 @@ public class HTMLTagTokenizerTest extends TestCase {
         final boolean[] called = {false}; // has to be final array so anonymous inner class can change the value.
 
         tokenizer.start(new TokenHandler() {
+
+            public boolean caresAboutTag(String name) {
+                return true;
+            }
+
             public void tag(Tag tag) {
                 assertEquals(originalTag, tag.getText());
                 called[0] = true;
@@ -249,5 +254,23 @@ public class HTMLTagTokenizerTest extends TestCase {
         handler.verify();
     }
 
+    public void testDoesNotTryToParseTagsUnlessTheHandlerCares() {
+        // setup
+        handler = new MockTokenHandler() {
+            public boolean caresAboutTag(String name) {
+                return name.equals("good");
+            }
+        };
+        // expectations
+        handler.expectTag(Tag.OPEN, "good");
+        handler.expectText("<bad>");
+        handler.expectTag(Tag.CLOSE, "good");
+        handler.expectText("</bad>");
+        // execute
+        HTMLTagTokenizer tokenizer = new HTMLTagTokenizer("<good><bad></good></bad>");
+        tokenizer.start(handler);
+        // verify
+        handler.verify();
+    }
 }
 

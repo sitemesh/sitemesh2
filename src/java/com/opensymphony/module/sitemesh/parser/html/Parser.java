@@ -124,38 +124,55 @@ public class Parser extends Lexer {
             // Token WORD - name of tag
             name = text();
 
-            while (true) {
-                skipWhiteSpace();
-                token = takeNextToken();
-                pushBack(token);
-
-                if (token == Parser.SLASH || token == Parser.GT) {
-                    break; // no more attributes here
-                } else if (token == Parser.WORD) {
-                    parseAttribute(); // start of an attribute
-                } else {
-                    fatal("XXY");
-                }
-            }
-
-            token = takeNextToken();
-            if (token == Parser.SLASH) {
-                // Token "/" - it's an empty tag
-                type = Tag.EMPTY;
-                token = takeNextToken();
-            }
-
-            if (token == Parser.GT) {
-                // Token ">" - YAY! end of tag.. process it!
-                tokenizer.parsedTag(type, name, start, position() + 1 - start);
+            if (tokenizer.caresAboutTag(name)) {
+                parseFullTag(type, name, start);
             } else {
-                fatal("Expected end of tag");
+
+                // don't care about this tag... scan to the end and treat it as text
+                while(true)  {
+                    token = takeNextToken();
+                    if (token == Parser.GT) {
+                        tokenizer.parsedText(start, position() - start + 1);
+                        break;
+                    }
+                }
             }
 
         } else if (token == Parser.GT) {
             // Token ">" - an illegal <> or <  > tag. Ignore
         } else {
             fatal("Could not recognise tag"); // TODO: this should be recoverable
+        }
+    }
+
+    private void parseFullTag(int type, String name, int start) throws IOException {
+        int token;
+        while (true) {
+            skipWhiteSpace();
+            token = takeNextToken();
+            pushBack(token);
+
+            if (token == Parser.SLASH || token == Parser.GT) {
+                break; // no more attributes here
+            } else if (token == Parser.WORD) {
+                parseAttribute(); // start of an attribute
+            } else {
+                fatal("XXY");
+            }
+        }
+
+        token = takeNextToken();
+        if (token == Parser.SLASH) {
+            // Token "/" - it's an empty tag
+            type = Tag.EMPTY;
+            token = takeNextToken();
+        }
+
+        if (token == Parser.GT) {
+            // Token ">" - YAY! end of tag.. process it!
+            tokenizer.parsedTag(type, name, start, position() - start + 1);
+        } else {
+            fatal("Expected end of tag");
         }
     }
 

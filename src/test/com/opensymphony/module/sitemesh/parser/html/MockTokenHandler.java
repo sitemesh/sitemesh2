@@ -23,6 +23,10 @@ public class MockTokenHandler implements TokenHandler {
         expected.append(' ').append(typeAsString(type)).append("}}");
     }
 
+    public boolean caresAboutTag(String name) {
+        return true;
+    }
+
     public void tag(Tag tag) {
         actual.append("{{TAG : ").append(tag.getName());
         for (int i = 0; i < tag.getAttributeCount(); i++) {

@@ -34,6 +34,17 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements TokenHandler 
 
     // ****** Methods to process incoming tags and text (required to implement TokenHandler) ******
 
+    public boolean caresAboutTag(String name) {
+        name = name.toLowerCase();
+        return name.equals("title")
+                || name.equals("html")
+                || name.equals("head")
+                || name.equals("body")
+                || name.equals("meta")
+                || name.equals("content")
+                || name.equals("parameter");
+    }
+
     public void tag(Tag tag) {
         String name = tag.getName().toLowerCase();
         if (name.equals("title")) {
