@@ -1,6 +1,6 @@
-***********************************
-** OpenSymphony SiteMesh 2.0     **
-***********************************
+*************************************
+** OpenSymphony SiteMesh 2.0.1     **
+*************************************
 
 SiteMesh is a web-page layout system that can be used to abstract common look
 and feel from the functionality of a web-application and to assemble large
@@ -182,6 +182,20 @@ compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
 PQ80592 to your WebSphere installation.
 
 Please report bugs here: http://jira.opensymphony.com
+
+--------------------------
+-- Changes from 2.0     --
+--------------------------
+
+Chris Miller has been working like a demon on FastPageParser, and it's now as 
+fast and efficient as it can get. To give you a rough idea, 2.0 is about 3 times 
+faster than 1.7. 2.0.1 is about 5 times faster than 1.7.
+
+With regards to memory usage, it's basically been knocked down to be negligible. 
+Previously (1.7), a 50k page parsed 250 times (separate instances strongly 
+referenced, with an explicit gc call to remove temporary objects) used up 37mb. 
+Currently, it uses 25mb (and it's no coincidence that 50k * 250 * 2 bytes per 
+char == 25mb).
 
 --------------------------
 -- Changes from 1.5     --
