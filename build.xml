@@ -53,24 +53,24 @@
     </target>
 
     <target name="yacc" unless="parser.uptodate">
-        <property name="yacc.args" value="-Jnorun -Jnoconstruct -Jclass=Parser -Jextends=Lexer -Jsemantic=String -Jsemantic=Value -Jpackage=com.opensymphony.module.sitemesh.parser.html parser.yacc" />
+        <property name="yacc.args" value="-Jnorun -Jnoconstruct -Jclass=Parser -Jextends=Lexer -Jsemantic=Value -Jpackage=com.opensymphony.module.sitemesh.parser.html parser.yacc" />
         <echo message="Generating HTML parser using BYacc/J"/>
-        <exec vmlauncher="false" executable="lib/yacc.exe" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
-        os="Windows NT,Windows 98,Windows 95,Windows 2000"
+        <exec executable="${lib.dir}/yacc.exe" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        os="Windows NT,Windows 98,Windows 95,Windows 2000,Windows XP"
         >
             <arg line="${yacc.args}"/>
         </exec>
-        <exec vmlauncher="false" executable="${lib.dir}/yacc.solaris" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        <exec executable="${lib.dir}/yacc.solaris" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
         os="SunOS,Solaris"
         >
             <arg line="${yacc.args}"/>
         </exec>
-        <exec vmlauncher="false" executable="${lib.dir}/yacc.linux" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        <exec executable="${lib.dir}/yacc.linux" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
         os="Linux"
         >
             <arg line="${yacc.args}"/>
         </exec>
-        <exec vmlauncher="false" executable="${lib.dir}/yacc.osx" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
+        <exec executable="${lib.dir}/yacc.osx" dir="${java.dir}/com/opensymphony/module/sitemesh/parser/html" failonerror="true"
         os="Mac OS X"
         >
             <arg line="${yacc.args}"/>
