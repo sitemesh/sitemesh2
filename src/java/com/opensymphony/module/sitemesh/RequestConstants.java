@@ -14,7 +14,7 @@ package com.opensymphony.module.sitemesh;
  * to represent various objects passed between pages.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.filter.PageFilter
  * @see com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag
@@ -26,25 +26,31 @@ public interface RequestConstants {
      * Marker that stores a Boolean to state whether the decorator filter
      * has been applied yet to this request.
      */
-    static final String FILTER_APPLIED = "__sitemesh__filterapplied";
+    String FILTER_APPLIED = "__sitemesh__filterapplied";
 
     /**
      * Stores {@link com.opensymphony.module.sitemesh.Page} instance for parsed page to be
      * passed across to {@link com.opensymphony.module.sitemesh.Decorator}.
      */
-    static final String PAGE           = "__sitemesh__page";
+    String PAGE           = "__sitemesh__page";
 
     /**
      * The name (String) of the Decorator to suggest using. This is set by
      * the {@link com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag}
      * and used by the corresponding {@link com.opensymphony.module.sitemesh.DecoratorMapper}.
      */
-    static final String DECORATOR      = "__sitemesh__decorator";
+    String DECORATOR      = "__sitemesh__decorator";
 
     /**
      * Marker that stores a Boolean (under the session) to state whether the current
      * session is the session of a web search engine spider. This is set and used by the
      * {@link com.opensymphony.module.sitemesh.mapper.RobotDecoratorMapper}.
      */
-    static final String ROBOT          = "__sitemesh__robot";
+    String ROBOT          = "__sitemesh__robot";
+
+    /**
+     * Whether the current request should use a binary stream (as opposed to writer).
+     * Used by {@link com.opensymphony.module.sitemesh.filter.PageFilter}.
+     */
+    String USING_STREAM   = "__sitemesh__using_stream";
 }

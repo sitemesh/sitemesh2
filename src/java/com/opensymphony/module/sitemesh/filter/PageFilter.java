@@ -23,14 +23,11 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class PageFilter implements Filter, RequestConstants {
     private FilterConfig filterConfig = null;
     private Factory factory = null;
-
-    private boolean useWriter = false;
-    private boolean useStream = false;
 
     /**
      * Main method of the Filter.
@@ -73,7 +70,7 @@ public class PageFilter implements Filter, RequestConstants {
                 // if we got here, an exception occured or the decorator was null,
                 // what we don't want is an exception printed to the user, so
                 // we write the original page
-                writeOriginal(response, page);
+                writeOriginal(request, response, page);
                 page = null;
             }
         }
@@ -149,8 +146,7 @@ public class PageFilter implements Filter, RequestConstants {
                 // parse the page
                 result = pageResponse.getPage();
             }
-            this.useStream = pageResponse.isUsingStream();  //this is ugly - but I just want to see if it works.
-            this.useWriter = pageResponse.isUsingWriter();
+            request.setAttribute(USING_STREAM, Boolean.valueOf(pageResponse.isUsingStream()));
             pageResponse.closeWriter();
             return result;
         }
@@ -206,9 +202,9 @@ public class PageFilter implements Filter, RequestConstants {
     }
 
     /** Write the original page data to the response. */
-    private void writeOriginal(HttpServletResponse response, Page page) throws IOException {
+    private void writeOriginal(HttpServletRequest request, HttpServletResponse response, Page page) throws IOException {
         response.setContentLength(page.getContentLength());
-        if (useStream)
+        if (request.getAttribute(USING_STREAM).equals(Boolean.TRUE))
         {
             PrintWriter writer = new PrintWriter(response.getOutputStream());
             page.writePage(writer);
