@@ -105,7 +105,7 @@ public class HTMLPageParserTest extends TestCase {
         props.load(input);
 
         String[] pageKeys = page.getPropertyKeys();
-        assertEquals(file.getName() + " : Unexpected number of page properties", pageKeys.length, props.size());
+        assertEquals(file.getName() + " : Unexpected number of page properties [" + join(pageKeys) + "]", pageKeys.length, props.size());
 
         for (int i = 0; i < pageKeys.length; i++) {
             String pageKey = pageKeys[i];
@@ -113,6 +113,17 @@ public class HTMLPageParserTest extends TestCase {
             String pageValue = page.getProperty(pageKey);
             assertEquals(file.getName(), pageValue, blockValue);
         }
+    }
+
+    private String join(String[] values) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < values.length; i++) {
+            if (i > 0) {
+                result.append(',');
+            }
+            result.append(values[i]);
+        }
+        return result.toString();
     }
 
     //-------------------------------------------------
