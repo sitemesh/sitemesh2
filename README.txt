@@ -34,13 +34,13 @@ specification. Versions prior to 2.3 are not enough.
 
 Currently known containers that support this and SiteMesh was tested with:
 
-* Orion 1.5.4 and up        - http://www.orionserver.com
-* Resin 2.1.11              - http://www.caucho.com
-* Tomcat 4.0 and 4.1        - http://jakarta.apache.org/tomcat
-* WebLogic 7.0 SP2 and 8.1  - http://www.bea.com
-* WebSphere 5.0             - http://www.ibm.com
-* Oracle OC4J               - http://www.oracle.com
-* Jetty 4                   - http://jetty.mortbay.org
+* Orion 1.5.4 and up                    - http://www.orionserver.com
+* Resin 2.1.11                          - http://www.caucho.com
+* Tomcat 4.0 and 4.1                    - http://jakarta.apache.org/tomcat
+* WebLogic 7.0 SP2, 8.1 and 8.1 SP2     - http://www.bea.com
+* WebSphere 5.0                         - http://www.ibm.com
+* Oracle OC4J                           - http://www.oracle.com
+* Jetty 4                               - http://jetty.mortbay.org
 
 --------------------------
 -- Installation         --
@@ -173,7 +173,7 @@ Consult mailing list for help.
 
 * SiteMesh currently does not work flawlessly on Weblogic 6.1, 7.0 and 7.0 SP1. For more
 information, visit http://jira.opensymphony.com/secure/ViewIssue.jspa?id=10045. However,
-SiteMesh does work correctly on WebLogic 7.0 SP2 and 8.1.
+SiteMesh does work correctly on WebLogic 7.0 SP2, 8.1 and 8.1 SP2.
 
 * SiteMesh does not work on Weblogic 8.1 SP1 because of various bugs in the JSP
 compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
