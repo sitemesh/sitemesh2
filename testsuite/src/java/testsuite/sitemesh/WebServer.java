@@ -36,4 +36,9 @@ public class WebServer {
             throw new RuntimeException("Cannot stop server", e);
         }
     }
+
+    public static void main(String[] args) throws IOException {
+        WebServer server = new WebServer(9912, "dist/webapp");
+        server.start();
+    }
 }
