@@ -25,7 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * DefaultFactory, reads configuration from <code>/WEB-INF/sitemesh.xml</code>, or uses the
@@ -33,12 +33,16 @@ import java.util.Properties;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName = "/WEB-INF/sitemesh.xml";
     File configFile;
     long configLastModified;
+    Map configProps = new HashMap();
+
+    String excludesFileName;
+    File excludesFile;
 
     public DefaultFactory(Config config) {
         super(config);
@@ -84,40 +88,9 @@ public class DefaultFactory extends BaseFactory {
     /** Load configuration from file. */
     private synchronized void loadConfig() {
         try {
-            // Parse file
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            // Load and parse the sitemesh.xml file
+            Element root = loadSitemeshXML();
 
-            InputStream is = null;
-
-            if (configFile == null) {
-                is = config.getServletContext().getResourceAsStream(configFileName);
-            }
-            else if (configFile.exists() && configFile.canRead()) {
-                is = configFile.toURL().openStream();
-            }
-
-            if (is == null){ // load the default sitemesh configuration
-                is = getClass().getClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
-            }
-
-            if (is == null){ // load the default sitemesh configuration using another classloader
-                is = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
-            }
-
-            if (is == null){
-                throw new IllegalStateException("Cannot load default configuration from jar");
-            }
-
-            Document document = builder.parse(is);
-            Element root = document.getDocumentElement();
-
-            if (configFile != null) configLastModified = configFile.lastModified();
-
-            // Verify root element
-            if (!"sitemesh".equalsIgnoreCase(root.getTagName())) {
-                report("Root element of sitemesh configuration file not <sitemesh>", null);
-            }
             NodeList sections = root.getChildNodes();
             // Loop through child elements of root node
             for (int i = 0; i < sections.getLength(); i++) {
@@ -125,7 +98,14 @@ public class DefaultFactory extends BaseFactory {
                     Element curr = (Element)sections.item(i);
                     NodeList children = curr.getChildNodes();
 
-                    if ("page-parsers".equalsIgnoreCase(curr.getTagName())) {
+                    if ("property".equalsIgnoreCase(curr.getTagName())) {
+                        String name = curr.getAttribute("name");
+                        String value = curr.getAttribute("value");
+                        if (!"".equals(name) && !"".equals(value)) {
+                            configProps.put("${" + name + "}", value);
+                        }
+                    }
+                    else if ("page-parsers".equalsIgnoreCase(curr.getTagName())) {
                         // handle <page-parsers>
                         loadPageParsers(children);
                     }
@@ -135,7 +115,11 @@ public class DefaultFactory extends BaseFactory {
                     }
                     else if ("excludes".equalsIgnoreCase(curr.getTagName())) {
                         // handle <excludes>
-                        loadExcludeUrls(children);
+                        String fileName = replaceProperties(curr.getAttribute("file"));
+                        if (!"".equals(fileName)) {
+                            excludesFileName = fileName;
+                            loadExcludes();
+                        }
                     }
                 }
             }
@@ -148,6 +132,78 @@ public class DefaultFactory extends BaseFactory {
         }
         catch (SAXException e) {
             report("Could not parse config file : " + configFileName, e);
+        }
+    }
+
+    private Element loadSitemeshXML()
+            throws ParserConfigurationException, IOException, SAXException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        InputStream is = null;
+
+        if (configFile == null) {
+            is = config.getServletContext().getResourceAsStream(configFileName);
+        }
+        else if (configFile.exists() && configFile.canRead()) {
+            is = configFile.toURL().openStream();
+        }
+
+        if (is == null){ // load the default sitemesh configuration
+            is = getClass().getClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
+        }
+
+        if (is == null){ // load the default sitemesh configuration using another classloader
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
+        }
+
+        if (is == null){
+            throw new IllegalStateException("Cannot load default configuration from jar");
+        }
+
+        if (configFile != null) configLastModified = configFile.lastModified();
+
+        Document doc = builder.parse(is);
+        Element root = doc.getDocumentElement();
+        // Verify root element
+        if (!"sitemesh".equalsIgnoreCase(root.getTagName())) {
+            report("Root element of sitemesh configuration file not <sitemesh>", null);
+        }
+        return root;
+    }
+
+    private void loadExcludes()
+            throws ParserConfigurationException, IOException, SAXException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        InputStream is = null;
+
+        if (excludesFile == null) {
+            is = config.getServletContext().getResourceAsStream(excludesFileName);
+        }
+        else if (excludesFile.exists() && excludesFile.canRead()) {
+            is = excludesFile.toURL().openStream();
+        }
+
+        if (is == null){
+            throw new IllegalStateException("Cannot load excludes configuration file from jar");
+        }
+
+        Document document = builder.parse(is);
+        Element root = document.getDocumentElement();
+        NodeList sections = root.getChildNodes();
+
+        // Loop through child elements of root node looking for the <excludes> block
+        for (int i = 0; i < sections.getLength(); i++) {
+            if (sections.item(i) instanceof Element) {
+                Element curr = (Element)sections.item(i);
+                if ("excludes".equalsIgnoreCase(curr.getTagName())) {
+                    loadExcludeUrls(curr.getChildNodes());
+                }
+            }
         }
     }
 
@@ -186,7 +242,8 @@ public class DefaultFactory extends BaseFactory {
                         if (children.item(j) instanceof Element) {
                             Element currC = (Element)children.item(j);
                             if ("param".equalsIgnoreCase(currC.getTagName())) {
-                                props.put(currC.getAttribute("name"), currC.getAttribute("value"));
+                                String value = currC.getAttribute("value");
+                                props.put(currC.getAttribute("name"), replaceProperties(value));
                             }
                         }
                     }
@@ -223,5 +280,31 @@ public class DefaultFactory extends BaseFactory {
     /** Check if configuration file has been modified, and if so reload it. */
     private void refresh() {
         if (configFile != null && configLastModified != configFile.lastModified()) loadConfig();
+    }
+
+    /**
+     * Replaces any properties that appear in the supplied string
+     * with their actual values
+     *
+     * @param str the string to replace the properties in
+     * @return the same string but with any properties expanded out to their
+     * actual values
+     */
+    private String replaceProperties(String str) {
+        Set props = configProps.entrySet();
+        for (Iterator it = props.iterator(); it.hasNext();)
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String) entry.getKey();
+            int idx;
+            while ((idx = str.indexOf(key)) >= 0) {
+                StringBuffer buf = new StringBuffer(100);
+                buf.append(str.substring(0, idx));
+                buf.append(entry.getValue());
+                buf.append(str.substring(idx + key.length()));
+                str = buf.toString();
+            }
+        }
+        return str;
     }
 }

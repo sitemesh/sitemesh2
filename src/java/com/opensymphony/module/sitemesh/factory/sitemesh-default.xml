@@ -1,10 +1,7 @@
 <sitemesh>
-    <!-- Any urls that are excluded will never be decorated by Sitemesh -->
-    <!--
-    <excludes>
-        <pattern>/simple/exclude/*</pattern>
-    </excludes>
-    -->
+    <property name="decorators-file" value="/WEB-INF/decorators.xml"/>
+    <excludes file="${decorators-file}"/>
+
 	<page-parsers>
 		<parser content-type="text/html" class="com.opensymphony.module.sitemesh.parser.FastPageParser" />
 	</page-parsers>
@@ -21,7 +18,7 @@
 		</mapper>
 		<mapper class="com.opensymphony.module.sitemesh.mapper.FileDecoratorMapper"/>
 		<mapper class="com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper">
-			<param name="config" value="/WEB-INF/decorators.xml" />
+			<param name="config" value="${decorators-file}" />
 		</mapper>
 	</decorator-mappers>
 </sitemesh>

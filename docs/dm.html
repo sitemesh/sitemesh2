@@ -134,10 +134,8 @@
 
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;sitemesh&gt;
-    &lt;excludes&gt;
-        &lt;pattern&gt;/plainPage.jsp&lt;/pattern&gt;
-        &lt;pattern&gt;/plain/*.jsp&lt;/pattern&gt;
-    &lt;/excludes&gt;
+    &lt;property name=&quot;decorators-file&quot; value=&quot;/WEB-INF/decorators.xml&quot; /&gt;
+    &lt;excludes file=&quot;${decorators-file}&quot; /&gt;
 
     &lt;page-parsers&gt;
         &lt;parser content-type=&quot;text/html&quot;
@@ -148,17 +146,43 @@
 
     &lt;decorator-mappers&gt;
         &lt;mapper class=&quot;com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper&quot;&gt;
-            &lt;param name=&quot;config&quot; value=&quot;/WEB-INF/decorators.xml&quot; /&gt;
+            &lt;param name=&quot;config&quot; value=&quot;${decorators-file}&quot; /&gt;
         &lt;/mapper&gt;
     &lt;/decorator-mappers&gt;
 &lt;/sitemesh&gt;
 </pre>
 
-		In this example, the only mapper that will be applied is the <code>ConfigDecoratorMapper</code>,
+		<p>In this example, the only mapper that will be applied is the <code>ConfigDecoratorMapper</code>,
 		and that will only be applied to responses of type <code>text/html</code> or
 		<code>text/html;charset=ISO-8859-1</code>. Responses of any other content type (eg
-		<code>image/gif</code>), the page <code>/plainPage.jsp</code> and any other jsp pages
-		in the <code>/plain</code> directory will be ignored by Sitemesh.
+		<code>image/gif</code>) will be ignored by Sitemesh. Additionally, any files that match a
+		pattern specified in the <code>excludes</code> file (in this case <code>'/WEB-INF/decorators.xml'</code>)
+		will not be touched by Sitemesh.</p>
+		<p>The excludes file points to an XML file that contains an <code>&lt;excludes /&gt;</code> block
+		similar to the following:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;decorators&gt;
+    &lt;excludes&gt;
+        &lt;pattern&gt;/plainPage.jsp&lt;/pattern&gt;
+        &lt;pattern&gt;/plain/*.jsp&lt;/pattern&gt;
+    &lt;/excludes&gt;
+&lt;/decorators&gt;
+</pre>
+		<p>The above example would prevent <code>/plainPage.jsp</code> and any JSP pages in the
+		<code>/plain</code> directory from being decorated. (Note that the pattern matching follows
+		exactly the same rules as the decorator mappings used by the <code>ConfigDecoratorMapper</code>.)</p>
+		<p>Typically the <code>&lt;excludes /&gt;</code> block is just added at the start of the
+		<code>decorators.xml</code> file, however this is not a requirement and any other XML
+		file can be specified instead by changing the excludes file specified in <code>sitemesh.xml</code>.
+		This might be useful if for example the <code>ConfigDecoratorMapper</code> is not being used
+		in your deployment.</p>
+		<p>Note that preventing pages from being decorated by adding them to the excludes list
+		superceeds, and is a better approach than, the old method of mapping the pages to a
+		non-existent decorator. This is because when pages were mapped to a non-existent decorator
+		they were still buffered internally by Sitemesh. By using the exclude list Sitemesh will not
+		let the request pass straight through to the servlet container without any buffering.</p>
+
 
 		<h3>Default mapper configuration</h3>
 

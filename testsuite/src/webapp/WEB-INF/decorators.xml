@@ -1,4 +1,9 @@
 <decorators>
+    <!-- Any urls that are excluded will never be decorated by Sitemesh -->
+    <excludes>
+        <pattern>/simple/exclude.jsp</pattern>
+        <pattern>/simple/exclude/*</pattern>
+    </excludes>
 
     <decorator name="simple" page="/decorators/simple.jsp">
         <pattern>/simple/*</pattern>

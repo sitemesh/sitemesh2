@@ -61,6 +61,13 @@
 		<deployment type="unpack">servers/orion1.5.4/orion/applications/sitemesh-testsuite</deployment>
 	</server>
 
+    <server disabled="false">
+        <name>Orion</name>
+        <version>2.0.4</version>
+        <base-url>http://localhost/sitemesh-testsuite</base-url>
+        <deployment type="unpack">servers/orion2.0.4/orion/applications/sitemesh-testsuite</deployment>
+    </server>
+
 	<server disabled="true">
 		<name>Oracle OC4J</name>
 		<version>1.0.2.2.1</version>

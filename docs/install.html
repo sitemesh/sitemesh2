@@ -17,6 +17,9 @@
 
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;sitemesh&gt;
+    &lt;property name=&quot;decorators-file&quot; value=&quot;/WEB-INF/decorators.xml&quot; /&gt;
+    &lt;excludes file=&quot;${decorators-file}&quot; /&gt;
+
     &lt;page-parsers&gt;
         &lt;parser content-type=&quot;text/html&quot;
             class=&quot;com.opensymphony.module.sitemesh.parser.FastPageParser&quot; /&gt;
@@ -26,7 +29,7 @@
 
     &lt;decorator-mappers&gt;
         &lt;mapper class=&quot;com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper&quot;&gt;
-            &lt;param name=&quot;config&quot; value=&quot;/WEB-INF/decorators.xml&quot; /&gt;
+            &lt;param name=&quot;config&quot; value=&quot;${decorators-file}&quot; /&gt;
         &lt;/mapper&gt;
     &lt;/decorator-mappers&gt;
 &lt;/sitemesh&gt;

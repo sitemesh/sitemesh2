@@ -1,4 +1,6 @@
 <sitemesh>
+    <property name="decorators-file" value="/WEB-INF/decorators.xml"/>
+    <excludes file="${decorators-file}"/>
 
 	<page-parsers>
 		<parser content-type="text/html" class="com.opensymphony.module.sitemesh.parser.FastPageParser" />
@@ -41,7 +43,7 @@
 		</mapper>
 
 		<mapper class="com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper">
-			<param name="config" value="/WEB-INF/decorators.xml" />
+			<param name="config" value="${decorators-file}" />
 		</mapper>
 
 	</decorator-mappers>
