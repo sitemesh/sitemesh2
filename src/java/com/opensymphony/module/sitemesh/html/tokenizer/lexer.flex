@@ -15,16 +15,23 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
 %unicode
 %byaccj
 %char
-%line
-%column
 %ignorecase
+
+// useful for debugging, but adds overhead
+//%line
+//%column
+
+// Profiling showed that this mode was slightly faster than %pack or %table.
+%switch
+// Profiling showed this as an optimal size buffer that was often filled but rarely exceeded.
+%buffer 2048
 
 %{
     // Additional methods to add to generated Lexer to aid in error reporting.
     protected int position() { return yychar; }
     protected int length()   { return yy_markedPos - yy_startRead; }
-    protected int line()     { return yyline; }
-    protected int column()   { return yycolumn; }
+    protected int line()     { return -1; /*yyline;*/ }   // useful for debugging, but adds overhead
+    protected int column()   { return -1; /*yycolumn;*/ } // useful for debugging, but adds overhead
     protected void resetLexerState() { yybegin(YYINITIAL); }
     protected abstract void reportError(String message, int line, int column);
 %}
