@@ -8,12 +8,8 @@ import java.io.IOException;
 
 /**
  * <b>WARNING - This is experimental - use at own risk!</b> Builds an HTMLPage object from an HTML document. This behaves
- * similarly to the FastPageParser, however it's:
- *
- * <ul>
- * <li>easier customize to add new features such as extracting/transform custom elements.</li>
- * <li>slower - the tradeoff for flexibility.</li>
- * </ul>
+ * similarly to the FastPageParser, however it's a complete rewrite that is simpler to add custom features to such as
+ * extraction and transformation of elements.
  *
  * @see TokenizedHTMLPage
  * @see TagTokenizer
