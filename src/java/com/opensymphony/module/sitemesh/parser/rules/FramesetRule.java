@@ -17,6 +17,6 @@ public class FramesetRule extends BasicRule {
     }
 
     public boolean shouldProcess(String name) {
-        return name.toLowerCase().startsWith("frame");
+        return name.startsWith("frame");
     }
 }

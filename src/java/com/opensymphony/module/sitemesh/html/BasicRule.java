@@ -29,7 +29,7 @@ public abstract class BasicRule implements TagRule {
         }
 
         for (int i=0; i<acceptableTagNames.length; i++) {
-            if (name.toLowerCase().equals(acceptableTagNames[i])) return true;
+            if (name.equals(acceptableTagNames[i])) return true;
         }
         return false;
     }

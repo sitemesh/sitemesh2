@@ -58,11 +58,11 @@ public class HTMLProcessor {
         tokenizer.start(new TokenHandler() {
 
             public boolean shouldProcessTag(String name) {
-                return currentState.shouldProcessTag(name);
+                return currentState.shouldProcessTag(name.toLowerCase());
             }
 
             public void tag(Tag tag) {
-                TagRule tagRule = currentState.getRule(tag.getName());
+                TagRule tagRule = currentState.getRule(tag.getName().toLowerCase());
                 tagRule.setContext(context);
                 tagRule.process(tag);
             }

@@ -22,7 +22,7 @@ public class MSOfficeDocumentPropertiesRule extends BlockExtractingRule {
     }
 
     public boolean shouldProcess(String name) {
-        return (inDocumentProperties && name.startsWith("o:")) || name.equals("o:DocumentProperties");
+        return (inDocumentProperties && name.startsWith("o:")) || name.equals("o:documentproperties");
     }
 
     public void process(Tag tag) {
