@@ -46,7 +46,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
@@ -154,7 +154,7 @@ public final class ConfigLoader {
                 role = getAttribute(decoratorElement, "role");
 
                 // Append the defaultDir
-                if (defaultDir != null && page != null && page.length() > 0) {
+                if (defaultDir != null && page != null && page.length() > 0 && !page.startsWith("/")) {
                     if (page.charAt(0) == '/') page = defaultDir + page;
                     else                       page = defaultDir + '/' + page;
                 }

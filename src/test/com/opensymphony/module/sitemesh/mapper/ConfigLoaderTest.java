@@ -41,7 +41,7 @@ public class ConfigLoaderTest extends TestCase {
         out.write("       <pattern>/uri/*</pattern>");
         out.write("   </decorator>");
 
-        out.write("   <decorator name=\"rolebased\" page=\"/rolebased.jsp\" role=\"developer\">");
+        out.write("   <decorator name=\"rolebased\" page=\"rolebased.jsp\" role=\"developer\">");
         out.write("       <pattern>/rolebased/*</pattern>");
         out.write("   </decorator>");
 
@@ -100,7 +100,7 @@ public class ConfigLoaderTest extends TestCase {
         assertNull(configLoader.getDecoratorByName("default").getRole());
 
         assertEquals(configLoader.getDecoratorByName("other").getName(), "other");
-        assertEquals(configLoader.getDecoratorByName("other").getPage(), "/decorators/other.jsp");
+        assertEquals(configLoader.getDecoratorByName("other").getPage(), "/other.jsp"); // absolute path
         assertNull(configLoader.getDecoratorByName("other").getURIPath());
         assertNull(configLoader.getDecoratorByName("other").getRole());
 
