@@ -2,16 +2,20 @@ package com.opensymphony.module.sitemesh.html;
 
 public abstract class BasicRule implements TagRule {
 
-    private final String acceptableTagName;
+    private final String[] acceptableTagNames;
 
     protected HTMLProcessorContext context;
 
+    protected BasicRule(String[] acceptableTagNames) {
+        this.acceptableTagNames = acceptableTagNames;
+    }
+
     protected BasicRule(String acceptableTagName) {
-        this.acceptableTagName = acceptableTagName;
+        this.acceptableTagNames = new String[] {acceptableTagName};
     }
 
     protected BasicRule() {
-        this.acceptableTagName = null;
+        this.acceptableTagNames = null;
     }
 
     public void setContext(HTMLProcessorContext context) {
@@ -19,11 +23,15 @@ public abstract class BasicRule implements TagRule {
     }
 
     public boolean shouldProcess(String name) {
-        if (acceptableTagName == null) {
+        if (acceptableTagNames == null || acceptableTagNames.length < 1) {
             throw new UnsupportedOperationException(getClass().getName()
-                    + " should be constructed with acceptableTagName OR should implement shouldProcess()");
+                    + " should be constructed with acceptableTagNames OR should implement shouldProcess()");
         }
-        return name.toLowerCase().equals(acceptableTagName);
+
+        for (int i=0; i<acceptableTagNames.length; i++) {
+            if (name.toLowerCase().equals(acceptableTagNames[i])) return true;
+        }
+        return false;
     }
 
     public abstract void process(Tag tag);
