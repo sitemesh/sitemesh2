@@ -28,11 +28,21 @@
     </filter-mapping>
 
     <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/velocity/velocity.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <!-- encoding filter needs to be the innermost & the outermost filter invoked -->
+  <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/velocity/velocity.jsp</url-pattern>
+    </filter-mapping>
+
     <filter-mapping>
         <filter-name>encoding</filter-name>
         <url-pattern>/simple/page4.jsp</url-pattern>
