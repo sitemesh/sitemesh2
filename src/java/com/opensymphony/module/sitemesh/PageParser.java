@@ -22,13 +22,11 @@ import java.io.IOException;
  * <p>A single PageParser is reused, therefore the parse() methods need to be thread-safe.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface PageParser {
     /**
-     * @associates Page
-     * @label builds
-     * @directed
+     * This builds a Page.
      */
     Page parse(char[] data) throws IOException;
 }

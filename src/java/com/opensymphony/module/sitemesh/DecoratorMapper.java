@@ -21,7 +21,7 @@ import java.util.Properties;
  * and should be thread-safe.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface DecoratorMapper {
     /**
@@ -41,8 +41,6 @@ public interface DecoratorMapper {
      * or the data of the parsed page. Typically this would call <code>getNamedDecorator()</code>
      * which would delegate to a parent DecoratorMapper.</p>
      *
-     * @associates Decorator
-     * @label maps to
      */
     Decorator getDecorator(HttpServletRequest request, Page page);
 

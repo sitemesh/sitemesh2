@@ -50,6 +50,7 @@
         <mkdir dir="${dist.dir}/docs/api"/>
 
         <javadoc sourcepath="${java.dir}"
+            breakiterator="true"
             destdir="${dist.dir}/docs/api"
             stylesheetfile="${docs.dir}/api.css"
             packagenames="com.opensymphony.*"
@@ -88,7 +89,10 @@
         <mkdir dir="${dist.dir}"/>
 
         <copy todir="${build.dir}/classes/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
-        <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}/classes">
+
+        <jar jarfile="${dist.dir}/${name}-${version}.jar" basedir="${build.dir}/classes"
+            excludes="**/servlets/**"
+            >
             <metainf dir="${tld.dir}/jsp1.2" includes="*.tld"/>
         </jar>
     </target>
@@ -113,11 +117,7 @@
         </copy>
         <move todir="${build.dir}/example-temp">
             <fileset dir="${build.dir}/example-temp"/>
-            <mapper type="glob" from="*.html" to="*.jsp"/>
         </move>
-        <replace dir="${build.dir}/example-temp">
-            <replacefilter token=".html" value=".jsp"/>
-        </replace>
 
         <mkdir dir="${dist.dir}"/>
 
@@ -132,7 +132,13 @@
                 <include name="commons-*.jar"/>
                 <include name="velocity-*.jar"/>
                 <include name="freemarker.jar"/>
+                </lib>
+            <lib dir="${tld.dir}">
+                  <include name="sitemesh*.tld" />
             </lib>
+            <classes dir="${build.dir}/classes">
+                <include name="**/PathologicalServlet.class"/>
+            </classes>
         </war>
     </target>
 

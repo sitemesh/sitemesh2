@@ -24,10 +24,10 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class Factory {
-    /** @label Web context lookup key */
+    /** Web context lookup key */
     private static final String SITEMESH_FACTORY = "sitemesh.factory";
 
     /**
@@ -71,9 +71,6 @@ public abstract class Factory {
      * @param contentType The MIME content-type of the data to be parsed
      * @return Appropriate <code>PageParser</code> for reading data
      *
-     * @associates PageParser
-     * @directed
-     * @label creates suitable
      */
     public abstract PageParser getPageParser(String contentType);
 

@@ -23,7 +23,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -88,7 +88,7 @@ public abstract class BaseFactory extends Factory {
      * Returns <code>true</code> if the supplied path matches one of the exclude
      * URLs specified in sitemesh.xml, otherwise returns <code>false</code>.
      * @param path
-     * @return
+     * @return whether the path is excluded
      */
     public boolean isPathExcluded(String path) {
         return excludeUrls.get(path) != null;

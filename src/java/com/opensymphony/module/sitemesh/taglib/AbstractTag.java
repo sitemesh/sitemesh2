@@ -24,7 +24,7 @@ import java.io.Writer;
  * by all (or most) taglibs.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class AbstractTag extends BodyTagSupport implements RequestConstants {
     protected PageContext pageContext;
@@ -82,7 +82,7 @@ public abstract class AbstractTag extends BodyTagSupport implements RequestConst
      * Get the outputWriter.  This method should be used in preference to
      * <code>pageContext.getOut()</code>, as some charset conversions may need
      * to happen in some servers.
-     * @return
+     * @return the writer for use in the tag
      */
     protected Writer getOut() {
         return OutputConverter.getWriter(pageContext.getOut());
