@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>SiteMesh and Charsets</title>
+	</head>
+	
+	<body>
+		<h3>Platform Defaults</h3>
+		<p>
+		  The default character set for SiteMesh is iso-8859-1. SiteMesh currently assumes that the underlying platform encoding is also iso-8859-1.
+		  This can cause some fairly insidious problems if there is a mismatch between the two! Specifically, on platforms which have a different file
+		  encoding, this should be overridden. The two known platforms which do not have iso-8859-1 encoding by default are IBM AS/400 JDK's and OSX. The
+		  work around in these cases is to specify a <code>-Dfile.encoding=iso-8859-1</code> parameter as JVM argument when starting the application server.
+		</p>
+		
+		<h3>Using Other Encodings</h3>
+		<p>
+		  The iso-8859-1 encoding is sufficient for most European and Western character sets, so nothing will need to be done in this case. However,
+		  for other languages that require the full range of the UTF-8 character set, this has to be explicitly specified at a number of places,
+		  some SiteMesh specific, some app server specific/jsp specific.<br>
+		  Note that the examples below all refer to utf-8. The same approach applies to any encoding other than iso-8859-1,
+		  and is not limited to utf-8.
+		</p>
+		<p>
+		  If possible, the web application should be configured to use utf-8 as the default encoding. For example Orion allows this to be specific in
+		  orion-web.xml, as the <code>default-charset</code> attribute (see Orion documentation for more details). If the application server of choice
+		  does not allow to set the default charset for all web-apps, then every page will need to specify the content-type. This is done
+		  by specifying a page header tag like thus: <code>&lt;%@ page contentType=&quot;text/html; charset=utf-8&quot;%&gt;</code>. Note that
+		  some older versions of Orion do not respect the contentType page directive in included pages, so to be on the safe side, this directive
+		  should be specified in ALL pages, not just the top level one (one could use an include).
+		</p>
+		<p>
+		  The next step is to inform the browser that the page contents are of a specific character set. This is done by specifying a meta tag in the HEAD
+		  element of the html page, like this: <code>&lt;META HTTP-EQUIV=&quot;content-type&quot; CONTENT=&quot;text/html; charset=utf-8&quot;&gt;</code>
+		</p>
+		<p>
+		  The final step is informing SiteMesh's decorator mechanism that it should use a specific encoding other than the default. This is done by
+		  specifying an encoding attribute to the applyDecorator tag with the name of the encoding to use.
+		</p>
+	</body>
+</html>
