@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>SiteMesh DecoratorMappers</title>
+	</head>
+	<body>
+	    <p>SiteMesh uses a DecoratorMapper to determine which decorator should be
+		applied to a particular piece of content.</p>
+
+		<p>This system has been revised to allow DecoratorMappers to be <b>chained
+		together</b>. When SiteMesh needs to determine the correct decorator to apply,
+		it calls a method of the first DecoratorMapper in the chain. If this can
+		determine the correct decorator it shall return it, otherwise it will pass
+		the request on to the next DecoratorMapper in the chain. The request shall
+		be passed down the chain until a response is received.</p>
+
+		<p>New DecoratorMappers can be added to a config file (<code>/WEB-INF/sitemesh.xml</code>)
+		and changed at runtime.</p>
+
+		<p>The main implementation of DecoratorMapper is <a href="api/com/opensymphony/module/sitemesh/mapper/ConfigDecoratorMapper.html">ConfigDecoratorMapper</a> which
+		reads the decorators and mappings from <code>/WEB-INF/decorators.xml</code> (which is
+		what the old mapper system used). The appropriate decorator is then applied
+		depending on the URL pattern.</p>
+
+		<p>DecoratorMappers are simple to write and the distribution includes some
+		samples that demonstrate how to write them and how flexible they can be.
+		These are:
+		<ul>
+			<li><a href="api/com/opensymphony/module/sitemesh/mapper/AgentDecoratorMapper.html">AgentDecoratorMapper</a>:
+			Can apply different decorator files depending on the browser/spider that is requesting the
+			page (e.g. mydecorator.jsp, mydecorator-plain.jsp, mydecorator-ie5.jsp)</li>
+
+			<li><a href="api/com/opensymphony/module/sitemesh/mapper/PrintableDecoratorMapper.html">PrintableDecoratorMapper</a>:
+			Can display a printer friendly version of the page if <code>?printable=true</code> is appended to the URL.</li>
+
+			<li><a href="api/com/opensymphony/module/sitemesh/mapper/PageDecoratorMapper.html">PageDecoratorMapper</a>:
+			Allows the actual content-page to override the mapped decorator by specifying
+			<code>&lt;meta name="decorator" content="..."&gt;</code> in the HTML.</li>
+
+			<li><a href="api/com/opensymphony/module/sitemesh/mapper/RobotDecoratorMapper.html">RobotDecoratorMapper</a>:
+			Applies a special decorator when the page is being requested by a robot (also known as a spider, crawler).</li>
+		</ul>
+
+		<p>An example of a custom DecoratorMapper could be one that displays different
+		Decorators based on time (e.g. morning, afternoon, Christmas, etc).</p>
+	</body>
+</html>
