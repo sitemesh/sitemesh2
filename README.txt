@@ -35,7 +35,7 @@ specification. Versions prior to 2.3 are not enough.
 Currently known containers that support this and SiteMesh was tested with:
 
 * Orion 1.5.4 and up                         - http://www.orionserver.com
-* Tomcat 4.0 and 4.1                         - http://jakarta.apache.org/tomcat
+* Tomcat 4.0, 4.1 and 5.0.19                 - http://jakarta.apache.org/tomcat
 * Resin 2.1.11, 2.1.12, 2.1.13 and 3.0.7     - http://www.caucho.com
 * Oracle OC4J 2                              - http://www.oracle.com
 * WebLogic 7.0 SP2, 8.1 and 8.1 SP2          - http://www.bea.com
