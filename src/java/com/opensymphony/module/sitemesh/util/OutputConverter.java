@@ -9,12 +9,31 @@ import java.io.*;
  */
 public class OutputConverter
 {
+    /**
+     * Resin versions 2.1.12 and previously have encoding problems for internationalisation.
+     * <p>
+     * This is fixed in Resin 2.1.13.  Once 2.1.13 is used more widely, this parameter (and class) can be removed.
+     */
+    public static final String WORK_AROUND_RESIN_I18N_BUG = "sitemesh.resin.i18n.workaround";
+
     public static Writer getWriter(Writer out)
     {
-        if (Container.get() == Container.RESIN)
+        if ("true".equalsIgnoreCase(System.getProperty(WORK_AROUND_RESIN_I18N_BUG)))
             return new ResinWriter(out);
         else
             return out;
+    }
+
+    public static String convert(String inputString) throws IOException
+    {
+        if ("true".equalsIgnoreCase(System.getProperty(WORK_AROUND_RESIN_I18N_BUG)))
+        {
+            StringWriter sr = new StringWriter();
+            resinConvert(inputString, sr);
+            return sr.getBuffer().toString();
+        }
+        else
+            return inputString;
     }
 
     /**
@@ -37,13 +56,7 @@ public class OutputConverter
 
         public void flush() throws IOException
         {
-            //does this need to be made configurable?  Or are these two always correct?
-            InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(buffer.toString().getBytes("UTF-8")), "ISO-8859-1");
-            int i;
-            while ((i = reader.read()) != -1) {
-                target.write(i);
-            }
-            target.flush();
+            resinConvert(buffer.toString(), target);
             buffer.reset();
         }
 
@@ -53,4 +66,17 @@ public class OutputConverter
             flush();
         }
     }
+
+    private static void resinConvert(String inputString, Writer writer) throws IOException
+    {
+        //does this need to be made configurable?  Or are these two always correct?
+        InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(inputString.getBytes("UTF-8")), "ISO-8859-1");
+        int i;
+        while ((i = reader.read()) != -1)
+        {
+            writer.write(i);
+        }
+        writer.flush();
+    }
+
 }

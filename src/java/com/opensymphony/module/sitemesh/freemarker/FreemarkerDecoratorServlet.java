@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.RequestConstants;
-import com.opensymphony.module.sitemesh.util.OutputConverter;
 
 import freemarker.ext.servlet.FreemarkerServlet;
 import freemarker.template.SimpleHash;
@@ -27,7 +26,7 @@ import freemarker.template.TemplateModel;
  * Servlet that allows Freemarker templates to be used as decorators.
  * 
  * @author <a href="mailto:richard.hallier@freesbee.fr">Richard HALLIER</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FreemarkerDecoratorServlet extends FreemarkerServlet
 {
@@ -60,11 +59,11 @@ public class FreemarkerDecoratorServlet extends FreemarkerServlet
 			title=htmlPage.getTitle();
 			
 			StringWriter buffer = new StringWriter();
-			htmlPage.writeBody(OutputConverter.getWriter(buffer));
+			htmlPage.writeBody(buffer);
 			body=buffer.toString();
 			
 			buffer = new StringWriter();
-			htmlPage.writeHead(OutputConverter.getWriter(buffer));
+			htmlPage.writeHead(buffer);
 			head=buffer.toString();
 
 			hash.put("page",htmlPage);
