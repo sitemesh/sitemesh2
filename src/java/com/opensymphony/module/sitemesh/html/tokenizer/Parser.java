@@ -21,9 +21,11 @@ import java.util.List;
  * @author Joe Walnes
  * @see TagTokenizer
  */
-class Parser extends Lexer implements Text, Tag {
+class Parser extends Lexer {
 
     private final CharArray attributeBuffer = new CharArray(64);
+    private final ReusableToken reusableToken = new ReusableToken();
+
     private int pushbackToken = -1;
     private String pushbackText;
 
@@ -311,7 +313,7 @@ class Parser extends Lexer implements Text, Tag {
     public void parsedText(int position, int length) {
         this.position = position;
         this.length = length;
-        handler.text((Text) this);
+        handler.text((Text) reusableToken);
     }
 
     public void parsedTag(int type, String name, int start, int length) {
@@ -319,7 +321,7 @@ class Parser extends Lexer implements Text, Tag {
         this.name = name;
         this.position = start;
         this.length = length;
-        handler.tag((Tag) this);
+        handler.tag((Tag) reusableToken);
         attributes.clear();
     }
 
@@ -336,50 +338,53 @@ class Parser extends Lexer implements Text, Tag {
         handler.warning(message, line, column);
     }
 
-    public String getName() {
-        return name;
-    }
+    private class ReusableToken implements Tag, Text {
 
-    public int getType() {
-        return type;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public String getContents() {
-        return new String(input, position, length);
-    }
+        public int getType() {
+            return type;
+        }
 
-    public void writeTo(CharArray out) {
-        out.append(input, position, length);
-    }
+        public String getContents() {
+            return new String(input, position, length);
+        }
 
-    public int getAttributeCount() {
-        return attributes == null ? 0 : attributes.size() / 2;
-    }
+        public void writeTo(CharArray out) {
+            out.append(input, position, length);
+        }
 
-    public String getAttributeName(int index) {
-        return (String) attributes.get(index * 2);
-    }
+        public int getAttributeCount() {
+            return attributes == null ? 0 : attributes.size() / 2;
+        }
 
-    public String getAttributeValue(int index) {
-        return (String) attributes.get(index * 2 + 1);
-    }
+        public String getAttributeName(int index) {
+            return (String) attributes.get(index * 2);
+        }
 
-    public String getAttributeValue(String name) {
-        // todo: optimize
-        if (attributes == null) {
+        public String getAttributeValue(int index) {
+            return (String) attributes.get(index * 2 + 1);
+        }
+
+        public String getAttributeValue(String name) {
+            // todo: optimize
+            if (attributes == null) {
+                return null;
+            }
+            final int len = attributes.size();
+            for (int i = 0; i < len; i+=2) {
+                if (name.equalsIgnoreCase((String) attributes.get(i))) {
+                    return (String) attributes.get(i + 1);
+                }
+            }
             return null;
         }
-        final int len = attributes.size();
-        for (int i = 0; i < len; i+=2) {
-            if (name.equalsIgnoreCase((String) attributes.get(i))) {
-                return (String) attributes.get(i + 1);
-            }
+
+        public boolean hasAttribute(String name) {
+            return getAttributeValue(name) != null;
         }
-        return null;
-    }
 
-    public boolean hasAttribute(String name) {
-        return getAttributeValue(name) != null;
     }
-
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.opensymphony.module.sitemesh.parser.FastPageParser;
+import com.opensymphony.module.sitemesh.parser.HTMLPageParser;
+import com.opensymphony.module.sitemesh.PageParser;
 
 /**
  * @author Hani Suleiman (hani@formicary.net)
@@ -35,7 +37,8 @@ public class ParserGrinder
 
     for(int i=0;i<10;i++)
     {
-      FastPageParser parser = new FastPageParser();
+      PageParser parser = new HTMLPageParser();
+      //FastPageParser parser = new FastPageParser();
       parser.parse(chars);
     }
 
