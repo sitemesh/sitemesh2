@@ -131,10 +131,12 @@ public class Report implements TestListener {
                 String testClass = testName.substring(testName.indexOf('(') + 1, testName.indexOf(')'));
                 String testMethod = testName.substring(0, testName.indexOf('('));
                 if (!lastTestClass.equals(testClass)) {
-                    writer.print("<tr><td class='testClass' colspan='" + (servers.size() + 1) + "'>" + testClass + "</td></tr>");
+                    writer.print("<tr><td class='testClass' colspan='" + (servers.size() + 1) + "'>"
+                        + testClass.substring(testClass.lastIndexOf('.') + 1).replaceAll("[A-Z]", " $0").trim() + "</td></tr>");
                     lastTestClass = testClass;
                 }
-                writer.print("<tr><td class='testMethod'>" + testMethod + "</td>");
+                writer.print("<tr><td class='testMethod'>"
+                    + testMethod.substring(4).replaceAll("[A-Z]", " $0").toLowerCase() + "</td>");
                 for (Iterator i2 = servers.iterator(); i2.hasNext();) {
                     Server server = (Server) i2.next();
                     String error = (String) results.get(new Tuple(server, test));

@@ -14,7 +14,7 @@ import java.io.InputStream;
  */
 public class BinaryFileTest extends WebTest {
 
-    public void testGif() throws Exception {
+    public void testImageIsDownloadedIntact() throws Exception {
         InputStream fis = new BufferedInputStream(new FileInputStream("src/webapp/binary/harry_potter.gif"));
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/binary/harry_potter.gif");
         InputStream wis = rs.getInputStream();

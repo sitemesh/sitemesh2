@@ -11,23 +11,23 @@ import electric.xml.Document;
  */
 public class RedirectTest extends WebTest {
 
-  public void testRedirect() throws Exception {
+  public void testRedirectedPage() throws Exception {
     checkPage( "/redirect/simple-redirect.jsp" );
   }
 
-  public void testRequestDispatcherForward() throws Exception {
+  public void testRequestDispatcherForwardedPage() throws Exception {
     checkPage( "/redirect/simple-rdforward.jsp" );
   }
 
-  public void testRequestDispatcherInclude() throws Exception {
+  public void testRequestDispatcherIncludedPage() throws Exception {
     checkPage( "/redirect/simple-rdinclude.jsp" );
   }
 
-  public void testPageContextForward() throws Exception {
+  public void testPageContextForwardedPage() throws Exception {
     checkPage( "/redirect/simple-forward.jsp" );
   }
 
-  public void testPageContextInclude() throws Exception {
+  public void testPageContextIncludedPage() throws Exception {
     checkPage( "/redirect/simple-include.jsp" );
   }
 

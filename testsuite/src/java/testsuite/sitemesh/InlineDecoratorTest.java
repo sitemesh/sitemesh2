@@ -5,14 +5,12 @@ import electric.xml.Document;
 import testsuite.tester.WebTest;
 
 /**
- *
- *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  */
 public class InlineDecoratorTest extends WebTest
 {
 
-    public void testPage1() throws Exception
+    public void testInlineContentDecoratedInDecorator() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page1.jsp");
         Document doc = getDocument(rs);
@@ -23,7 +21,7 @@ public class InlineDecoratorTest extends WebTest
         assertEquals("footer", doc.getElementWithId("footer").getText().toString());
     }
 
-    public void testPage2() throws Exception
+    public void testJspIncludedContentedDecoratedInDecorator() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page2.jsp");
         Document doc = getDocument(rs);
@@ -34,7 +32,7 @@ public class InlineDecoratorTest extends WebTest
         assertEquals("footer", doc.getElementWithId("footer").getText().toString());
     }
 
-    public void testPage3() throws Exception
+    public void testSitemeshIncludedContentDecoratedInDecorator() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page3.jsp");
         Document doc = getDocument(rs);
@@ -49,7 +47,7 @@ public class InlineDecoratorTest extends WebTest
      * Test a page that uses an inline include, and is also decorated itself.
      * @throws Exception
      */
-    public void testPage5() throws Exception
+    public void testInlineContentedDecoratedInContent() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page5.jsp");
         Document doc = getDocument(rs);
@@ -64,7 +62,7 @@ public class InlineDecoratorTest extends WebTest
      * Internationalisation test
      * @throws Exception
      */
-    public void testPage6() throws Exception
+    public void testInlineDecoratorWithInternationalizedCharacters() throws Exception
     {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/inline/page6.jsp");
         Document doc = getDocument(rs);

@@ -13,13 +13,11 @@ import electric.xml.Document;
 import electric.xml.ParseException;
 
 /**
- *
- *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  */
 public class SimpleDecoratorTest extends WebTest {
 
-	public void testPage1() throws Exception {
+	public void testCompleteHtmlPage() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page1.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple page1 ::]", rs.getTitle() );
@@ -28,7 +26,7 @@ public class SimpleDecoratorTest extends WebTest {
 		assertEquals( "Simple page1", doc.getElementWithId( "header" ).getText().toString() );
 	}
 
-	public void testPage2() throws Exception {
+	public void testHtmlWithTitleAndBodyContentsOnly() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page2.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: Simple page2 ::]", rs.getTitle() );
@@ -37,7 +35,7 @@ public class SimpleDecoratorTest extends WebTest {
 		assertEquals( "Simple page2", doc.getElementWithId( "header" ).getText().toString() );
 	}
 
-	public void testPage3() throws Exception {
+	public void testHtmlWithBodyContentsOnly() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page3.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
@@ -50,7 +48,7 @@ public class SimpleDecoratorTest extends WebTest {
      * Internationalisation Test
      * @throws Exception
      */
-    public void testPage4() throws Exception {
+    public void testDocumentWithInternationalizedCharacters() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/simple/page4.jsp" );
 		Document doc = getDocument( rs );
 		assertEquals( "[:: MySite ::]", rs.getTitle() );
@@ -62,7 +60,7 @@ public class SimpleDecoratorTest extends WebTest {
     /**
      * Test the exclude patterns in sitemesh.xml
      */
-    public void testPage5() throws Exception {
+    public void testExcludePattern() throws Exception {
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/simple/exclude.jsp");
         Document doc = getDocument(rs);
         assertEquals("Undecorated Page", rs.getTitle());

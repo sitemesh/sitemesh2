@@ -20,7 +20,7 @@ public class BasicPageTest extends WebTest {
 	/**
 	 * Check plain page is working and contains correct title.
 	 */
-	public void testPage() throws Exception {
+	public void testStandardJsp() throws Exception {
 		WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/page.jsp" );
 		assertEquals( 200, rs.getResponseCode() );
 		assertEquals( "SiteMesh plain page", rs.getTitle() );
@@ -29,7 +29,7 @@ public class BasicPageTest extends WebTest {
 	/**
 	 * Check error 500 is properly sent.
 	 */
-	public void testError() throws Exception {
+	public void testErrorMessage() throws Exception {
 		try {
 			WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/error-500.jsp" );
 			fail( "Expected 500" );
@@ -50,7 +50,7 @@ public class BasicPageTest extends WebTest {
 		}
 	}
 
-    public void testNonHtml() throws Exception {
+    public void testPlainTextPage() throws Exception {
         WebResponse rs = wc.getResponse( server.getBaseURL() + "/basic/text.jsp" );
         assertEquals("This is a plain page.", rs.getText().trim());
         assertEquals("text/plain", rs.getContentType());
