@@ -147,35 +147,6 @@ You can define as many decorators as you want in decorators.xml. Example:
     </decorators>
 
 --------------------------
--- Manual               --
---------------------------
-
-If you need to have the manual installed on your intranet, or on your local PC,
-do the following:
-
-    (instructions for Jakarta Tomcat, assuming TOMCAT_HOME is where you
-    installed Jakarta Tomcat)
-
-    1. copy the sitemesh-manual.war from the distribution package to the
-       TOMCAT_HOME/webapps directory
-
-    2. download Xalan (http://xml.apache.org/xalan-j) and copy xalan.jar to the
-       TOMCAT_HOME/common/lib directory
-
-    3. download JAXP (http://java.sun.com/xml/jaxp/) and copy jaxp.jar to the
-       TOMCAT_HOME/common/lib directory
-
-    4. start Tomcat (TOMCAT_HOME/bin/startup.bat or TOMCAT_HOME/bin/startup.sh)
-
-    5. point your browser to
-
-            http://localhost:8080/sitemesh-manual
-
-            (where 8080 is the port tomcat is listening on)
-
-    (when installing on Orion, skip step 2 and 3)
-
---------------------------
 -- Further support      --
 --------------------------
 
