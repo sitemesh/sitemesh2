@@ -22,6 +22,10 @@
             <lib dir="../dist">
                 <include name="sitemesh-*.jar"/>
             </lib>
+            <lib dir="../lib">
+                <include name="commons-*.jar"/>
+                <include name="velocity-*.jar"/>
+            </lib>
             <classes dir="tmp/webapp/WEB-INF/classes"/>
             <webinf dir="src/webapp/WEB-INF/">
                 <include name="*.xml"/>

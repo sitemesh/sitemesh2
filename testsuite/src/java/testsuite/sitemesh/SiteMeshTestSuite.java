@@ -21,6 +21,7 @@ public class SiteMeshTestSuite extends WebTestSuite {
         addTests( InlineDecoratorTest.class );
         addTests( RedirectTest.class );
         addTests( BinaryFileTest.class );
+        addTests( VelocityDecoratorTest.class );
     }
 
 }
