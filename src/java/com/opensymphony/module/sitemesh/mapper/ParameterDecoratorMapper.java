@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Properties;
 
 /**
- * The ParameterDecoratorMapper is a sample DecoratorMapper that will choose the decorator
- * based on request parameters.
+ * The ParameterDecoratorMapper will map a suitable decorator based on request
+ * parameters.
  *
  * <p>The ParameterDecoratorMapper is configured via three properties.
  * <code>decorator.parameter</code> - the parameter which contains the name of the decorator which will be mapped.
@@ -39,7 +39,7 @@ import java.util.Properties;
  * not return any decorator.</p>
  *
  * @author <a href="mailto:mcannon@internet.com">Mike Cannon-Brookes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */

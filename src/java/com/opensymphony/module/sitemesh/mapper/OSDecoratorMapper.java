@@ -21,8 +21,8 @@ import java.util.Enumeration;
 import java.lang.String;
 
 /**
- * OSDecoratorMapper is a class that maps to decorators based on
- * the user's operating system.
+ * The OSDecoratorMapper will map a suitable decorator based on the operating system
+ * of the remote client.
  *
  * <p>OSDecoratorMapper works by checking to see if the "UA-OS" header
  * was sent with the HTTP request. If it was, the class will check the
@@ -34,7 +34,7 @@ import java.lang.String;
  * decorator name if the user is using that operating system</p>
  *
  * @author	<a href="mailto:schepdawg@yahoo.com">Adam P. Schepis</a>
- * @version	$Revision: 1.1 $
+ * @version	$Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.AbstractDecoratorMapper
  */
