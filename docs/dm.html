@@ -32,7 +32,7 @@
 		</ul>
 
 		<p>The main implementation of DecoratorMapper is <a href="api/com/opensymphony/module/sitemesh/mapper/ConfigDecoratorMapper.html">ConfigDecoratorMapper</a> which
-		reads the decorators and mappings from <b><code>/WEB-INF/decorators.xml</code></b>. The appropriate decorator is then applied
+		reads the decorators and mappings from <code>/WEB-INF/decorators.xml</code>. The appropriate decorator is then applied
 		depending on the URL pattern.</p>
 
 		<p>DecoratorMappers are simple to write and the distribution includes some
@@ -130,10 +130,15 @@
 		<h3>Custom mapper configuration</h3>
 
 		<p>To be able to specify which mappers will be applied to a request, create the
-		file <b>[web-app]/WEB-INF/sitemesh.xml</b> that contains the following:</p>
+		file <code>[web-app]/WEB-INF/sitemesh.xml</code> that contains the following:</p>
 
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;sitemesh&gt;
+    &lt;excludes&gt;
+        &lt;pattern&gt;/plainPage.jsp&lt;/pattern&gt;
+        &lt;pattern&gt;/plain/*.jsp&lt;/pattern&gt;
+    &lt;/excludes&gt;
+
     &lt;page-parsers&gt;
         &lt;parser content-type=&quot;text/html&quot;
             class=&quot;com.opensymphony.module.sitemesh.parser.FastPageParser&quot; /&gt;
@@ -149,13 +154,17 @@
 &lt;/sitemesh&gt;
 </pre>
 
-		In this example, only the ConfigDecoratorMapper will be applied.
+		In this example, the only mapper that will be applied is the <code>ConfigDecoratorMapper</code>,
+		and that will only be applied to responses of type <code>text/html</code> or
+		<code>text/html;charset=ISO-8859-1</code>. Responses of any other content type (eg
+		<code>image/gif</code>), the page <code>/plainPage.jsp</code> and any other jsp pages
+		in the <code>/plain</code> directory will be ignored by Sitemesh.
 
 		<h3>Default mapper configuration</h3>
 
-		<p>If sitemesh.xml is not found in the WEB-INF dir, the default mapper
-		configuration will be used. The default mapper configuration is defined
-		in sitemesh-default.xml (packaged inside the jar) and exists out of the
+		<p>If <code>sitemesh.xml</code> is not found in the <code>WEB-INF</code> dir,
+		the default mapper configuration will be used. The default mapper configuration is
+		defined in sitemesh-default.xml (packaged inside the jar) and consists of the
 		following mappers:</p>
 
 		<ul>
@@ -165,5 +174,7 @@
 		    <li>FileDecoratorMapper</li>
 		    <li>ConfigDecoratorMapper</li>
 		</ul>
+
+		By default only content of type <code>text/html</code> will be decorated by Sitemesh.
 	</body>
 </html>
