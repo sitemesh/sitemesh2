@@ -32,14 +32,14 @@ public class HTMLProcessorTest extends TestCase {
 	}
 
     public void testSupportsConventionalReaderAndWriter() throws IOException {
-        Reader in = new StringReader("<hello><b>world</b></hello>");
+        Reader in = new StringReader("<hello><b id=\"something\">world</b></hello>");
         Writer out = new StringWriter();
 
         HTMLProcessor processor = new HTMLProcessor(in, out);
         processor.addRule(new TagReplaceRule("b", "strong"));
 
         processor.process();
-        assertEquals("<hello><strong>world</strong></hello>", out.toString());
+        assertEquals("<hello><strong id=\"something\">world</strong></hello>", out.toString());
     }
 
     public void testAllowsRulesToModifyAttributes() throws IOException {
