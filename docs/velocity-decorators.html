@@ -33,7 +33,8 @@
         	The SiteMesh distribution comes with <b>velocity-1.4-rc1.jar</b>.</p></li>
         	
         	<li>Add the following to <b><code>[web-app]/WEB-INF/web.xml</code></b>
-        	within the <b><code>&lt;web-app&gt;</code></b> tag:
+        	within the <b><code>&lt;web-app&gt;</code></b> tag:</li>
+       	</ul>
 
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;servlet&gt;
@@ -46,8 +47,8 @@
     &lt;url-pattern&gt;<b>/decorators/*.vm</b>&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre>
-			</li>
-			
+
+		<ul>
 			<li>Modify <b><code>decorators.xml</code></b> to reference a .vm 
 			decorator.</li>
 		
