@@ -26,7 +26,7 @@ import java.io.Reader;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public final class FastPageParser implements PageParser
 {
@@ -772,6 +772,8 @@ public final class FastPageParser implements PageParser
          idx++;
 
          if(idx == len) continue;
+
+         while(idx < len && (buffer.charAt(idx) == '\n' || buffer.charAt(idx) == '\r')) idx++;
 
          if(buffer.charAt(idx) == ' ')
          {
