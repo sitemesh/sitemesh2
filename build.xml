@@ -1,11 +1,19 @@
 <?xml version="1.0"?>
 
-<project name="sitemesh" default="dist">
+<project name="sitemesh" default="jar">
+
+    <property name="build.compiler" value="modern" />
     <property name="lib.dir" location="lib" />
     <property name="dist.dir" location="dist" />
     <property name="docs.dir" location="docs" />
     <property name="src.dir" location="src" />
     <property name="build.dir" location="${dist.dir}/build" />
+    <property name="etc.dir" location="${src.dir}/etc" />
+    <property name="java.dir" location="${src.dir}/java" />
+    <property name="test.dir" location="${src.dir}/test" />
+    <property name="example.dir" location="${src.dir}/example-webapp" />
+    <property name="tld.dir" location="${etc.dir}/tld" />
+    <property name="blank.dir" location="${etc.dir}/blank" />
 
     <property file="build.properties"/>
 
@@ -228,7 +236,7 @@
         </style>
     </target>
 
-    <target name="dist" depends="clean, docs, test, jar, blank, example" description="Builds distribution archives">
+    <target name="dist" depends="clean, test, jar, docs, blank, example" description="Builds distribution archives">
         <zip zipfile="${dist.dir}/${name}-${version}-sources.zip"
             basedir="${basedir}"
             excludes="${dist.dir}/**, ${build.dir}/**, **/*.log"
