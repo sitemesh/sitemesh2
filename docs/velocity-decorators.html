@@ -7,7 +7,7 @@
         As of SiteMesh 2.0.2 <a href="http://jakarta.apache.org/velocity/">Velocity</a> (.vm)
         decorators are supported.
 
-        <p>Here is an example of how such a decorator might look:</p>
+        <p>Here is an example of how such a decorator might look like:</p>
 
 <pre style="border: 1px solid #999999; padding: 5px">
 #parse ("/includes/decorators/header.vm")
@@ -25,11 +25,15 @@
 
         <h3>Installation</h3>
         
-        <p>Download <a href="http://jakarta.apache.org/velocity/">Velocity</a> 1.3 or higher and put it on the classpath.
-        The SiteMesh distribution comes with <b>velocity-1.4-rc1.jar</b>.</p>
-
-        <p>Add the following to <b><code>[web-app]/WEB-INF/web.xml</code></b>
-        within the <b><code>&lt;web-app&gt;</code></b> tag:</p>
+        <ul>
+        
+        	<li>Download <a 
+        	href="http://jakarta.apache.org/velocity/">Velocity</a> 1.3 or 
+        	higher and copy it into <b><code>[web-app]/WEB-INF/lib</code></b>. 
+        	The SiteMesh distribution comes with <b>velocity-1.4-rc1.jar</b>.</p></li>
+        	
+        	<li>Add the following to <b><code>[web-app]/WEB-
+        	INF/web.xml</code></b> within the <b><code>&lt;web-app&gt;</code></b> tag:
 
 <pre style="border: 1px solid #999999; padding: 5px">
 &lt;servlet&gt;
@@ -42,8 +46,12 @@
     &lt;url-pattern&gt;<b>/decorators/*.vm</b>&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre>
-
-		<p>Now you can reference any .vm under the decorators directory from your decorators.xml.</p>
+			</li>
+			
+			<li>Modify <b><code>decorators.xml</code></b> to reference a .vm 
+			decorator.</li>
+		
+		</ul>
 		
 		<h3>Context</h3>
 		
