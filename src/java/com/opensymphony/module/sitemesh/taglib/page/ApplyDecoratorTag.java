@@ -49,7 +49,7 @@ import java.net.MalformedURLException;
  * {@link com.opensymphony.module.sitemesh.DecoratorMapper} can overide this.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstants {
     private String page = null;
@@ -259,8 +259,6 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
 
             // clean up
             pageContext.getRequest().setAttribute(PAGE, oldPage);
-            // pageContext.getOut().flush();
-            release();
         }
         catch (IOException e) {
             trace(e);
