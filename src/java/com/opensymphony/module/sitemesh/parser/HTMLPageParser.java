@@ -48,7 +48,6 @@ public class HTMLPageParser implements PageParser {
         defaultState.addRule(new ParameterExtractingRule(page));
         defaultState.addRule(new ContentBlockExtractingRule(page));
         defaultState.addRule(new FramesetRule(page));
-        defaultState.addRule(new FramesetRule(page));
         defaultState.addRule(new StateTransitionRule("xml", xmlState, true));
 
         xmlState.addRule(new MSOfficeDocumentPropertiesRule(page));
