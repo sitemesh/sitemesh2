@@ -42,12 +42,12 @@ public class DebugPageWriter extends PrintWriter {
     }
 
     public void write(char buf[], int off, int len) {
-        System.out.println("DebugPageWriter.write (buf, off, len) :" + new String(buf) + " " + off + " " + len);
+        System.out.println("DebugPageWriter.write (buf, off, len) :" + buf + " " + off + " " + len);
         super.write(buf, off, len);
     }
 
     public void write(char buf[]) {
-        System.out.println("DebugPageWriter.write (buf) :" + new String(buf));
+        System.out.println("DebugPageWriter.write (buf) :" + buf);
         super.write(buf);
     }
 
