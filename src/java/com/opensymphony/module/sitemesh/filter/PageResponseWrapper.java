@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -51,10 +51,6 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     private boolean aborted = false;
     private boolean parseablePage = false;
-
-
-    // this will one day be used to cache parsed pages.
-    private long lastModified;
 
     // verbose debugging of PageWriter
     private boolean debug;
@@ -132,15 +128,6 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
     /** Prevent content-length being set if page is parseable. */
     public void setContentLength(int contentLength) {
         if (!parseablePage()) super.setContentLength(contentLength);
-    }
-
-    /** Prevent Last-Modified header being set if page is parseable. */
-    public void setDateHeader(String name, long value) {
-        if (parseablePage() && "Last-Modified".equalsIgnoreCase(name)) {
-            lastModified = value;
-        } else {
-            super.setDateHeader(name, value);
-        }
     }
 
     /**
@@ -254,8 +241,6 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         }
         if (aborted || !parseablePage()) return null;
         if (page == null) {
-            // @todo: the lastModified field is available, so the parsed-page could be retrieved from
-            //        a cache.
             PageParser parser = factory.getPageParser(contentType);
             return parser.parse(getBufferStream().getBuffer());
         }
