@@ -25,6 +25,14 @@ public class ExcludesPatternTest extends WebTest {
         assertIsDecorated(rs);
     }
 
+    public void testExcludeTakesIntoAccountQueryString() throws Exception {
+        WebResponse rs = wc.getResponse(baseUrl + "/simple/exclude-partial/?EXCLUDED");
+        assertNotDecorated(rs);
+
+        rs = wc.getResponse(baseUrl + "/simple/exclude-partial/?NOTEXCLUDED");
+        assertIsDecorated(rs);
+    }
+
     private void assertIsDecorated(WebResponse rs) throws SAXException {
         assertTrue("pattern should have been matched by <exclude> tag", rs.getTitle().startsWith("[::"));
     }
