@@ -4,7 +4,7 @@
     <a href="<%= request.getContextPath() %>/sitemesh/requirements.html">Requirements</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/features.html">Feature List</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/history.html">History and Crew</a><br>
-    <a href="https://sitemesh.dev.java.net/unbranded-source/browse/*checkout*/sitemesh/README.txt?rev=HEAD&content-type=text/plain">README.txt</a><br>
+    <a href="<%= request.getContextPath() %>/sitemesh/README.txt">README.txt</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a>
 </p>
 

@@ -54,9 +54,12 @@
         </copy>
 
         <mkdir dir="${dist.dir}/docs/dtd"/>
+        <copy todir="${dist.dir}/docs" file="README.txt"/>
         <copy todir="${dist.dir}/docs/dtd">
             <fileset dir="${etc.dir}/dtd" />
         </copy>
+        
+		<replace dir="${dist.dir}/docs" token="@VERSION@" value="${version}"/>
     </target>
 
     <target name="jar" depends="compile">
