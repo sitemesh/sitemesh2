@@ -31,7 +31,7 @@
 						<tr>
 							<td id="footer">
 								<b>Disclaimer:</b>
-								This site is an example site to demonstrate SiteMesh. It serves no other purpose. Sue us.
+								This site is an example site to demonstrate SiteMesh. It serves no other purpose.
 							</td>
 						</tr>
 					</table>
