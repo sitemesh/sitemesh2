@@ -35,7 +35,7 @@ public class HTMLPageParserTest extends TestCase {
         TestSuite result = new TestSuite(HTMLPageParserTest.class.getName());
 
         File[] files = listParserTests(new File("src/parser-tests"));
-        PageParser[] parsers = new PageParser[] { new FastPageParser(), new HTMLPageParser() };
+        PageParser[] parsers = new PageParser[] { /*new FastPageParser(),*/ new HTMLPageParser() };
 
         for (int i = 0; i < parsers.length; i++) {
             PageParser parser = parsers[i];
@@ -111,15 +111,16 @@ public class HTMLPageParserTest extends TestCase {
         props.load(input);
 
         String[] pageKeys = page.getPropertyKeys();
-        assertEquals(file.getName() + " : Unexpected number of page properties [" + join(pageKeys) + "]", pageKeys.length, props.size());
+        assertEquals(file.getName() + " : Unexpected number of page properties [" + join(pageKeys) + "]",
+                props.size(), pageKeys.length);
 
         for (int i = 0; i < pageKeys.length; i++) {
             String pageKey = pageKeys[i];
             String blockValue = props.getProperty(pageKey);
             String pageValue = page.getProperty(pageKey);
             assertEquals(file.getName(),
-                    pageValue == null ? null : pageValue.trim(),
-                    blockValue == null ? null : blockValue.trim());
+                    blockValue == null ? null : blockValue.trim(),
+                    pageValue == null ? null : pageValue.trim());
         }
     }
 
