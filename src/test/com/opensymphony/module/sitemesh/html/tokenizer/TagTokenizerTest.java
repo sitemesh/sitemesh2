@@ -286,11 +286,11 @@ public class TagTokenizerTest extends TestCase {
 
     }
 
-    public void testX() {
+    public void testToleratesExtraQuoteClosingAttributeValue() {
         // expectations
         handler = new MockTokenHandler() {
             public void warning(String message, int line, int column) {
-
+                // warning ok!
             }
         };
         handler.expectTag(Tag.OPEN, "a", new String[] {"href", "something-with-a-naughty-quote"});
