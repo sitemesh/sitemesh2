@@ -1,0 +1,43 @@
+body, td, li, br, div, p {
+	font-family : Verdana,Arial,Helvetica,"MS Sans Serif";
+	font-size: 12px;
+}
+
+TD.NavBarCell1 {
+	 BACKGROUND-COLOR: #eeeeee;
+}
+
+TD.NavBarCell1Rev {
+	BACKGROUND-COLOR: #ffffcc;
+ 	border-color: #69c #036 #036 #69c;
+	border-style: solid;
+	border-width: 1px;
+}
+
+TR.TableHeadingColor {
+	background-color: #ffffcc;
+}
+
+HR
+{
+	size: 1;
+	color: #000000;
+	height: 1;
+}
+
+i, b, em, strong {
+	color: #164a7d;
+}
+
+code {
+	color: #164a7d;
+	font-size : 12px;
+}
+
+a, a:visited{
+	color: #164a7d;
+}
+
+li {
+	padding-bottom: 2pt;
+}

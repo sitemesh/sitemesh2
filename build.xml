@@ -35,19 +35,9 @@
     </target>
 
     <!-- Generate JavaDoc -->
-    <target name="doc">
-        <mkdir dir="${doc.dir}" />
-        <javadoc sourcepath="${java.dir}"
-            destdir="${doc.dir}"
-            packagenames="${packages}"
-            classpathref="cp"
-            author="true"
-            version="true"
-            windowTitle="${Name} ${version} API"
-            doctitle="${Name}"
-            footer="See &lt;a href=&quot;http://www.opensymphony.com/&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information."
-            use="true"
-            verbose="false" />
+    <target name="javadocs">
+        <mkdir dir="${dist.dir}/docs/api"/>
+		<javadoc sourcepath="${java.dir}" destdir="${dist.dir}/docs/api" stylesheetfile="${docs.dir}/api.css" packagenames="com.opensymphony.*" classpathref="cp" author="true" version="true" windowTitle="${Name} ${version} API" doctitle="${Name}" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
     </target>
 
     <!-- Build simple web-app to get started with SiteMesh -->
