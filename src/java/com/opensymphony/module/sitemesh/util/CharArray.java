@@ -263,4 +263,12 @@ public class CharArray
       System.arraycopy(buffer, 0, newBuffer, 0, size);
       buffer = newBuffer;
    }
+
+    /**
+     * Clear the contents.
+     */
+    public final void clear()
+    {
+        size = 0;
+    }
 }

@@ -1,30 +1,30 @@
 package com.opensymphony.module.sitemesh.parser.html;
 
 import com.opensymphony.module.sitemesh.parser.AbstractHTMLPage;
+import com.opensymphony.module.sitemesh.util.CharArray;
 
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 class HTMLPage extends AbstractHTMLPage {
 
-    private StringWriter head = new StringWriter();
-    private StringWriter body = new StringWriter();
+    private final CharArray head = new CharArray(512);
+    private final CharArray body = new CharArray(4096);
 
     public HTMLPage(char[] original) {
         this.pageData = original;
     }
 
     public void clearBody() {
-        body.getBuffer().setLength(0);
+        body.clear();
     }
 
     public void appendToHead(String s) {
-        head.write(s);
+        head.append(s);
     }
 
     public void appendToBody(String s) {
-        body.write(s);
+        body.append(s);
     }
 
     public void writeHead(Writer out) throws IOException {
