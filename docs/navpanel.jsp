@@ -5,6 +5,7 @@
     <a href="<%= request.getContextPath() %>/sitemesh/features.html">Feature List</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/history.html">History and Crew</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/README.txt">README.txt</a><br>
+	<a href="<%= request.getContextPath() %>/sitemesh/CHANGES.txt">CHANGES.txt</a><br>
     <a href="<%= request.getContextPath() %>/sitemesh/download.html">Download</a>
 </p>
 

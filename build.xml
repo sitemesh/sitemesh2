@@ -77,6 +77,7 @@
 
         <mkdir dir="${dist.dir}/docs/dtd"/>
         <copy todir="${dist.dir}/docs" file="README.txt"/>
+        <copy todir="${dist.dir}/docs" file="CHANGES.txt"/>
         <copy todir="${dist.dir}/docs/dtd">
             <fileset dir="${etc.dir}/dtd"/>
         </copy>
