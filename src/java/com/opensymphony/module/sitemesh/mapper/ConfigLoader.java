@@ -11,12 +11,7 @@ package com.opensymphony.module.sitemesh.mapper;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Decorator;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.servlet.ServletException;
@@ -51,7 +46,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
@@ -166,41 +161,9 @@ public final class ConfigLoader {
                     if (uriPath.charAt(0) != '/') uriPath = '/' + uriPath;
                 }
 
-                // Get all <pattern>...</pattern> nodes and add a mapping
-                NodeList patternNodes = decoratorElement.getElementsByTagName("pattern");
-                for (int j = 0; j < patternNodes.getLength(); j++) {
-                    Element p = (Element)patternNodes.item(j);
-                    Text patternText = (Text) p.getFirstChild();
-                    if (patternText != null) {
-                    	String pattern = patternText.getData().trim();
-	                    if (role != null) {
-	                        // concatenate name and role to allow more
-	                        // than one decorator per role
-	                        pathMapper.put(name + role, pattern);
-	                    }
-	                    else {
-	                        pathMapper.put(name, pattern);
-	                    }
-	                }
-                }
-
-                // Get all <url-pattern>...</url-pattern> nodes and add a mapping
-                NodeList urlPatternNodes = decoratorElement.getElementsByTagName("url-pattern");
-                for (int j = 0; j < urlPatternNodes.getLength(); j++) {
-                    Element p = (Element)urlPatternNodes.item(j);
-                    Text patternText = (Text) p.getFirstChild();
-                    if (patternText != null) {
-                    	String pattern = patternText.getData().trim();
-                    	if (role != null) {
-                        	// concatenate name and role to allow more
-                        	// than one decorator per role
-                        	pathMapper.put(name + role, pattern);
-                    	}
-                    	else {
-                        	pathMapper.put(name, pattern);
-                    	}
-                    }
-                }
+                // Get all <pattern>...</pattern> and <url-pattern>...</url-pattern> nodes and add a mapping
+               populatePathMapper(decoratorElement.getElementsByTagName("pattern"), role, name);
+               populatePathMapper(decoratorElement.getElementsByTagName("url-pattern"), role, name);
             }
             else {
                 // NOTE: Deprecated format
@@ -229,16 +192,34 @@ public final class ConfigLoader {
             String name = getContainedText(mappingNodes.item(i), "decorator-name");
 
             // Get all <url-pattern>...</url-pattern> nodes and add a mapping
-            NodeList patternNodes = n.getElementsByTagName("url-pattern");
-            for (int j = 0; j < patternNodes.getLength(); j++) {
-                Element p = (Element)patternNodes.item(j);
-                Text patternText = (Text) p.getFirstChild();
-                if (patternText != null) pathMapper.put(name, patternText.getData().trim());
-            }
+            populatePathMapper(n.getElementsByTagName("url-pattern"), null, name);
         }
     }
 
-    /** Override default behavior of element.getAttribute (returns the empty string) to return null. */
+   /**
+    * Extracts each URL pattern and adds it to the pathMapper map.
+    */
+   private void populatePathMapper(NodeList patternNodes, String role, String name) {
+      for (int j = 0; j < patternNodes.getLength(); j++) {
+          Element p = (Element)patternNodes.item(j);
+          Text patternText = (Text) p.getFirstChild();
+          if (patternText != null) {
+             String pattern = patternText.getData().trim();
+             if (pattern != null) {
+                 if (role != null) {
+                     // concatenate name and role to allow more
+                     // than one decorator per role
+                     pathMapper.put(name + role, pattern);
+                 }
+                 else {
+                     pathMapper.put(name, pattern);
+                 }
+             }
+         }
+      }
+   }
+
+   /** Override default behavior of element.getAttribute (returns the empty string) to return null. */
     private static String getAttribute(Element element, String name) {
         if (element != null && element.getAttribute(name) != null && element.getAttribute(name).trim() != "") {
             return element.getAttribute(name).trim();
