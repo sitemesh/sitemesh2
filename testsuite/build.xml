@@ -61,7 +61,7 @@
     <target name="test" depends="tests-build" description="Run acceptance tests on deployed web-app">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
         <mkdir dir="${test-results}"/>
-        <junit fork="no" haltonfailure="no">
+        <junit fork="yes" haltonfailure="no">
             <classpath>
                 <fileset dir="lib"/>
                 <fileset dir="dist"/>
@@ -71,6 +71,22 @@
             <formatter type="plain" usefile="false"/>
             <formatter type="xml"/>
             <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite$OnAllServers"/>
+        </junit>
+    </target>
+
+    <target name="test-embedded" depends="tests-build, webapp-build" description="Run acceptance tests using embedded server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
+        <mkdir dir="${test-results}"/>
+        <junit fork="yes" haltonfailure="no">
+            <classpath>
+                <fileset dir="lib"/>
+                <fileset dir="dist"/>
+                <fileset dir="../lib"/>
+                <fileset dir="../dist"/>
+            </classpath>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml"/>
+            <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite$OnEmbeddedServer"/>
         </junit>
     </target>
 
