@@ -15,7 +15,7 @@ public class HTMLPageParserTestSuite extends TestSuite {
     public static Test suite() throws Exception {
 
         TestSuite suite = new TestSuite();
-        File dir = new File("parser-tests");
+        File dir = new File("src/parser-tests");
 
         // get list of files to ignore
         LineNumberReader ignoreReader = new LineNumberReader(new FileReader(new File(dir, "ignore.txt")));
@@ -26,7 +26,8 @@ public class HTMLPageParserTestSuite extends TestSuite {
         while ((line = ignoreReader.readLine()) != null) {
             ignoreFileNames.add(line);
         }
-        // list all testXXX.txt files.        Object[] context = dir.listFiles(new FilenameFilter() {
+        // list all testXXX.txt files.
+        Object[] context = dir.listFiles(new FilenameFilter() {
             public boolean accept(File currentDir, String name) {
                 return name.startsWith("test") && !ignoreFileNames.contains(name);
             }
