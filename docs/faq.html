@@ -106,5 +106,16 @@
             Orion applies <a href="http://jira.opensymphony.com/ViewIssue.jspa?id=10180">filters incorrectly to error pages</a>.
             For more information, consult the mail archives.
         </p>
+
+        <h4>How do I enable SiteMesh to decorate error pages on Tomcat 5?</h4>
+        <p>Replace the <code>&lt;filter-mapping&gt;</code> element in <code>web.xml</code> with this:
+            <blockquote><pre><xmp><filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+</filter-mapping></xmp></pre></blockquote>
+        </p>
+
     </body>
 </html>
