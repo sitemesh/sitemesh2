@@ -76,5 +76,6 @@ public class HTMLProcessor {
                 // System.out.println(line + "," + column + ": " + message);
             }
         });
+        defaultState.endOfState();
     }
 }
