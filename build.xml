@@ -27,10 +27,10 @@
         <mkdir dir="${dist.dir}" />
         <copy todir="${build.dir}/com/opensymphony/module/sitemesh/factory" file="${java.dir}/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
         <jar jarfile="${dist.dir}/${name}.jar" basedir="${build.dir}">
-          <metainf dir="${tld.dir}/jsp1.2"/>
+            <metainf dir="${tld.dir}/jsp1.2" includes="*.tld" />
         </jar>
         <copy todir="${dist.dir}">
-            <fileset dir="${tld.dir}" />
+            <fileset dir="${tld.dir}" includes="*.tld" />
         </copy>
     </target>
 
