@@ -2,10 +2,7 @@ package testsuite.sitemesh;
 
 import testsuite.tester.WebTest;
 import com.meterware.httpunit.WebResponse;
-import org.xml.sax.SAXException;
 
-import java.net.MalformedURLException;
-import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -18,7 +15,7 @@ import java.io.InputStream;
 public class BinaryFileTest extends WebTest {
 
     public void testGif() throws Exception {
-        InputStream fis = new BufferedInputStream(new FileInputStream("webapp/binary/harry_potter.gif"));
+        InputStream fis = new BufferedInputStream(new FileInputStream("src/webapp/binary/harry_potter.gif"));
         WebResponse rs = wc.getResponse(server.getBaseURL() + "/binary/harry_potter.gif");
         InputStream wis = rs.getInputStream();
 
