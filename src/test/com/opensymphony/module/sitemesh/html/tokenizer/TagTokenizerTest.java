@@ -43,10 +43,12 @@ public class TagTokenizerTest extends TestCase {
         // expectations
         handler.expectText("hello world ");
         handler.expectText("<!-- how are<we> \n -doing? -->");
+        handler.expectText("<!-- -->");
+        handler.expectText("<!---->");
         handler.expectText("good\n bye.");
         handler.expectTag(Tag.OPEN, "br");
         // execute
-        TagTokenizer tokenizer = new TagTokenizer("hello world <!-- how are<we> \n -doing? -->good\n bye.<br>");
+        TagTokenizer tokenizer = new TagTokenizer("hello world <!-- how are<we> \n -doing? --><!-- --><!---->good\n bye.<br>");
         tokenizer.start(handler);
         // verify
         handler.verify();

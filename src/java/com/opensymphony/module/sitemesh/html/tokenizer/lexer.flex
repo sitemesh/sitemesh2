@@ -36,6 +36,7 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
 /* Initial state of lexer. */
 <YYINITIAL> {
     "<!--" [^\[] ~"-->" { return Parser.TEXT; } /* All comments unless they start with <!--[ */
+    "<!---->"           { return Parser.TEXT; } 
     "<?" ~"?>"          { return Parser.TEXT; }
     "<!" [^\[\-] ~">"     { return Parser.TEXT; }
     "<![CDATA[" ~"]]>"  { return Parser.TEXT; }
