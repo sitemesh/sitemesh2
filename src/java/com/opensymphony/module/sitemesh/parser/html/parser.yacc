@@ -74,7 +74,7 @@ protected void reportError(String message, int line, int column) {
     tokenizer.error(message, line, column);
 }
 
-private class Value {
+private static class Value {
     String sval;
     int ival;
     int line;
