@@ -7,7 +7,7 @@
         As of SiteMesh 2.0.2 <a href="http://jakarta.apache.org/velocity/">Velocity</a> (.vm)
         decorators are supported.
 
-        <p>Here is an example of how such a decorator might look like:</p>
+        <p>Here is an example of how such a decorator (e.g. /decorators/main.vm) might look like:</p>
 
 <pre style="border: 1px solid #999999; padding: 5px">
 #parse ("/includes/decorators/header.vm")
@@ -44,15 +44,16 @@
 
 &lt;servlet-mapping&gt;
     &lt;servlet-name&gt;sitemesh-velocity&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;<b>/decorators/*.vm</b>&lt;/url-pattern&gt;
+    &lt;url-pattern&gt;<b>*.vm</b>&lt;/url-pattern&gt;
 &lt;/servlet-mapping&gt;
 </pre>
 
 		<ul>
 			<li>Modify <b><code>decorators.xml</code></b> to reference a .vm 
-			decorator.</li>
-		
+			decorator.</li>		
 		</ul>
+		
+		<p>A working example is included with the SiteMesh distribution, under the <a href="https://sitemesh.dev.java.net/source/browse/sitemesh/src/example-webapp/">src/example-webapp</a> directory.</p>
 		
 		<h3>Context</h3>
 		
