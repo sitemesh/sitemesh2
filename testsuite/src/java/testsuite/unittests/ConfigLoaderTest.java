@@ -31,7 +31,11 @@ public class ConfigLoaderTest extends TestCase {
 
             out.write("   <decorator name=\"default\" page=\"default.jsp\">");
             out.write("       <pattern>/info/*</pattern>");
-            out.write("       <url-pattern>/test/*</url-pattern>");
+            out.write("       <url-pattern>   ");
+            out.write("           /test/*");
+            out.write("       </url-pattern>");
+            out.write("       <url-pattern> </url-pattern>");
+            out.write("       <url-pattern></url-pattern>");
             out.write("   </decorator>");
 
             out.write("   <decorator name=\"other\" page=\"/other.jsp\">");
@@ -56,6 +60,11 @@ public class ConfigLoaderTest extends TestCase {
             out.write("   <decorator-mapping>");
             out.write("       <decorator-name>old</decorator-name>");
             out.write("       <url-pattern>/old/*</url-pattern>");
+            out.write("   </decorator-mapping>");
+
+            out.write("   <decorator-mapping>");
+            out.write("       <decorator-name>old2</decorator-name>");
+            out.write("       <url-pattern></url-pattern>");
             out.write("   </decorator-mapping>");
 
             out.write("</decorators>");

@@ -51,7 +51,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
@@ -170,29 +170,35 @@ public final class ConfigLoader {
                 NodeList patternNodes = decoratorElement.getElementsByTagName("pattern");
                 for (int j = 0; j < patternNodes.getLength(); j++) {
                     Element p = (Element)patternNodes.item(j);
-                    String pattern = ((Text)p.getFirstChild()).getData();
-                    if (role != null) {
-                        // concatenate name and role to allow more
-                        // than one decorator per role
-                        pathMapper.put(name + role, pattern);
-                    }
-                    else {
-                        pathMapper.put(name, pattern);
-                    }
+                    Text patternText = (Text) p.getFirstChild();
+                    if (patternText != null) {
+                    	String pattern = patternText.getData().trim();
+	                    if (role != null) {
+	                        // concatenate name and role to allow more
+	                        // than one decorator per role
+	                        pathMapper.put(name + role, pattern.trim());
+	                    }
+	                    else {
+	                        pathMapper.put(name, pattern.trim());
+	                    }
+	                }
                 }
 
                 // Get all <url-pattern>...</url-pattern> nodes and add a mapping
                 NodeList urlPatternNodes = decoratorElement.getElementsByTagName("url-pattern");
                 for (int j = 0; j < urlPatternNodes.getLength(); j++) {
                     Element p = (Element)urlPatternNodes.item(j);
-                    String pattern = ((Text)p.getFirstChild()).getData();
-                    if (role != null) {
-                        // concatenate name and role to allow more
-                        // than one decorator per role
-                        pathMapper.put(name + role, pattern);
-                    }
-                    else {
-                        pathMapper.put(name, pattern);
+                    Text patternText = (Text) p.getFirstChild();
+                    if (patternText != null) {
+                    	String pattern = patternText.getData().trim();
+                    	if (role != null) {
+                        	// concatenate name and role to allow more
+                        	// than one decorator per role
+                        	pathMapper.put(name + role, pattern);
+                    	}
+                    	else {
+                        	pathMapper.put(name, pattern);
+                    	}
                     }
                 }
             }
@@ -226,8 +232,8 @@ public final class ConfigLoader {
             NodeList patternNodes = n.getElementsByTagName("url-pattern");
             for (int j = 0; j < patternNodes.getLength(); j++) {
                 Element p = (Element)patternNodes.item(j);
-                String pattern = ((Text)p.getFirstChild()).getData();
-                pathMapper.put(name, pattern);
+                Text patternText = (Text) p.getFirstChild();
+                if (patternText != null) pathMapper.put(name, patternText.getData().trim());
             }
         }
     }
