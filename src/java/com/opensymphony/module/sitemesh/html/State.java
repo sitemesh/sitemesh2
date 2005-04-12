@@ -29,7 +29,7 @@ public final class State {
     }
 
     public boolean shouldProcessTag(String tagName) {
-        for (int i = 0; i < ruleCount; i++) {
+        for (int i = ruleCount - 1; i >= 0; i--) { // reverse iteration to so most recently added rule matches
             if (rules[i].shouldProcess(tagName)) {
                 return true;
             }
@@ -38,7 +38,7 @@ public final class State {
     }
 
     public TagRule getRule(String tagName) {
-        for (int i = 0; i < ruleCount; i++) {
+        for (int i = ruleCount - 1; i >= 0; i--) { // reverse iteration to so most recently added rule matches
             if (rules[i].shouldProcess(tagName)) {
                 return rules[i];
             }
