@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is only used because the default charset is '8859-1'  As utf-8 is a superset, we choose this as a default.
+
+    For other servers, we can use a servlet filter to set the charset in the page.  However, a bug in weblogic prevents this.
+
+    Change the charset below if you wish to use a character set other than utf-8 in weblogic
+-->
+<weblogic-web-app>
+    <jsp-descriptor>
+        <jsp-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </jsp-param>
+        <jsp-param>
+            <param-name>compilerSupportsEncoding</param-name>
+            <param-value>false</param-value>
+        </jsp-param>
+    </jsp-descriptor>
+</weblogic-web-app>
