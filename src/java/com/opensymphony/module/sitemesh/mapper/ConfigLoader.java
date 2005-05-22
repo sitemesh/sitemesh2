@@ -46,12 +46,12 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
  */
-public final class ConfigLoader {
+public class ConfigLoader {
     private Map decorators = null;
     private long configLastModified;
 

@@ -30,11 +30,11 @@ import java.util.Properties;
  * of a page, it can be used for much more imaginative purposes.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
-public final class PrintableDecoratorMapper extends AbstractDecoratorMapper {
+public class PrintableDecoratorMapper extends AbstractDecoratorMapper {
     private String decorator, paramName, paramValue;
 
     public void init(Config config, Properties properties, DecoratorMapper parent) throws InstantiationException {

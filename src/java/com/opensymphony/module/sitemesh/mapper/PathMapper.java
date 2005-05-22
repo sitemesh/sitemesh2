@@ -37,9 +37,9 @@ import java.util.Iterator;
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:mcannon@internet.com">Mike Cannon-Brookes</a>
  * @author <a href="mailto:hani@formicary.net">Hani Suleiman</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public final class PathMapper {
+public class PathMapper {
     private Map mappings = new HashMap();
 
     /** Add a key and appropriate matching pattern. */

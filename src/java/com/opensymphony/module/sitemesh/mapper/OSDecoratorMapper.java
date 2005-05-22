@@ -9,16 +9,14 @@
 
 package com.opensymphony.module.sitemesh.mapper;
 
-import com.opensymphony.module.sitemesh.mapper.AbstractDecoratorMapper;
-import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Decorator;
 import com.opensymphony.module.sitemesh.DecoratorMapper;
-import com.opensymphony.module.sitemesh.Config;
+import com.opensymphony.module.sitemesh.Page;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Properties;
 import java.util.Enumeration;
-import java.lang.String;
+import java.util.Properties;
 
 /**
  * The OSDecoratorMapper will map a suitable decorator based on the operating system
@@ -34,11 +32,11 @@ import java.lang.String;
  * decorator name if the user is using that operating system</p>
  *
  * @author	<a href="mailto:schepdawg@yahoo.com">Adam P. Schepis</a>
- * @version	$Revision: 1.2 $
+ * @version	$Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.AbstractDecoratorMapper
  */
-public final class OSDecoratorMapper extends AbstractDecoratorMapper {
+public class OSDecoratorMapper extends AbstractDecoratorMapper {
     /**
      * Properties holds the parameters that the object was initialized with.
      */

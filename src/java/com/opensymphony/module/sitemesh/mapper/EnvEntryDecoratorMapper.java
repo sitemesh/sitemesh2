@@ -36,11 +36,11 @@ import javax.servlet.http.HttpServletRequest;
  * </ol>
  *
  * @author <a href="mailto:joeo@enigmastation.com">Joseph B. Ottinger</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  */
-public final class EnvEntryDecoratorMapper extends ConfigDecoratorMapper {
+public class EnvEntryDecoratorMapper extends ConfigDecoratorMapper {
     /**
      * Retrieves the {@link com.opensymphony.module.sitemesh.Decorator}
      * specified by the decorator name. If it's not in the environment

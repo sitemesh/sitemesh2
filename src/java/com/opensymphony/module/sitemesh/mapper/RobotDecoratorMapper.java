@@ -27,11 +27,11 @@ import java.util.Properties;
  * property.</p>
  *
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
-public final class RobotDecoratorMapper extends AbstractDecoratorMapper {
+public class RobotDecoratorMapper extends AbstractDecoratorMapper {
     private String decoratorName = null;
 
     /** All known robot hosts (list can be found <a href="http://www.spiderhunter.com">here</a>). */

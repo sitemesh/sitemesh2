@@ -43,11 +43,11 @@ import java.util.Properties;
  * For example: 'match.MSIE'=ie , 'match.Lynx'=plain .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
-public final class AgentDecoratorMapper extends AbstractDecoratorMapper {
+public class AgentDecoratorMapper extends AbstractDecoratorMapper {
     private Map map = null;
 
     public void init(Config config, Properties properties, DecoratorMapper parent) throws InstantiationException {

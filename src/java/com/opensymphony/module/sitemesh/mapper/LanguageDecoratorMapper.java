@@ -42,7 +42,7 @@ import java.util.Properties;
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
-public final class LanguageDecoratorMapper extends AbstractDecoratorMapper {
+public class LanguageDecoratorMapper extends AbstractDecoratorMapper {
     private Map map = null;
 
     public void init(Config config, Properties properties, DecoratorMapper parent) throws InstantiationException {

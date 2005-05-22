@@ -28,11 +28,11 @@ import java.util.Properties;
  * frame based pages.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  */
-public final class FrameSetDecoratorMapper extends AbstractDecoratorMapper {
+public class FrameSetDecoratorMapper extends AbstractDecoratorMapper {
     private String decorator = null;
 
     public void init(Config config, Properties properties, DecoratorMapper parent) throws InstantiationException {
