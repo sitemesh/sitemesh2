@@ -24,7 +24,7 @@ import java.util.Properties;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mcannon@internet.com">Mike Cannon-Brookes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.DefaultDecorator
@@ -59,6 +59,10 @@ public class ConfigDecoratorMapper extends AbstractDecoratorMapper {
             else {
                 thisPath = requestURI;
             }
+        }
+        else if ("".equals(thisPath)) {
+            // in servlet 2.4, if a request is mapped to '/*', getServletPath returns null (SIM-130)
+            thisPath = request.getPathInfo();
         }
 
         String name = null;
