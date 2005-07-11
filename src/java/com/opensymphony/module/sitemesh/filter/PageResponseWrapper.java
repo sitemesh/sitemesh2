@@ -21,7 +21,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -67,6 +67,9 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
             if (factory.shouldParsePage(contentType)) {
                 activateSiteMesh(contentType, encoding);
             }
+            else {
+                deactivateSiteMesh();
+            }
         }
 
     }
@@ -85,6 +88,21 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         routableServletOutputStream.updateDestination(new RoutableServletOutputStream.DestinationFactory() {
             public ServletOutputStream create() {
                 return buffer.getOutputStream();
+            }
+        });
+    }
+
+    private void deactivateSiteMesh() {
+        parseablePage = false;
+        buffer = null;
+        routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
+            public PrintWriter activateDestination() throws IOException {
+                return getResponse().getWriter();
+            }
+        });
+        routableServletOutputStream.updateDestination(new RoutableServletOutputStream.DestinationFactory() {
+            public ServletOutputStream create() throws IOException {
+                return getResponse().getOutputStream();
             }
         });
     }
@@ -151,16 +169,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         if (sc == HttpServletResponse.SC_NOT_MODIFIED) {
             aborted = true;
             // route any content back to the original writer.  There shouldn't be any content, but just to be safe
-            routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
-                public PrintWriter activateDestination() throws IOException {
-                    return getResponse().getWriter();
-                }
-            });
-            routableServletOutputStream.updateDestination(new RoutableServletOutputStream.DestinationFactory() {
-                public ServletOutputStream create() throws IOException {
-                    return getResponse().getOutputStream();
-                }
-            });
+            deactivateSiteMesh();
         }
         super.setStatus(sc);
     }
