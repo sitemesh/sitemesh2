@@ -2,13 +2,15 @@ package testsuite.sitemesh;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.xml.sax.SAXException;
 
-import com.meterware.httpunit.WebResponse;
-import com.meterware.httpunit.HttpInternalErrorException;
-import com.meterware.httpunit.HttpNotFoundException;
+import com.meterware.httpunit.*;
 import testsuite.tester.WebTest;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Test basic capabilities of web-app - no sitemesh specific stuff.
@@ -49,6 +51,31 @@ public class BasicPageTest extends WebTest {
 		catch ( HttpNotFoundException e ) {
 		}
 	}
+
+    public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    /**
+     * Check that sitemesh does not break unmodified pages (SIM-186)
+     */
+    public void testNotModified() throws Exception {
+        // get the page twice, and get it with an 'If-Modified-Since' header the second time
+        WebResponse rs = wc.getResponse( baseUrl + "/basic/notmodified.html" );
+        assertEquals("SiteMesh plain page", rs.getTitle());
+
+        WebRequest wr = new GetMethodWebRequest(baseUrl + "/basic/notmodified.html");
+        wr.setHeaderField("If-Modified-Since", new SimpleDateFormat(PATTERN_RFC1123).format(new Date()));
+        rs = wc.getResponse(wr);
+
+        if (200 == rs.getResponseCode()) {
+            assertEquals("SiteMesh plain page", rs.getTitle());
+        }
+        else if (304 == rs.getResponseCode()) {
+            // this is valid as well!
+        }
+        else {
+            fail("Response code was " + rs.getResponseCode() + " was expecting 200 or 304");
+        }
+    }
 
     public void testPlainTextPage() throws Exception {
         WebResponse rs = wc.getResponse( baseUrl + "/basic/text.jsp" );

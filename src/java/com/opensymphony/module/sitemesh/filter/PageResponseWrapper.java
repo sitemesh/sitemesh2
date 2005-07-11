@@ -21,7 +21,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -145,13 +145,24 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /**
-     * Prevent 'not modified' (304) HTTP status from being sent if page is parseable
-     * (so web-server/browser doesn't cache contents).
+     * If 'not modified' (304) HTTP status is being sent - then abort parsing, as there shouldn't be any body
      */
     public void setStatus(int sc) {
-        if (!parseablePage || sc != HttpServletResponse.SC_NOT_MODIFIED) {
-            super.setStatus(sc);
+        if (sc == HttpServletResponse.SC_NOT_MODIFIED) {
+            aborted = true;
+            // route any content back to the original writer.  There shouldn't be any content, but just to be safe
+            routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
+                public PrintWriter activateDestination() throws IOException {
+                    return getResponse().getWriter();
+                }
+            });
+            routableServletOutputStream.updateDestination(new RoutableServletOutputStream.DestinationFactory() {
+                public ServletOutputStream create() throws IOException {
+                    return getResponse().getOutputStream();
+                }
+            });
         }
+        super.setStatus(sc);
     }
 
     public ServletOutputStream getOutputStream() {
