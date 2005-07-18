@@ -9,6 +9,10 @@
 
 package com.opensymphony.module.sitemesh.taglib.decorator;
 
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
@@ -16,19 +20,22 @@ import com.opensymphony.module.sitemesh.taglib.AbstractTag;
  * Write original HTMLPage head to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.HTMLPage#writeHead(java.io.Writer)
  */
 public class HeadTag extends AbstractTag {
-    public final int doEndTag() {
-        try {
-            HTMLPage htmlPage = (HTMLPage)getPage();
-            htmlPage.writeHead(getOut());
-        }
-        catch (Exception e) {
-            trace(e);
-        }
-        return EVAL_PAGE;
+    public final int doEndTag() throws JspException
+    {
+      HTMLPage htmlPage = (HTMLPage)getPage();
+      try
+      {
+        htmlPage.writeHead(getOut());
+      }
+      catch(IOException e)
+      {
+        throw new JspException("Error writing head element: " + e.toString(), e);
+      }
+      return EVAL_PAGE;
     }
 }
