@@ -11,6 +11,7 @@ package com.opensymphony.module.sitemesh;
 
 import com.opensymphony.module.sitemesh.factory.FactoryException;
 import com.opensymphony.module.sitemesh.util.Container;
+import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
 
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
@@ -24,7 +25,7 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class Factory {
     /** Web context lookup key */
@@ -40,14 +41,7 @@ public abstract class Factory {
         if (instance == null) {
             String factoryClass = getEnvEntry("sitemesh.factory", "com.opensymphony.module.sitemesh.factory.DefaultFactory");
             try {
-                Class cls;
-                try {
-                    cls = Class.forName(factoryClass);
-                }
-                catch (NoClassDefFoundError e) {
-                    cls = Class.forName(factoryClass, true, Thread.currentThread().getContextClassLoader());
-                }
-
+                Class cls = ClassLoaderUtil.loadClass(factoryClass, config.getClass());
                 Constructor con = cls.getConstructor(new Class[] { Config.class });
                 instance = (Factory)con.newInstance(new Config[] { config });
                 config.getServletContext().setAttribute(SITEMESH_FACTORY, instance);

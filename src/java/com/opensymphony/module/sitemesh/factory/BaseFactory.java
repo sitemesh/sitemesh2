@@ -13,6 +13,7 @@ import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.DecoratorMapper;
 import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
 import com.opensymphony.module.sitemesh.mapper.PathMapper;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -104,13 +105,7 @@ public abstract class BaseFactory extends Factory {
     /** Push new DecoratorMapper onto end of chain. */
     protected void pushDecoratorMapper(String className, Properties properties) {
         try {
-            Class decoratorMapperClass = null;
-            try {
-                decoratorMapperClass = loadClass(className, getClass());
-            }
-            catch (NoClassDefFoundError e) {
-                decoratorMapperClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
-            }
+            Class decoratorMapperClass = ClassLoaderUtil.loadClass(className, getClass());
             DecoratorMapper newMapper = (DecoratorMapper) decoratorMapperClass.newInstance();
             newMapper.init(config, properties, decoratorMapper);
             decoratorMapper = newMapper;
@@ -123,22 +118,6 @@ public abstract class BaseFactory extends Factory {
         }
     }
 
-    public static Class loadClass(String className, Class callingClass) throws ClassNotFoundException {
-        try {
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
-        } catch (ClassNotFoundException e) {
-            try {
-                return Class.forName(className);
-            } catch (ClassNotFoundException ex) {
-                try {
-                    return BaseFactory.class.getClassLoader().loadClass(className);
-                } catch (ClassNotFoundException exc) {
-                    return callingClass.getClassLoader().loadClass(className);
-                }
-            }
-        }
-    }
-  
     /** Clear all PageParser mappings. */
     protected void clearParserMappings() {
         pageParsers = new HashMap();
@@ -153,7 +132,7 @@ public abstract class BaseFactory extends Factory {
             return; // Backwards compatability - this can safely be ignored.
         }
         try {
-            PageParser pp = (PageParser) Class.forName(className).newInstance();
+            PageParser pp = (PageParser) ClassLoaderUtil.loadClass(className, getClass()).newInstance();
             // Store the parser even if the content type is NULL. [This
             // is most probably the legacy default page parser which
             // we no longer have a use for]
