@@ -12,8 +12,6 @@ import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.util.CharArrayReader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Looks for patterns of tokens in the Lexer and translates these to calls to pass to the TokenHandler.
@@ -50,7 +48,8 @@ class Parser extends Lexer {
 
     private String name;
     private int type;
-    private final List attributes = new ArrayList(); // name1, value1, name2, value2...
+    private int attributeCount = 0;
+    private String[] attributes = new String[10]; // name1, value1, name2, value2...
 
     public Parser(char[] input, TokenHandler handler) {
         super(new CharArrayReader(input));
@@ -305,15 +304,20 @@ class Parser extends Lexer {
         this.position = start;
         this.length = length;
         handler.tag((Tag) reusableToken);
-        attributes.clear();
+        attributeCount = 0;
     }
 
     public void parsedAttribute(String name, String value, boolean quoted) {
-        attributes.add(name);
+        if(attributeCount + 2 >= attributes.length) {
+            String[] newAttributes = new String[this.attributeCount * 2];
+            System.arraycopy(attributes, 0, newAttributes, 0, this.attributeCount);
+            this.attributes = newAttributes;
+        }
+        attributes[attributeCount++] = name;
         if (quoted) {
-            attributes.add(value.substring(1, value.length() - 1));
+            attributes[attributeCount++] = value.substring(1, value.length() - 1);
         } else {
-            attributes.add(value);
+            attributes[attributeCount++] = value;
         }
     }
 
@@ -340,17 +344,15 @@ class Parser extends Lexer {
         }
 
         public int getAttributeCount() {
-            return attributes == null ? 0 : attributes.size() / 2;
+            return attributeCount / 2;
         }
 
         public int getAttributeIndex(String name, boolean caseSensitive) {
-            // todo: optimize
-            if (attributes == null) {
-                return -1;
-            }
-            final int len = attributes.size();
+            if(attributeCount == 0)
+               return -1;
+            final int len = attributeCount;
             for (int i = 0; i < len; i+=2) {
-                final String current = (String) attributes.get(i);
+                final String current = attributes[i];
                 if (caseSensitive ? name.equals(current) : name.equalsIgnoreCase(current)) {
                     return i / 2;
                 }
@@ -359,11 +361,11 @@ class Parser extends Lexer {
         }
 
         public String getAttributeName(int index) {
-            return (String) attributes.get(index * 2);
+            return attributes[index * 2];
         }
 
         public String getAttributeValue(int index) {
-            return (String) attributes.get(index * 2 + 1);
+            return (String) attributes[index * 2 + 1];
         }
 
         public String getAttributeValue(String name, boolean caseSensitive) {
@@ -371,7 +373,7 @@ class Parser extends Lexer {
             if (attributeIndex == -1) {
                 return null;
             } else {
-                return (String) attributes.get(attributeIndex * 2 + 1);
+                return attributes[attributeIndex * 2 + 1];
             }
         }
 
