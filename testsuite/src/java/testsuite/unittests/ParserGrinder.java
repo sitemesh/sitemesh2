@@ -57,7 +57,8 @@ public class ParserGrinder
         {
           for(int j=0;j<passes;j++)
           {
-            FastPageParser parser = new FastPageParser();
+            PageParser parser = new HTMLPageParser();
+            //PageParser parser = new FastPageParser();
             try
             {
               lists[index].add(parser.parse(chars));
@@ -83,8 +84,9 @@ public class ParserGrinder
     {
       threads[i].join();
     }
-    System.gc();
+    long timeTaken = System.currentTimeMillis() - now;
+    //System.gc();
     long endMemory = Runtime.getRuntime().freeMemory();
-    System.out.println("time taken " + (System.currentTimeMillis()-now) + " for " + (threads.length * passes) + " parses. Memory used=" + (startMemory-endMemory));
+    System.out.println("time taken " + timeTaken + " for " + (threads.length * passes) + " parses. Memory used=" + (endMemory-  startMemory));
   }
 }

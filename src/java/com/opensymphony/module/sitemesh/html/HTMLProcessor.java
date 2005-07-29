@@ -3,13 +3,11 @@ package com.opensymphony.module.sitemesh.html;
 import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
 import com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.util.CharArrayWriter;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.Reader;
 import java.io.Writer;
-import java.io.CharArrayWriter;
+//import java.io.CharArrayWriter;
 import java.io.IOException;
 
 public class HTMLProcessor {
@@ -29,7 +27,7 @@ public class HTMLProcessor {
     public HTMLProcessor(Reader in, Writer out) throws IOException {
         CharArrayWriter inBuffer = new CharArrayWriter();
         char[] buffer = new char[2048];
-        int n = 0;
+        int n;
         while (-1 != (n = in.read(buffer))) {
             inBuffer.write(buffer, 0, n);
         }
