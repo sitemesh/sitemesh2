@@ -263,7 +263,10 @@ public class CustomTag implements Tag {
         //shift everything down one and null the last two
         String[] newAttributes = new String[attributes.length - 2];
         System.arraycopy(attributes, 0, newAttributes, 0, attributeIndex * 2);
-        System.arraycopy(attributes, (attributeIndex * 2) + 2, newAttributes, attributeIndex * 2, attributeIndex);
+        int next = (attributeIndex * 2) + 2;
+        System.arraycopy(attributes, next, newAttributes, attributeIndex * 2, attributes.length - next);
+        attributeCount = attributeCount - 2;
+        attributes = newAttributes;
     }
 
     /**
