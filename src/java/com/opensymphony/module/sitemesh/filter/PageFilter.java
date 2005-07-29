@@ -17,11 +17,11 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class PageFilter implements Filter, RequestConstants {
-    private FilterConfig filterConfig = null;
-    private Factory factory = null;
+    protected FilterConfig filterConfig = null;
+    protected Factory factory = null;
 
     /**
      * Main method of the Filter.
