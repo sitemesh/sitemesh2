@@ -1,9 +1,10 @@
 package com.opensymphony.module.sitemesh.html;
 
-import com.opensymphony.module.sitemesh.html.util.CharArray;
+import java.util.Arrays;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.html.tokenizer.Parser;
+
 
 /**
  * A CustomTag provides a mechanism to manipulate the contents of a Tag. The standard Tag implementations
@@ -15,7 +16,8 @@ import java.util.List;
  */
 public class CustomTag implements Tag {
 
-    private final List attributes = new ArrayList(); // name1, value1, name2, value2...
+    private String[] attributes = new String[10]; // name1, value1, name2, value2...
+    private int attributeCount = 0;
     private String name;
     private int type;
 
@@ -37,10 +39,23 @@ public class CustomTag implements Tag {
     public CustomTag(Tag tag) {
         setName(tag.getName());
         setType(tag.getType());
-        int c = tag.getAttributeCount();
-        for (int i = 0; i < c; i++) {
-            attributes.add(tag.getAttributeName(i));
-            attributes.add(tag.getAttributeValue(i));
+        if(tag instanceof Parser.ReusableToken) {
+          Parser.ReusableToken orig = (Parser.ReusableToken)tag;
+          attributeCount = orig.attributeCount;
+          attributes = new String[attributeCount];
+          System.arraycopy(orig.attributes, 0, attributes, 0, attributeCount);
+        } else if(tag instanceof CustomTag) {
+          CustomTag orig = (CustomTag)tag;
+          attributeCount = orig.attributeCount;
+          attributes = new String[attributeCount];
+          System.arraycopy(orig.attributes, 0, attributes, 0, attributeCount);
+        } else {
+          int c = tag.getAttributeCount();
+          attributes = new String[c * 2];
+          for (int i = 0; i < c; i++) {
+              attributes[attributeCount++] = tag.getAttributeName(i);
+              attributes[attributeCount++] = tag.getAttributeValue(i);
+          }
         }
     }
 
@@ -58,11 +73,11 @@ public class CustomTag implements Tag {
         }
 
         out.append(name);
-        final int len = attributes.size();
+        final int len = attributeCount;
 
         for (int i = 0; i < len; i += 2) {
-            final String name = (String) attributes.get(i);
-            final String value = (String) attributes.get(i + 1);
+            final String name = attributes[i];
+            final String value = attributes[i + 1];
             if (value == null) {
                 out.append(' ').append(name);
             } else {
@@ -84,15 +99,14 @@ public class CustomTag implements Tag {
         final CustomTag customTag = (CustomTag) o;
 
         if (type != customTag.type) return false;
-        if (attributes != null ? !attributes.equals(customTag.attributes) : customTag.attributes != null) return false;
+        if (attributes != null ? !Arrays.equals(attributes, customTag.attributes) : customTag.attributes != null) return false;
         if (name != null ? !name.equals(customTag.name) : customTag.name != null) return false;
 
         return true;
     }
 
     public int hashCode() {
-        int result;
-        result = (attributes != null ? attributes.hashCode() : 0);
+        int result = (attributes != null ? attributes.hashCode() : 0);
         result = 29 * result + (name != null ? name.hashCode() : 0);
         result = 29 * result + type;
         return result;
@@ -105,16 +119,16 @@ public class CustomTag implements Tag {
     // ---------- Standard methods to implement Tag interface ------
 
     public int getAttributeCount() {
-        return attributes == null ? 0 : attributes.size() / 2;
+        return attributeCount / 2;
     }
 
     public int getAttributeIndex(String name, boolean caseSensitive) {
         if (attributes == null) {
             return -1;
         }
-        final int len = attributes.size();
+        final int len = attributeCount;
         for (int i = 0; i < len; i += 2) {
-            final String current = (String) attributes.get(i);
+            final String current = attributes[i];
             if (caseSensitive ? name.equals(current) : name.equalsIgnoreCase(current)) {
                 return i / 2;
             }
@@ -123,11 +137,11 @@ public class CustomTag implements Tag {
     }
 
     public String getAttributeName(int index) {
-        return (String) attributes.get(index * 2);
+        return attributes[index * 2];
     }
 
     public String getAttributeValue(int index) {
-        return (String) attributes.get(index * 2 + 1);
+        return attributes[index * 2 + 1];
     }
 
     public String getAttributeValue(String name, boolean caseSensitive) {
@@ -135,7 +149,7 @@ public class CustomTag implements Tag {
         if (attributeIndex == -1) {
             return null;
         } else {
-            return (String) attributes.get(attributeIndex * 2 + 1);
+            return attributes[attributeIndex * 2 + 1];
         }
     }
 
@@ -186,6 +200,12 @@ public class CustomTag implements Tag {
         }
     }
 
+    private void growAttributes() {
+        String[] newAttributes = new String[attributes.length * 2];
+        System.arraycopy(attributes, 0, newAttributes, 0, attributes.length);
+        attributes = newAttributes;
+    }
+  
     /**
      * Add a new attribute. This does not check for the existence of an attribute with the same name,
      * thus allowing duplicate attributes.
@@ -195,9 +215,12 @@ public class CustomTag implements Tag {
      * @return Index of new attribute.
      */
     public int addAttribute(String name, String value) {
-        attributes.add(name);
-        attributes.add(value);
-        return getAttributeCount() - 1;
+        if(attributeCount == attributes.length) {
+            growAttributes();
+        }
+        attributes[attributeCount++] = name;
+        attributes[attributeCount++] = value;
+        return (attributeCount / 2) - 1;
     }
 
     /**
@@ -210,33 +233,37 @@ public class CustomTag implements Tag {
     public void setAttributeValue(String name, boolean caseSensitive, String value) {
         int attributeIndex = getAttributeIndex(name, caseSensitive);
         if (attributeIndex == -1) {
-            attributes.add(name);
-            attributes.add(value);
+            addAttribute(name, value);
         } else {
-            attributes.set(attributeIndex + 1, value);
+            attributes[attributeIndex * 2 + 1] = value;
         }
     }
 
     /**
      * Change the name of an existing attribute.
      */
-    public void setAttributeName(int attributeIndex, String value) {
-        attributes.set(attributeIndex, value);
+    public void setAttributeName(int attributeIndex, String name) {
+        attributes[attributeIndex * 2] = name;
     }
 
     /**
      * Change the value of an existing attribute. The value may be null for an HTML style empty attribute.
      */
     public void setAttributeValue(int attributeIndex, String value) {
-        attributes.set(attributeIndex + 1, value);
+        attributes[(attributeIndex * 2) + 1] = value;
     }
 
     /**
      * Remove an attribute.
      */
     public void removeAttribute(int attributeIndex) {
-        attributes.remove(attributeIndex * 2); // name
-        attributes.remove(attributeIndex * 2); // value (now shifted down a place)
+        if(attributeIndex > attributeCount / 2) {
+            throw new ArrayIndexOutOfBoundsException("Cannot remove attribute at index " + attributeIndex + ", max index is " + attributeCount/2);
+        }
+        //shift everything down one and null the last two
+        String[] newAttributes = new String[attributes.length - 2];
+        System.arraycopy(attributes, 0, newAttributes, 0, attributeIndex * 2);
+        System.arraycopy(attributes, (attributeIndex * 2) + 2, newAttributes, attributeIndex * 2, attributeIndex);
     }
 
     /**
@@ -250,8 +277,7 @@ public class CustomTag implements Tag {
         if (attributeIndex == -1) {
             throw new IllegalArgumentException("Attribute " + name + " not found");
         } else {
-            attributes.remove(attributeIndex * 2); // name
-            attributes.remove(attributeIndex * 2); // value (now shifted down a place)
+            removeAttribute(attributeIndex);
         }
     }
 }

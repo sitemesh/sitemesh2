@@ -60,23 +60,31 @@ public class HTMLProcessor {
                 currentState = newState;
             }
 
-            private LinkedList bufferStack = new LinkedList();
+            private CharArray[] buffers = new CharArray[10];
+            private int size;
 
             public void pushBuffer(CharArray buffer) {
-                bufferStack.add(buffer);
+                if(size == buffers.length) {
+                  CharArray[] newBuffers = new CharArray[buffers.length * 2];
+                  System.arraycopy(buffers, 0, newBuffers, 0, buffers.length);
+                  buffers = newBuffers;
+                }
+                buffers[size++] = buffer;
             }
-
+  
             public CharArray currentBuffer() {
-                return (CharArray) bufferStack.getLast();
+                return buffers[size - 1];
             }
-
+  
             public CharArray popBuffer() {
-                return (CharArray) bufferStack.removeLast();
+                CharArray last = buffers[size - 1];
+                buffers[--size] = null;
+                return last;
             }
-
+  
             public void mergeBuffer() {
-                CharArray top = (CharArray) bufferStack.getLast();
-                CharArray nextDown = (CharArray) bufferStack.get(bufferStack.size() - 2);
+                CharArray top = buffers[size - 1];
+                CharArray nextDown = buffers[size - 2];
                 nextDown.append(top);
             }
         };
