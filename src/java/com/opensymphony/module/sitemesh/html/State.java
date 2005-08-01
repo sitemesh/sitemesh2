@@ -8,8 +8,8 @@ public final class State {
 
     private TagRule[] rules = new TagRule[16]; // List is too slow, according to profiler
     private int ruleCount = 0;
-    private final ArrayList listeners = new ArrayList();
-    private List textFilters = new ArrayList(); // lazily instantiated to reduce overhead for most cases where it's not needed.
+    private List listeners = null;
+    private List textFilters = null; // lazily instantiated to reduce overhead for most cases where it's not needed.
 
     public void addRule(TagRule rule) {
         if (ruleCount == rules.length) {
@@ -47,11 +47,13 @@ public final class State {
     }
 
 	public void addListener(StateChangeListener listener) {
-		listeners.add(listener);
+    if(listeners == null) listeners = new ArrayList();
+    listeners.add(listener);
 	}
 
 	public void endOfState() {
-		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+    if(listeners == null) return;
+    for (Iterator iter = listeners.iterator(); iter.hasNext();) {
 			StateChangeListener listener = (StateChangeListener) iter.next();
 			listener.stateFinished();			
 		}
