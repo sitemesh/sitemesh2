@@ -1,4 +1,9 @@
 --------------------------
+-- Changes in 2.3       --
+--------------------------
+Added components to enable decorators to be built with Tapestry (contributed by Erik Hatcher). 
+
+--------------------------
 -- Changes in 2.2.1     --
 --------------------------  
 SiteMesh 2.2 introduced a few critical bugs, which have stopped it

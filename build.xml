@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-    <project name="sitemesh" default="jar">
+<project name="sitemesh" default="jar">
 
     <property name="build.compiler" value="modern" />
     <property file="build.properties"/>
@@ -109,7 +109,9 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="dist"/>
-        <copy todir="build/classes/com/opensymphony/module/sitemesh/factory" file="src/java/com/opensymphony/module/sitemesh/factory/sitemesh-default.xml"/>
+        <copy todir="build/classes">
+             <fileset dir="src/java" excludes="**/*.java,**/*.flex"/>
+        </copy>
         <jar jarfile="dist/${name}-${version}.jar" basedir="build/classes" excludes="**/servlets/**">
             <metainf dir="src/etc/tld/jsp1.2" includes="*.tld"/>
         </jar>

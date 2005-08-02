@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE component-specification PUBLIC
+        "-//Apache Software Foundation//Tapestry Specification 3.0//EN"
+        "http://jakarta.apache.org/tapestry/dtd/Tapestry_3_0.dtd">
+<component-specification class="com.opensymphony.module.sitemesh.tapestry.Property"
+                         allow-body="no"
+                         allow-informal-parameters="yes">
+
+    <parameter name="property" required="yes" type="java.lang.String" direction="in"/>
+    <parameter name="default" required="no" type="java.lang.String" direction="in"/>
+
+    <component id="insert" type="Insert" inherit-informal-parameters="yes">
+        <binding name="value" expression="value"/>
+        <binding name="raw" expression="true"/>
+    </component>
+
+</component-specification>

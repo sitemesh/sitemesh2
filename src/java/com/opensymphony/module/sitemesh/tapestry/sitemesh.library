@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library-specification PUBLIC
+        "-//Apache Software Foundation//Tapestry Specification 3.0//EN"
+        "http://jakarta.apache.org/tapestry/dtd/Tapestry_3_0.dtd">
+
+<library-specification>
+    <component-type type="Body" specification-path="Body.jwc"/>
+    <component-type type="Head" specification-path="Head.jwc"/>
+    <component-type type="Property" specification-path="Property.jwc"/>
+    <component-type type="Title" specification-path="Title.jwc"/>
+</library-specification>
