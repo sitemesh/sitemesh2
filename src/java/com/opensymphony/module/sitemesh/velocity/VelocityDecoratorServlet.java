@@ -24,7 +24,7 @@ import java.io.StringWriter;
  * Servlet that allows Velocity templates to be used as decorators.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class VelocityDecoratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request, HttpServletResponse response, Context context) throws Exception {
@@ -57,11 +57,17 @@ public class VelocityDecoratorServlet extends VelocityViewServlet {
                 context.put("head", buffer.toString());
             }
             context.put("page", htmlPage);
-            Factory factory = Factory.getInstance(new Config(getServletConfig()));
-            Decorator decorator = factory.getDecoratorMapper().getDecorator(request, htmlPage);
+            DecoratorMapper decoratorMapper = getDecoratorMapper();
+            Decorator decorator = decoratorMapper.getDecorator(request, htmlPage);
             template = decorator.getPage();
         }
 
         return getTemplate(template);
+    }
+
+    private DecoratorMapper getDecoratorMapper() {
+        Factory factory = Factory.getInstance(new Config(getServletConfig()));
+        DecoratorMapper decoratorMapper = factory.getDecoratorMapper();
+        return decoratorMapper;
     }
 }

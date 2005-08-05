@@ -22,27 +22,26 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mike@atlassian.com">Mike Cannon-Brookes</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  * @see com.opensymphony.module.sitemesh.DecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.DefaultDecorator
  */
 public class FileDecoratorMapper extends AbstractDecoratorMapper {
-    private static boolean pathNotAvailable = false;
+    private boolean pathNotAvailable = false;
 
     public Decorator getNamedDecorator(HttpServletRequest req, String name) {
         if (pathNotAvailable || name == null) {
             return super.getNamedDecorator(req, name);
         }
 
-        URL resourcePath = null;
+        URL resourcePath;
 
         // try to locate the resource (might be an unexpanded WAR)
         try  {
             resourcePath = config.getServletContext().getResource('/' + name);
         }
         catch (MalformedURLException e) {
-            e.printStackTrace();
             return super.getNamedDecorator(req, name);
         }
 
