@@ -3,8 +3,8 @@
  * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
-import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.PageParserSelector;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -21,21 +21,21 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     private final RoutablePrintWriter routablePrintWriter;
     private final RoutableServletOutputStream routableServletOutputStream;
-    private final Factory factory;
+    private final PageParserSelector parserSelector;
 
     private Buffer buffer;
     private boolean aborted = false;
     private boolean parseablePage = false;
 
-    public PageResponseWrapper(final HttpServletResponse response, Factory factory) {
+    public PageResponseWrapper(final HttpServletResponse response, PageParserSelector parserSelector) {
         super(response);
-        this.factory = factory;
+        this.parserSelector = parserSelector;
 
         routablePrintWriter = new RoutablePrintWriter(new RoutablePrintWriter.DestinationFactory() {
             public PrintWriter activateDestination() throws IOException {
@@ -47,6 +47,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
                 return response.getOutputStream();
             }
         });
+
     }
 
     /**
@@ -64,7 +65,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
                encoding = extractContentTypeValue(type, offset + 8);
             String contentType = extractContentTypeValue(type, 0);
 
-            if (factory.shouldParsePage(contentType)) {
+            if (parserSelector.shouldParsePage(contentType)) {
                 activateSiteMesh(contentType, encoding);
             }
             else {
@@ -74,12 +75,12 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     }
 
-    private void activateSiteMesh(String contentType, String encoding) {
+    public void activateSiteMesh(String contentType, String encoding) {
         if (parseablePage) {
             return; // already activated
         }
         parseablePage = true;
-        buffer = new Buffer(factory, contentType, encoding);
+        buffer = new Buffer(parserSelector.getPageParser(contentType), encoding);
         routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
             public PrintWriter activateDestination() {
                 return buffer.getWriter();

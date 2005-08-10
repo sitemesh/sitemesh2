@@ -24,7 +24,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -111,10 +111,10 @@ public abstract class BaseFactory extends Factory {
             decoratorMapper = newMapper;
         }
         catch (ClassNotFoundException e) {
-            report("Could not load DecoratorMapper class : " + className, e);
+            throw new FactoryException("Could not load DecoratorMapper class : " + className, e);
         }
         catch (Exception e) {
-            report("Could not initialize DecoratorMapper : " + className, e);
+            throw new FactoryException("Could not initialize DecoratorMapper : " + className, e);
         }
     }
 
@@ -139,10 +139,10 @@ public abstract class BaseFactory extends Factory {
             pageParsers.put(contentType, pp);
         }
         catch (ClassNotFoundException e) {
-            report("Could not load PageParser class : " + className, e);
+            throw new FactoryException("Could not load PageParser class : " + className, e);
         }
         catch (Exception e) {
-            report("Could not instantiate PageParser : " + className, e);
+            throw new FactoryException("Could not instantiate PageParser : " + className, e);
         }
     }
 

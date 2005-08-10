@@ -43,7 +43,7 @@ import java.util.*;
  * 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName;
@@ -77,34 +77,6 @@ public class DefaultFactory extends BaseFactory {
         }
 
         loadConfig();
-    }
-
-    /** Refresh config before delegating to superclass. */
-    public DecoratorMapper getDecoratorMapper() {
-        refresh();
-        return super.getDecoratorMapper();
-    }
-
-    /** Refresh config before delegating to superclass. */
-    public PageParser getPageParser(String contentType) {
-        refresh();
-        return super.getPageParser(contentType);
-    }
-
-    /** Refresh config before delegating to superclass. */
-    public boolean shouldParsePage(String contentType) {
-        refresh();
-        return super.shouldParsePage(contentType);
-    }
-
-    /**
-     * Returns <code>true</code> if the supplied path matches one of the exclude
-     * URLs specified in sitemesh.xml, otherwise returns <code>false</code>. This
-     * method refreshes the config before delgating to the superclass.
-     */
-    public boolean isPathExcluded(String path) {
-        refresh();
-        return super.isPathExcluded(path);
     }
 
     /** Load configuration from file. */
@@ -147,13 +119,13 @@ public class DefaultFactory extends BaseFactory {
             }
         }
         catch (ParserConfigurationException e) {
-            report("Could not get XML parser", e);
+            throw new FactoryException("Could not get XML parser", e);
         }
         catch (IOException e) {
-            report("Could not read config file : " + configFileName, e);
+            throw new FactoryException("Could not read config file : " + configFileName, e);
         }
         catch (SAXException e) {
-            report("Could not parse config file : " + configFileName, e);
+            throw new FactoryException("Could not parse config file : " + configFileName, e);
         }
     }
 
@@ -190,7 +162,7 @@ public class DefaultFactory extends BaseFactory {
         Element root = doc.getDocumentElement();
         // Verify root element
         if (!"sitemesh".equalsIgnoreCase(root.getTagName())) {
-            report("Root element of sitemesh configuration file not <sitemesh>", null);
+            throw new FactoryException("Root element of sitemesh configuration file not <sitemesh>", null);
         }
         return root;
     }
@@ -300,7 +272,7 @@ public class DefaultFactory extends BaseFactory {
     }
 
     /** Check if configuration file has been modified, and if so reload it. */
-    private void refresh() {
+    public void refresh() {
         if (configFile != null && configLastModified != configFile.lastModified()) loadConfig();
     }
 

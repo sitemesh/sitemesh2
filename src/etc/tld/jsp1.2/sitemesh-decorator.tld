@@ -57,6 +57,27 @@
     </tag>
 
     <tag>
+        <name>extractProperty</name>
+        <tag-class>com.opensymphony.module.sitemesh.multipass.ExtractPropertyTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>property</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>default</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>writeEntireProperty</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>usePage</name>
         <tag-class>com.opensymphony.module.sitemesh.taglib.decorator.UsePageTag</tag-class>
         <tei-class>com.opensymphony.module.sitemesh.taglib.decorator.UsePageTEI</tei-class>

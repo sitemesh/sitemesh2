@@ -83,6 +83,7 @@ public class SiteMeshTestSuite {
         serverSuite.addTestSuite(BinaryFileTest.class);
         serverSuite.addTestSuite(VelocityDecoratorTest.class);
         serverSuite.addTestSuite(FreemarkerDecoratorTest.class);
+        serverSuite.addTestSuite(MultipassTest.class);
     }
 
     public static URL currentBaseURL() {

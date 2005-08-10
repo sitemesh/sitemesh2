@@ -10,8 +10,8 @@
 package com.opensymphony.module.sitemesh;
 
 import com.opensymphony.module.sitemesh.factory.FactoryException;
-import com.opensymphony.module.sitemesh.util.Container;
 import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
+import com.opensymphony.module.sitemesh.util.Container;
 
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
@@ -25,9 +25,9 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
-public abstract class Factory {
+public abstract class Factory implements PageParserSelector {
     /** Web context lookup key */
     private static final String SITEMESH_FACTORY = "sitemesh.factory";
 
@@ -47,11 +47,14 @@ public abstract class Factory {
                 config.getServletContext().setAttribute(SITEMESH_FACTORY, instance);
             }
             catch (Exception e) {
-                report("Cannot construct Factory : " + factoryClass, e);
+                throw new FactoryException("Cannot construct Factory : " + factoryClass, e);
             }
         }
+        instance.refresh();
         return instance;
     }
+
+    public abstract void refresh();
 
     /** Return instance of DecoratorMapper. */
     public abstract DecoratorMapper getDecoratorMapper();
@@ -75,11 +78,6 @@ public abstract class Factory {
      * Determine whether the given path should be excluded from decoration or not.
      */
     public abstract boolean isPathExcluded(String path);
-
-    /** Report a problem. */
-    protected static void report(String msg, Exception e) {
-        throw new FactoryException(msg, e);
-    }
 
     /** Find String environment entry, or return default if not found. */
     private static String getEnvEntry(String envEntry, String defaultValue) {

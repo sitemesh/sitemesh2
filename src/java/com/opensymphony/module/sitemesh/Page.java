@@ -29,7 +29,7 @@ import java.util.Map;
  * be added to the system by extending Page and implementing an appropriate PageParser.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public interface Page {
     /**

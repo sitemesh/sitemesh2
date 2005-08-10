@@ -9,7 +9,7 @@
 
 package com.opensymphony.module.sitemesh.taglib.decorator;
 
-import com.opensymphony.module.sitemesh.HTMLPage;
+import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
 import java.io.Writer;
@@ -18,7 +18,7 @@ import java.io.Writer;
  * Write property of Page to out.
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *
  * @see com.opensymphony.module.sitemesh.Page#getProperty(java.lang.String)
  */
@@ -29,6 +29,10 @@ public class PropertyTag extends AbstractTag {
     /** Key of property to write. */
     public void setProperty(String propertyName) {
         this.propertyName = propertyName;
+    }
+
+    protected String getProperty() {
+        return propertyName;
     }
 
     /** Value to write if no property matching key is found (optional). */
@@ -54,10 +58,10 @@ public class PropertyTag extends AbstractTag {
         }
     }
 
-    public final int doEndTag() {
+    public int doEndTag() {
         try {
-            HTMLPage htmlPage = (HTMLPage)getPage();
-            String propertyValue = htmlPage.getProperty(propertyName);
+            Page page = getPage();
+            String propertyValue = page.getProperty(propertyName);
 
             if (propertyValue == null || propertyValue.trim().length() == 0)
                 propertyValue = defaultValue;

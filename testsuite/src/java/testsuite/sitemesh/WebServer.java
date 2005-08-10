@@ -2,6 +2,7 @@ package testsuite.sitemesh;
 
 import org.mortbay.http.SocketListener;
 import org.mortbay.jetty.Server;
+import org.mortbay.jetty.servlet.WebApplicationContext;
 
 import java.io.IOException;
 
@@ -13,11 +14,15 @@ public class WebServer {
         SocketListener listener = new SocketListener();
         listener.setPort(port);
         server.addListener(listener);
-        try {
-            server.addWebApplication("/", pathToWebApp);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot add web-app: " + pathToWebApp, e);
-        }
+
+        WebApplicationContext context = new WebApplicationContext(pathToWebApp);
+        context.setContextPath("/");
+
+        // This will load classes from primordial classloader first.
+        // Avoids having to copy classes into WEB-INF/classes when running from the IDE.
+        context.setClassLoaderJava2Compliant(true);
+
+        server.addContext(null, context);
     }
 
     public void start() {

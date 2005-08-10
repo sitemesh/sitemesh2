@@ -8,7 +8,7 @@
 
     <filter>
         <filter-name>sitemesh</filter-name>
-        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+        <filter-class>com.opensymphony.module.sitemesh.multipass.MultipassFilter</filter-class>
     </filter>
 
     <!-- A filter to turn the request & response content types to UTF-8 -->

@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh.html.util;
 
+import java.io.PrintWriter;
+
 /**
  * A leaner, meaner version of StringBuffer.
  * <p/>
@@ -275,4 +277,8 @@ public class CharArray
         size = 0;
     }
 
+    public void writeTo(PrintWriter writer)
+    {
+        writer.write(buffer, 0, size);
+    }
 }

@@ -3,7 +3,6 @@
  * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
-import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
@@ -18,7 +17,7 @@ import java.io.PrintWriter;
  * later be accessed as a parsed Page object.
  *
  * @author Joe Walnes
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Buffer {
 
@@ -31,9 +30,9 @@ public class Buffer {
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
 
-    public Buffer(Factory factory, String contentType, String encoding) {
+    public Buffer(PageParser pageParser, String encoding) {
+        this.pageParser = pageParser;
         this.encoding = encoding;
-        pageParser = factory.getPageParser(contentType);
     }
 
     public Page parse() throws IOException {

@@ -48,4 +48,8 @@
         <pattern>/freemarker/freemarker.jsp</pattern>
     </decorator>
 
+    <decorator name="multipass" page="/multipass/decorator.jsp">
+        <pattern>/multipass/content.html</pattern>
+    </decorator>
+
 </decorators>

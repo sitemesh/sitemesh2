@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class PageFilter implements Filter, RequestConstants {
     protected FilterConfig filterConfig = null;
@@ -41,6 +41,9 @@ public class PageFilter implements Filter, RequestConstants {
         else {
             request.setAttribute(FILTER_APPLIED, Boolean.TRUE);
 
+            factory.refresh();
+            DecoratorMapper decoratorMapper = factory.getDecoratorMapper();
+
             // force creation of the session now because Tomcat 4 had problems with
             // creating sessions after the response had been committed
             if (Container.get() == Container.TOMCAT) {
@@ -54,10 +57,9 @@ public class PageFilter implements Filter, RequestConstants {
             if (page != null) {
                 page.setRequest(request);
 
-                Decorator decorator = factory.getDecoratorMapper().getDecorator(request, page);
+                Decorator decorator = decoratorMapper.getDecorator(request, page);
                 if (decorator != null && decorator.getPage() != null) {
                     applyDecorator(page, decorator, request, response);
-                    page = null;
                     return;
                 }
 
@@ -65,7 +67,6 @@ public class PageFilter implements Filter, RequestConstants {
                 // what we don't want is an exception printed to the user, so
                 // we write the original page
                 writeOriginal(request, response, page);
-                page = null;
             }
         }
     }
@@ -122,7 +123,7 @@ public class PageFilter implements Filter, RequestConstants {
                 // parse the page
                 result = pageResponse.getPage();
             }
-            request.setAttribute(USING_STREAM, new Boolean(pageResponse.isUsingStream()));
+            request.setAttribute(USING_STREAM, pageResponse.isUsingStream() ? Boolean.TRUE : Boolean.FALSE); // JDK 1.3 friendly
             return result;
         }
         catch (IllegalStateException e) {
@@ -138,7 +139,7 @@ public class PageFilter implements Filter, RequestConstants {
      * Apply {@link com.opensymphony.module.sitemesh.Decorator} to
      * {@link com.opensymphony.module.sitemesh.Page} and write to the response.
      */
-    protected void applyDecorator(Page page, Decorator decorator, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void applyDecorator(final Page page, Decorator decorator, HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         try {
             request.setAttribute(PAGE, page);
             ServletContext context = filterConfig.getServletContext();
@@ -153,9 +154,11 @@ public class PageFilter implements Filter, RequestConstants {
             // get the dispatcher for the decorator
             RequestDispatcher dispatcher = context.getRequestDispatcher(decorator.getPage());
             // create a wrapper around the response
-            dispatcher.include(request, response);
+
+            writeDecorator(response, page, dispatcher, request);
 
             // set the headers specified as decorator init params
+            // TODO: This looks weird. Is it used? Why would the headers be set after the the include? Hrmmmmm. -Joe
             while (decorator.getInitParameterNames().hasNext()) {
                 String initParam = (String) decorator.getInitParameterNames().next();
                 if (initParam.startsWith("header.")) {
@@ -173,6 +176,10 @@ public class PageFilter implements Filter, RequestConstants {
 
             throw e;
         }
+    }
+
+    protected void writeDecorator(HttpServletResponse response, Page page, RequestDispatcher dispatcher, HttpServletRequest request) throws ServletException, IOException {
+        dispatcher.include(request, response);
     }
 
     /** Write the original page data to the response. */
