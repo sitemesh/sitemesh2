@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  * later be accessed as a parsed Page object.
  *
  * @author Joe Walnes
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Buffer {
 
@@ -35,14 +35,18 @@ public class Buffer {
         this.encoding = encoding;
     }
 
-    public Page parse() throws IOException {
+    public char[] getContents() throws IOException {
         if (bufferedWriter != null) {
-            return pageParser.parse(bufferedWriter.toCharArray());
+            return bufferedWriter.toCharArray();
         } else if (bufferedStream != null) {
-            return pageParser.parse(TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding));
+            return TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding);
         } else {
-            return pageParser.parse(new char[0]);
+            return new char[0];
         }
+    }
+
+    public Page parse() throws IOException {
+        return pageParser.parse(getContents());
     }
 
     public PrintWriter getWriter() {

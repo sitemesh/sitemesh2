@@ -21,7 +21,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -208,5 +208,13 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
 
     public boolean isUsingStream() {
         return buffer != null && buffer.isUsingStream();
+    }
+
+    public char[] getContents() throws IOException {
+        if (aborted || !parseablePage) {
+            return null;
+        } else {
+            return buffer.getContents();
+        }
     }
 }
