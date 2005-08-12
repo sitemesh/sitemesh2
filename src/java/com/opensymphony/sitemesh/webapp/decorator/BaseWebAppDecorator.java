@@ -29,14 +29,14 @@ public abstract class BaseWebAppDecorator implements Decorator {
 
     public void render(Content content, SiteMeshContext context) {
         SiteMeshWebAppContext webAppContext = (SiteMeshWebAppContext) context;
-        // TODO:           content.setRequest(request);
+        // TODO: content.setRequest(request);
         try {
             render(content, webAppContext.getRequest(), webAppContext.getResponse(), webAppContext.getServletContext(), webAppContext);
         } catch (IOException e) {
-            // TODO?
+            // TODO: Decent exception handling
             throw new RuntimeException(e.toString());
         } catch (ServletException e) {
-            // TODO?
+            // TODO: Decent exception handling
             throw new RuntimeException(e.toString());
         }
     }

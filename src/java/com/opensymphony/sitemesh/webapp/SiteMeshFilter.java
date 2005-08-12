@@ -1,10 +1,13 @@
 package com.opensymphony.sitemesh.webapp;
 
-import com.opensymphony.module.sitemesh.util.Container;
+import com.opensymphony.module.sitemesh.Config;
+import com.opensymphony.module.sitemesh.Factory;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.Decorator;
 import com.opensymphony.sitemesh.DecoratorSelector;
-import com.opensymphony.sitemesh.content.ContentProcessor;
+import com.opensymphony.sitemesh.ContentProcessor;
+import com.opensymphony.sitemesh.compatability.DecoratorMapper2DecoratorSelector;
+import com.opensymphony.sitemesh.compatability.PageParser2ContentProcessor;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,20 +17,23 @@ import java.io.IOException;
 /**
  * Core Filter for integrating SiteMesh into a Java web application.
  *
- * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @author <a href="scott@atlassian.com">Scott Farquhar</a>
+ * @author Joe Walnes
+ * @author Scott Farquhar
+ * @since SiteMesh 3
  */
 public class SiteMeshFilter implements Filter {
 
     private FilterConfig filterConfig;
-    private ContainerTweaks containerTweaks = new ContainerTweaks();
+    private ContainerTweaks containerTweaks;
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
+        containerTweaks = new ContainerTweaks();
     }
 
     public void destroy() {
         filterConfig = null;
+        containerTweaks = null;
     }
 
     /**
@@ -43,8 +49,9 @@ public class SiteMeshFilter implements Filter {
         ServletContext servletContext = filterConfig.getServletContext();
 
         SiteMeshWebAppContext webAppContext = new SiteMeshWebAppContext(request, response, servletContext);
-        ContentProcessor contentProcessor = null; // TODO
-        DecoratorSelector decoratorSelector = null; // TODO
+
+        ContentProcessor contentProcessor = initContentProcessor(webAppContext);
+        DecoratorSelector decoratorSelector = initDecoratorSelector(webAppContext);
 
         if (filterAlreadyAppliedForRequest(request)) {
             // Prior to Servlet 2.4 spec, it was unspecified whether the filter should be called again upon an include().
@@ -75,6 +82,12 @@ public class SiteMeshFilter implements Filter {
             Decorator decorator = decoratorSelector.selectDecorator(content, webAppContext);
             decorator.render(content, webAppContext);
 
+        } catch (IllegalStateException e) {
+            // Some containers (such as WebLogic) throw an IllegalStateException when an error page is served.
+            // It may be ok to ignore this. However, for safety it is propegated if possible.
+            if (!containerTweaks.shouldIgnoreIllegalStateExceptionOnErrorPage()) {
+                throw e;
+            }
         } catch (RuntimeException e) {
             if (containerTweaks.shouldLogUnhandledExceptions()) {
                 // Some containers (such as Tomcat 4) swallow RuntimeExceptions in filters.
@@ -83,6 +96,20 @@ public class SiteMeshFilter implements Filter {
             throw e;
         }
 
+    }
+
+    protected ContentProcessor initContentProcessor(SiteMeshWebAppContext webAppContext) {
+        // TODO: Remove heavy coupling on horrible SM2 Factory
+        Factory factory = Factory.getInstance(new Config(filterConfig));
+        factory.refresh();
+        return new PageParser2ContentProcessor(factory);
+    }
+
+    protected DecoratorSelector initDecoratorSelector(SiteMeshWebAppContext webAppContext) {
+        // TODO: Remove heavy coupling on horrible SM2 Factory
+        Factory factory = Factory.getInstance(new Config(filterConfig));
+        factory.refresh();
+        return new DecoratorMapper2DecoratorSelector(factory.getDecoratorMapper());
     }
 
     /**
@@ -94,25 +121,16 @@ public class SiteMeshFilter implements Filter {
                                   HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        try {
-            ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor);
-            chain.doFilter(request, contentBufferingResponse);
-            // TODO: check if another servlet or filter put a page object to the request
-            //            Content result = request.getAttribute(PAGE);
-            //            if (result == null) {
-            //                // parse the page
-            //                result = pageResponse.getPage();
-            //            }
-            webAppContext.setUsingStream(contentBufferingResponse.isUsingStream());
-            return contentBufferingResponse.getContent();
-        }
-        catch (IllegalStateException e) {
-            // weblogic throws an IllegalStateException when an error page is served.
-            // it's ok to ignore this, however for all other containers it should be thrown
-            // properly.
-            if (Container.get() != Container.WEBLOGIC) throw e;
-            return null;
-        }
+        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext);
+        chain.doFilter(request, contentBufferingResponse);
+        // TODO: check if another servlet or filter put a page object in the request
+        //            Content result = request.getAttribute(PAGE);
+        //            if (result == null) {
+        //                // parse the page
+        //                result = pageResponse.getPage();
+        //            }
+        webAppContext.setUsingStream(contentBufferingResponse.isUsingStream());
+        return contentBufferingResponse.getContent();
     }
 
     private boolean filterAlreadyAppliedForRequest(HttpServletRequest request) {

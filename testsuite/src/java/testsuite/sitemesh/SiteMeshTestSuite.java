@@ -73,17 +73,17 @@ public class SiteMeshTestSuite {
     }
 
     private static void addTests(TestSuite serverSuite) {
+        serverSuite.addTestSuite(SimpleDecoratorTest.class);
         serverSuite.addTestSuite(BasicPageTest.class);
         serverSuite.addTestSuite(ExcludesPatternTest.class);
         serverSuite.addTestSuite(WelcomePageTest.class);
         serverSuite.addTestSuite(ContentLengthTest.class);
-        serverSuite.addTestSuite(SimpleDecoratorTest.class);
         serverSuite.addTestSuite(InlineDecoratorTest.class);
         serverSuite.addTestSuite(RedirectTest.class);
         serverSuite.addTestSuite(BinaryFileTest.class);
         serverSuite.addTestSuite(VelocityDecoratorTest.class);
         serverSuite.addTestSuite(FreemarkerDecoratorTest.class);
-        serverSuite.addTestSuite(MultipassTest.class);
+        // serverSuite.addTestSuite(MultipassTest.class); Disabled until it can be wired into SM3. Was unreleased experimental stuff anyway. -joe
     }
 
     public static URL currentBaseURL() {

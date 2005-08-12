@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class PageFilter implements Filter, RequestConstants {
     protected FilterConfig filterConfig = null;
@@ -156,15 +156,6 @@ public class PageFilter implements Filter, RequestConstants {
             // create a wrapper around the response
 
             writeDecorator(response, page, dispatcher, request);
-
-            // set the headers specified as decorator init params
-            // TODO: This looks weird. Is it used? Why would the headers be set after the the include? Hrmmmmm. -Joe
-            while (decorator.getInitParameterNames().hasNext()) {
-                String initParam = (String) decorator.getInitParameterNames().next();
-                if (initParam.startsWith("header.")) {
-                    response.setHeader(initParam.substring(initParam.indexOf('.')), decorator.getInitParameter(initParam));
-                }
-            }
 
             request.removeAttribute(PAGE);
         }

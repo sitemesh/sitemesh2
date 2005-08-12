@@ -15,15 +15,15 @@ import java.io.PrintWriter;
 /**
  * Implementation of HttpServletResponseWrapper that captures page data instead of
  * sending to the writer.
- *
+ * <p/>
  * <p>Should be used in filter-chains or when forwarding/including pages
  * using a RequestDispatcher.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
-public final class PageResponseWrapper extends HttpServletResponseWrapper {
+public class PageResponseWrapper extends HttpServletResponseWrapper {
 
     private final RoutablePrintWriter routablePrintWriter;
     private final RoutableServletOutputStream routableServletOutputStream;
@@ -58,17 +58,11 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         super.setContentType(type);
 
         if (type != null) {
-            // this is the content type + charset. eg: text/html;charset=UTF-8
-            int offset = type.lastIndexOf("charset=");
-            String encoding = null;
-            if (offset != -1)
-               encoding = extractContentTypeValue(type, offset + 8);
-            String contentType = extractContentTypeValue(type, 0);
+            HttpContentType httpContentType = new HttpContentType(type);
 
-            if (parserSelector.shouldParsePage(contentType)) {
-                activateSiteMesh(contentType, encoding);
-            }
-            else {
+            if (parserSelector.shouldParsePage(httpContentType.getType())) {
+                activateSiteMesh(httpContentType.getType(), httpContentType.getEncoding());
+            } else {
                 deactivateSiteMesh();
             }
         }
@@ -79,7 +73,6 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         if (parseablePage) {
             return; // already activated
         }
-        parseablePage = true;
         buffer = new Buffer(parserSelector.getPageParser(contentType), encoding);
         routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
             public PrintWriter activateDestination() {
@@ -91,6 +84,7 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
                 return buffer.getOutputStream();
             }
         });
+        parseablePage = true;
     }
 
     private void deactivateSiteMesh() {
@@ -108,44 +102,16 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         });
     }
 
-    private String extractContentTypeValue(String type, int startIndex) {
-        if (startIndex < 0)
-            return null;
-
-        // Skip over any leading spaces
-        while (startIndex < type.length() && type.charAt(startIndex) == ' ')
-            startIndex++;
-
-        if (startIndex >= type.length())
-            return null;
-
-        int endIndex = startIndex;
-
-        if (type.charAt(startIndex) == '"') {
-            startIndex++;
-            endIndex = type.indexOf('"', startIndex);
-            if (endIndex == -1)
-                endIndex = type.length();
-        } else {
-            // Scan through until we hit either  the end of the string or a
-            // special character (as defined in RFC-2045). Note that we ignore '/'
-            // since we want to capture it as part of the value.
-            char ch;
-            while (endIndex < type.length() && (ch = type.charAt(endIndex)) != ' ' && ch != ';'
-                  && ch != '(' && ch != ')' && ch != '[' && ch != ']' && ch != '<' && ch != '>'
-                  && ch != ':' && ch != ',' && ch != '=' && ch != '?' && ch != '@' && ch!= '"'
-                  && ch !='\\')
-               endIndex++;
-        }
-        return type.substring(startIndex, endIndex);
-    }
-
-    /** Prevent content-length being set if page is parseable. */
+    /**
+     * Prevent content-length being set if page is parseable.
+     */
     public void setContentLength(int contentLength) {
         if (!parseablePage) super.setContentLength(contentLength);
     }
 
-    /** Prevent content-length being set if page is parseable. */
+    /**
+     * Prevent content-length being set if page is parseable.
+     */
     public void setHeader(String name, String value) {
         if (name.toLowerCase().equals("content-type")) { // ensure ContentType is always set through setContentType()
             setContentType(value);
@@ -154,7 +120,9 @@ public final class PageResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-    /** Prevent content-length being set if page is parseable. */
+    /**
+     * Prevent content-length being set if page is parseable.
+     */
     public void addHeader(String name, String value) {
         if (name.toLowerCase().equals("content-type")) { // ensure ContentType is always set through setContentType()
             setContentType(value);
