@@ -26,7 +26,7 @@ public class DecoratorMapper2DecoratorSelector implements DecoratorSelector {
         SiteMeshWebAppContext webAppContext = (SiteMeshWebAppContext) context;
         com.opensymphony.module.sitemesh.Decorator decorator =
                 decoratorMapper.getDecorator(webAppContext.getRequest(), new Content2HTMLPage(content));
-        if (decorator == null) {
+        if (decorator == null || decorator.getPage() == null) {
             return new NoDecorator();
         } else {
             return new OldDecorator2NewDecorator(decorator);
