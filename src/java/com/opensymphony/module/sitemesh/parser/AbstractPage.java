@@ -30,7 +30,7 @@ import java.util.Set;
  * add all the required information.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *
  * @see com.opensymphony.module.sitemesh.Page
  */
@@ -39,7 +39,7 @@ public abstract class AbstractPage implements Page {
      * Map of all properties.
      * Key is String. Value is java.util.List of multiple String values.
      */
-    private Map properties = new HashMap();
+    private final Map properties = new HashMap();
 
     /** Date of page contents. */
     protected char[] pageData = new char[0];
@@ -85,7 +85,7 @@ public abstract class AbstractPage implements Page {
     }
 
     public int getContentLength() {
-        return pageData.length;
+        return new String(pageData).getBytes().length; // we cannot just measure pageData.length, due to i18n issues (SIM-157)
     }
 
     public String getProperty(String name) {

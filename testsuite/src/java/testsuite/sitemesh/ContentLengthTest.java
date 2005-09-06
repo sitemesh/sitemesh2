@@ -37,4 +37,15 @@ public class ContentLengthTest extends WebTest {
         }
     }
 
+    public void testInternationalizationDoesNotTrimCharacters() throws Exception {   //SIM-157
+        WebResponse rs = wc.getResponse( baseUrl + "/contentlength/page-decorator-none.jsp" );
+        assertTrue(rs.getText().endsWith("</html>"));
+    }
+
+    public void testContentLengthSetCorrectlyWithNoneDecorator() throws Exception { 
+        int contentLength = 10;
+        WebResponse rs = wc.getResponse( baseUrl + "/contentlength/ContentLengthNoDecorator?content-length=" + contentLength);
+        assertEquals("Content Length Header should equal " + contentLength, String.valueOf(contentLength) ,rs.getHeaderField("Content-Length"));
+        assertEquals("Content Length should equal " + contentLength + " but was " + rs.getText().length(), contentLength, rs.getText().length());
+    }
 }

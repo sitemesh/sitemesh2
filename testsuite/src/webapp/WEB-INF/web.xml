@@ -94,6 +94,11 @@
         <servlet-class>testsuite.servlets.StandardServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ContentLengthServlet</servlet-name>
+        <servlet-class>testsuite.servlets.ContentLengthServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
         <servlet-name>sitemesh-velocity</servlet-name>
         <url-pattern>*.vm</url-pattern>
@@ -117,6 +122,11 @@
     <servlet-mapping>
         <servlet-name>StandardServlet</servlet-name>
         <url-pattern>/simple/exclude-partial/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ContentLengthServlet</servlet-name>
+        <url-pattern>/contentlength/ContentLengthNoDecorator</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

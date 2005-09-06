@@ -13,6 +13,11 @@
         <pattern>/redirect/*</pattern>
     </decorator>
 
+    <decorator name="none">
+        <pattern>/contentlength/page-decorator-none.jsp</pattern>
+        <pattern>/contentlength/ContentLengthNoDecorator</pattern>
+    </decorator>
+
     <decorator name="inline-1" page="/inline/dec-1.jsp">
         <pattern>/inline/page1.jsp</pattern>
     </decorator>
