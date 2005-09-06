@@ -34,18 +34,15 @@ public class TomcatWebServer {// Instance variables:
             baseEngine.addChild(baseHost);
 
             // RootContext
-            Context context = addContext("", pathToWebApp);
-            System.out.println("context = " + context);
+            addContext("", pathToWebApp);
 
             // add new Engine to set of Engine for embedded server
             embedded.addEngine(baseEngine);
 
             // create Connector
-            System.out.println("port = " + port);
-            Connector httpConnector = new Connector();
+            Connector httpConnector = new Connector();  //this method shows errors better than the one below
             httpConnector.setPort(port);
 //            Connector httpConnector = embedded.createConnector((java.net.InetAddress) null, port, false);
-            System.out.println("httpConnector = " + httpConnector);
 
             // add new Connector to set of Connectors for embedded server, associated
             // with Engine

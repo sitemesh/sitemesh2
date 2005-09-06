@@ -73,8 +73,6 @@ public class SiteMeshTestSuite {
         public static Test suite() throws Exception {
             final int port = Integer.parseInt(System.getProperty("testsuite.port", "9102"));
             String currentDirectory = new File("").getAbsolutePath();
-            System.out.println("currentDirectory = " + currentDirectory);
-            printClassloader(OnEmbeddedTomcatServer.class.getClassLoader());
             final TomcatWebServer server = new TomcatWebServer(port, currentDirectory + "/dist/webapp");
             final URL baseUrl = new URL("http", "localhost", port, "");
             final TestSuite result = new TestSuite() {
@@ -87,16 +85,7 @@ public class SiteMeshTestSuite {
             };
             addTests(result);
             return result;
-//            return new TestSuite();
         }
-    }
-
-    static void printClassloader(ClassLoader classLoader)
-    {
-        do {
-            System.out.println("classLoader = " + classLoader);
-        }
-        while ((classLoader = classLoader.getParent()) != null);
     }
 
     private static void addTests(TestSuite serverSuite) {
