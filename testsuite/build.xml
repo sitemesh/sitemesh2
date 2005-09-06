@@ -6,6 +6,7 @@
         <fileset dir="lib"/>
         <fileset dir="../lib"/>
         <fileset dir="../dist"/>
+        <fileset dir="embedded/tomcat/lib"/>
     </path>
 
     <target name="sitemesh-build" description="Build SiteMesh jar">
@@ -75,7 +76,9 @@
         </junit>
     </target>
 
-    <target name="test-embedded" depends="tests-build, webapp-build" description="Run acceptance tests using embedded server">
+    <target name="test-embedded" depends="test-embedded-jetty, test-embedded-tomcat" description="Run acceptance tests using embedded jetty and tomcat server (needs JDK 1.5)"/>
+
+    <target name="test-embedded-jetty" depends="tests-build, webapp-build" description="Run acceptance tests using embedded jetty server">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
         <mkdir dir="${test-results}"/>
         <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
@@ -99,6 +102,33 @@
         </junit>
     </target>
 
+    <target name="test-embedded-tomcat" depends="tests-build, webapp-build" description="Run acceptance tests using embedded tomcat server (needs JDK 1.5)">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
+        <mkdir dir="${test-results}"/>
+        <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
+            <classpath>
+                <fileset dir="embedded/tomcat/lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="dist">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="../lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="../dist">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml"/>
+            <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite$OnEmbeddedTomcatServer"/>
+        </junit>
+    </target>
+
     <target name="report">
         <junitreport todir="${test-results}">
             <fileset dir="${test-results}">
@@ -113,6 +143,7 @@
         <delete dir="tmp"/>
         <delete dir="dist"/>
         <delete dir="${test-results}"/>
+        <delete dir="embedded/tomcat/work"/>
         <delete file="results.html"/>
     </target>
 

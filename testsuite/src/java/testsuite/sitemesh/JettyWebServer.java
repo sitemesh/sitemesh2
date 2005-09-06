@@ -6,10 +6,10 @@ import org.mortbay.jetty.servlet.WebApplicationContext;
 
 import java.io.IOException;
 
-public class WebServer {
+public class JettyWebServer {
     private Server server;
 
-    public WebServer(int port, String pathToWebApp) throws IOException {
+    public JettyWebServer(int port, String pathToWebApp) throws IOException {
         server = new Server();
         SocketListener listener = new SocketListener();
         listener.setPort(port);
@@ -43,7 +43,7 @@ public class WebServer {
     }
 
     public static void main(String[] args) throws IOException {
-        WebServer server = new WebServer(9912, "dist/webapp");
+        JettyWebServer server = new JettyWebServer(9912, "dist/webapp");
         server.start();
     }
 }

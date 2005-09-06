@@ -5,14 +5,11 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import testsuite.config.ConfigReader;
 import testsuite.config.Server;
-import testsuite.config.ConfigException;
 import testsuite.tester.Report;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.net.URL;
-import java.net.MalformedURLException;
 
 /**
  * Test suite for all web-app test cases.
@@ -57,7 +54,7 @@ public class SiteMeshTestSuite {
     public static class OnEmbeddedServer {
         public static Test suite() throws Exception {
             final int port = Integer.parseInt(System.getProperty("testsuite.port", "9102"));
-            final WebServer server = new WebServer(port, "dist/webapp");
+            final JettyWebServer server = new JettyWebServer(port, "dist/webapp");
             final URL baseUrl = new URL("http", "localhost", port, "");
             final TestSuite result = new TestSuite() {
                 public void run(TestResult result) {
@@ -70,6 +67,36 @@ public class SiteMeshTestSuite {
             addTests(result);
             return result;
         }
+    }
+
+    public static class OnEmbeddedTomcatServer {
+        public static Test suite() throws Exception {
+            final int port = Integer.parseInt(System.getProperty("testsuite.port", "9102"));
+            String currentDirectory = new File("").getAbsolutePath();
+            System.out.println("currentDirectory = " + currentDirectory);
+            printClassloader(OnEmbeddedTomcatServer.class.getClassLoader());
+            final TomcatWebServer server = new TomcatWebServer(port, currentDirectory + "/dist/webapp");
+            final URL baseUrl = new URL("http", "localhost", port, "");
+            final TestSuite result = new TestSuite() {
+                public void run(TestResult result) {
+                    currentBaseUrl = baseUrl;
+                    server.start();
+                    super.run(result);
+                    server.stop();
+                }
+            };
+            addTests(result);
+            return result;
+//            return new TestSuite();
+        }
+    }
+
+    static void printClassloader(ClassLoader classLoader)
+    {
+        do {
+            System.out.println("classLoader = " + classLoader);
+        }
+        while ((classLoader = classLoader.getParent()) != null);
     }
 
     private static void addTests(TestSuite serverSuite) {
