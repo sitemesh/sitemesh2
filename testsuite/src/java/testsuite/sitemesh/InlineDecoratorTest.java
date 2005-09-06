@@ -105,4 +105,10 @@ public class InlineDecoratorTest extends WebTest
         assertEquals("This is a servlet using stream to output", inlineContents.next().getText().toString());
     }
 
+    public void testPageParametersSearchAncestryInsteadOfParent() throws Exception // SIM-119
+    {
+        WebResponse rs = wc.getResponse(baseUrl + "/inline/page8.jsp");
+        assertTrue(rs.getText().indexOf("Inline Title") > 0);
+    }
+
 }
