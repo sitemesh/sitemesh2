@@ -24,7 +24,7 @@ import java.util.Properties;
  * Base Factory implementation. Provides utility methods for implementation.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class BaseFactory extends Factory {
     /** ServletConfig or FilterConfig. */
@@ -106,7 +106,7 @@ public abstract class BaseFactory extends Factory {
     protected void pushDecoratorMapper(String className, Properties properties) {
         try {
             Class decoratorMapperClass = ClassLoaderUtil.loadClass(className, getClass());
-            DecoratorMapper newMapper = (DecoratorMapper) decoratorMapperClass.newInstance();
+            DecoratorMapper newMapper = getDecoratorMapper(decoratorMapperClass);
             newMapper.init(config, properties, decoratorMapper);
             decoratorMapper = newMapper;
         }
@@ -118,7 +118,11 @@ public abstract class BaseFactory extends Factory {
         }
     }
 
-    /** Clear all PageParser mappings. */
+	protected DecoratorMapper getDecoratorMapper(Class decoratorMapperClass) throws InstantiationException, IllegalAccessException {
+		return (DecoratorMapper) decoratorMapperClass.newInstance();
+	}
+
+	/** Clear all PageParser mappings. */
     protected void clearParserMappings() {
         pageParsers = new HashMap();
     }
