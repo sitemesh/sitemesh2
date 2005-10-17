@@ -30,7 +30,7 @@ import java.util.Set;
  * add all the required information.</p>
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *
  * @see com.opensymphony.module.sitemesh.Page
  */
@@ -85,7 +85,15 @@ public abstract class AbstractPage implements Page {
     }
 
     public int getContentLength() {
-        return new String(pageData).getBytes().length; // we cannot just measure pageData.length, due to i18n issues (SIM-157)
+        try
+        {
+            //todo - this needs to be fixed properly (SIM-196)
+            return new String(pageData).getBytes("UTF-8").length; // we cannot just measure pageData.length, due to i18n issues (SIM-157)
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return new String(pageData).getBytes().length;
+        }
     }
 
     public String getProperty(String name) {

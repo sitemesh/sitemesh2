@@ -39,7 +39,7 @@ public class ContentLengthTest extends WebTest {
 
     public void testInternationalizationDoesNotTrimCharacters() throws Exception {   //SIM-157
         WebResponse rs = wc.getResponse( baseUrl + "/contentlength/page-decorator-none.jsp" );
-        assertTrue(rs.getText().endsWith("</html>"));
+        assertTrue("Text does not end with '</html>'.  Full text:" + rs.getText(), rs.getText().endsWith("</html>"));
     }
 
     public void testContentLengthSetCorrectlyWithNoneDecorator() throws Exception { 
