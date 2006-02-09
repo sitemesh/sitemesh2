@@ -21,7 +21,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class PageResponseWrapper extends HttpServletResponseWrapper {
 
@@ -107,6 +107,13 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
      */
     public void setContentLength(int contentLength) {
         if (!parseablePage) super.setContentLength(contentLength);
+    }
+
+    /**
+     * Prevent buffer from being flushed if this is a page being parsed.
+     */
+    public void flushBuffer() throws IOException {
+        if (!parseablePage) super.flushBuffer();
     }
 
     /**
