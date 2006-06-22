@@ -22,6 +22,12 @@
         <delete file="build/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java~"/>
     </target>
 
+    <target name="hostedqa" depends="example">
+        <taskdef resource="hostedqatasks" classpathref="cp"/>
+        <upload file="dist/${name}-example.war" account="sitemesh" email="${hostedqa.email}" password="${hostedqa.password}" resourceId="18"/>
+        <playsuite suiteId="16" clientConfigs="17" appConfigs="12" account="sitemesh" email="${hostedqa.email}" password="${hostedqa.password}"/>
+    </target>
+
     <target name="compile" description="Compile Java">
         <!-- Determine if lexer needs regenerating -->
         <uptodate
