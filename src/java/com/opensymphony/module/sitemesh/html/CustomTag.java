@@ -201,7 +201,8 @@ public class CustomTag implements Tag {
     }
 
     private void growAttributes() {
-        String[] newAttributes = new String[attributes.length * 2];
+        int newSize = attributes.length == 0 ? 4 : attributes.length * 2;
+        String[] newAttributes = new String[newSize];
         System.arraycopy(attributes, 0, newAttributes, 0, attributes.length);
         attributes = newAttributes;
     }

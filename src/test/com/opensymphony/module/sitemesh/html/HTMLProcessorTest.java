@@ -16,17 +16,17 @@ public class HTMLProcessorTest extends TestCase {
 	public void testCreatesStateTransitionEvent() throws IOException {
 		char[] input = "<a></a>".toCharArray();
 		HTMLProcessor htmlProcessor = new HTMLProcessor(input, new CharArray(128));
-		
+
 		State defaultState = htmlProcessor.defaultState();
-		
+
 		final StringBuffer stateLog = new StringBuffer();
-		
+
 		defaultState.addListener(new StateChangeListener() {
 			public void stateFinished() {
 				stateLog.append("finished");
 			}
 		});
-		
+
 		htmlProcessor.process();
 		assertEquals("finished", stateLog.toString());
 	}
@@ -102,4 +102,26 @@ public class HTMLProcessorTest extends TestCase {
         assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", out.toString());
     }
 
+    public void testCanAddAttributesToCustomTag() throws IOException {
+        CharArray buffer = new CharArray(64);
+        String html = "<h1>Headline</h1>";
+        HTMLProcessor htmlProcessor = new HTMLProcessor(html.toCharArray(), buffer);
+        htmlProcessor.addRule(new BasicRule() {
+            public boolean shouldProcess(String tag) {
+                return tag.equalsIgnoreCase("h1");
+            }
+
+            public void process(Tag tag) {
+                if (tag.getType() == Tag.OPEN) {
+                    CustomTag ctag = new CustomTag(tag);
+                    ctag.addAttribute("class", "y");
+                    assertEquals(1, ctag.getAttributeCount());
+                    tag = ctag;
+                }
+                tag.writeTo(currentBuffer());
+            }
+        });
+        htmlProcessor.process();
+        assertEquals("<h1 class=\"y\">Headline</h1>", buffer.toString());
+    }
 }
