@@ -21,8 +21,6 @@ import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 import java.io.IOException;
 
 /**
- * <b>WARNING - This is experimental - use at own risk!</b>
- *
  * <p>Builds an HTMLPage object from an HTML document. This behaves
  * similarly to the FastPageParser, however it's a complete rewrite that is simpler to add custom features to such as
  * extraction and transformation of elements.</p>

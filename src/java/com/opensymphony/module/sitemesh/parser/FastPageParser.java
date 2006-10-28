@@ -26,7 +26,8 @@ import java.util.Map;
  * <p>Produces FastPage.</p>
  *
  * @author <a href="mailto:salaman@qoretech.com">Victor Salaman</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
+ * @deprecated Use HTMLPageParser instead - it performs better and is more extensible.
  */
 public final class FastPageParser implements PageParser
 {
