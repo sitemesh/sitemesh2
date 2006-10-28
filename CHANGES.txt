@@ -1,6 +1,8 @@
 --------------------------
 -- Changes in 2.3       --
 --------------------------
+Default parser has been moved from FastPageParser to HTMLPageParser.
+Misc bug fixes.
 Added components to enable decorators to be built with Tapestry (contributed by Erik Hatcher). 
 
 --------------------------

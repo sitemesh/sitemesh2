@@ -1,5 +1,5 @@
 *************************************
-** OpenSymphony SiteMesh 2.2.1     **
+** OpenSymphony SiteMesh 2.3       **
 *************************************
 
 SiteMesh is a web-page layout system that can be used to abstract common look
@@ -155,31 +155,6 @@ You get the idea. Play around. See the SiteMesh website for
 full documentation.
 
     http://www.opensymphony.com/sitemesh/
-
-Mailing list subscription info and archives can be found at:
-
-    http://sourceforge.net/mail/?group_id=9890
-
---------------------------
--- Known bugs           --
---------------------------
-
-* When working with charsets that aren't the default ones, issues may occur.
-Consult mailing list for help.
-
-* SiteMesh does not work on Weblogic 6.1, 7.0 and 7.0 SP1. For more
-information, visit http://jira.opensymphony.com/secure/ViewIssue.jspa?id=10045. However,
-SiteMesh does work correctly on WebLogic 7.0 SP2, 8.1 and 8.1 SP2.
-
-* SiteMesh does not work on Weblogic 8.1 SP1 because of various bugs in the JSP
-compilation engine. Apply patch CR112789_81sp1 to your Weblogic installation.
-
-* SiteMesh does not work on WebSphere 5.0.1 and 5.0.2. Apply patch IBM iFix
-PQ80592 to your WebSphere installation.
-
-* SiteMesh's CookieDecoratorMapper does not work on Resin.
-
-Please report bugs here: http://jira.opensymphony.com
 
 --------------------------
 -- Credits              --
