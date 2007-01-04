@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @author <a href="scott@atlassian.com">Scott Farquhar</a>
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class PageFilter implements Filter, RequestConstants {
     protected FilterConfig filterConfig = null;
@@ -44,11 +44,6 @@ public class PageFilter implements Filter, RequestConstants {
             factory.refresh();
             DecoratorMapper decoratorMapper = factory.getDecoratorMapper();
 
-            // force creation of the session now because Tomcat 4 had problems with
-            // creating sessions after the response had been committed
-            if (Container.get() == Container.TOMCAT) {
-                request.getSession(true);
-            }
             HttpServletResponse response = (HttpServletResponse) rs;
 
             // parse data into Page object (or continue as normal if Page not parseable)
