@@ -88,6 +88,21 @@ public class SiteMeshTestSuite {
         }
     }
 
+    public static class OnCargoServer {
+        public static Test suite() throws Exception {
+            final int port = Integer.parseInt(System.getProperty("testsuite.port", "8080"));
+            final URL baseUrl = new URL("http", "localhost", port, "/webapp");
+            final TestSuite result = new TestSuite() {
+                public void run(TestResult result) {
+                    currentBaseUrl = baseUrl;
+                    super.run(result);
+                }
+            };
+            addTests(result);
+            return result;
+        }
+    }
+
     private static void addTests(TestSuite serverSuite) {
         serverSuite.addTestSuite(SimpleDecoratorTest.class);
         serverSuite.addTestSuite(BasicPageTest.class);

@@ -9,6 +9,174 @@
         <fileset dir="embedded/tomcat/lib"/>
     </path>
 
+
+    <property name="cargo-uberjar" value="lib/cargo-core-uberjar-0.8.jar"/>
+    <property name="cargo-antjar" value="lib/cargo-ant-0.8.jar"/>
+    <property name="mywarfile" value="${basedir}/dist/webapp"/>
+    <property name="containers.dir" value="${basedir}/containers"/>
+    <property name="container.port" value="9000" />
+
+
+    <taskdef resource="cargo.tasks">
+        <classpath>
+            <pathelement location="${cargo-uberjar}"/>
+            <pathelement location="${cargo-antjar}"/>
+        </classpath>
+    </taskdef>
+
+
+    <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5517, cargo-tomcat4132, cargo-tomcat5030" />
+
+
+    <target name="cargo-orion205" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.orionserver.com/distributions/orion2.0.5.zip"/>
+            <param name="container.uniquename" value="orion205"/>
+            <param name="container.type" value="orion2x"/>
+            <param name="container.port" value="9001"/>
+        </antcall>
+    </target>
+
+    <target name="cargo-resin3019" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.caucho.com/download/resin-3.0.19.zip"/>
+            <param name="container.uniquename" value="resin3019"/>
+            <param name="container.type" value="resin3x"/>
+            <param name="container.port" value="9002"/>
+        </antcall>
+    </target>
+
+    <target name="cargo-resin2117" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.caucho.com/download/resin-2.1.17.zip"/>
+            <param name="container.uniquename" value="resin2117"/>
+            <param name="container.type" value="resin2x"/>
+            <param name="container.port" value="9003"/>
+        </antcall>
+    </target>
+
+<!--  can't get jboss to deploy the application.  May need to use a closed war instead
+    <target name="cargo-jboss405" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://optusnet.dl.sourceforge.net/sourceforge/jboss/jboss-4.0.5.GA.zip"/>
+            <param name="container.uniquename" value="jboss405"/>
+            <param name="container.type" value="jboss4x"/>
+            <param name="container.port" value="9004"/>
+        </antcall>
+    </target>
+-->
+
+    <target name="cargo-jo11beta" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://optusnet.dl.sourceforge.net/sourceforge/tagtraum-jo/jo1.1beta1.zip"/>
+            <param name="container.uniquename" value="jo11beta"/>
+            <param name="container.type" value="jo1x"/>
+            <param name="container.port" value="9005"/>
+        </antcall>
+    </target>
+
+<!--
+   <target name="cargo-jetty5112" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://optusnet.dl.sourceforge.net/sourceforge/jetty/jetty-5.1.12.zip"/>
+            <param name="container.uniquename" value="jetty5112"/>
+            <param name="container.type" value="jetty5x"/>
+        </antcall>
+    </target>
+
+    <target name="cargo-jetty602" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://optusnet.dl.sourceforge.net/sourceforge/jetty/jetty-6.0.2.zip"/>
+            <param name="container.uniquename" value="jetty602"/>
+            <param name="container.type" value="jetty6x"/>
+        </antcall>
+    </target>
+-->
+    <target name="cargo-tomcat5517" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.zip"/>
+            <param name="container.uniquename" value="tomcat5517"/>
+            <param name="container.type" value="tomcat5x"/>
+            <param name="container.port" value="9006"/>
+        </antcall>
+    </target>
+
+    <target name="cargo-tomcat4132" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-4/v4.1.34/bin/apache-tomcat-4.1.34.zip"/>
+            <param name="container.uniquename" value="tomcat4132"/>
+            <param name="container.type" value="tomcat4x"/>
+            <param name="container.port" value="9007"/>
+        </antcall>
+    </target>
+
+    <target name="cargo-tomcat5030" depends="webapp-build">
+        <antcall target="test-cargo">
+            <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/bin/jakarta-tomcat-5.0.30.zip"/>
+            <param name="container.uniquename" value="tomcat5030"/>
+            <param name="container.type" value="tomcat5x"/>
+            <param name="container.port" value="9008"/>
+        </antcall>
+    </target>
+
+
+    <target name="test-cargo" depends="webapp-build">
+        <property name="container.home.dir" value="${containers.dir}/home/${container.uniquename}" />
+        <property name="container.download.dir" value="${containers.dir}/download/${container.uniquename}" />
+        <property name="container.log.dir" value="${containers.dir}/logs/${container.uniquename}" />
+
+        <mkdir dir="${container.download.dir}"/>
+        <mkdir dir="${container.home.dir}"/>
+        <mkdir dir="${container.log.dir}"/>
+
+        <echo message="Starting Cargo..."/>
+        <echo message="Downloading container to = ${container.download.dir} "/>
+        <echo message="Using configuration directory = ${container.home.dir} "/>
+        <echo message="Using war = ${mywarfile} "/>
+        <echo message="Jars used = ${cargo-uberjar} , ${cargo-antjar}"/>
+
+
+        <antcall target="start-or-stop-cargo">
+            <param name="cargo.action" value="start"/>
+        </antcall>
+
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="classpath"/>
+        <mkdir dir="${test-results}"/>
+        <junit haltonfailure="no" fork="yes" forkmode="once" dir=".">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="dist">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml" />
+            <sysproperty key="testsuite.port" value="${container.port}" />
+            <test todir="${test-results}" name="testsuite.sitemesh.SiteMeshTestSuite$OnCargoServer" outfile="${container.uniquename}"/>
+        </junit>
+
+        <!--<sleep minutes="10"/>-->
+
+        <antcall target="start-or-stop-cargo">
+            <param name="cargo.action" value="stop"/>
+        </antcall>
+
+    </target>
+
+    <target name="start-or-stop-cargo">
+        <fail unless="cargo.action">You must pass the 'cargo.action' property to start-or-stop-cargo</fail>
+        <cargo containerId="${container.type}" output="${container.log.dir}/output.log" log="${container.log.dir}/cargo.log" action="${cargo.action}" wait="false">
+            <configuration home="${container.home.dir}">
+                <property name="cargo.servlet.port" value="${container.port}"/>
+                <property name="cargo.logging" value="high"/>
+                <deployable type="war" file="${mywarfile}"/>
+            </configuration>
+            <zipUrlInstaller installUrl="${container.installurl}" installDir="${container.download.dir}" />
+        </cargo>
+    </target>
+
     <target name="sitemesh-build" description="Build SiteMesh jar">
         <ant dir=".." target="jar"/>
     </target>
@@ -145,6 +313,12 @@
         <delete dir="${test-results}"/>
         <delete dir="embedded/tomcat/work"/>
         <delete file="results.html"/>
+        <delete file="${containers.dir}/home"/>
+        <delete file="${containers.dir}/logs"/>
+    </target>
+
+    <target name="clean-all" description="Clean project, but also delete downloaded containers" depends="clean">
+        <delete file="${containers.dir}"/>
     </target>
 
 </project>
