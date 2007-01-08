@@ -1,3 +1,5 @@
+This test proves that http://jira.opensymphony.com/browse/SIM-206 isn't a problem anymore.
+
 ~~~ INPUT ~~~
 
 <?xml version="1.0"?>
