@@ -12,6 +12,9 @@
         <pattern>/welcomepage/*</pattern>
         <pattern>/redirect/*</pattern>
         <pattern>/errorpage-200.jsp</pattern>
+        <pattern>/ForwardServlet*</pattern>
+        <pattern>/contentlength/ContentLengthWithDecorator/*</pattern>
+
     </decorator>
 
     <decorator name="none">

@@ -99,7 +99,13 @@
         <servlet-class>testsuite.servlets.ContentLengthServlet</servlet-class>
     </servlet>
 
-	<servlet-mapping>
+    <servlet>
+        <servlet-name>ForwardServlet</servlet-name>
+        <servlet-class>testsuite.servlets.ForwardServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
         <servlet-name>sitemesh-velocity</servlet-name>
         <url-pattern>*.vm</url-pattern>
     </servlet-mapping>
@@ -128,6 +134,16 @@
         <servlet-name>ContentLengthServlet</servlet-name>
         <url-pattern>/contentlength/ContentLengthNoDecorator</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ContentLengthServlet</servlet-name>
+        <url-pattern>/contentlength/ContentLengthWithDecorator</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ForwardServlet</servlet-name>
+        <url-pattern>/ForwardServlet</url-pattern>
+     </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>default.jsp</welcome-file>
