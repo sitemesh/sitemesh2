@@ -1,6 +1,6 @@
 <html>
 	<head>
-        <meta content="simple" name="decorator">
+        <meta content="/simple" name="decorator">
         <title>Simple page6</title>
 	</head>
 	<body>

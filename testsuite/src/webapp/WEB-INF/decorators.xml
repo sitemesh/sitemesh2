@@ -61,4 +61,9 @@
         <pattern>/multipass/content.html</pattern>
     </decorator>
 
+    <!-- used to ensure that FileDecoratorMapper ignores the '/simple' directory.  See SIM-149 / SimpleDecoratorTest -->
+    <decorator name="/simple" page="/decorators/simple.jsp">
+    </decorator>
+
+
 </decorators>
