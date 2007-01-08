@@ -66,6 +66,16 @@ public class SimpleDecoratorTest extends WebTest {
 		assertEquals( "MySite", doc.getElementWithId( "header" ).getText().toString() );
 	}
 
+    // Test to prove SIM-149 (ignore directories when using the FileDecoratorMapper)
+    public void testFileDecoratorMapperExcludesDirectories() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/page6.jsp" );
+        Document doc = getDocument( rs );
+        assertEquals( "[:: Simple page6 ::]", rs.getTitle() );
+        assertEquals( "Hello world 6", doc.getElementWithId( "p1" ).getText().toString() );
+        assertEquals( "footer", doc.getElementWithId( "footer" ).getText().toString() );
+        assertEquals( "Simple page6", doc.getElementWithId( "header" ).getText().toString() );
+    }
+
     /**
      * Tomcat 5 has problems serving static pages through sitemesh.  See SIM-74 and SIM-82.
      * This test case is to demonstrate this problem.
