@@ -51,7 +51,7 @@
             <param name="container.uniquename" value="resin3019"/>
             <param name="container.type" value="resin3x"/>
             <param name="container.port" value="9002"/>
-            <param name="web.xml" value="2.3-web.xml"/>
+            <param name="web.xml" value="2.4-web.xml"/>
         </antcall>
     </target>
 

@@ -155,19 +155,4 @@
         <location>/errorpage-200.jsp</location>
     </error-page>
 
-    <taglib>
-        <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
-        <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
-    </taglib>
-
-    <taglib>
-        <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
-        <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
-    </taglib>
-
-    <taglib>
-        <taglib-uri>test-tags</taglib-uri>
-        <taglib-location>/WEB-INF/test-tags.tld</taglib-location>
-    </taglib>
-
 </web-app>
