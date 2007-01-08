@@ -6,6 +6,10 @@ public abstract class BlockExtractingRule extends BasicRule {
 
     private boolean includeEnclosingTags;
 
+    // we should only handle tags that have been opened previously.
+    // else the parser throws a NoSuchElementException (SIM-216)
+    private boolean seenOpeningTag;
+
     protected BlockExtractingRule(boolean includeEnclosingTags, String acceptableTagName) {
         super(acceptableTagName);
         this.includeEnclosingTags = includeEnclosingTags;
@@ -22,7 +26,8 @@ public abstract class BlockExtractingRule extends BasicRule {
             }
             context.pushBuffer(createBuffer());
             start(tag);
-        } else if (tag.getType() == Tag.CLOSE) {
+            seenOpeningTag = true;
+        } else if (tag.getType() == Tag.CLOSE && seenOpeningTag) {
             end(tag);
             context.popBuffer();
             if (includeEnclosingTags) {
