@@ -25,7 +25,8 @@
     </taskdef>
 
 
-    <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5517, cargo-tomcat4132, cargo-tomcat5030" />
+    <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5517, cargo-tomcat4132, cargo-tomcat5030"
+            description="Run acceptance tests on multiple application servers using Cargo"/>
 
     <target name="2.3-web.xml" depends="webapp-build">
         <copy file="dist/webapp/WEB-INF/web-2.3.xml" tofile="dist/webapp/WEB-INF/web.xml" overwrite="true"/>
@@ -34,7 +35,7 @@
         <copy file="dist/webapp/WEB-INF/web-2.4.xml" tofile="dist/webapp/WEB-INF/web.xml" overwrite="true"/>
     </target>
 
-    <target name="cargo-orion205" depends="webapp-build">
+    <target name="cargo-orion205" depends="webapp-build" description="Run acceptance tests on Orion 2.0.5">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.orionserver.com/distributions/orion2.0.5.zip"/>
             <param name="container.uniquename" value="orion205"/>
@@ -44,7 +45,7 @@
         </antcall>
     </target>
 
-    <target name="cargo-resin3019" depends="webapp-build">
+    <target name="cargo-resin3019" depends="webapp-build" description="Run acceptance tests on Resin 3.0.19">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.caucho.com/download/resin-3.0.19.zip"/>
             <param name="container.uniquename" value="resin3019"/>
@@ -54,7 +55,7 @@
         </antcall>
     </target>
 
-    <target name="cargo-resin2117" depends="webapp-build">
+    <target name="cargo-resin2117" depends="webapp-build" description="Run acceptance tests on Resin 2.1.17">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.caucho.com/download/resin-2.1.17.zip"/>
             <param name="container.uniquename" value="resin2117"/>
@@ -75,7 +76,7 @@
     </target>
 -->
 
-    <target name="cargo-jo11beta" depends="webapp-build">
+    <target name="cargo-jo11beta" depends="webapp-build" description="Run acceptance tests on Jo 1 Beta 1">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://optusnet.dl.sourceforge.net/sourceforge/tagtraum-jo/jo1.1beta1.zip"/>
             <param name="container.uniquename" value="jo11beta"/>
@@ -102,7 +103,7 @@
         </antcall>
     </target>
 -->
-    <target name="cargo-tomcat5517" depends="webapp-build">
+    <target name="cargo-tomcat5517" depends="webapp-build" description="Run acceptance tests on Tomcat 5.5.17">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.zip"/>
             <param name="container.uniquename" value="tomcat5517"/>
@@ -112,7 +113,7 @@
         </antcall>
     </target>
 
-    <target name="cargo-tomcat4132" depends="webapp-build">
+    <target name="cargo-tomcat4132" depends="webapp-build" description="Run acceptance tests on Tomcat 4.1.34">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-4/v4.1.34/bin/apache-tomcat-4.1.34.zip"/>
             <param name="container.uniquename" value="tomcat4132"/>
@@ -122,7 +123,7 @@
         </antcall>
     </target>
 
-    <target name="cargo-tomcat5030" depends="webapp-build">
+    <target name="cargo-tomcat5030" depends="webapp-build" description="Run acceptance tests on Tomcat 5.0.30">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.0.30/bin/jakarta-tomcat-5.0.30.zip"/>
             <param name="container.uniquename" value="tomcat5030"/>
