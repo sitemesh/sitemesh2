@@ -171,6 +171,8 @@
             <configuration home="${container.home.dir}">
                 <property name="cargo.servlet.port" value="${container.port}"/>
                 <property name="cargo.logging" value="high"/>
+                <!--Uncomment to run cargo in a debugger.  You will also need to set wait=true above. -->
+                <!--<property name="cargo.jvmargs" value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"/>-->
                 <deployable type="war" file="${mywarfile}"/>
             </configuration>
             <zipUrlInstaller installUrl="${container.installurl}" installDir="${container.download.dir}" />
