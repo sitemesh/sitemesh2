@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+     version="2.4">
+
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+        <!--<filter-class>com.opensymphony.module.sitemesh.multipass.MultipassFilter</filter-class>-->
+    </filter>
+
+    <!-- A filter to turn the request & response content types to UTF-8 -->
+    <filter>
+        <filter-name>encoding</filter-name>
+        <filter-class>testsuite.i18n.EncodingFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/simple/page5.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/inline/page6.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/velocity/velocity.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/freemarker/freemarker.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>ERROR</dispatcher> 
+    </filter-mapping>
+
+    <!-- encoding filter needs to be the innermost & the outermost filter invoked -->
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/velocity/velocity.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/simple/page4.jsp</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/inline/page6.jsp</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>sitemesh-velocity</servlet-name>
+        <servlet-class>com.opensymphony.module.sitemesh.velocity.VelocityDecoratorServlet</servlet-class>
+        <load-on-startup>10</load-on-startup>
+    </servlet>
+
+	<servlet>
+	    <servlet-name>sitemesh-freemarker</servlet-name>
+	    <servlet-class>com.opensymphony.module.sitemesh.freemarker.FreemarkerDecoratorServlet</servlet-class>
+		<init-param>
+			<param-name>TemplatePath</param-name>
+			<param-value>/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>default_encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	
+    <servlet>
+        <servlet-name>outputservlet</servlet-name>
+        <servlet-class>testsuite.servlets.OutputServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>DifferentWaysOfSpecifyingContentType</servlet-name>
+        <servlet-class>testsuite.servlets.DifferentWaysOfSpecifyingContentType</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>StandardServlet</servlet-name>
+        <servlet-class>testsuite.servlets.StandardServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ContentLengthServlet</servlet-name>
+        <servlet-class>testsuite.servlets.ContentLengthServlet</servlet-class>
+    </servlet>
+
+	<servlet-mapping>
+        <servlet-name>sitemesh-velocity</servlet-name>
+        <url-pattern>*.vm</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <url-pattern>*.ftl</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>outputservlet</servlet-name>
+        <url-pattern>/outputservlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DifferentWaysOfSpecifyingContentType</servlet-name>
+        <url-pattern>/simple/DifferentWaysOfSpecifyingContentType</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>StandardServlet</servlet-name>
+        <url-pattern>/simple/exclude-partial/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ContentLengthServlet</servlet-name>
+        <url-pattern>/contentlength/ContentLengthNoDecorator</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/errorpage-200.jsp</location>
+    </error-page>
+
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
+        <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>test-tags</taglib-uri>
+        <taglib-location>/WEB-INF/test-tags.tld</taglib-location>
+    </taglib>
+
+</web-app>

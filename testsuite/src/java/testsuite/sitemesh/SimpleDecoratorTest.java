@@ -106,4 +106,11 @@ public class SimpleDecoratorTest extends WebTest {
         assertStringContains("START", rs.getText());
     }
 
+    // Test that proves SIM-168 (error pages not decorated correctly)
+    public void testErrorPageDecoratedCorrectly() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/basic/error-exception.jsp" );
+        assertEquals( "[:: An error has occurred ::]", rs.getTitle() );
+    }
+
+
 }

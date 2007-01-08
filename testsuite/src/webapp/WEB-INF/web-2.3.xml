@@ -133,6 +133,11 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/errorpage-200.jsp</location>
+    </error-page>
+
     <taglib>
         <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
         <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>

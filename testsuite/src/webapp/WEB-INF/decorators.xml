@@ -11,6 +11,7 @@
         <pattern>/simple/*</pattern>
         <pattern>/welcomepage/*</pattern>
         <pattern>/redirect/*</pattern>
+        <pattern>/errorpage-200.jsp</pattern>
     </decorator>
 
     <decorator name="none">

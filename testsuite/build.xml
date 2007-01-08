@@ -27,6 +27,12 @@
 
     <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5517, cargo-tomcat4132, cargo-tomcat5030" />
 
+    <target name="2.3-web.xml" depends="webapp-build">
+        <copy file="dist/webapp/WEB-INF/web-2.3.xml" tofile="dist/webapp/WEB-INF/web.xml" overwrite="true"/>
+    </target>
+    <target name="2.4-web.xml" depends="webapp-build">
+        <copy file="dist/webapp/WEB-INF/web-2.4.xml" tofile="dist/webapp/WEB-INF/web.xml" overwrite="true"/>
+    </target>
 
     <target name="cargo-orion205" depends="webapp-build">
         <antcall target="test-cargo">
@@ -34,6 +40,7 @@
             <param name="container.uniquename" value="orion205"/>
             <param name="container.type" value="orion2x"/>
             <param name="container.port" value="9001"/>
+            <param name="web.xml" value="2.3-web.xml"/>
         </antcall>
     </target>
 
@@ -43,6 +50,7 @@
             <param name="container.uniquename" value="resin3019"/>
             <param name="container.type" value="resin3x"/>
             <param name="container.port" value="9002"/>
+            <param name="web.xml" value="2.3-web.xml"/>
         </antcall>
     </target>
 
@@ -52,6 +60,7 @@
             <param name="container.uniquename" value="resin2117"/>
             <param name="container.type" value="resin2x"/>
             <param name="container.port" value="9003"/>
+            <param name="web.xml" value="2.3-web.xml"/>
         </antcall>
     </target>
 
@@ -72,6 +81,7 @@
             <param name="container.uniquename" value="jo11beta"/>
             <param name="container.type" value="jo1x"/>
             <param name="container.port" value="9005"/>
+            <param name="web.xml" value="2.3-web.xml"/>
         </antcall>
     </target>
 
@@ -98,6 +108,7 @@
             <param name="container.uniquename" value="tomcat5517"/>
             <param name="container.type" value="tomcat5x"/>
             <param name="container.port" value="9006"/>
+            <param name="web.xml" value="2.4-web.xml"/>
         </antcall>
     </target>
 
@@ -107,6 +118,7 @@
             <param name="container.uniquename" value="tomcat4132"/>
             <param name="container.type" value="tomcat4x"/>
             <param name="container.port" value="9007"/>
+            <param name="web.xml" value="2.3-web.xml"/>
         </antcall>
     </target>
 
@@ -116,6 +128,7 @@
             <param name="container.uniquename" value="tomcat5030"/>
             <param name="container.type" value="tomcat5x"/>
             <param name="container.port" value="9008"/>
+            <param name="web.xml" value="2.4-web.xml"/>
         </antcall>
     </target>
 
@@ -134,7 +147,9 @@
         <echo message="Using configuration directory = ${container.home.dir} "/>
         <echo message="Using war = ${mywarfile} "/>
         <echo message="Jars used = ${cargo-uberjar} , ${cargo-antjar}"/>
+        <echo message="Using web.xml ${web.xml}"/>
 
+        <antcall target="${web.xml}"/>
 
         <antcall target="start-or-stop-cargo">
             <param name="cargo.action" value="start"/>
@@ -206,7 +221,8 @@
             </fileset>
         </copy>
 
-        <touch file="dist/webapp/WEB-INF/web.xml"/> 
+        <!-- use the 2.4 web.xml -->
+        <copy file="dist/webapp/WEB-INF/web-2.4.xml" tofile="dist/webapp/WEB-INF/web.xml"/>
         <jar jarfile="dist/sitemesh-testsuite.war" basedir="dist/webapp"/>
     </target>
 

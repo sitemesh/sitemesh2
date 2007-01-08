@@ -25,6 +25,7 @@ public class SiteMeshFilter implements Filter {
 
     private FilterConfig filterConfig;
     private ContainerTweaks containerTweaks;
+    private static final String ALREADY_APPLIED_KEY = "com.opensymphony.sitemesh.APPLIED_ONCE";
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
@@ -94,6 +95,9 @@ public class SiteMeshFilter implements Filter {
                 servletContext.log("Unhandled exception occurred whilst decorating page", e);
             }
             throw e;
+        } catch (ServletException e) {
+            request.setAttribute(ALREADY_APPLIED_KEY, null);
+            throw e;
         }
 
     }
@@ -134,11 +138,10 @@ public class SiteMeshFilter implements Filter {
     }
 
     private boolean filterAlreadyAppliedForRequest(HttpServletRequest request) {
-        final String alreadyAppliedKey = "com.opensymphony.sitemesh.APPLIED_ONCE";
-        if (request.getAttribute(alreadyAppliedKey) == Boolean.TRUE) {
+        if (request.getAttribute(ALREADY_APPLIED_KEY) == Boolean.TRUE) {
             return true;
         } else {
-            request.setAttribute(alreadyAppliedKey, Boolean.TRUE);
+            request.setAttribute(ALREADY_APPLIED_KEY, Boolean.TRUE);
             return false;
         }
     }
