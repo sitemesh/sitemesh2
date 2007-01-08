@@ -15,7 +15,8 @@ public class ContainerTweaks {
     private final int container = Container.get();
 
     public boolean shouldAutoCreateSession() {
-        return container == Container.TOMCAT;
+        return false;
+//        return container == Container.TOMCAT;  - this is removed due to SIM-151.  
     }
 
     public boolean shouldLogUnhandledExceptions() {
