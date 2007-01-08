@@ -53,7 +53,7 @@ Currently known containers that support this and SiteMesh was tested with:
 
     <filter>
         <filter-name>sitemesh</filter-name>
-        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
     </filter>
 
     <filter-mapping>
