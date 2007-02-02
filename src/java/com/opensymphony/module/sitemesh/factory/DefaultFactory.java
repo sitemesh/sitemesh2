@@ -10,9 +10,6 @@
 package com.opensymphony.module.sitemesh.factory;
 
 import com.opensymphony.module.sitemesh.Config;
-import com.opensymphony.module.sitemesh.DecoratorMapper;
-import com.opensymphony.module.sitemesh.PageParser;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -43,7 +40,7 @@ import java.util.*;
  * 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName;
@@ -51,6 +48,8 @@ public class DefaultFactory extends BaseFactory {
 
     File configFile;
     long configLastModified;
+    private long configLastCheck = 0L;
+    public static long configCheckMillis = 3000L;
     Map configProps = new HashMap();
 
     String excludesFileName;
@@ -92,7 +91,10 @@ public class DefaultFactory extends BaseFactory {
                     Element curr = (Element)sections.item(i);
                     NodeList children = curr.getChildNodes();
 
-                    if ("property".equalsIgnoreCase(curr.getTagName())) {
+                    if ("config-refresh".equalsIgnoreCase(curr.getTagName())) {
+                        String seconds = curr.getAttribute("seconds");
+                        configCheckMillis = Long.parseLong(seconds) * 1000L;
+                    } else if ("property".equalsIgnoreCase(curr.getTagName())) {
                         String name = curr.getAttribute("name");
                         String value = curr.getAttribute("value");
                         if (!"".equals(name) && !"".equals(value)) {
@@ -273,6 +275,11 @@ public class DefaultFactory extends BaseFactory {
 
     /** Check if configuration file has been modified, and if so reload it. */
     public void refresh() {
+        long time = System.currentTimeMillis();
+        if (time - configLastCheck < configCheckMillis)
+            return;
+        configLastCheck = time;
+
         if (configFile != null && configLastModified != configFile.lastModified()) loadConfig();
     }
 

@@ -11,6 +11,7 @@ package com.opensymphony.module.sitemesh.mapper;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Decorator;
+import com.opensymphony.module.sitemesh.factory.DefaultFactory;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -46,69 +47,113 @@ import java.util.Map;
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper
  * @see com.opensymphony.module.sitemesh.mapper.PathMapper
  */
 public class ConfigLoader {
-    private Map decorators = null;
-    private long configLastModified;
+
+    /**
+     * State visibile across threads stored in a single container so that we
+     * can efficiently atomically access it with the guarantee that we wont see
+     * a partially loaded configuration in the face of one thread reloading the
+     * configuration while others are trying to read it.
+     */
+    private static class State {
+        /**
+         * Timestamp of the last time we checked for an update to the
+         * configuration file used to rate limit the frequency at which we check
+         * for efficiency.
+         */
+        long lastModificationCheck = System.currentTimeMillis();
+
+        /**
+         * Timestamp of the modification time of the configuration file when we
+         * generated the state.
+         */
+        long lastModified;
+
+        /**
+         * Whether a thread is currently checking if the configuration file has
+         * been modified and potentially reloading it and therefore others
+         * shouldn't attempt the same till it's done.
+         */
+        boolean checking = false;
+
+        Map decorators = new HashMap();
+        PathMapper pathMapper = new PathMapper();
+    }
+
+    /**
+     * Mark volatile so that the installation of new versions is guaranteed to
+     * be visible across threads.
+     */
+    private volatile State state;
 
     private File configFile = null;
     private String configFileName = null;
-    private PathMapper pathMapper = null;
 
     private Config config = null;
 
-    /** Create new ConfigLoader using supplied File. */
+    /**
+     * Create new ConfigLoader using supplied File.
+     */
     public ConfigLoader(File configFile) throws ServletException {
         this.configFile = configFile;
         this.configFileName = configFile.getName();
-        loadConfig();
+        state = loadConfig();
     }
 
-    /** Create new ConfigLoader using supplied filename and config. */
+    /**
+     * Create new ConfigLoader using supplied filename and config.
+     */
     public ConfigLoader(String configFileName, Config config) throws ServletException {
         this.config = config;
         this.configFileName = configFileName;
         if (config.getServletContext().getRealPath(configFileName) != null) {
             this.configFile = new File(config.getServletContext().getRealPath(configFileName));
         }
-        loadConfig();
+        state = loadConfig();
     }
 
-    /** Retrieve Decorator based on name specified in configuration file. */
+    /**
+     * Retrieve Decorator based on name specified in configuration file.
+     */
     public Decorator getDecoratorByName(String name) throws ServletException {
-        refresh();
-        return (Decorator)decorators.get(name);
+        return (Decorator) refresh().decorators.get(name);
     }
 
     /** Get name of Decorator mapped to given path. */
     public String getMappedName(String path) throws ServletException {
-        refresh();
-        return pathMapper.get(path);
+        return refresh().pathMapper.get(path);
     }
 
-    /** Load configuration from file. */
-    private synchronized void loadConfig() throws ServletException {
+    /**
+     * Load configuration from file.
+     */
+    private State loadConfig() throws ServletException {
+        // The new state which we build up and atomically replace the old state
+        // with atomically to avoid other threads seeing partial modifications.
+        State newState = new State();
         try {
             // Build a document from the file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            Document document = null;
+            Document document;
             if (configFile != null && configFile.canRead()) {
                 // Keep time we read the file to check if the file was modified
-                configLastModified = configFile.lastModified();
+                newState.lastModified = configFile.lastModified();
                 document = builder.parse(configFile);
-            }
-            else {
+            } else {
                 document = builder.parse(config.getServletContext().getResourceAsStream(configFileName));
             }
 
             // Parse the configuration document
-            parseConfig(document);
+            parseConfig(newState, document);
+
+            return newState;
         }
         catch (ParserConfigurationException e) {
             throw new ServletException("Could not get XML parser", e);
@@ -124,24 +169,19 @@ public class ConfigLoader {
         }
     }
 
-    /** Parse configuration from XML document. */
-    private synchronized void parseConfig(Document document) {
+    private void parseConfig(State newState, Document document) {
         Element root = document.getDocumentElement();
 
         // get the default directory for the decorators
         String defaultDir = getAttribute(root, "defaultdir");
         if (defaultDir == null) defaultDir = getAttribute(root, "defaultDir");
 
-        // Clear previous config
-        pathMapper = new PathMapper();
-        decorators = new HashMap();
-
         // Get decorators
         NodeList decoratorNodes = root.getElementsByTagName("decorator");
-        Element decoratorElement = null;
+        Element decoratorElement;
 
         for (int i = 0; i < decoratorNodes.getLength(); i++) {
-            String name = null, page = null, uriPath = null, role = null;
+            String name, page, uriPath = null, role = null;
 
             // get the current decorator element
             decoratorElement = (Element) decoratorNodes.item(i);
@@ -156,7 +196,7 @@ public class ConfigLoader {
                 // Append the defaultDir
                 if (defaultDir != null && page != null && page.length() > 0 && !page.startsWith("/")) {
                     if (page.charAt(0) == '/') page = defaultDir + page;
-                    else                       page = defaultDir + '/' + page;
+                    else page = defaultDir + '/' + page;
                 }
 
                 // The uriPath must begin with a slash
@@ -165,10 +205,9 @@ public class ConfigLoader {
                 }
 
                 // Get all <pattern>...</pattern> and <url-pattern>...</url-pattern> nodes and add a mapping
-               populatePathMapper(decoratorElement.getElementsByTagName("pattern"), role, name);
-               populatePathMapper(decoratorElement.getElementsByTagName("url-pattern"), role, name);
-            }
-            else {
+                populatePathMapper(newState, decoratorElement.getElementsByTagName("pattern"), role, name);
+                populatePathMapper(newState, decoratorElement.getElementsByTagName("url-pattern"), role, name);
+            } else {
                 // NOTE: Deprecated format
                 name = getContainedText(decoratorNodes.item(i), "decorator-name");
                 page = getContainedText(decoratorNodes.item(i), "resource");
@@ -185,80 +224,127 @@ public class ConfigLoader {
                 String paramValue = getContainedText(paramNodes.item(ii), "param-value");
                 params.put(paramName, paramValue);
             }
-            storeDecorator(new DefaultDecorator(name, page, uriPath, role, params));
+            storeDecorator(newState, new DefaultDecorator(name, page, uriPath, role, params));
         }
 
         // Get (deprecated format) decorator-mappings
         NodeList mappingNodes = root.getElementsByTagName("decorator-mapping");
         for (int i = 0; i < mappingNodes.getLength(); i++) {
-            Element n = (Element)mappingNodes.item(i);
+            Element n = (Element) mappingNodes.item(i);
             String name = getContainedText(mappingNodes.item(i), "decorator-name");
 
             // Get all <url-pattern>...</url-pattern> nodes and add a mapping
-            populatePathMapper(n.getElementsByTagName("url-pattern"), null, name);
+            populatePathMapper(newState, n.getElementsByTagName("url-pattern"), null, name);
         }
     }
 
-   /**
-    * Extracts each URL pattern and adds it to the pathMapper map.
-    */
-   private void populatePathMapper(NodeList patternNodes, String role, String name) {
-      for (int j = 0; j < patternNodes.getLength(); j++) {
-          Element p = (Element)patternNodes.item(j);
-          Text patternText = (Text) p.getFirstChild();
-          if (patternText != null) {
-             String pattern = patternText.getData().trim();
-             if (pattern != null) {
-                 if (role != null) {
-                     // concatenate name and role to allow more
-                     // than one decorator per role
-                     pathMapper.put(name + role, pattern);
-                 }
-                 else {
-                     pathMapper.put(name, pattern);
-                 }
-             }
-         }
-      }
-   }
+    private void populatePathMapper(State newState, NodeList patternNodes, String role, String name) {
+        for (int j = 0; j < patternNodes.getLength(); j++) {
+            Element p = (Element) patternNodes.item(j);
+            Text patternText = (Text) p.getFirstChild();
+            if (patternText != null) {
+                String pattern = patternText.getData().trim();
+                if (pattern != null) {
+                    if (role != null) {
+                        // concatenate name and role to allow more
+                        // than one decorator per role
+                        newState.pathMapper.put(name + role, pattern);
+                    } else {
+                        newState.pathMapper.put(name, pattern);
+                    }
+                }
+            }
+        }
+    }
 
-   /** Override default behavior of element.getAttribute (returns the empty string) to return null. */
     private static String getAttribute(Element element, String name) {
         if (element != null && element.getAttribute(name) != null && element.getAttribute(name).trim() != "") {
             return element.getAttribute(name).trim();
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-    /**
-     * With a given parent XML Element, find the text contents of the child element with
-     * supplied name.
-     */
     private static String getContainedText(Node parent, String childTagName) {
         try {
-            Node tag = ((Element)parent).getElementsByTagName(childTagName).item(0);
-            String text = ((Text)tag.getFirstChild()).getData();
-            return text;
+            Node tag = ((Element) parent).getElementsByTagName(childTagName).item(0);
+            return ((Text) tag.getFirstChild()).getData();
         }
         catch (Exception e) {
             return null;
         }
     }
 
-    /** Store Decorator in Map */
-    private void storeDecorator(Decorator d) {
+    private void storeDecorator(State newState, Decorator d) {
         if (d.getRole() != null) {
-            decorators.put(d.getName() + d.getRole(), d);
-        }
-        else {
-            decorators.put(d.getName(), d);
+            newState.decorators.put(d.getName() + d.getRole(), d);
+        } else {
+            newState.decorators.put(d.getName(), d);
         }
     }
 
-    /** Check if configuration file has been updated, and if so, reload. */
-    private synchronized void refresh() throws ServletException {
-        if (configFile != null && configLastModified != configFile.lastModified()) loadConfig();
+    /**
+     * Check if configuration file has been updated, and if so, reload.
+     */
+    private State refresh() throws ServletException {
+        // Read the current state just once since another thread can swap
+        // another version in at any time.
+        State currentState = state;
+        if (configFile == null) {
+            return currentState;
+        }
+
+        // Rate limit the stat'ing of the config file to find its
+        // modification time to once every five seconds to reduce the
+        // number of system calls made. We grab the monitor of currentState
+        // so that we can safely read the values shared across threads and
+        // so that only one thread is performing the modification check at
+        // a time.
+        long current = System.currentTimeMillis();
+        long oldLastModified;
+
+        boolean check = false;
+        synchronized (currentState) {
+            oldLastModified = currentState.lastModified;
+            if (!currentState.checking && current >= currentState.lastModificationCheck + DefaultFactory.configCheckMillis) {
+                currentState.lastModificationCheck = current;
+                currentState.checking = true;
+                check = true;
+            }
+        }
+
+        if (check) {
+            // Perform the file stat'ing system call without holding a lock
+            // on the current state.
+            State newState = null;
+            try {
+                long currentLastModified = configFile.lastModified();
+                if (currentLastModified != oldLastModified) {
+                    // The configuration file has been modified since we last
+                    // read it so reload the configuration without holding a
+                    // lock on the current state and then slam down the new
+                    // state for other threads to see. The State.checking flag
+                    // being set on currentState will prevent other threads
+                    // from attempting to reload the state while we are and
+                    // the new state will have the flag cleared so that we can
+                    // continue checking if the configuration file is modified.
+                    newState = loadConfig();
+                    state = newState;
+                    return newState;
+                }
+            } finally {
+                // In the event of a failure of the modification time check,
+                // or while reloading the configuration file, mark that we're no
+                // longer checking if the modification time or reloading so that
+                // we'll retry.
+                if (newState == null) {
+                    synchronized (currentState) {
+                        currentState.checking = false;
+                    }
+                }
+            }
+
+        }
+        return currentState;
     }
 }
