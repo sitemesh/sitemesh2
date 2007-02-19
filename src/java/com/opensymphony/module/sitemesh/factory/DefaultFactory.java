@@ -40,7 +40,7 @@ import java.util.*;
  * 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class DefaultFactory extends BaseFactory {
     String configFileName;
@@ -185,7 +185,7 @@ public class DefaultFactory extends BaseFactory {
         }
 
         if (is == null){
-            throw new IllegalStateException("Cannot load excludes configuration file from jar");
+            throw new IllegalStateException("Cannot load excludes configuration file \"" + excludesFileName + "\" as specified in \"sitemesh.xml\" or \"sitemesh-default.xml\"");
         }
 
         Document document = builder.parse(is);
