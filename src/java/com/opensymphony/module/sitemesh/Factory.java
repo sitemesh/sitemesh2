@@ -16,6 +16,7 @@ import com.opensymphony.module.sitemesh.util.Container;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Factory responsible for creating appropriate instances of implementations.
@@ -25,7 +26,7 @@ import java.lang.reflect.Constructor;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class Factory implements PageParserSelector {
     /** Web context lookup key */
@@ -45,8 +46,10 @@ public abstract class Factory implements PageParserSelector {
                 Constructor con = cls.getConstructor(new Class[] { Config.class });
                 instance = (Factory)con.newInstance(new Config[] { config });
                 config.getServletContext().setAttribute(SITEMESH_FACTORY, instance);
-            }
-            catch (Exception e) {
+            } catch (InvocationTargetException e) {
+                throw new FactoryException("Cannot construct Factory : " + factoryClass, e.getTargetException());
+        
+            } catch (Exception e) {
                 throw new FactoryException("Cannot construct Factory : " + factoryClass, e);
             }
         }

@@ -17,10 +17,10 @@ import java.io.PrintWriter;
  * an appropriate function.
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FactoryException extends RuntimeException {
-	protected Exception exception = null;
+	protected Throwable exception = null;
 
 	public FactoryException() {
 		super();
@@ -35,7 +35,7 @@ public class FactoryException extends RuntimeException {
 		exception = e;
 	}
 
-	public FactoryException(String msg, Exception e) {
+	public FactoryException(String msg, Throwable e) {
 		super(msg + ": " + e);
 		exception = e;
 	}
@@ -43,7 +43,7 @@ public class FactoryException extends RuntimeException {
 	/**
 	 * Get the original cause of the Exception. Returns null if not known.
 	 */
-	public Exception getRootCause() {
+	public Throwable getRootCause() {
 		return exception;
 	}
 
