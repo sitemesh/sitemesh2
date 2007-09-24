@@ -10,7 +10,7 @@ Closing the HEAD tag without a corresponding opening tag throws and ArrayOutOfBo
 
 ~~~ PROPERTIES ~~~
 
-
+title=
 
 ~~~ HEAD ~~~
 
