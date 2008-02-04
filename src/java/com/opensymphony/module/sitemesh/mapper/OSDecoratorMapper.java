@@ -32,7 +32,7 @@ import java.util.Properties;
  * decorator name if the user is using that operating system</p>
  *
  * @author	<a href="mailto:schepdawg@yahoo.com">Adam P. Schepis</a>
- * @version	$Revision: 1.3 $
+ * @version	$Revision: 1.4 $
  *
  * @see com.opensymphony.module.sitemesh.mapper.AbstractDecoratorMapper
  */
@@ -66,7 +66,7 @@ public class OSDecoratorMapper extends AbstractDecoratorMapper {
      * OS, or the parent DecoratorMapper's decorator
      */
     public Decorator getDecorator(HttpServletRequest request, Page page) {
-        String osHeader = request.getHeader("UA-OS").toLowerCase();
+        String osHeader = request.getHeader("UA-OS");
         if (osHeader == null) return parent.getDecorator(request, page);
 
         // run through the list of operating systems the application developer listed
@@ -75,7 +75,7 @@ public class OSDecoratorMapper extends AbstractDecoratorMapper {
             String os = (String) e.nextElement();
 
             // see if the name matches the user's operating system name
-            if (osHeader.indexOf(os.toLowerCase()) != -1) {
+            if (osHeader.toLowerCase().indexOf(os.toLowerCase()) != -1) {
                 String decoratorName = parent.getDecorator(request, page).getName();
                 if (decoratorName != null) {
                     decoratorName += '-' + properties.getProperty(os);
