@@ -5,7 +5,7 @@
 
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
-	<shortname>SiteMesh Page Tags</shortname>
+	<shortname>sitemesh-page-tags</shortname>
 	<uri>http://www.opensymphony.com/sitemesh/page</uri>
 
 	<tag>
