@@ -1,4 +1,29 @@
 --------------------------
+-- Changes in 2.4       --
+--------------------------
+Mostly minor fixes.
+
+Bug fixes
+    * [SIM-156] - Style Tags are stripped from <HEAD>
+    * [SIM-172] - Unclosed quotes cause parsing problems
+    * [SIM-180] - Header content after a <content> tag gets treated as part of the body
+    * [SIM-186] - SM should honor (at least) 304 (SC_NOT_MODIFIED)
+    * [SIM-197] - when bodyContent is null,page:applyDecorator will throw NullPointerException
+    * [SIM-198] - Deleted '<' in included content
+    * [SIM-206] - XML Declaration in XHTML
+    * [SIM-216] - NoSuchElementException in com.opensymphony.module.sitemesh.html.HTMLProcessor$1.currentBuffer(HTMLProcessor.java:44)
+    * [SIM-241] - ArrayIndexOutofBounds exception in HTMLPageParser
+    * [SIM-247] - OSDecoratorMapper == FAIL
+    * [SIM-249] - tlds are broken - shortname does not conform to NMTOKEN
+Improvements
+    * [SIM-151] - Allow the forced session creation to be optional
+    * [SIM-174] - Simple (but measurable) Performance improvements for DefaultFactory and ConfigLoader
+    * [SIM-192] - Need more user-friendly log error message when decorators.xml is missing
+Tasks
+    * [SIM-229] - Update Sitemesh testsuite to use Cargo
+    * [SIM-230] - Remove PageFilter, in favour of new SiteMeshFilter
+
+--------------------------
 -- Changes in 2.3       --
 --------------------------
 Default parser has been moved from FastPageParser to HTMLPageParser.
