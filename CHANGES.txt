@@ -1,4 +1,9 @@
 --------------------------
+-- Changes in 2.4.1     --
+--------------------------
+Fixed error in Page.getRequest() implementation. Now deprecated and removed from examples.
+
+--------------------------
 -- Changes in 2.4       --
 --------------------------
 Mostly minor fixes.
