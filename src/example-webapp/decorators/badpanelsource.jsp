@@ -42,9 +42,8 @@
 		<%-- Construct URL from page request and append 'printable=true' param --%>
 		<decorator:usePage id="p" />
 		<%
-			HttpServletRequest req = p.getRequest();
 			StringBuffer printUrl = new StringBuffer();
-			printUrl.append( req.getRequestURI() );
+			printUrl.append(request.getRequestURI());
 			printUrl.append("?printable=true");
 			if (request.getQueryString()!=null) {
 				printUrl.append('&');

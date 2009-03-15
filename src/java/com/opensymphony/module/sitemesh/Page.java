@@ -29,7 +29,7 @@ import java.util.Map;
  * be added to the system by extending Page and implementing an appropriate PageParser.</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public interface Page {
     /**
@@ -135,6 +135,8 @@ public interface Page {
 
     /**
      * Return the request of the original page.
+     *
+     * @deprecated Since Servlet 2.4 API, this is unnecessary - just use the stand HttpServletRequest instance.
      */
     HttpServletRequest getRequest();
 
