@@ -31,7 +31,7 @@ public class OldDecorator2NewDecorator extends BaseWebAppDecorator implements Re
                           ServletContext servletContext, SiteMeshWebAppContext webAppContext)
             throws IOException, ServletException {
 
-        request.setAttribute(PAGE, new Content2HTMLPage(content));
+        request.setAttribute(PAGE, new Content2HTMLPage(content, request));
 
         // see if the URI path (webapp) is set
         if (oldDecorator.getURIPath() != null) {

@@ -19,9 +19,11 @@ import java.util.HashMap;
 public class Content2HTMLPage implements HTMLPage {
 
     private final Content content;
+    private HttpServletRequest request;
 
-    public Content2HTMLPage(Content content) {
+    public Content2HTMLPage(Content content, HttpServletRequest request) {
         this.content = content;
+        this.request = request;
     }
 
     public void writePage(Writer out) throws IOException {
@@ -139,14 +141,20 @@ public class Content2HTMLPage implements HTMLPage {
         addProperty("frameset", frameset ? "true" : "false");
     }
 
+    /**
+     * @see com.opensymphony.module.sitemesh.Page#getRequest()
+     */
     public HttpServletRequest getRequest() {
-        // TODO: Find a new place for the request to live - don't want to couple Content to Servlet environment.
-        throw new UnsupportedOperationException();
+        return request;
     }
 
+    /**
+     * Create snapshot of Request.
+     *
+     * @see com.opensymphony.module.sitemesh.Page#getRequest()
+     */
     public void setRequest(HttpServletRequest request) {
-        // TODO: Find a new place for the request to live - don't want to couple Content to Servlet environment.
-        throw new UnsupportedOperationException();
+        this.request = request;
     }
 
     public void addProperty(String name, String value) {

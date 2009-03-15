@@ -29,7 +29,6 @@ public abstract class BaseWebAppDecorator implements Decorator {
 
     public void render(Content content, SiteMeshContext context) {
         SiteMeshWebAppContext webAppContext = (SiteMeshWebAppContext) context;
-        // TODO: content.setRequest(request);
         try {
             render(content, webAppContext.getRequest(), webAppContext.getResponse(), webAppContext.getServletContext(), webAppContext);
         } catch (IOException e) {
