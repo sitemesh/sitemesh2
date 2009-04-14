@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
  * If this doesn't exist, it defaults to {@link com.opensymphony.module.sitemesh.factory.DefaultFactory} .</p>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public abstract class Factory implements PageParserSelector {
     /** Web context lookup key */
@@ -95,6 +95,7 @@ public abstract class Factory implements PageParserSelector {
             }
         }
         catch (Exception e) { } // failed - don't moan, just return default.
+        catch (NoClassDefFoundError e) { } // to deal with restricted class loaders (i.e. on AppEngine).
         return result == null || result.trim().length() == 0 ? defaultValue : result;
     }
 }
