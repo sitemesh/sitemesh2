@@ -109,6 +109,29 @@
 
     <releases>
         <release>
+            <version>2.4.2</version>
+            <date>4/16/2009</date>
+            <jiraId>21822</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132512/sitemesh-2.4.2.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132511/sitemesh-2.4.2.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132513/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132514/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
             <version>2.4.1</version>
             <date>3/15/2009</date>
             <jiraId>21821</jiraId>
