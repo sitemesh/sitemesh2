@@ -103,7 +103,7 @@
         </antcall>
     </target>
 -->
-    <target name="cargo-tomcat5528" depends="webapp-build" description="Run acceptance tests on Tomcat 5.5.17">
+    <target name="cargo-tomcat5528" depends="webapp-build" description="Run acceptance tests on Tomcat 5.5.28">
         <antcall target="test-cargo">
             <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.28/bin/apache-tomcat-5.5.28.zip"/>
             <param name="container.uniquename" value="tomcat5528"/>
