@@ -16,16 +16,16 @@ public class RequestTest extends WebTest {
         WebResponse rs = wc.getResponse(baseUrl + "/request/default.jsp?x=y");
         assertEquals(200, rs.getResponseCode());
         Properties properties = getProperties(rs.getText());
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("default.jsp, request"));
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("decorator-main.jsp, request"));
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("decorator-panel.jsp, request"));
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("inline.jsp, request"));
     }
@@ -34,13 +34,13 @@ public class RequestTest extends WebTest {
         WebResponse rs = wc.getResponse(baseUrl + "/request/default.jsp?x=y");
         assertEquals(200, rs.getResponseCode());
         Properties properties = getProperties(rs.getText());
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("decorator-main.jsp, page.request before applyDecorator"));
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("decorator-main.jsp, page.request after applyDecorator"));
-        assertEquals(
+        assertStringContains(
                 "/request/default.jsp|x=y",
                 properties.getProperty("decorator-panel.jsp, page.request"));
     }
