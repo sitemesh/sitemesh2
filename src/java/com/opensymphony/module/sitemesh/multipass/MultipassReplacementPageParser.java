@@ -19,6 +19,17 @@ public class MultipassReplacementPageParser implements PageParser {
         this.response = response;
     }
 
+    public Page parse(char[] data, int length) throws IOException
+    {
+        if (data.length > length) {
+            // todo fix this parser so that it doesn't need to compact the array
+            char[] newData = new char[length];
+            System.arraycopy(data, 0, newData, 0, length);
+            data = newData;
+        }
+        return parse(data);
+    }
+    
     public Page parse(char[] data) throws IOException {
         final CharArray result = new CharArray(4096);
         HTMLProcessor processor = new HTMLProcessor(data, result);

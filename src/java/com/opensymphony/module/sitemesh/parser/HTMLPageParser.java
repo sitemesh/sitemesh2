@@ -18,6 +18,7 @@ import com.opensymphony.module.sitemesh.html.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.TitleExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 
+import java.io.CharArrayWriter;
 import java.io.IOException;
 
 /**
@@ -32,6 +33,17 @@ import java.io.IOException;
  * @see HTMLProcessor
  */
 public class HTMLPageParser implements PageParser {
+
+    public Page parse(char[] data, int length) throws IOException
+    {
+        if (data.length > length) {
+            // todo fix this parser so that it doesn't need to compact the array
+            char[] newData = new char[length];
+            System.arraycopy(data, 0, newData, 0, length);
+            data = newData;
+        }
+        return parse(data);
+    }
 
     public Page parse(char[] data) throws IOException {
         CharArray head = new CharArray(64);

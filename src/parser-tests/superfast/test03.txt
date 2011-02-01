@@ -1,0 +1,24 @@
+~~~ INPUT ~~~
+
+<html>
+ <body bgcolor="black">
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+
+ </body>
+</html>
+
+~~~ TITLE ~~~
+
+~~~ PROPERTIES ~~~
+
+~~~ HEAD ~~~
+
+~~~ BODY ~~~
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+ 

@@ -25,7 +25,7 @@ public class Buffer {
     private final String encoding;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
-    private CharArrayWriter bufferedWriter;
+    private AccessibleCharArrayWriter bufferedWriter;
     private FastByteArrayOutputStream bufferedStream;
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
@@ -35,18 +35,19 @@ public class Buffer {
         this.encoding = encoding;
     }
 
-    public char[] getContents() throws IOException {
+    public BufferedContent getContents() throws IOException {
         if (bufferedWriter != null) {
-            return bufferedWriter.toCharArray();
+            return new BufferedContent(bufferedWriter.getCharArray(), bufferedWriter.size());
         } else if (bufferedStream != null) {
-            return TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding);
+            return new BufferedContent(TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding));
         } else {
-            return new char[0];
+            return new BufferedContent(new char[0]);
         }
     }
 
     public Page parse() throws IOException {
-        return pageParser.parse(getContents());
+        BufferedContent content = getContents();
+        return pageParser.parse(content.getBuffer(), content.getLength());
     }
 
     public PrintWriter getWriter() {
@@ -54,7 +55,7 @@ public class Buffer {
             if (bufferedStream != null) {
                 throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
             }
-            bufferedWriter = new CharArrayWriter(128);
+            bufferedWriter = new AccessibleCharArrayWriter(128);
             exposedWriter = new PrintWriter(bufferedWriter);
         }
         return exposedWriter;
@@ -77,5 +78,17 @@ public class Buffer {
 
     public boolean isUsingStream() {
         return bufferedStream != null;
+    }
+
+    private static class AccessibleCharArrayWriter extends CharArrayWriter {
+
+        private AccessibleCharArrayWriter(int initialSize) {
+            super(initialSize);
+        }
+
+        public char[] getCharArray()
+        {
+            return buf;
+        }
     }
 }

@@ -185,7 +185,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
         return buffer != null && buffer.isUsingStream();
     }
 
-    public char[] getContents() throws IOException {
+    public BufferedContent getContents() throws IOException {
         if (aborted || !parseablePage) {
             return null;
         } else {

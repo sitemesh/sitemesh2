@@ -1,0 +1,33 @@
+~~~ INPUT ~~~
+
+<html>
+ <head>
+  <style>
+    body { font-family: arial; }
+  </style>
+ </head>
+ <body>
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+
+ </body>
+</html>
+
+~~~ TITLE ~~~
+
+~~~ PROPERTIES ~~~
+
+~~~ HEAD ~~~
+
+  <style>
+    body { font-family: arial; }
+  </style>
+
+~~~ BODY ~~~
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+ 

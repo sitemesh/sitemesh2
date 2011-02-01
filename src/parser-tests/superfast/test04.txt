@@ -1,0 +1,18 @@
+~~~ INPUT ~~~
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+
+~~~ TITLE ~~~
+
+~~~ PROPERTIES ~~~
+
+~~~ HEAD ~~~
+
+~~~ BODY ~~~
+
+   <p>This is a pretty simple page.</p>
+
+   <p>Bye.</p>
+ 
