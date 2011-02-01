@@ -25,7 +25,7 @@
     </taskdef>
 
 
-    <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5517, cargo-tomcat4132, cargo-tomcat5030"
+    <target name="cargo-all" depends="cargo-orion205, cargo-resin3019, cargo-resin2117, cargo-tomcat5528, cargo-tomcat4132, cargo-tomcat5030"
             description="Run acceptance tests on multiple application servers using Cargo"/>
 
     <target name="2.3-web.xml" depends="webapp-build">
@@ -103,10 +103,10 @@
         </antcall>
     </target>
 -->
-    <target name="cargo-tomcat5517" depends="webapp-build" description="Run acceptance tests on Tomcat 5.5.17">
+    <target name="cargo-tomcat5528" depends="webapp-build" description="Run acceptance tests on Tomcat 5.5.28">
         <antcall target="test-cargo">
-            <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.17/bin/apache-tomcat-5.5.17.zip"/>
-            <param name="container.uniquename" value="tomcat5517"/>
+            <param name="container.installurl" value="http://www.apache.org/dist/tomcat/tomcat-5/v5.5.28/bin/apache-tomcat-5.5.28.zip"/>
+            <param name="container.uniquename" value="tomcat5528"/>
             <param name="container.type" value="tomcat5x"/>
             <param name="container.port" value="9006"/>
             <param name="web.xml" value="2.4-web.xml"/>
