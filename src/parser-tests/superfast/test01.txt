@@ -25,6 +25,7 @@ Some page
 
 title=Some page
 meta.author=Someone
+body.bgcolor=black
 
 ~~~ HEAD ~~~
 

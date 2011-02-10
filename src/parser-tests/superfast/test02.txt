@@ -19,6 +19,8 @@
 
 ~~~ PROPERTIES ~~~
 
+title=
+
 ~~~ HEAD ~~~
 
   <style>

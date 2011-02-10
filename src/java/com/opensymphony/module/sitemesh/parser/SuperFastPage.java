@@ -28,8 +28,12 @@ public class SuperFastPage extends AbstractPage {
     public int getContentLength() {
         // We encode it but not into a new buffer
         CountingOutputStream counter = new CountingOutputStream();
-        try {
-            writePage(new OutputStreamWriter(counter));
+        try
+        {
+            OutputStreamWriter writer = new OutputStreamWriter(counter);
+            writePage(writer);
+            // We mush flush, because the writer will buffer
+            writer.flush();
         } catch (IOException ioe) {
             // Ignore, it's not possible with our OutputStream
         }

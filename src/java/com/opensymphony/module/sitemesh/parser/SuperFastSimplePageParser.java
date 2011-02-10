@@ -2,11 +2,8 @@ package com.opensymphony.module.sitemesh.parser;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
@@ -16,21 +13,17 @@ import com.opensymphony.module.sitemesh.PageParser;
  * and body properties. This page parser makes several assumptions:
  * <p/>
  * <ul> <li>If the first tag is an html tag, it's an HTML page, otherwise, it's a fragment, and no head/title/etc
- * parsing will be done.</li>
- * </ul>
+ * parsing will be done.</li> </ul>
  *
  * @since v2.4
  */
 public class SuperFastSimplePageParser implements PageParser
 {
-    private static final Pattern META_PATTERN = Pattern.compile(
-            "<meta\\s+([\\w-]+)=[\"']([^\"']*)[\"']\\s+([\\w-]+)=[\"']([^\"']*)[\"']\\s*/?>", Pattern.CASE_INSENSITIVE);
-
     public Page parse(final char[] data) throws IOException
     {
         return parse(data, data.length);
     }
-    
+
     public Page parse(final char[] data, final int length) throws IOException
     {
         int position = 0;
@@ -51,12 +44,12 @@ public class SuperFastSimplePageParser implements PageParser
                 else
                 {
                     // The whole thing is the body.
-                    return new SuperFastPage(data, length, 0, length);
+                    return new SuperFastHtmlPage(data, length, 0, length, null);
                 }
             }
         }
         // If we're here, we mustn't have found a tag
-        return new SuperFastPage(data, length, 0, length);
+        return new SuperFastHtmlPage(data, length, 0, length, null);
     }
 
     private Page parseHtmlPage(final char[] data, final int length, int position)
@@ -66,6 +59,7 @@ public class SuperFastSimplePageParser implements PageParser
         int headStart = -1;
         int headLength = -1;
         // Find head end and start, and body start
+        Map<String, String> bodyProperties = null;
         while (position < length)
         {
             if (data[position++] == '<')
@@ -81,7 +75,9 @@ public class SuperFastSimplePageParser implements PageParser
                 }
                 else if (compareLowerCase(data, length, position, "body"))
                 {
-                    bodyStart = findEndOf(data, length, position + 4, ">");
+                    HashSimpleMap map = new HashSimpleMap();
+                    bodyStart = parseProperties(data, length, position + 4, map);
+                    bodyProperties = map.getMap();
                     break;
                 }
             }
@@ -111,36 +107,50 @@ public class SuperFastSimplePageParser implements PageParser
 
         if (headLength > 0)
         {
+            int idx = headStart;
+            int headEnd = headStart + headLength;
             String title = null;
-            // Extract title and meta properties.  This should be a small amount of data, so regexs are fine
-            CharBuffer buffer = CharBuffer.wrap(data, headStart, headLength);
-            Matcher matcher = META_PATTERN.matcher(buffer);
+
+            // Extract meta attributes out of head
             Map<String, String> metaAttributes = new HashMap<String, String>();
-            while (matcher.find())
+            while (idx < headEnd)
             {
-                if (matcher.group(1).equals("content"))
+                if (data[idx++] == '<')
                 {
-                    metaAttributes.put(matcher.group(4), matcher.group(2));
-                }
-                else
-                {
-                    metaAttributes.put(matcher.group(2), matcher.group(4));                    
+                    if (compareLowerCase(data, headEnd, idx, "meta"))
+                    {
+                        MetaTagSimpleMap map = new MetaTagSimpleMap();
+                        idx = parseProperties(data, headEnd, idx + 4, map);
+                        if (map.getName() != null && map.getContent() != null)
+                        {
+                            metaAttributes.put(map.getName(), map.getContent());
+                        }
+                    }
                 }
             }
 
-            // We need a new head buffer because we have to remove the title from it
+            // We need a new head buffer because we have to remove the title and content tags from it
+            Map<String, String> pageProperties = new HashMap<String, String>();
             CharArrayWriter head = new CharArrayWriter();
-            for (int i = headStart; i < headStart + headLength; i++)
+            for (int i = headStart; i < headEnd; i++)
             {
                 char c = data[i];
                 if (c == '<')
                 {
-                    if (compareLowerCase(data, headLength, i + 1, "title"))
+                    if (compareLowerCase(data, headEnd, i + 1, "title"))
                     {
-                        int titleStart = findEndOf(data, headLength, i + 6, ">");
-                        int titleEnd = findStartOf(data, headLength, titleStart, "<");
+                        int titleStart = findEndOf(data, headEnd, i + 6, ">");
+                        int titleEnd = findStartOf(data, headEnd, titleStart, "<");
                         title = new String(data, titleStart, titleEnd - titleStart);
                         i = titleEnd + "</title>".length() - 1;
+                    }
+                    else if (compareLowerCase(data, headEnd, i + 1, "content"))
+                    {
+                        ContentTagSimpleMap map = new ContentTagSimpleMap();
+                        int contentStart = parseProperties(data, headEnd, i + 8, map);
+                        int contentEnd = findStartOf(data, headEnd, contentStart, "</content>");
+                        pageProperties.put(map.getTag(), new String(data, contentStart, contentEnd - contentStart));
+                        i = contentEnd + "</content>".length() - 1;
                     }
                     else
                     {
@@ -153,18 +163,18 @@ public class SuperFastSimplePageParser implements PageParser
                 }
             }
 
-            return new SuperFastHtmlPage(data, length, bodyStart, bodyLength, head.toCharArray(), title, metaAttributes);
+            return new SuperFastHtmlPage(data, length, bodyStart, bodyLength, bodyProperties, head.toCharArray(), title, metaAttributes, pageProperties);
         }
         else
         {
-            return new SuperFastPage(data, length, bodyStart, bodyLength);
+            return new SuperFastHtmlPage(data, length, bodyStart, bodyLength, bodyProperties);
         }
     }
 
-    private static boolean compareLowerCase(final char[] data, final int length, int position, String token)
+    private static boolean compareLowerCase(final char[] data, final int dataEnd, int position, String token)
     {
         int l = position + token.length();
-        if (l > length)
+        if (l > dataEnd)
         {
             return false;
         }
@@ -181,27 +191,201 @@ public class SuperFastSimplePageParser implements PageParser
         return true;
     }
 
-    private static int findEndOf(final char[] data, final int length, int position, String token)
+    private static int findEndOf(final char[] data, final int dataEnd, int position, String token)
     {
-        for (int i = position; i < length - token.length(); i++)
+        for (int i = position; i < dataEnd - token.length(); i++)
         {
-            if (compareLowerCase(data, length, i, token))
+            if (compareLowerCase(data, dataEnd, i, token))
             {
                 return i + token.length();
             }
         }
-        return length;
+        return dataEnd;
     }
 
-    private static int findStartOf(final char[] data, final int length, int position, String token)
+    private static int findStartOf(final char[] data, final int dataEnd, int position, String token)
     {
-        for (int i = position; i < length - token.length(); i++)
+        for (int i = position; i < dataEnd - token.length(); i++)
         {
-            if (compareLowerCase(data, length, i, token))
+            if (compareLowerCase(data, dataEnd, i, token))
             {
                 return i;
             }
         }
-        return length;
+        return dataEnd;
+    }
+
+    /**
+     * Parse the properties of the current tag
+     *
+     * @param data the data
+     * @param dataEnd the end index of the data
+     * @param position our position in the data, this should be the first character after the tag name
+     * @param map to the map to parse the properties into
+     *
+     * @return The position of the first character after the tag
+     */
+    private static int parseProperties(char[] data, int dataEnd, int position, SimpleMap map)
+    {
+        int idx = position;
+
+        while (idx < dataEnd)
+        {
+            // Skip forward to the next non-whitespace character
+            while (idx < dataEnd && Character.isWhitespace(data[idx]))
+            {
+                idx++;
+            }
+
+            // Make sure its not the end of the data or the end of the tag
+            if (idx == dataEnd || data[idx] == '>' || data[idx] == '/')
+            {
+                break;
+            }
+
+            int startAttr = idx;
+
+            // Find the next equals
+            while (idx < dataEnd && !Character.isWhitespace(data[idx]) && data[idx] != '=' && data[idx] != '>')
+            {
+                idx++;
+            }
+
+            if (idx == dataEnd || data[idx] != '=')
+            {
+                continue;
+            }
+
+            String attrName = new String(data, startAttr, idx - startAttr);
+
+            idx++;
+            if (idx == dataEnd)
+            {
+                break;
+            }
+
+            int startValue = idx;
+            int endValue;
+            if (data[idx] == '"')
+            {
+                idx++;
+                startValue = idx;
+                while (idx < dataEnd && data[idx] != '"')
+                {
+                    idx++;
+                }
+                if (idx == dataEnd)
+                {
+                    break;
+                }
+                endValue = idx;
+                idx++;
+            }
+            else if (data[idx] == '\'')
+            {
+                idx++;
+                startValue = idx;
+                while (idx < dataEnd && data[idx] != '\'')
+                {
+                    idx++;
+                }
+                if (idx == dataEnd)
+                {
+                    break;
+                }
+                endValue = idx;
+                idx++;
+            }
+            else
+            {
+                while (idx < dataEnd && !Character.isWhitespace(data[idx]) && data[idx] != '/' && data[idx] != '>')
+                {
+                    idx++;
+                }
+                endValue = idx;
+            }
+            String attrValue = new String(data, startValue, endValue - startValue);
+            map.put(attrName, attrValue);
+        }
+        // Find the end of the tag
+        while (idx < dataEnd && data[idx] != '>')
+        {
+            idx++;
+        }
+        if (idx == dataEnd)
+        {
+            return idx;
+        }
+        else
+        {
+            // Return the first character after the end of the tag
+            return idx + 1;
+        }
+    }
+
+    public static interface SimpleMap
+    {
+        public void put(String key, String value);
+    }
+
+    public static class MetaTagSimpleMap implements SimpleMap
+    {
+        private String name;
+        private String content;
+
+        public void put(String key, String value)
+        {
+            if (key.equals("name"))
+            {
+                name = value;
+            }
+            else if (key.equals("content"))
+            {
+                content = value;
+            }
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public String getContent()
+        {
+            return content;
+        }
+    }
+
+    public static class ContentTagSimpleMap implements SimpleMap
+    {
+        private String tag;
+
+        public void put(String key, String value)
+        {
+            if (key.equals("tag"))
+            {
+                tag = value;
+            }
+        }
+
+        public String getTag()
+        {
+            return tag;
+        }
+    }
+
+    public static class HashSimpleMap implements SimpleMap
+    {
+        private final Map<String, String> map = new HashMap<String, String>();
+
+        public void put(String key, String value)
+        {
+            map.put(key, value);
+        }
+
+        public Map<String, String> getMap()
+        {
+            return map;
+        }
     }
 }
