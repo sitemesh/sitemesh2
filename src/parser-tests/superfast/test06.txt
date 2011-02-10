@@ -1,0 +1,26 @@
+~~~ INPUT ~~~
+
+<html>
+ <head>
+   <content tag="blah">hello</content>
+ </head>
+ <body>
+   <p>This is a pretty simple page.</p>
+   <p>Bye.</p>
+ </body>
+</html>
+
+~~~ TITLE ~~~
+
+~~~ PROPERTIES ~~~
+
+title=
+page.blah=hello
+
+~~~ HEAD ~~~
+
+~~~ BODY ~~~
+
+   <p>This is a pretty simple page.</p>
+   <p>Bye.</p>
+ 
