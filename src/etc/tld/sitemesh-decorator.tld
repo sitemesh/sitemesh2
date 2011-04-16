@@ -32,6 +32,17 @@
 	</tag>
 
 	<tag>
+	<name>div</name>
+		<tag-class>com.opensymphony.module.sitemesh.taglib.decorator.DivTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<name>getProperty</name>
 		<tagclass>com.opensymphony.module.sitemesh.taglib.decorator.PropertyTag</tagclass>
 		<bodycontent>JSP</bodycontent>
@@ -50,7 +61,7 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-    </tag>
+	</tag>
 
 	<tag>
 		<name>extractProperty</name>

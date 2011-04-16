@@ -33,6 +33,9 @@ public class DivExtractingPageParser extends HTMLPageParser {
                 if (depth == 0 && id != null) {
                     currentBuffer().insert(tag.getPosition(), "<sitemesh:multipass id=\"div." + id + "\"/>");
                     blockId = id;
+                    for (int i = 0; i < tag.getAttributeCount(); i++) {
+                        page.addProperty(String.format("div.%s.%s", blockId, tag.getAttributeName(i)), tag.getAttributeValue(i));
+                    }
                     currentBuffer().markStartDelete(tag.getPosition());
                     context.pushBuffer(SitemeshBufferFragment.builder().setBuffer(context.getSitemeshBuffer()));
                     currentBuffer().markStart(tag.getPosition());
