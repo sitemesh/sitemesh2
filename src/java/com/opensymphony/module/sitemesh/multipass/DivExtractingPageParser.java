@@ -31,7 +31,11 @@ public class DivExtractingPageParser extends HTMLPageParser {
                     currentBuffer().append("<sitemesh:multipass id=\"div." + id + "\"/>");
                     blockId = id;
                     context.pushBuffer(new CharArray(512));
-                }
+
+                    for (int i = 0; i < tag.getAttributeCount(); i++) {
+                        page.addProperty(String.format("div.%s.%s", blockId, tag.getAttributeName(i)), tag.getAttributeValue(i));
+                    }
+                  }
                 tag.writeTo(currentBuffer());
                 depth++;
             } else if (tag.getType() == Tag.CLOSE) {

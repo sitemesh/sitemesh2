@@ -36,6 +36,17 @@
     </tag>
 
     <tag>
+        <name>div</name>
+        <tag-class>com.opensymphony.module.sitemesh.taglib.decorator.DivTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>getProperty</name>
         <tag-class>com.opensymphony.module.sitemesh.taglib.decorator.PropertyTag</tag-class>
         <body-content>JSP</body-content>

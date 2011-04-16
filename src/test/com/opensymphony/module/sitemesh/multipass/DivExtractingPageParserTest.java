@@ -38,5 +38,24 @@ public class DivExtractingPageParserTest extends TestCase {
         assertEquals("<div id='two'>World<br><div id=inner>Great</div></div>", page.getProperty("div.two"));
     }
 
+    public void testExtractAttributes() throws IOException {
+        String input = "" +
+                "<html>\n" +
+                "  <head><title>Title</title></head>\n" +
+                "  <body>\n" +
+                "    <div id='one' class='c_one' align='center'>Hello</div>\n" +
+                "    Blah\n" +
+                "    <div id='two'>World<br><div id=inner>Great</div></div>\n" +
+                "    <div>Bye</div>\n" +
+                "  </body>\n" +
+                "</html>";
+
+        PageParser parser = new DivExtractingPageParser();
+        Page page = parser.parse(input.toCharArray());
+
+        assertEquals("c_one", page.getProperty("div.one.class"));
+        assertEquals("center", page.getProperty("div.one.align"));
+        assertEquals("two", page.getProperty("div.two.id"));
+    }
 }
 
