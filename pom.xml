@@ -5,31 +5,18 @@
 
     <!--
     ant clean jar sources
-    mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.4.2.jar -DpomFile=./pom.xml
-    mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.4.2-sources.jar -DpomFile=./pom.xml -Dclassifier=sources
-
+    mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.4.2.jar -DpomFile=./pom.xml -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
+    mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.4.2-sources.jar -DpomFile=./pom.xml -Dclassifier=sources -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
     -->
 
     <groupId>opensymphony</groupId>
     <artifactId>sitemesh</artifactId>
-    <version>2.4.2-atlassianmlq-2</version>
+    <version>2.4.2-atlassian-2</version>
     
     <packaging>jar</packaging>
     <name>SiteMesh</name>
     <description>Atlassian's fork of SiteMesh</description>
     <url>https://github.com/atlassian/sitemesh2</url>
 
-    <distributionManagement>
-        <repository>
-            <id>atlassian-m2-repository</id>
-            <name>Atlassian Public Repository</name>
-            <url>davs://maven.atlassian.com/public/</url>
-        </repository>
-        <snapshotRepository>
-            <id>atlassian-m2-snapshot-repository</id>
-            <name>Atlassian Public Snapshot Repository</name>
-            <url>davs://maven.atlassian.com/public-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
