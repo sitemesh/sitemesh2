@@ -91,7 +91,7 @@ public final class FastPageParser implements PageParser
    public Page parse(char[] data, int length) throws IOException
    {
       FastPage page = internalParse(new CharArrayReader(data, 0, length));
-      page.setVerbatimPage(data);
+      page.setVerbatimPage(data, length);
       return page;
    }
 

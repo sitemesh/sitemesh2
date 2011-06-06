@@ -68,8 +68,14 @@ public final class FastPage extends AbstractHTMLPage
       }
    }
 
-   public void setVerbatimPage(char[] v)
+   public void setVerbatimPage(char[] v, int length)
    {
+      if (v.length > length) {
+         // todo fix this parser so that it doesn't need to compact the array
+         char[] newData = new char[length];
+         System.arraycopy(v, 0, newData, 0, length);
+         v = newData;
+      }
       this.pageData = v;
    }
 
