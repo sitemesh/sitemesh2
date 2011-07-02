@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 /**
  * Super fast page parser.  It uses a single buffer, and never copies anything, apart from the title, meta attributes
@@ -19,13 +20,10 @@ import com.opensymphony.module.sitemesh.PageParser;
  */
 public class SuperFastSimplePageParser implements PageParser
 {
-    public Page parse(final char[] data) throws IOException
+    public Page parse(SitemeshBuffer buffer) throws IOException
     {
-        return parse(data, data.length);
-    }
-
-    public Page parse(final char[] data, final int length) throws IOException
-    {
+        char[] data = buffer.getCharArray();
+        int length = buffer.getBufferLength();
         int position = 0;
         while (position < data.length)
         {
@@ -39,21 +37,23 @@ public class SuperFastSimplePageParser implements PageParser
                 if (compareLowerCase(data, length, position, "html"))
                 {
                     // It's an HTML page, handle HTML pages
-                    return parseHtmlPage(data, length, position);
+                    return parseHtmlPage(buffer, position);
                 }
                 else
                 {
                     // The whole thing is the body.
-                    return new SuperFastHtmlPage(data, length, 0, length, null);
+                    return new SuperFastHtmlPage(buffer, 0, length, null);
                 }
             }
         }
         // If we're here, we mustn't have found a tag
-        return new SuperFastHtmlPage(data, length, 0, length, null);
+        return new SuperFastHtmlPage(buffer, 0, length, null);
     }
 
-    private Page parseHtmlPage(final char[] data, final int length, int position)
+    private Page parseHtmlPage(SitemeshBuffer buffer, int position)
     {
+        char[] data = buffer.getCharArray();
+        int length = buffer.getBufferLength();
         int bodyStart = -1;
         int bodyLength = -1;
         int headStart = -1;
@@ -163,11 +163,11 @@ public class SuperFastSimplePageParser implements PageParser
                 }
             }
 
-            return new SuperFastHtmlPage(data, length, bodyStart, bodyLength, bodyProperties, head.toCharArray(), title, metaAttributes, pageProperties);
+            return new SuperFastHtmlPage(buffer, bodyStart, bodyLength, bodyProperties, head.toCharArray(), title, metaAttributes, pageProperties);
         }
         else
         {
-            return new SuperFastHtmlPage(data, length, bodyStart, bodyLength, bodyProperties);
+            return new SuperFastHtmlPage(buffer, bodyStart, bodyLength, bodyProperties);
         }
     }
 

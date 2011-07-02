@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.multipass;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.multipass.DivExtractingPageParser;
@@ -25,7 +26,7 @@ public class DivExtractingPageParserTest extends TestCase {
                 "</html>";
 
         PageParser parser = new DivExtractingPageParser();
-        Page page = parser.parse(input.toCharArray());
+        Page page = parser.parse(new DefaultSitemeshBuffer(input.toCharArray()));
 
         String expectedBody = "" +
                 "    <sitemesh:multipass id=\"div.one\"/>\n" +

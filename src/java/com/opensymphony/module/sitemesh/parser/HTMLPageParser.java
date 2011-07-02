@@ -2,10 +2,10 @@ package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.html.HTMLProcessor;
 import com.opensymphony.module.sitemesh.html.State;
 import com.opensymphony.module.sitemesh.html.StateTransitionRule;
-import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.html.rules.BodyTagRule;
 import com.opensymphony.module.sitemesh.html.rules.ContentBlockExtractingRule;
@@ -18,7 +18,6 @@ import com.opensymphony.module.sitemesh.html.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.TitleExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 
-import java.io.CharArrayWriter;
 import java.io.IOException;
 
 /**
@@ -34,7 +33,23 @@ import java.io.IOException;
  */
 public class HTMLPageParser implements PageParser {
 
-    public Page parse(char[] data, int length) throws IOException
+    public Page parse(SitemeshBuffer buffer) throws IOException {
+        char[] data;
+        int length;
+        if (buffer.hasFragments()) {
+            // Write the buffer into a char array
+            com.opensymphony.module.sitemesh.util.CharArrayWriter writer = new com.opensymphony.module.sitemesh.util.CharArrayWriter(buffer.getTotalLength());
+            buffer.writeTo(writer, 0, buffer.getBufferLength());
+            data = writer.toCharArray();
+            length = data.length;
+        } else {
+            data = buffer.getCharArray();
+            length = buffer.getBufferLength();
+        }
+        return parse(data, length);
+    }
+
+    private Page parse(char[] data, int length) throws IOException
     {
         if (data.length > length) {
             // todo fix this parser so that it doesn't need to compact the array
@@ -45,7 +60,7 @@ public class HTMLPageParser implements PageParser {
         return parse(data);
     }
 
-    public Page parse(char[] data) throws IOException {
+    private Page parse(char[] data) throws IOException {
         CharArray head = new CharArray(64);
         CharArray body = new CharArray(4096);
         TokenizedHTMLPage page = new TokenizedHTMLPage(data, body, head);

@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
 
@@ -18,7 +19,7 @@ public class ParserPerformanceComparison
 {
 
     private static final String HTML_FILE = "sitemesh-performance-test.html";
-    private static final String HTML_URL = "http://jira.atlassian.com/browse/JRA-1330";
+    private static final String HTML_URL = "https://jira.atlassian.com/browse/JRA-1330";
     private static final int PARSE_COUNT = 1000;
 
     public static void main(String... args) throws Exception
@@ -82,9 +83,9 @@ public class ParserPerformanceComparison
         System.gc();
         double normalTime = runPerformanceTest("Normal #3", page, normal, PARSE_COUNT);
         System.gc();
-        double fastTime = runPerformanceTest("Fast #2", page, fast, PARSE_COUNT);
+        double fastTime = runPerformanceTest("Fast #3", page, fast, PARSE_COUNT);
         System.gc();
-        double superfastTime = runPerformanceTest("Super Fast #2", page, superfast, PARSE_COUNT);
+        double superfastTime = runPerformanceTest("Super Fast #3", page, superfast, PARSE_COUNT);
 
         System.out.println("\nPerformance comparison %\n========================");
         System.out.println(String.format("%-10s%12s%12s%12s", "", "Normal", "Fast", "Super Fast"));
@@ -99,7 +100,7 @@ public class ParserPerformanceComparison
         long start = System.currentTimeMillis();
         for (int i = 0; i < times; i++)
         {
-            Page page = parser.parse(data);
+            Page page = parser.parse(new DefaultSitemeshBuffer(data));
             page.writeBody(writer);
         }
         long finish = System.currentTimeMillis();

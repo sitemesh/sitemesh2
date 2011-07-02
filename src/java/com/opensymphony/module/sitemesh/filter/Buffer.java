@@ -3,12 +3,10 @@
  * distribution in the LICENSE.txt file. */
 package com.opensymphony.module.sitemesh.filter;
 
-import com.opensymphony.module.sitemesh.Page;
-import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
 
 import javax.servlet.ServletOutputStream;
-import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -25,7 +23,7 @@ public class Buffer {
     private final String encoding;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
-    private AccessibleCharArrayWriter bufferedWriter;
+    private SitemeshBufferWriter bufferedWriter;
     private FastByteArrayOutputStream bufferedStream;
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
@@ -35,19 +33,18 @@ public class Buffer {
         this.encoding = encoding;
     }
 
-    public BufferedContent getContents() throws IOException {
+    public SitemeshBuffer getContents() throws IOException {
         if (bufferedWriter != null) {
-            return new BufferedContent(bufferedWriter.getCharArray(), bufferedWriter.size());
+            return bufferedWriter.getSitemeshBuffer();
         } else if (bufferedStream != null) {
-            return new BufferedContent(TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding));
+            return new DefaultSitemeshBuffer(TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding));
         } else {
-            return new BufferedContent(new char[0]);
+            return new DefaultSitemeshBuffer(new char[0]);
         }
     }
 
     public Page parse() throws IOException {
-        BufferedContent content = getContents();
-        return pageParser.parse(content.getBuffer(), content.getLength());
+        return pageParser.parse(getContents());
     }
 
     public PrintWriter getWriter() {
@@ -55,8 +52,8 @@ public class Buffer {
             if (bufferedStream != null) {
                 throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
             }
-            bufferedWriter = new AccessibleCharArrayWriter(128);
-            exposedWriter = new PrintWriter(bufferedWriter);
+            bufferedWriter = new SitemeshBufferWriter(128);
+            exposedWriter = new SitemeshPrintWriter(bufferedWriter);
         }
         return exposedWriter;
     }
@@ -78,17 +75,5 @@ public class Buffer {
 
     public boolean isUsingStream() {
         return bufferedStream != null;
-    }
-
-    private static class AccessibleCharArrayWriter extends CharArrayWriter {
-
-        private AccessibleCharArrayWriter(int initialSize) {
-            super(initialSize);
-        }
-
-        public char[] getCharArray()
-        {
-            return buf;
-        }
     }
 }

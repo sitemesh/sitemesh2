@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshWriter;
+
 /**
  * Provides a PrintWriter that routes through to another PrintWriter, however the destination
  * can be changed at any point. The destination can be passed in using a factory, so it will not be created
@@ -15,7 +19,7 @@ import java.io.Writer;
  * @author Joe Walnes
  * @version $Revision: 1.1 $
  */
-public class RoutablePrintWriter extends PrintWriter {
+public class RoutablePrintWriter extends PrintWriter implements SitemeshWriter {
 
     private PrintWriter destination;
     private DestinationFactory factory;
@@ -179,4 +183,24 @@ public class RoutablePrintWriter extends PrintWriter {
 
     }
 
+    public boolean writeSitemeshBuffer(SitemeshBuffer sitemeshBuffer, int start, int length) throws IOException
+    {
+        PrintWriter destination = getDestination();
+        if (destination instanceof SitemeshWriter) {
+            return ((SitemeshWriter) destination).writeSitemeshBuffer(sitemeshBuffer, start, length);
+        } else {
+            sitemeshBuffer.writeTo(destination, start, length);
+            return true;
+        }
+    }
+
+    public SitemeshBuffer getSitemeshBuffer()
+    {
+        PrintWriter destination = getDestination();
+        if (destination instanceof SitemeshWriter) {
+            return ((SitemeshWriter) destination).getSitemeshBuffer();
+        } else {
+            throw new IllegalStateException("Print writer is not a sitemesh buffer");
+        }
+    }
 }
