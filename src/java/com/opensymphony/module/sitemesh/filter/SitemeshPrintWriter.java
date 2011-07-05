@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.filter;
 
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.SitemeshBufferWriter;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.SitemeshWriter;
@@ -19,8 +20,8 @@ public class SitemeshPrintWriter extends PrintWriter implements SitemeshWriter {
         this.sitemeshWriter = sitemeshWriter;
     }
 
-    public boolean writeSitemeshBuffer(SitemeshBuffer sitemeshBuffer, int start, int length) throws IOException {
-        return sitemeshWriter.writeSitemeshBuffer(sitemeshBuffer, start, length);
+    public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException {
+        return sitemeshWriter.writeSitemeshBufferFragment(bufferFragment);
     }
 
     public SitemeshBuffer getSitemeshBuffer() {

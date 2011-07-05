@@ -1,5 +1,8 @@
 package com.opensymphony.module.sitemesh.html;
 
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.html.util.StringSitemeshBuffer;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,15 +63,17 @@ public final class State {
 	}
 
     public void handleText(Text text, HTMLProcessorContext context) {
-        if (textFilters == null) {
-            text.writeTo(context.currentBuffer());
-        } else {
-            String asString = text.getContents();
+        if (textFilters != null && !textFilters.isEmpty()) {
+            String original = text.getContents();
+            String asString = original;
             for (Iterator iterator = textFilters.iterator(); iterator.hasNext();) {
                 TextFilter textFilter = (TextFilter) iterator.next();
                 asString = textFilter.filter(asString);
             }
-            context.currentBuffer().append(asString);
+            if (!original.equals(asString)) {
+                context.currentBuffer().delete(text.getPosition(), text.getLength());
+                context.currentBuffer().insert(text.getPosition(), StringSitemeshBuffer.createBufferFragment(asString));
+            }
         }
     }
 

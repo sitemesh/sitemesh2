@@ -26,7 +26,6 @@ public class MSOfficeDocumentPropertiesRule extends BlockExtractingRule {
     public void process(Tag tag) {
         if (tag.getName().equals("o:DocumentProperties")) {
             inDocumentProperties = (tag.getType() == Tag.OPEN);
-            tag.writeTo(currentBuffer());
         } else {
             super.process(tag);
         }
@@ -37,8 +36,7 @@ public class MSOfficeDocumentPropertiesRule extends BlockExtractingRule {
 
     protected void end(Tag tag) {
         String name = tag.getName().substring(2);
-        page.addProperty("office.DocumentProperties." + name, currentBuffer().toString());
-        context.mergeBuffer();
+        page.addProperty("office.DocumentProperties." + name, getCurrentBufferContent());
     }
 
 }

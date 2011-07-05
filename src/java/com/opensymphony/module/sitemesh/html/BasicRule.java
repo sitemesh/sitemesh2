@@ -1,6 +1,10 @@
 package com.opensymphony.module.sitemesh.html;
 
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
+
+import java.io.IOException;
+import java.io.StringWriter;
 
 public abstract class BasicRule implements TagRule {
 
@@ -38,8 +42,12 @@ public abstract class BasicRule implements TagRule {
 
     public abstract void process(Tag tag);
 
-    protected CharArray currentBuffer() {
+    protected SitemeshBufferFragment.Builder currentBuffer() {
         return context.currentBuffer();
+    }
+
+    protected String getCurrentBufferContent() {
+        return context.currentBuffer().build().toString();
     }
 
 }

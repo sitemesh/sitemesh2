@@ -87,31 +87,7 @@ public final class FastPageParser implements PageParser
 
    public Page parse(SitemeshBuffer buffer) throws IOException
    {
-      char[] data;
-      int length;
-      if (buffer.hasFragments()) {
-        // Write the buffer into a char array
-        CharArrayWriter writer = new CharArrayWriter(buffer.getTotalLength());
-        buffer.writeTo(writer, 0, buffer.getBufferLength());
-        data = writer.toCharArray();
-        length = data.length;
-      } else {
-        data = buffer.getCharArray();
-        length = buffer.getBufferLength();
-      }
-
-      FastPage page = internalParse(new CharArrayReader(data, 0, length));
-      page.setVerbatimPage(data, length);
-      return page;
-   }
-
-   public Page parse(Reader reader)
-   {
-      return internalParse(reader);
-   }
-
-   private FastPage internalParse(Reader reader)
-   {
+      CharArrayReader reader = new CharArrayReader(buffer.getCharArray(), 0, buffer.getBufferLength());
       CharArray _buffer    = new CharArray(4096);
       CharArray _body      = new CharArray(4096);
       CharArray _head      = new CharArray(512);
@@ -661,7 +637,7 @@ public final class FastPageParser implements PageParser
       _currentTaggedContent = null;
       _buffer = null;
 
-      return new FastPage(_sitemeshProperties,
+      return new FastPage(buffer, _sitemeshProperties,
                           _htmlProperties,
                           _metaProperties,
                           _bodyProperties,

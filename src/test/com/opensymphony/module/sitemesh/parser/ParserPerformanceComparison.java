@@ -65,7 +65,7 @@ public class ParserPerformanceComparison
         // Create the parsers
         PageParser normal = new HTMLPageParser();
         PageParser fast = new FastPageParser();
-        PageParser superfast = new SuperFastSimplePageParser();
+        PageParser superfast = new PartialPageParser();
 
         System.out.println("Amount of data: " + page.length);
         System.gc();

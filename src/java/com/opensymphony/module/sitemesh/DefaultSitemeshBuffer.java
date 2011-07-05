@@ -2,9 +2,7 @@ package com.opensymphony.module.sitemesh;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * The default implementation of sitemesh buffer
@@ -13,38 +11,38 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
 
     private final char[] buffer;
     private final int length;
-    private final List<SitemeshBufferFragment> bufferFragments;
+    private final TreeMap<Integer, SitemeshBufferFragment> bufferFragments;
 
     public DefaultSitemeshBuffer(char[] buffer) {
         this(buffer, buffer.length);
     }
 
     public DefaultSitemeshBuffer(char[] buffer, int length) {
-        this(buffer, length, Collections.<SitemeshBufferFragment>emptyList());
+        this(buffer, length, new TreeMap<Integer, SitemeshBufferFragment>());
     }
 
-    public DefaultSitemeshBuffer(char[] buffer, int length, List<SitemeshBufferFragment> bufferFragments) {
+    public DefaultSitemeshBuffer(char[] buffer, int length, TreeMap<Integer, SitemeshBufferFragment> bufferFragments) {
         this.buffer = buffer;
         this.length = length;
-        this.bufferFragments = new ArrayList<SitemeshBufferFragment>(bufferFragments);
-        Collections.sort(bufferFragments);
+        this.bufferFragments = bufferFragments;
     }
 
     public void writeTo(Writer writer, int start, int length) throws IOException {
         int pos = start;
-        for (SitemeshBufferFragment fragment : bufferFragments) {
-            if (fragment.getPosition() < pos) {
+        for (Map.Entry<Integer, SitemeshBufferFragment> entry : bufferFragments.entrySet()) {
+            int fragmentPosition = entry.getKey();
+            if (fragmentPosition < pos) {
                 continue;
             }
-            if (fragment.getPosition() >= start + length) {
+            if (fragmentPosition > start + length) {
                 break;
             }
             // Write the buffer up to the fragment
-            writer.write(buffer, pos, fragment.getPosition() - pos);
+            writer.write(buffer, pos, fragmentPosition - pos);
             // Write the fragment
-            fragment.writeTo(writer);
+            entry.getValue().writeTo(writer);
             // increment pos
-            pos = fragment.getPosition();
+            pos = fragmentPosition;
         }
         // Write out the remaining buffer
         if (pos < start + length) {
@@ -59,14 +57,15 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     public int getTotalLength(int start, int length) {
         int total = length;
 
-        for (SitemeshBufferFragment fragment : bufferFragments) {
-            if (fragment.getPosition() < start) {
+        for (Map.Entry<Integer, SitemeshBufferFragment> entry : bufferFragments.entrySet()) {
+            int fragmentPosition = entry.getKey();
+            if (fragmentPosition < start) {
                 continue;
             }
-            if (fragment.getPosition() > start + length) {
+            if (fragmentPosition > start + length) {
                 break;
             }
-            total += fragment.getTotalLength();
+            total += entry.getValue().getTotalLength();
         }
         return total;
     }
@@ -81,5 +80,48 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
 
     public boolean hasFragments() {
         return !bufferFragments.isEmpty();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Builder builder(SitemeshBuffer sitemeshBuffer) {
+        return new Builder((DefaultSitemeshBuffer) sitemeshBuffer);
+    }
+
+    public static class Builder {
+        private char[] buffer;
+        private int length;
+        private final TreeMap<Integer, SitemeshBufferFragment> fragments;
+
+        private Builder() {
+            this.fragments = new TreeMap<Integer, SitemeshBufferFragment>();
+        }
+
+        private Builder(DefaultSitemeshBuffer buffer) {
+            this.buffer = buffer.buffer;
+            this.length = buffer.length;
+            this.fragments = new TreeMap<Integer, SitemeshBufferFragment>(buffer.bufferFragments);
+        }
+
+        public Builder setBuffer(char[] buffer) {
+            this.buffer = buffer;
+            return this;
+        }
+
+        public Builder setLength(int length) {
+            this.length = length;
+            return this;
+        }
+
+        public Builder insert(int position, SitemeshBufferFragment fragment) {
+            this.fragments.put(position, fragment);
+            return this;
+        }
+
+        public SitemeshBuffer build() {
+            return new DefaultSitemeshBuffer(buffer, length, fragments);
+        }
     }
 }

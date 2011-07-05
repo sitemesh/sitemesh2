@@ -3,8 +3,7 @@ package com.opensymphony.module.sitemesh;
 import com.opensymphony.module.sitemesh.util.CharArrayWriter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeMap;
 
 /**
  * A char array writer that caches other sitemesh buffers written to it, so that it doesn't have to continually copy
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class SitemeshBufferWriter extends CharArrayWriter implements SitemeshWriter {
 
-    private final List<SitemeshBufferFragment> fragments = new ArrayList<SitemeshBufferFragment>();
+    private final TreeMap<Integer, SitemeshBufferFragment> fragments = new TreeMap<Integer, SitemeshBufferFragment>();
 
     public SitemeshBufferWriter() {
     }
@@ -21,8 +20,8 @@ public class SitemeshBufferWriter extends CharArrayWriter implements SitemeshWri
         super(initialSize);
     }
 
-    public boolean writeSitemeshBuffer(SitemeshBuffer sitemeshBuffer, int start, int length) throws IOException {
-        fragments.add(new SitemeshBufferFragment(sitemeshBuffer, start, length, count));
+    public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException {
+        fragments.put(count, bufferFragment);
         return false;
     }
 

@@ -19,9 +19,15 @@ package com.opensymphony.module.sitemesh.html.tokenizer;
 public class TagTokenizer {
 
     private final char[] input;
+    private final int length;
 
     public TagTokenizer(char[] input) {
+        this(input, input.length);
+    }
+
+    public TagTokenizer(char[] input, int length) {
         this.input = input;
+        this.length = length;
     }
 
     public TagTokenizer(String input) {
@@ -29,7 +35,7 @@ public class TagTokenizer {
     }
 
     public void start(TokenHandler handler) {
-        Parser parser = new Parser(input, handler);
+        Parser parser = new Parser(input, length, handler);
         parser.start();
     }
 

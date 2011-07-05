@@ -1,9 +1,14 @@
 package com.opensymphony.module.sitemesh.html;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.TreeMap;
 
-import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.tokenizer.Parser;
+import com.opensymphony.module.sitemesh.html.util.StringSitemeshBuffer;
 
 
 /**
@@ -60,12 +65,13 @@ public class CustomTag implements Tag {
     }
 
     public String getContents() {
-        CharArray c = new CharArray(64);
-        writeTo(c);
-        return c.toString();
+        SitemeshBufferFragment.Builder buffer = SitemeshBufferFragment.builder().setBuffer(new DefaultSitemeshBuffer(new char[]{}));
+        writeTo(buffer, 0);
+        return buffer.build().toString();
     }
 
-    public void writeTo(CharArray out) {
+    public void writeTo(SitemeshBufferFragment.Builder buffer, int position) {
+        StringWriter out = new StringWriter();
         if (type == Tag.CLOSE) {
             out.append("</");
         } else {
@@ -90,6 +96,7 @@ public class CustomTag implements Tag {
         } else {
             out.append('>');
         }
+        buffer.insert(position, StringSitemeshBuffer.createBufferFragment(out.toString()));
     }
 
     public boolean equals(Object o) {
@@ -283,5 +290,13 @@ public class CustomTag implements Tag {
         } else {
             removeAttribute(attributeIndex);
         }
+    }
+
+    public int getPosition() {
+        return 0;
+    }
+
+    public int getLength() {
+        return 0;
     }
 }

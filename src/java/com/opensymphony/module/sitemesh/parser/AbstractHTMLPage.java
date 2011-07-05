@@ -10,6 +10,7 @@
 package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.HTMLPage;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -28,6 +29,10 @@ import java.io.Writer;
  * @see com.opensymphony.module.sitemesh.HTMLPage
  */
 public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage {
+
+    protected AbstractHTMLPage(SitemeshBuffer sitemeshBuffer) {
+        super(sitemeshBuffer);
+    }
 
     /**
      * Write data of html <code>&lt;head&gt;</code> tag.

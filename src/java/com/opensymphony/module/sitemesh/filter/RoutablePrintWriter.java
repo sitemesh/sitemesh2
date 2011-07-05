@@ -9,6 +9,7 @@ import java.io.Writer;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.SitemeshWriter;
 
 /**
@@ -183,13 +184,13 @@ public class RoutablePrintWriter extends PrintWriter implements SitemeshWriter {
 
     }
 
-    public boolean writeSitemeshBuffer(SitemeshBuffer sitemeshBuffer, int start, int length) throws IOException
+    public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException
     {
         PrintWriter destination = getDestination();
         if (destination instanceof SitemeshWriter) {
-            return ((SitemeshWriter) destination).writeSitemeshBuffer(sitemeshBuffer, start, length);
+            return ((SitemeshWriter) destination).writeSitemeshBufferFragment(bufferFragment);
         } else {
-            sitemeshBuffer.writeTo(destination, start, length);
+            bufferFragment.writeTo(destination);
             return true;
         }
     }

@@ -2,35 +2,36 @@ package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-public class SuperFastHtmlPage extends SuperFastPage implements HTMLPage
+public class PartialPageParserHtmlPage extends PartialPageParserPage implements HTMLPage
 {
-    private final char[] head;
+    private final SitemeshBufferFragment head;
 
-    public SuperFastHtmlPage(SitemeshBuffer sitemeshBuffer, int bodyStart, int bodyLength, Map<String, String> bodyProperties)
+    public PartialPageParserHtmlPage(SitemeshBuffer sitemeshBuffer, SitemeshBufferFragment body, Map<String, String> bodyProperties)
     {
-        this(sitemeshBuffer, bodyStart, bodyLength, bodyProperties, null, null, null, null);
+        this(sitemeshBuffer, body, bodyProperties, null, null, null, null);
     }
 
     /**
      *
      * @param sitemeshBuffer The buffer for the page
-     * @param bodyStart The start of the body
-     * @param bodyLength The length of the body
+     * @param body The body fragment
      * @param bodyProperties The properties of the body
      * @param head The head section
      * @param title The title
      * @param metaAttributes The meta attributes found in the head section
      * @param pageProperties The page properties extracted from the head section
      */
-    public SuperFastHtmlPage(SitemeshBuffer sitemeshBuffer, int bodyStart, int bodyLength, Map<String, String> bodyProperties,
-            char[] head, String title, Map<String, String> metaAttributes, Map<String, String> pageProperties)
+    public PartialPageParserHtmlPage(SitemeshBuffer sitemeshBuffer, SitemeshBufferFragment body, Map<String, String> bodyProperties,
+                                     SitemeshBufferFragment head, String title, Map<String, String> metaAttributes, Map<String, String> pageProperties)
     {
-        super(sitemeshBuffer, bodyStart, bodyLength);
+        super(sitemeshBuffer, body);
         this.head = head;
         if (title == null)
         {
@@ -57,7 +58,7 @@ public class SuperFastHtmlPage extends SuperFastPage implements HTMLPage
     {
         if (head != null)
         {
-            out.write(head);
+            head.writeTo(out);
         }
     }
 
@@ -65,7 +66,13 @@ public class SuperFastHtmlPage extends SuperFastPage implements HTMLPage
     {
         if (head != null)
         {
-            return new String(head);
+            StringWriter headString = new StringWriter();
+            try {
+                head.writeTo(headString);
+            } catch (IOException e) {
+                throw new RuntimeException("IOException occured while writing to buffer?");
+            }
+            return headString.toString();
         }
         else
         {

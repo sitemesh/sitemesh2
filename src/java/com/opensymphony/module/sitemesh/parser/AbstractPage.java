@@ -10,6 +10,7 @@
 package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -22,13 +23,7 @@ import java.util.Set;
  * Abstract implementation of {@link com.opensymphony.module.sitemesh.Page} .
  *
  * <p>Contains base methods for storing and accessing page properties.
- * Also stores {@link #pageData} as byte[] and implements write???()
- * methods.</p>
- *
- * <p>Concrete implementations need only set the {@link #pageData} and
- * call {@link #addProperty(java.lang.String,java.lang.String)} to
- * add all the required information.</p>
- *
+ * *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @version $Revision: 1.6 $
  *
@@ -42,13 +37,17 @@ public abstract class AbstractPage implements Page {
     private final Map properties = new HashMap();
 
     /** Date of page contents. */
-    protected char[] pageData = new char[0];
+    private final SitemeshBuffer sitemeshBuffer;
 
     /** RequestURI of original Page. */
     private HttpServletRequest request;
 
+    protected AbstractPage(SitemeshBuffer sitemeshBuffer) {
+        this.sitemeshBuffer = sitemeshBuffer;
+    }
+
     public void writePage(Writer out) throws IOException {
-        out.write(pageData);
+        sitemeshBuffer.writeTo(out, 0, sitemeshBuffer.getBufferLength());
     }
 
     public String getPage() {
@@ -85,15 +84,18 @@ public abstract class AbstractPage implements Page {
     }
 
     public int getContentLength() {
+        // We encode it but not into a new buffer
+        CountingOutputStream counter = new CountingOutputStream();
         try
         {
-            //todo - this needs to be fixed properly (SIM-196)
-            return new String(pageData).getBytes("UTF-8").length; // we cannot just measure pageData.length, due to i18n issues (SIM-157)
+            OutputStreamWriter writer = new OutputStreamWriter(counter);
+            writePage(writer);
+            // We must flush, because the writer will buffer
+            writer.flush();
+        } catch (IOException ioe) {
+            // Ignore, it's not possible with our OutputStream
         }
-        catch (UnsupportedEncodingException e)
-        {
-            return new String(pageData).getBytes().length;
-        }
+        return counter.getCount();
     }
 
     public String getProperty(String name) {
@@ -176,6 +178,19 @@ public abstract class AbstractPage implements Page {
     /** Return String as is, or "" if null. (Prevents NullPointerExceptions) */
     protected static String noNull(String in) {
         return in == null ? "" : in;
+    }
+
+    private static class CountingOutputStream extends OutputStream {
+        private int count = 0;
+
+        @Override
+        public void write(int i) throws IOException {
+            count++;
+        }
+
+        public int getCount() {
+            return count;
+        }
     }
 }
 
