@@ -13,7 +13,7 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
 
     private final char[] buffer;
     private final int length;
-    private final List<SitemeshBufferFragment> chainedBuffers;
+    private final List<SitemeshBufferFragment> bufferFragments;
 
     public DefaultSitemeshBuffer(char[] buffer) {
         this(buffer, buffer.length);
@@ -23,16 +23,16 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
         this(buffer, length, Collections.<SitemeshBufferFragment>emptyList());
     }
 
-    public DefaultSitemeshBuffer(char[] buffer, int length, List<SitemeshBufferFragment> chainedBuffers) {
+    public DefaultSitemeshBuffer(char[] buffer, int length, List<SitemeshBufferFragment> bufferFragments) {
         this.buffer = buffer;
         this.length = length;
-        this.chainedBuffers = new ArrayList<SitemeshBufferFragment>(chainedBuffers);
-        Collections.sort(chainedBuffers);
+        this.bufferFragments = new ArrayList<SitemeshBufferFragment>(bufferFragments);
+        Collections.sort(bufferFragments);
     }
 
     public void writeTo(Writer writer, int start, int length) throws IOException {
         int pos = start;
-        for (SitemeshBufferFragment fragment : chainedBuffers) {
+        for (SitemeshBufferFragment fragment : bufferFragments) {
             if (fragment.getPosition() < pos) {
                 continue;
             }
@@ -59,7 +59,7 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     public int getTotalLength(int start, int length) {
         int total = length;
 
-        for (SitemeshBufferFragment fragment : chainedBuffers) {
+        for (SitemeshBufferFragment fragment : bufferFragments) {
             if (fragment.getPosition() < start) {
                 continue;
             }
@@ -80,6 +80,6 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     }
 
     public boolean hasFragments() {
-        return !chainedBuffers.isEmpty();
+        return !bufferFragments.isEmpty();
     }
 }
