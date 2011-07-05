@@ -33,8 +33,6 @@ public class ChainingBufferTest extends TestCase
         assertEquals("a", getContent(buffer, 3, 1));
     }
 
-    public void 
-
     private String getContent(SitemeshBuffer buffer) throws Exception
     {
         CharArrayWriter writer = new CharArrayWriter();

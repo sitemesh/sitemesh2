@@ -42,7 +42,7 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
             // Write the buffer up to the fragment
             writer.write(buffer, pos, fragment.getPosition() - pos);
             // Write the fragment
-            fragment.getBuffer().writeTo(writer, fragment.getStart(), fragment.getLength());
+            fragment.writeTo(writer);
             // increment pos
             pos = fragment.getPosition();
         }
@@ -66,7 +66,7 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
             if (fragment.getPosition() > start + length) {
                 break;
             }
-            total += fragment.getBuffer().getTotalLength(fragment.getStart(), fragment.getLength());
+            total += fragment.getTotalLength();
         }
         return total;
     }
