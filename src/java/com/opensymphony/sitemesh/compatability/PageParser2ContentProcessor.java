@@ -1,7 +1,6 @@
 package com.opensymphony.sitemesh.compatability;
 
 import com.opensymphony.module.sitemesh.*;
-import com.opensymphony.module.sitemesh.filter.BufferedContent;
 import com.opensymphony.module.sitemesh.filter.HttpContentType;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.SiteMeshContext;

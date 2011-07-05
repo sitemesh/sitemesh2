@@ -1,7 +1,6 @@
 package com.opensymphony.sitemesh.webapp;
 
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
-import com.opensymphony.module.sitemesh.filter.BufferedContent;
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 import com.opensymphony.module.sitemesh.PageParserSelector;
 import com.opensymphony.module.sitemesh.PageParser;

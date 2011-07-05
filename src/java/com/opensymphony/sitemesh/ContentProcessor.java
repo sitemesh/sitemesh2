@@ -1,7 +1,6 @@
 package com.opensymphony.sitemesh;
 
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
-import com.opensymphony.module.sitemesh.filter.BufferedContent;
 
 import java.io.IOException;
 
