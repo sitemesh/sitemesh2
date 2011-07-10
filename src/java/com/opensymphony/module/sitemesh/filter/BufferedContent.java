@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh.filter;
 
+import java.util.TreeMap;
+
 public class BufferedContent {
     private final char[] buffer;
     private final int length;

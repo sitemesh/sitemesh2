@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
@@ -56,6 +57,7 @@ public class HTMLPageParserTest extends TestCase {
                 suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testHead"));
                 suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testFullPage"));
                 suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testProperties"));
+                suiteForFile.addTest(new HTMLPageParserTest(parser, file, "testContentSanity"));
                 suiteForParser.addTest(suiteForFile);
             }
             result.addTest(suiteForParser);
@@ -83,7 +85,7 @@ public class HTMLPageParserTest extends TestCase {
         this.blocks = readBlocks(new FileReader(file));
         // create PageParser and parse input block into HTMLPage object.
         String input = (String) blocks.get("INPUT");
-        this.page = parser.parse(input.toCharArray());
+        this.page = parser.parse(new DefaultSitemeshBuffer(input.toCharArray()));
     }
 
     public void testTitle() throws Exception {
@@ -135,6 +137,20 @@ public class HTMLPageParserTest extends TestCase {
                     blockValue == null ? null : blockValue.trim(),
                     pageValue == null ? null : pageValue.trim());
         }
+    }
+
+    /**
+     * compare difference between using parse(char[]) and parse(char[], length)
+     */
+    public void testContentSanity() throws Exception {
+        String input = (String) blocks.get("INPUT");
+        final char[] chars = input.toCharArray();
+        final char[] bigChars = new char[chars.length * 2 + 10]; // make it bigger
+        System.arraycopy(chars, 0, bigChars, 0, chars.length);
+        Page bigPage = parser.parse(new DefaultSitemeshBuffer(bigChars, chars.length));
+
+        assertEquals(bigPage.getPage(), page.getPage());
+        assertEquals(bigPage.getContentLength(), page.getContentLength());
     }
 
     private String join(String[] values) {

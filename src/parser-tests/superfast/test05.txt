@@ -3,7 +3,7 @@
 <html>
  <head>
   <title>Some page</title>
-  <meta name="author" content="Someone">
+  <meta name="author" content="Someone"/>
   <style>
     body { font-family: arial; }
   </style>
@@ -22,10 +22,11 @@ Some page
 
 title=Some page
 meta.author=Someone
+body.bgcolor=black
 
 ~~~ HEAD ~~~
 
-  <meta name="author" content="Someone">
+  <meta name="author" content="Someone"/>
   <style>
     body { font-family: arial; }
   </style>

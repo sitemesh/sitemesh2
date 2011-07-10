@@ -1,5 +1,6 @@
 package com.opensymphony.sitemesh.webapp;
 
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.filter.BufferedContent;
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 import com.opensymphony.module.sitemesh.PageParserSelector;
@@ -50,7 +51,7 @@ public class ContentBufferingResponse extends HttpServletResponseWrapper {
     }
 
     public Content getContent() throws IOException {
-        BufferedContent content = pageResponseWrapper.getContents();
+        SitemeshBuffer content = pageResponseWrapper.getContents();
         if (content != null) {
             return contentProcessor.build(content, webAppContext);
         } else {

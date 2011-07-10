@@ -5,31 +5,38 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshWriter;
+
 public class SuperFastPage extends AbstractPage {
 
+    private final SitemeshBuffer sitemeshBuffer;
     private final int bodyStart;
     private final int bodyLength;
-    private final int pageLength;
 
 
-    public SuperFastPage(char[] pageData, int pageLength, int bodyStart, int bodyLength) {
-        this.pageLength = pageLength;
+    public SuperFastPage(SitemeshBuffer sitemeshBuffer, int bodyStart, int bodyLength) {
+        this.sitemeshBuffer = sitemeshBuffer;
         this.bodyStart = bodyStart;
         this.bodyLength = bodyLength;
-        this.pageData = pageData;
+        this.pageData = sitemeshBuffer.getCharArray();
     }
 
     @Override
     public void writePage(Writer out) throws IOException {
-        out.write(pageData, 0, pageLength);
+        sitemeshBuffer.writeTo(out, 0, sitemeshBuffer.getBufferLength());
     }
 
     @Override
     public int getContentLength() {
         // We encode it but not into a new buffer
         CountingOutputStream counter = new CountingOutputStream();
-        try {
-            writePage(new OutputStreamWriter(counter));
+        try
+        {
+            OutputStreamWriter writer = new OutputStreamWriter(counter);
+            writePage(writer);
+            // We mush flush, because the writer will buffer
+            writer.flush();
         } catch (IOException ioe) {
             // Ignore, it's not possible with our OutputStream
         }
@@ -38,7 +45,11 @@ public class SuperFastPage extends AbstractPage {
 
     @Override
     public void writeBody(Writer out) throws IOException {
-        out.write(pageData, bodyStart, bodyLength);
+        if (out instanceof SitemeshWriter) {
+            ((SitemeshWriter) out).writeSitemeshBuffer(sitemeshBuffer, bodyStart, bodyLength);
+        } else {
+            sitemeshBuffer.writeTo(out, bodyStart, bodyLength);
+        }
     }
 
     protected static class CountingOutputStream extends OutputStream {

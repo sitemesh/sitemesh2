@@ -42,6 +42,13 @@ public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage 
     }
 
     public void setFrameSet(boolean frameset) {
-        addProperty("frameset", frameset ? "true" : "false");
+        if (frameset)
+        {
+            addProperty("frameset", "true");
+        }
+        else if (isPropertySet("frameset"))
+        {
+            addProperty("frameset", "false");
+        }
     }
 }

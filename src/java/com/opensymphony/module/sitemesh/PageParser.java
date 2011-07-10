@@ -25,24 +25,12 @@ import java.io.IOException;
  * @version $Revision: 1.2 $
  */
 public interface PageParser {
-
     /**
      * This builds a Page.
      *
-     * @param data The data for the page. Note, this array may be larger than the length of the content.
-     * @param length The length of the page.
-     * @return The parsed page
-     * @throws IOException if an error occurs
-     * @since 2.5
-     */
-    Page parse(char[] data, int length) throws IOException;
-
-    /**
-     * This builds a Page.
-     *
-     * @param data The data for the page.
+     * @param buffer The buffer for the page.
      * @return The parsed page
      * @throws IOException if an error occurs
      */
-    Page parse(char[] data) throws IOException;    
+    Page parse(SitemeshBuffer buffer) throws IOException;
 }
