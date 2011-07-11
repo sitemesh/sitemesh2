@@ -79,8 +79,7 @@ public class SitemeshBufferFragment {
         return total;
     }
 
-    @Override
-    public String toString() {
+    public String getStringContent() {
         StringWriter writer = new StringWriter();
         try {
             writeTo(writer);
@@ -88,6 +87,19 @@ public class SitemeshBufferFragment {
             throw new RuntimeException("Exception writing to buffer", e);
         }
         return writer.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "SitemeshBufferFragment{" +
+                // Here we generate our own ID, because if the underlying writer is a CharArrayWriter, we'll end up
+                // with its entire contents, which we don't really want in this method.
+                "buffer=" + buffer.getClass().getName() + "@" + Integer.toHexString(hashCode()) +
+                ", start=" + start +
+                ", length=" + length +
+                ", deletions=" + deletions +
+                '}';
     }
 
     public int getStart() {

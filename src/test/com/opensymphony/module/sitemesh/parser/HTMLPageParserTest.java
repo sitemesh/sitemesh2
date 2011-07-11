@@ -133,7 +133,7 @@ public class HTMLPageParserTest extends TestCase {
             String pageKey = pageKeys[i];
             String blockValue = props.getProperty(pageKey);
             String pageValue = page.getProperty(pageKey);
-            assertEquals(file.getName(),
+            assertEquals(file.getName() + ": " + pageKey,
                     blockValue == null ? null : blockValue.trim(),
                     pageValue == null ? null : pageValue.trim());
         }

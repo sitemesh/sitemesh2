@@ -9,6 +9,7 @@
 
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
@@ -84,6 +85,11 @@ public final class FastPageParser implements PageParser
    private static final int BODY_HASH = 3029410; // "body".hashCode();
    private static final int SLASH_BODY_HASH = 46434897; // "/body".hashCode();
    private static final int CONTENT_HASH = 951530617; // "content".hashCode();
+
+   public Page parse(char[] buffer) throws IOException
+   {
+      return parse(new DefaultSitemeshBuffer(buffer));
+   }
 
    public Page parse(SitemeshBuffer buffer) throws IOException
    {

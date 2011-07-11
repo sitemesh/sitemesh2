@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
@@ -33,6 +34,10 @@ import java.io.IOException;
  * @see HTMLProcessor
  */
 public class HTMLPageParser implements PageParser {
+
+    public Page parse(char[] buffer) throws IOException {
+        return parse(new DefaultSitemeshBuffer(buffer));
+    }
 
     public Page parse(SitemeshBuffer buffer) throws IOException {
         SitemeshBufferFragment.Builder head = SitemeshBufferFragment.builder().setBuffer(buffer).setLength(0);

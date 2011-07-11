@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.multipass;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
@@ -19,6 +20,10 @@ public class MultipassReplacementPageParser implements PageParser {
     public MultipassReplacementPageParser(Page page, HttpServletResponse response) {
         this.page = page;
         this.response = response;
+    }
+
+    public Page parse(char[] buffer) throws IOException {
+        return parse(new DefaultSitemeshBuffer(buffer));
     }
 
     public Page parse(SitemeshBuffer sitemeshBuffer) throws IOException {

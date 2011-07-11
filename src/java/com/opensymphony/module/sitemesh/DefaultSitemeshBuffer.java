@@ -87,7 +87,11 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     }
 
     public static Builder builder(SitemeshBuffer sitemeshBuffer) {
-        return new Builder((DefaultSitemeshBuffer) sitemeshBuffer);
+        if (sitemeshBuffer instanceof DefaultSitemeshBuffer) {
+            return new Builder((DefaultSitemeshBuffer) sitemeshBuffer);
+        } else {
+            return new Builder(sitemeshBuffer);
+        }
     }
 
     public static class Builder {
@@ -103,6 +107,12 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
             this.buffer = buffer.buffer;
             this.length = buffer.length;
             this.fragments = new TreeMap<Integer, SitemeshBufferFragment>(buffer.bufferFragments);
+        }
+
+        private Builder(SitemeshBuffer buffer) {
+            this.buffer = buffer.getCharArray();
+            this.length = buffer.getBufferLength();
+            this.fragments = new TreeMap<Integer, SitemeshBufferFragment>();
         }
 
         public Builder setBuffer(char[] buffer) {

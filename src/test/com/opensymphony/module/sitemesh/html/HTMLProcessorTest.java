@@ -4,6 +4,7 @@ import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.rules.TagReplaceRule;
+import com.opensymphony.module.sitemesh.html.util.StringSitemeshBuffer;
 
 import junit.framework.TestCase;
 
@@ -14,7 +15,7 @@ public class HTMLProcessorTest extends TestCase {
     private SitemeshBufferFragment.Builder body;
 
     private HTMLProcessor createProcessor(String input) {
-        SitemeshBuffer buffer = new DefaultSitemeshBuffer(input.toCharArray());
+        SitemeshBuffer buffer = new StringSitemeshBuffer(input);
         body = SitemeshBufferFragment.builder().setBuffer(buffer);
         return new HTMLProcessor(buffer, body);
     }
@@ -42,7 +43,7 @@ public class HTMLProcessorTest extends TestCase {
         processor.addRule(new TagReplaceRule("b", "strong"));
 
         processor.process();
-        assertEquals("<hello><strong id=\"something\">world</strong></hello>", body.build().toString());
+        assertEquals("<hello><strong id=\"something\">world</strong></hello>", body.build().getStringContent());
     }
 
     public void testAllowsRulesToModifyAttributes() throws IOException {
@@ -61,7 +62,7 @@ public class HTMLProcessorTest extends TestCase {
         });
 
         processor.process();
-        assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", body.build().toString());
+        assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", body.build().getStringContent());
     }
 
     public void testSupportsChainedFilteringOfTextContent() throws IOException {
@@ -78,7 +79,7 @@ public class HTMLProcessorTest extends TestCase {
         });
 
         processor.process();
-        assertEquals("<HELLo>WoRLD</HELLo>", body.build().toString());
+        assertEquals("<HELLo>WoRLD</HELLo>", body.build().getStringContent());
     }
 
     public void testSupportsTextFiltersForSpecificStates() throws IOException {
@@ -93,7 +94,7 @@ public class HTMLProcessorTest extends TestCase {
         });
 
         processor.process();
-        assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", body.build().toString());
+        assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", body.build().getStringContent());
     }
 
     public void testCanAddAttributesToCustomTag() throws IOException {
@@ -115,6 +116,6 @@ public class HTMLProcessorTest extends TestCase {
             }
         });
         htmlProcessor.process();
-        assertEquals("<h1 class=\"y\">Headline</h1>", body.build().toString());
+        assertEquals("<h1 class=\"y\">Headline</h1>", body.build().getStringContent());
     }
 }

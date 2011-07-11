@@ -47,7 +47,7 @@ public abstract class BasicRule implements TagRule {
     }
 
     protected String getCurrentBufferContent() {
-        return context.currentBuffer().build().toString();
+        return context.currentBuffer().build().getStringContent();
     }
 
 }

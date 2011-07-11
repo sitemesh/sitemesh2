@@ -28,7 +28,7 @@ public class RegexReplacementTextFilterTest extends TestCase {
         processor.addTextFilter(new RegexReplacementTextFilter("DATE", "1-jan-2009"));
 
         processor.process();
-        assertEquals("<hello>Today is 1-jan-2009 so hi</hello>", body.build().toString());
+        assertEquals("<hello>Today is 1-jan-2009 so hi</hello>", body.build().getStringContent());
     }
 
     public void testAllowsMatchedGroupToBeUsedInSubsitution() throws IOException {
@@ -40,7 +40,7 @@ public class RegexReplacementTextFilterTest extends TestCase {
         processor.process();
         assertEquals(
                 "<hello>I think <a href='http://jira.opensymhony.com/browse/SIM-1234'>SIM-1234</a> is the way forward</hello>",
-                body.build().toString());
+                body.build().getStringContent());
     }
 
 }

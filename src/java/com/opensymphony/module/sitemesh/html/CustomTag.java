@@ -67,7 +67,7 @@ public class CustomTag implements Tag {
     public String getContents() {
         SitemeshBufferFragment.Builder buffer = SitemeshBufferFragment.builder().setBuffer(new DefaultSitemeshBuffer(new char[]{}));
         writeTo(buffer, 0);
-        return buffer.build().toString();
+        return buffer.build().getStringContent();
     }
 
     public void writeTo(SitemeshBufferFragment.Builder buffer, int position) {

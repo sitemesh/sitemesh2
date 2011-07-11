@@ -53,10 +53,10 @@ public class TokenizedHTMLPage extends AbstractHTMLPage implements PageBuilder {
     }
 
     public String getHead() {
-        return head.toString();
+        return head.getStringContent();
     }
 
     public String getBody() {
-        return body.toString();
+        return body.getStringContent();
     }
 }

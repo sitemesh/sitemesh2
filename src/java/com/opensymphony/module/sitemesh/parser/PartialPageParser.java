@@ -12,6 +12,10 @@ import com.opensymphony.module.sitemesh.*;
  */
 public class PartialPageParser implements PageParser
 {
+    public Page parse(char[] buffer) throws IOException {
+        return parse(new DefaultSitemeshBuffer(buffer));
+    }
+
     public Page parse(SitemeshBuffer buffer) throws IOException
     {
         char[] data = buffer.getCharArray();
