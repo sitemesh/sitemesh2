@@ -72,10 +72,6 @@ public class Content2HTMLPage implements HTMLPage {
         return content.getTitle();
     }
 
-    public int getContentLength() {
-        return content.originalLength();
-    }
-
     public String getProperty(String name) {
         return content.getProperty(name);
     }

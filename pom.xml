@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--
+    ant clean test
     ant clean jar sources
     mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.5-atlassian-2.jar -DpomFile=./pom.xml -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
     mvn deploy:deploy-file -Dfile=./dist/sitemesh-2.5-atlassian-2-sources.jar -DpomFile=./pom.xml -Dclassifier=sources -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
@@ -11,7 +12,7 @@
 
     <groupId>opensymphony</groupId>
     <artifactId>sitemesh</artifactId>
-    <version>2.5-atlassian-2</version>
+    <version>2.5-atlassian-3</version>
     
     <packaging>jar</packaging>
     <name>SiteMesh</name>

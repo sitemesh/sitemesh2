@@ -23,10 +23,6 @@ public class HTMLPage2Content implements Content {
         page.writePage(out);
     }
 
-    public int originalLength() {
-        return page.getContentLength();
-    }
-
     public void writeBody(Writer out) throws IOException {
         page.writeBody(out);
     }

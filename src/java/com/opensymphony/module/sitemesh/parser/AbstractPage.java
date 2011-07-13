@@ -83,21 +83,6 @@ public abstract class AbstractPage implements Page {
         return noNull(getProperty("title"));
     }
 
-    public int getContentLength() {
-        // We encode it but not into a new buffer
-        CountingOutputStream counter = new CountingOutputStream();
-        try
-        {
-            OutputStreamWriter writer = new OutputStreamWriter(counter);
-            writePage(writer);
-            // We must flush, because the writer will buffer
-            writer.flush();
-        } catch (IOException ioe) {
-            // Ignore, it's not possible with our OutputStream
-        }
-        return counter.getCount();
-    }
-
     public String getProperty(String name) {
         if (!isPropertySet(name)) return null;
         return (String)properties.get(name);
@@ -180,18 +165,6 @@ public abstract class AbstractPage implements Page {
         return in == null ? "" : in;
     }
 
-    private static class CountingOutputStream extends OutputStream {
-        private int count = 0;
-
-        @Override
-        public void write(int i) throws IOException {
-            count++;
-        }
-
-        public int getCount() {
-            return count;
-        }
-    }
 }
 
 class PageRequest extends HttpServletRequestWrapper {

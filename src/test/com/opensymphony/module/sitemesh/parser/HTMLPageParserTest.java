@@ -150,7 +150,6 @@ public class HTMLPageParserTest extends TestCase {
         Page bigPage = parser.parse(new DefaultSitemeshBuffer(bigChars, chars.length));
 
         assertEquals(bigPage.getPage(), page.getPage());
-        assertEquals(bigPage.getContentLength(), page.getContentLength());
     }
 
     private String join(String[] values) {
