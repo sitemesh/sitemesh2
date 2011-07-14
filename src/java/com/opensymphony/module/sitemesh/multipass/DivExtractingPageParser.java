@@ -1,11 +1,14 @@
 package com.opensymphony.module.sitemesh.multipass;
 
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.BasicRule;
 import com.opensymphony.module.sitemesh.html.State;
 import com.opensymphony.module.sitemesh.html.Tag;
 import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.parser.HTMLPageParser;
+
+import java.nio.channels.GatheringByteChannel;
 
 public class DivExtractingPageParser extends HTMLPageParser {
 
@@ -28,19 +31,21 @@ public class DivExtractingPageParser extends HTMLPageParser {
             if (tag.getType() == Tag.OPEN) {
                 String id = tag.getAttributeValue("id", false);
                 if (depth == 0 && id != null) {
-                    currentBuffer().append("<sitemesh:multipass id=\"div." + id + "\"/>");
+                    currentBuffer().insert(tag.getPosition(), "<sitemesh:multipass id=\"div." + id + "\"/>");
                     blockId = id;
-                    context.pushBuffer(new CharArray(512));
+                    currentBuffer().markStartDelete(tag.getPosition());
+                    context.pushBuffer(SitemeshBufferFragment.builder().setBuffer(context.getSitemeshBuffer()));
+                    currentBuffer().markStart(tag.getPosition());
                 }
-                tag.writeTo(currentBuffer());
                 depth++;
             } else if (tag.getType() == Tag.CLOSE) {
                 depth--;
-                tag.writeTo(currentBuffer());
                 if (depth == 0 && blockId != null) {
-                    page.addProperty("div." + blockId, currentBuffer().toString());
+                    currentBuffer().end(tag.getPosition() + tag.getLength());
+                    page.addProperty("div." + blockId, getCurrentBufferContent());
                     blockId = null;
                     context.popBuffer();
+                    currentBuffer().endDelete(tag.getPosition() + tag.getLength());
                 }
             }
         }

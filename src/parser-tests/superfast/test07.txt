@@ -2,16 +2,16 @@
 
 <html>
  <head>
-  <style>
-    body { font-family: arial; }
-  </style>
+   <style>
+     body { font-family: arial; }
+   </style>
+   <content tag="blah">
+    <p>Some markup</p>
+   </content>
  </head>
  <body>
-
    <p>This is a pretty simple page.</p>
-
    <p>Bye.</p>
-
  </body>
 </html>
 
@@ -20,16 +20,16 @@
 ~~~ PROPERTIES ~~~
 
 title=
+page.blah=<p>Some markup</p>
 
 ~~~ HEAD ~~~
 
-  <style>
-    body { font-family: arial; }
-  </style>
+   <style>
+     body { font-family: arial; }
+   </style>
 
 ~~~ BODY ~~~
 
    <p>This is a pretty simple page.</p>
-
    <p>Bye.</p>
  

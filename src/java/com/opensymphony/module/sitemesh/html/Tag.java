@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.html;
 
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 
 /**
@@ -25,15 +26,13 @@ public interface Tag {
      * Get the complete tag in its original form, preserving original formatting.
      *
      * This has a slight overhead in that it needs to construct a String. For improved performance, use writeTo() instead.
-     *
-     * @see #writeTo(com.opensymphony.module.sitemesh.html.util.CharArray)
      */
     String getContents();
 
     /**
      * Write out the complete tag in its original form, preserving original formatting.
      */
-    void writeTo(CharArray out);
+    void writeTo(SitemeshBufferFragment.Builder fragment, int position);
 
     /**
      * Name of tag (ie. element name).
@@ -77,5 +76,15 @@ public interface Tag {
      * Determine if an attribute is present.
      */
     boolean hasAttribute(String name, boolean caseSensitive);
+
+    /**
+     * The position of the tag
+     */
+    int getPosition();
+
+    /**
+     * The length of the tag
+     */
+    int getLength();
 
 }

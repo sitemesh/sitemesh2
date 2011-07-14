@@ -22,8 +22,6 @@ public class NoDecorator extends BaseWebAppDecorator {
                           ServletContext servletContext, SiteMeshWebAppContext webAppContext)
             throws IOException, ServletException {
 
-        response.setContentLength(content.originalLength());
-
         if (webAppContext.isUsingStream()) {
             PrintWriter writer = new PrintWriter(response.getOutputStream());
             content.writeOriginal(writer);

@@ -151,9 +151,12 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
             if (page == null) {
                 // inline content
                 if (bodyContent != null) {
-                    pageObj = parser.parse(bodyContent.getString().toCharArray());
+                    // Would be nice if we could do our own buffering...
+                    SitemeshBufferWriter sitemeshWriter = new SitemeshBufferWriter();
+                    bodyContent.writeOut(sitemeshWriter);
+                    pageObj = parser.parse(sitemeshWriter.getSitemeshBuffer());
                 } else {
-                    pageObj = parser.parse(new char[]{});
+                    pageObj = parser.parse(new DefaultSitemeshBuffer(new char[] {}));
                 }
             }
             else if (page.startsWith("http://") || page.startsWith("https://")) {
@@ -164,15 +167,15 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
                     BufferedReader in = new BufferedReader(
                             new InputStreamReader(urlConn.getInputStream()));
 
-                    StringBuffer sbuf = new StringBuffer();
+                    SitemeshBufferWriter sitemeshWriter = new SitemeshBufferWriter();
                     char[] buf = new char[1000];
                     for (; ;) {
                         int moved = in.read(buf);
                         if (moved < 0) break;
-                        sbuf.append(buf, 0, moved);
+                        sitemeshWriter.write(buf, 0, moved);
                     }
                     in.close();
-                    pageObj = parser.parse(sbuf.toString().toCharArray());
+                    pageObj = parser.parse(sitemeshWriter.getSitemeshBuffer());
                 }
                 catch (MalformedURLException e) {
                     throw new JspException(e);

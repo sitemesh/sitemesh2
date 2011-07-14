@@ -15,12 +15,6 @@ public interface Content {
     void writeOriginal(Writer writer) throws IOException;
 
     /**
-     * Length of the original unprocessed content.
-     */
-    int originalLength();
-
-
-    /**
      * Write the contents of the <code>&lt;body&gt;</code> tag.
      */
     void writeBody(Writer out) throws IOException;

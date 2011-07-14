@@ -6,6 +6,8 @@
 
 package com.opensymphony.module.sitemesh.html.tokenizer;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.Tag;
 import com.opensymphony.module.sitemesh.html.Text;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
@@ -49,8 +51,8 @@ public class Parser extends Lexer {
     private String name;
     private int type;
 
-    public Parser(char[] input, TokenHandler handler) {
-        super(new CharArrayReader(input));
+    public Parser(char[] input, int length, TokenHandler handler) {
+        super(new CharArrayReader(input, 0, length));
         this.input = input;
         this.handler = handler;
     }
@@ -339,8 +341,8 @@ public class Parser extends Lexer {
             return new String(input, position, length);
         }
 
-        public void writeTo(CharArray out) {
-            out.append(input, position, length);
+        public void writeTo(SitemeshBufferFragment.Builder buffer, int position) {
+            buffer.insert(position, SitemeshBufferFragment.builder().setBuffer(new DefaultSitemeshBuffer(input)).setStart(position).setLength(length).build());
         }
 
         public int getAttributeCount() {
@@ -383,6 +385,14 @@ public class Parser extends Lexer {
 
         public boolean hasAttribute(String name, boolean caseSensitive) {
             return getAttributeIndex(name, caseSensitive) > -1;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public int getLength() {
+            return length;
         }
 
     }

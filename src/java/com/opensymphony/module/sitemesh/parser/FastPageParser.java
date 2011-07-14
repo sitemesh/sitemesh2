@@ -9,10 +9,13 @@
 
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.util.CharArrayReader;
+import com.opensymphony.module.sitemesh.util.CharArrayWriter;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -83,25 +86,14 @@ public final class FastPageParser implements PageParser
    private static final int SLASH_BODY_HASH = 46434897; // "/body".hashCode();
    private static final int CONTENT_HASH = 951530617; // "content".hashCode();
 
-   public Page parse(char[] data) throws IOException
+   public Page parse(char[] buffer) throws IOException
    {
-       return parse(data, data.length);
+      return parse(new DefaultSitemeshBuffer(buffer));
    }
 
-   public Page parse(char[] data, int length) throws IOException
+   public Page parse(SitemeshBuffer buffer) throws IOException
    {
-      FastPage page = internalParse(new CharArrayReader(data, 0, length));
-      page.setVerbatimPage(data);
-      return page;
-   }
-
-   public Page parse(Reader reader)
-   {
-      return internalParse(reader);
-   }
-
-   private FastPage internalParse(Reader reader)
-   {
+      CharArrayReader reader = new CharArrayReader(buffer.getCharArray(), 0, buffer.getBufferLength());
       CharArray _buffer    = new CharArray(4096);
       CharArray _body      = new CharArray(4096);
       CharArray _head      = new CharArray(512);
@@ -651,7 +643,7 @@ public final class FastPageParser implements PageParser
       _currentTaggedContent = null;
       _buffer = null;
 
-      return new FastPage(_sitemeshProperties,
+      return new FastPage(buffer, _sitemeshProperties,
                           _htmlProperties,
                           _metaProperties,
                           _bodyProperties,

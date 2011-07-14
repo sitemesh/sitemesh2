@@ -5,6 +5,7 @@ package com.opensymphony.module.sitemesh.filter;
 
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParserSelector;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -185,7 +186,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
         return buffer != null && buffer.isUsingStream();
     }
 
-    public BufferedContent getContents() throws IOException {
+    public SitemeshBuffer getContents() throws IOException {
         if (aborted || !parseablePage) {
             return null;
         } else {

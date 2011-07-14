@@ -1,6 +1,6 @@
 package com.opensymphony.sitemesh;
 
-import com.opensymphony.module.sitemesh.filter.BufferedContent;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import java.io.IOException;
 
@@ -13,5 +13,5 @@ public interface ContentProcessor {
     boolean handles(SiteMeshContext context);
     boolean handles(String contentType);
 
-    Content build(BufferedContent content, SiteMeshContext context) throws IOException;
+    Content build(SitemeshBuffer buffer, SiteMeshContext context) throws IOException;
 }

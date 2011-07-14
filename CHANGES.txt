@@ -1,4 +1,11 @@
 --------------------------
+-- Changes in 2.5       --
+--------------------------
+ * Single buffer parsing
+ * Buffer chaining
+ * PartialPageParser that only parses the <head> section of bodies
+
+--------------------------
 -- Changes in 2.4.2     --
 --------------------------
 Minor update to allow SiteMesh to initialize correctly when deployed on Google AppEngine.

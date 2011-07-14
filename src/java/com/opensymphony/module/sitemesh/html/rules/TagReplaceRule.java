@@ -22,8 +22,9 @@ public class TagReplaceRule extends BasicRule {
     }
 
     public void process(Tag tag) {
+        currentBuffer().delete(tag.getPosition(), tag.getLength());
         CustomTag customTag = new CustomTag(tag);
         customTag.setName(newTagName);
-        customTag.writeTo(currentBuffer());
+        customTag.writeTo(currentBuffer(), tag.getPosition());
     }
 }

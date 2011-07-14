@@ -68,14 +68,6 @@ public interface Page {
     String getTitle();
 
     /**
-     * Length of the <code>Page</code>, in the format before
-     * it was parsed.
-     *
-     * @return Length of page data (in number of bytes).
-     */
-    int getContentLength();
-
-    /**
      * Get a property embedded into the <code>Page</code> as a <code>String</code>.
      *
      * @param name Name of property

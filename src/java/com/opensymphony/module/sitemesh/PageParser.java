@@ -27,22 +27,24 @@ import java.io.IOException;
 public interface PageParser {
 
     /**
-     * This builds a Page.
+     * Parse the given buffer into a page object.  {@link DefaultSitemeshBuffer} is the appropriate implementation of
+     * this interface to pass in.
      *
-     * @param data The data for the page. Note, this array may be larger than the length of the content.
-     * @param length The length of the page.
+     * @param buffer The buffer for the page.
      * @return The parsed page
      * @throws IOException if an error occurs
-     * @since 2.5
      */
-    Page parse(char[] data, int length) throws IOException;
+    Page parse(SitemeshBuffer buffer) throws IOException;
 
     /**
-     * This builds a Page.
+     * Parse the given buffer into a Page object.
      *
-     * @param data The data for the page.
+     * @param buffer The buffer for the page.
      * @return The parsed page
      * @throws IOException if an error occurs
+     * @deprecated Use {@link PageParser#parse(SitemeshBuffer)}, to allow performance improvement such as single buffer
+     *      parsing and buffer chaining.
      */
-    Page parse(char[] data) throws IOException;    
+    @Deprecated
+    Page parse(char[] buffer) throws IOException;
 }
