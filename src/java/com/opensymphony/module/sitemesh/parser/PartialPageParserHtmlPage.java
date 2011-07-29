@@ -70,7 +70,7 @@ public class PartialPageParserHtmlPage extends PartialPageParserPage implements 
             try {
                 head.writeTo(headString);
             } catch (IOException e) {
-                throw new RuntimeException("IOException occured while writing to buffer?");
+                throw new RuntimeException("IOException occured while writing to buffer?", e);
             }
             return headString.toString();
         }

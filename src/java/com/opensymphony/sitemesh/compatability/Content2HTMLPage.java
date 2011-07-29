@@ -36,7 +36,7 @@ public class Content2HTMLPage implements HTMLPage {
             writePage(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get page " + e.getMessage());
+            throw new IllegalStateException("Could not get page " + e.getMessage(), e);
         }
     }
 
@@ -50,7 +50,7 @@ public class Content2HTMLPage implements HTMLPage {
             writeBody(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get body " + e.getMessage());
+            throw new IllegalStateException("Could not get body " + e.getMessage(), e);
         }
     }
 
@@ -64,7 +64,7 @@ public class Content2HTMLPage implements HTMLPage {
             writeHead(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get head " + e.getMessage());
+            throw new IllegalStateException("Could not get head " + e.getMessage(), e);
         }
     }
 

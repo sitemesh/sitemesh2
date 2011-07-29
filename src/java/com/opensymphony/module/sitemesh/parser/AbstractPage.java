@@ -56,7 +56,7 @@ public abstract class AbstractPage implements Page {
             writePage(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get page " + e.getMessage());
+            throw new IllegalStateException("Could not get page " + e.getMessage(), e);
         }
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractPage implements Page {
             writeBody(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get body " + e.getMessage());
+            throw new IllegalStateException("Could not get body " + e.getMessage(), e);
         }
     }
 

@@ -32,11 +32,9 @@ public abstract class BaseWebAppDecorator implements Decorator {
         try {
             render(content, webAppContext.getRequest(), webAppContext.getResponse(), webAppContext.getServletContext(), webAppContext);
         } catch (IOException e) {
-            // TODO: Decent exception handling
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         } catch (ServletException e) {
-            // TODO: Decent exception handling
-            throw new RuntimeException(e.toString());
+            throw new RuntimeException(e);
         }
     }
 }
