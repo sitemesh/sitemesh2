@@ -35,6 +35,7 @@ public abstract class BlockExtractingRule extends BasicRule {
             if (!keepInBuffer) {
                 context.currentBuffer().endDelete(tag.getPosition() + tag.getLength());
             }
+            seenOpeningTag = false;
         } else if (!keepInBuffer) {
             context.currentBuffer().delete(tag.getPosition(), tag.getLength());
         }
