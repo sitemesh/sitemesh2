@@ -77,6 +77,7 @@ public class SiteMeshFilter implements Filter {
             Content content = obtainContent(contentProcessor, webAppContext, request, response, chain);
 
             if (content == null) {
+                request.setAttribute(ALREADY_APPLIED_KEY, null);
                 return;
             }
 
