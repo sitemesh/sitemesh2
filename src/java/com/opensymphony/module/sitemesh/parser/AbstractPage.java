@@ -10,6 +10,7 @@
 package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -22,13 +23,7 @@ import java.util.Set;
  * Abstract implementation of {@link com.opensymphony.module.sitemesh.Page} .
  *
  * <p>Contains base methods for storing and accessing page properties.
- * Also stores {@link #pageData} as byte[] and implements write???()
- * methods.</p>
- *
- * <p>Concrete implementations need only set the {@link #pageData} and
- * call {@link #addProperty(java.lang.String,java.lang.String)} to
- * add all the required information.</p>
- *
+ * *
  * @author <a href="joe@truemesh.com">Joe Walnes</a>
  * @version $Revision: 1.6 $
  *
@@ -42,13 +37,17 @@ public abstract class AbstractPage implements Page {
     private final Map properties = new HashMap();
 
     /** Date of page contents. */
-    protected char[] pageData = new char[0];
+    private final SitemeshBuffer sitemeshBuffer;
 
     /** RequestURI of original Page. */
     private HttpServletRequest request;
 
+    protected AbstractPage(SitemeshBuffer sitemeshBuffer) {
+        this.sitemeshBuffer = sitemeshBuffer;
+    }
+
     public void writePage(Writer out) throws IOException {
-        out.write(pageData);
+        sitemeshBuffer.writeTo(out, 0, sitemeshBuffer.getBufferLength());
     }
 
     public String getPage() {
@@ -57,7 +56,7 @@ public abstract class AbstractPage implements Page {
             writePage(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get page " + e.getMessage());
+            throw new IllegalStateException("Could not get page " + e.getMessage(), e);
         }
     }
 
@@ -75,25 +74,13 @@ public abstract class AbstractPage implements Page {
             writeBody(writer);
             return writer.toString();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not get body " + e.getMessage());
+            throw new IllegalStateException("Could not get body " + e.getMessage(), e);
         }
     }
 
     /** Return title of from "title" property. Never returns null. */
     public String getTitle() {
         return noNull(getProperty("title"));
-    }
-
-    public int getContentLength() {
-        try
-        {
-            //todo - this needs to be fixed properly (SIM-196)
-            return new String(pageData).getBytes("UTF-8").length; // we cannot just measure pageData.length, due to i18n issues (SIM-157)
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            return new String(pageData).getBytes().length;
-        }
     }
 
     public String getProperty(String name) {
@@ -177,6 +164,7 @@ public abstract class AbstractPage implements Page {
     protected static String noNull(String in) {
         return in == null ? "" : in;
     }
+
 }
 
 class PageRequest extends HttpServletRequestWrapper {

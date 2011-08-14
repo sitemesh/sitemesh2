@@ -14,9 +14,12 @@ public class HtmlAttributesRule extends BasicRule{
 
     public void process(Tag tag) {
         if (tag.getType() == Tag.OPEN) {
+            context.currentBuffer().markStart(tag.getPosition() + tag.getLength());
             for (int i = 0; i < tag.getAttributeCount(); i++) {
                 page.addProperty(tag.getAttributeName(i), tag.getAttributeValue(i));
             }
+        } else {
+            context.currentBuffer().end(tag.getPosition());
         }
     }
 

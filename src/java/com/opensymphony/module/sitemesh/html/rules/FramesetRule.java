@@ -13,6 +13,7 @@ public class FramesetRule extends BasicRule {
     }
 
     public void process(Tag tag) {
+        context.currentBuffer().delete(tag.getPosition(), tag.getLength());
         page.addProperty("frameset", "true");
     }
 

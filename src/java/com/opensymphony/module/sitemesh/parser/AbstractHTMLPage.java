@@ -10,6 +10,7 @@
 package com.opensymphony.module.sitemesh.parser;
 
 import com.opensymphony.module.sitemesh.HTMLPage;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -29,6 +30,10 @@ import java.io.Writer;
  */
 public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage {
 
+    protected AbstractHTMLPage(SitemeshBuffer sitemeshBuffer) {
+        super(sitemeshBuffer);
+    }
+
     /**
      * Write data of html <code>&lt;head&gt;</code> tag.
      *
@@ -42,6 +47,13 @@ public abstract class AbstractHTMLPage extends AbstractPage implements HTMLPage 
     }
 
     public void setFrameSet(boolean frameset) {
-        addProperty("frameset", frameset ? "true" : "false");
+        if (frameset)
+        {
+            addProperty("frameset", "true");
+        }
+        else if (isPropertySet("frameset"))
+        {
+            addProperty("frameset", "false");
+        }
     }
 }

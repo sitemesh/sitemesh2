@@ -1,39 +1,23 @@
 package com.opensymphony.module.sitemesh.html;
 
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
 import com.opensymphony.module.sitemesh.html.tokenizer.TokenHandler;
-import com.opensymphony.module.sitemesh.html.util.CharArray;
-import com.opensymphony.module.sitemesh.util.CharArrayWriter;
 
-import java.io.Reader;
-import java.io.Writer;
-//import java.io.CharArrayWriter;
 import java.io.IOException;
 
 public class HTMLProcessor {
 
-    private final char[] in;
-    private final CharArray out;
+    private final SitemeshBuffer sitemeshBuffer;
+    private final SitemeshBufferFragment.Builder body;
     private final State defaultState = new State();
 
     private State currentState = defaultState;
-    private Writer outStream;
 
-    public HTMLProcessor(char[] in, CharArray out) {
-        this.in = in;
-        this.out = out;
-    }
-
-    public HTMLProcessor(Reader in, Writer out) throws IOException {
-        CharArrayWriter inBuffer = new CharArrayWriter();
-        char[] buffer = new char[2048];
-        int n;
-        while (-1 != (n = in.read(buffer))) {
-            inBuffer.write(buffer, 0, n);
-        }
-        this.in = inBuffer.toCharArray();
-        this.out = new CharArray(2048);
-        this.outStream = out;
+    public HTMLProcessor(SitemeshBuffer sitemeshBuffer, SitemeshBufferFragment.Builder body) {
+        this.sitemeshBuffer = sitemeshBuffer;
+        this.body = body;
     }
 
     public State defaultState() {
@@ -48,8 +32,13 @@ public class HTMLProcessor {
     }
 
     public void process() throws IOException {
-        TagTokenizer tokenizer = new TagTokenizer(in);
+        TagTokenizer tokenizer = new TagTokenizer(sitemeshBuffer.getCharArray(), sitemeshBuffer.getBufferLength());
         final HTMLProcessorContext context = new HTMLProcessorContext() {
+
+            public SitemeshBuffer getSitemeshBuffer() {
+                return sitemeshBuffer;
+            }
+
             public State currentState() {
                 return currentState;
             }
@@ -58,35 +47,29 @@ public class HTMLProcessor {
                 currentState = newState;
             }
 
-            private CharArray[] buffers = new CharArray[10];
+            private SitemeshBufferFragment.Builder[] buffers = new SitemeshBufferFragment.Builder[10];
             private int size;
 
-            public void pushBuffer(CharArray buffer) {
+            public void pushBuffer(SitemeshBufferFragment.Builder buffer) {
                 if(size == buffers.length) {
-                  CharArray[] newBuffers = new CharArray[buffers.length * 2];
+                  SitemeshBufferFragment.Builder[] newBuffers = new SitemeshBufferFragment.Builder[buffers.length * 2];
                   System.arraycopy(buffers, 0, newBuffers, 0, buffers.length);
                   buffers = newBuffers;
                 }
                 buffers[size++] = buffer;
             }
   
-            public CharArray currentBuffer() {
+            public SitemeshBufferFragment.Builder currentBuffer() {
                 return buffers[size - 1];
             }
   
-            public CharArray popBuffer() {
-                CharArray last = buffers[size - 1];
+            public SitemeshBufferFragment.Builder popBuffer() {
+                SitemeshBufferFragment.Builder last = buffers[size - 1];
                 buffers[--size] = null;
                 return last;
             }
-  
-            public void mergeBuffer() {
-                CharArray top = buffers[size - 1];
-                CharArray nextDown = buffers[size - 2];
-                nextDown.append(top);
-            }
         };
-        context.pushBuffer(out);
+        context.pushBuffer(body);
         tokenizer.start(new TokenHandler() {
 
             public boolean shouldProcessTag(String name) {
@@ -109,9 +92,6 @@ public class HTMLProcessor {
             }
         });
         defaultState.endOfState();
-        if (outStream != null) {
-            outStream.write(out.toString());
-        }
     }
 
     public void addTextFilter(TextFilter textFilter) {

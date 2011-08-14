@@ -18,6 +18,5 @@ public class MetaTagRule extends BasicRule {
         } else if (tag.hasAttribute("http-equiv", false)) {
             page.addProperty("meta.http-equiv." + tag.getAttributeValue("http-equiv", false), tag.getAttributeValue("content", false));
         }
-        tag.writeTo(currentBuffer());
     }
 }

@@ -1,11 +1,13 @@
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParser;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.HTMLProcessor;
 import com.opensymphony.module.sitemesh.html.State;
 import com.opensymphony.module.sitemesh.html.StateTransitionRule;
-import com.opensymphony.module.sitemesh.html.tokenizer.TagTokenizer;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.html.rules.BodyTagRule;
 import com.opensymphony.module.sitemesh.html.rules.ContentBlockExtractingRule;
@@ -18,7 +20,6 @@ import com.opensymphony.module.sitemesh.html.rules.ParameterExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.TitleExtractingRule;
 import com.opensymphony.module.sitemesh.html.rules.PageBuilder;
 
-import java.io.CharArrayWriter;
 import java.io.IOException;
 
 /**
@@ -34,22 +35,15 @@ import java.io.IOException;
  */
 public class HTMLPageParser implements PageParser {
 
-    public Page parse(char[] data, int length) throws IOException
-    {
-        if (data.length > length) {
-            // todo fix this parser so that it doesn't need to compact the array
-            char[] newData = new char[length];
-            System.arraycopy(data, 0, newData, 0, length);
-            data = newData;
-        }
-        return parse(data);
+    public Page parse(char[] buffer) throws IOException {
+        return parse(new DefaultSitemeshBuffer(buffer));
     }
 
-    public Page parse(char[] data) throws IOException {
-        CharArray head = new CharArray(64);
-        CharArray body = new CharArray(4096);
-        TokenizedHTMLPage page = new TokenizedHTMLPage(data, body, head);
-        HTMLProcessor processor = new HTMLProcessor(data, body);
+    public Page parse(SitemeshBuffer buffer) throws IOException {
+        SitemeshBufferFragment.Builder head = SitemeshBufferFragment.builder().setBuffer(buffer).setLength(0);
+        SitemeshBufferFragment.Builder body = SitemeshBufferFragment.builder().setBuffer(buffer);
+        TokenizedHTMLPage page = new TokenizedHTMLPage(buffer);
+        HTMLProcessor processor = new HTMLProcessor(buffer, body);
         State html = processor.defaultState();
 
         // Core rules for SiteMesh to be functional.
@@ -62,6 +56,8 @@ public class HTMLPageParser implements PageParser {
         addUserDefinedRules(html, page);
 
         processor.process();
+        page.setBody(body.build());
+        page.setHead(head.build());
         return page;
     }
 

@@ -26,8 +26,5 @@ public class StateTransitionRule extends BasicRule {
             context.changeState(lastState);
             lastState = null;
         }
-        if (writeEnclosingTag) {
-            tag.writeTo(context.currentBuffer());
-        }
     }
 }

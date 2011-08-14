@@ -1,0 +1,24 @@
+~~~ INPUT ~~~
+
+<head>
+    <meta name=author content=Someone>
+</head>
+    <title>Support</title>
+</head>
+
+~~~ TITLE ~~~
+
+Support
+
+~~~ PROPERTIES ~~~
+
+meta.author=Someone
+title=Support
+
+~~~ HEAD ~~~
+
+    <meta name=author content=Someone>
+
+~~~ BODY ~~~
+
+

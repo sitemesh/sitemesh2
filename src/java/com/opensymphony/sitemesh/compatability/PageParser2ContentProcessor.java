@@ -1,10 +1,6 @@
 package com.opensymphony.sitemesh.compatability;
 
-import com.opensymphony.module.sitemesh.Factory;
-import com.opensymphony.module.sitemesh.HTMLPage;
-import com.opensymphony.module.sitemesh.Page;
-import com.opensymphony.module.sitemesh.PageParser;
-import com.opensymphony.module.sitemesh.filter.BufferedContent;
+import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.filter.HttpContentType;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.SiteMeshContext;
@@ -46,10 +42,10 @@ public class PageParser2ContentProcessor implements ContentProcessor {
         return factory.shouldParsePage(contentType);
     }
 
-    public Content build(BufferedContent content, SiteMeshContext context) throws IOException {
+    public Content build(SitemeshBuffer buffer, SiteMeshContext context) throws IOException {
         HttpContentType httpContentType = new HttpContentType(context.getContentType());
         PageParser pageParser = factory.getPageParser(httpContentType.getType());
-        Page page = pageParser.parse(content.getBuffer(), content.getLength());
+        Page page = pageParser.parse(buffer);
         return new HTMLPage2Content((HTMLPage) page);
     }
 }

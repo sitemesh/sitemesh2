@@ -19,7 +19,7 @@ public class ContentBlockExtractingRule extends BlockExtractingRule {
     }
 
     protected void end(Tag tag) {
-        page.addProperty("page." + contentBlockId, currentBuffer().toString());
+        page.addProperty("page." + contentBlockId, getCurrentBufferContent());
     }
 
 }

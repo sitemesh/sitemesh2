@@ -123,6 +123,14 @@
         </jar>
     </target>
 
+    <target name="sources" depends="compile">
+        <mkdir dir="dist"/>
+        <jar jarfile="dist/${name}-${version}-sources.jar">
+            <fileset dir="src/java"/>
+            <fileset dir="build/java"/>
+        </jar>
+    </target>
+
     <target name="blank" depends="jar" description="Builds simple web-app to get started with SiteMesh">
         <mkdir dir="dist"/>
         <war warfile="dist/${name}-blank.war" webxml="src/etc/blank/WEB-INF/web.xml">

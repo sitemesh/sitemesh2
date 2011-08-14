@@ -1,7 +1,10 @@
 package com.opensymphony.module.sitemesh.multipass;
 
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
 import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.module.sitemesh.Page;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.util.CharArray;
 import com.opensymphony.module.sitemesh.html.HTMLProcessor;
 import com.opensymphony.module.sitemesh.html.BasicRule;
@@ -19,31 +22,25 @@ public class MultipassReplacementPageParser implements PageParser {
         this.response = response;
     }
 
-    public Page parse(char[] data, int length) throws IOException
-    {
-        if (data.length > length) {
-            // todo fix this parser so that it doesn't need to compact the array
-            char[] newData = new char[length];
-            System.arraycopy(data, 0, newData, 0, length);
-            data = newData;
-        }
-        return parse(data);
+    public Page parse(char[] buffer) throws IOException {
+        return parse(new DefaultSitemeshBuffer(buffer));
     }
-    
-    public Page parse(char[] data) throws IOException {
-        final CharArray result = new CharArray(4096);
-        HTMLProcessor processor = new HTMLProcessor(data, result);
+
+    public Page parse(SitemeshBuffer sitemeshBuffer) throws IOException {
+        SitemeshBufferFragment.Builder builder = SitemeshBufferFragment.builder().setBuffer(sitemeshBuffer);
+        HTMLProcessor processor = new HTMLProcessor(sitemeshBuffer, builder);
         processor.addRule(new BasicRule("sitemesh:multipass") {
             public void process(Tag tag) {
+                currentBuffer().delete(tag.getPosition(), tag.getLength());
                 String id = tag.getAttributeValue("id", true);
                 if (!page.isPropertySet("_sitemesh.removefrompage." + id)) {
-                    currentBuffer().append(page.getProperty(id));
+                    currentBuffer().insert(tag.getPosition(), page.getProperty(id));
                 }
             }
         });
         processor.process();
 
-        result.writeTo(response.getWriter());
+        builder.build().writeTo(response.getWriter());
         return null;
     }
 }

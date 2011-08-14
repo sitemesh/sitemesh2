@@ -9,6 +9,8 @@
 
 package com.opensymphony.module.sitemesh.parser;
 
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -25,9 +27,10 @@ public final class FastPage extends AbstractHTMLPage
    private String head;
    private String body;
 
-   public FastPage(Map sitemeshProps, Map htmlProps, Map metaProps, Map bodyProps,
+   public FastPage(SitemeshBuffer sitemeshBuffer, Map sitemeshProps, Map htmlProps, Map metaProps, Map bodyProps,
                    String title, String head, String body, boolean frameSet)
    {
+      super(sitemeshBuffer);
       this.head = head;
       this.body = body;
       setFrameSet(frameSet);
@@ -66,11 +69,6 @@ public final class FastPage extends AbstractHTMLPage
             addProperty(prefix + name, value);
          }
       }
-   }
-
-   public void setVerbatimPage(char[] v)
-   {
-      this.pageData = v;
    }
 
    public String getBody()

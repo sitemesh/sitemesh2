@@ -1,21 +1,28 @@
 package com.opensymphony.module.sitemesh.html;
 
-import com.opensymphony.module.sitemesh.html.util.CharArray;
+import com.opensymphony.module.sitemesh.DefaultSitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.html.rules.TagReplaceRule;
+import com.opensymphony.module.sitemesh.html.util.StringSitemeshBuffer;
 
 import junit.framework.TestCase;
 
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
 
 public class HTMLProcessorTest extends TestCase {
 
-	public void testCreatesStateTransitionEvent() throws IOException {
-		char[] input = "<a></a>".toCharArray();
-		HTMLProcessor htmlProcessor = new HTMLProcessor(input, new CharArray(128));
+    private SitemeshBufferFragment.Builder body;
+
+    private HTMLProcessor createProcessor(String input) {
+        SitemeshBuffer buffer = new StringSitemeshBuffer(input);
+        body = SitemeshBufferFragment.builder().setBuffer(buffer);
+        return new HTMLProcessor(buffer, body);
+    }
+
+    public void testCreatesStateTransitionEvent() throws IOException {
+		String input = "<a></a>";
+		HTMLProcessor htmlProcessor = createProcessor(input);
 
 		State defaultState = htmlProcessor.defaultState();
 
@@ -32,42 +39,34 @@ public class HTMLProcessorTest extends TestCase {
 	}
 
     public void testSupportsConventionalReaderAndWriter() throws IOException {
-        Reader in = new StringReader("<hello><b id=\"something\">world</b></hello>");
-        Writer out = new StringWriter();
-
-        HTMLProcessor processor = new HTMLProcessor(in, out);
+        HTMLProcessor processor = createProcessor("<hello><b id=\"something\">world</b></hello>");
         processor.addRule(new TagReplaceRule("b", "strong"));
 
         processor.process();
-        assertEquals("<hello><strong id=\"something\">world</strong></hello>", out.toString());
+        assertEquals("<hello><strong id=\"something\">world</strong></hello>", body.build().getStringContent());
     }
 
     public void testAllowsRulesToModifyAttributes() throws IOException {
-        Reader in = new StringReader("<hello><a href=\"modify-me\">world</a></hello>");
-        Writer out = new StringWriter();
-
-        HTMLProcessor processor = new HTMLProcessor(in, out);
+        HTMLProcessor processor = createProcessor("<hello><a href=\"modify-me\">world</a></hello>");
         processor.addRule(new BasicRule("a") {
             public void process(Tag tag) {
+                currentBuffer().delete(tag.getPosition(), tag.getLength());
                 CustomTag customTag = new CustomTag(tag);
                 String href = customTag.getAttributeValue("href", false);
                 if (href != null) {
                     href = href.toUpperCase();
                     customTag.setAttributeValue("href", true, href);
                 }
-                customTag.writeTo(currentBuffer());
+                customTag.writeTo(currentBuffer(), tag.getPosition());
             }
         });
 
         processor.process();
-        assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", out.toString());
+        assertEquals("<hello><a href=\"MODIFY-ME\">world</a></hello>", body.build().getStringContent());
     }
 
     public void testSupportsChainedFilteringOfTextContent() throws IOException {
-        Reader in = new StringReader("<hello>world</hello>");
-        Writer out = new StringWriter();
-
-        HTMLProcessor processor = new HTMLProcessor(in, out);
+        HTMLProcessor processor = createProcessor("<hello>world</hello>");
         processor.addTextFilter(new TextFilter() {
             public String filter(String text) {
                 return text.toUpperCase();
@@ -80,15 +79,11 @@ public class HTMLProcessorTest extends TestCase {
         });
 
         processor.process();
-        assertEquals("<HELLo>WoRLD</HELLo>", out.toString());
+        assertEquals("<HELLo>WoRLD</HELLo>", body.build().getStringContent());
     }
 
     public void testSupportsTextFiltersForSpecificStates() throws IOException {
-        Reader in = new StringReader("la la<br> la la <capitalism>laaaa<br> laaaa</capitalism> la la");
-        Writer out = new StringWriter();
-
-        HTMLProcessor processor = new HTMLProcessor(in, out);
-
+        HTMLProcessor processor = createProcessor("la la<br> la la <capitalism>laaaa<br> laaaa</capitalism> la la");
         State capsState = new State();
         processor.addRule(new StateTransitionRule("capitalism", capsState, true));
 
@@ -99,13 +94,12 @@ public class HTMLProcessorTest extends TestCase {
         });
 
         processor.process();
-        assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", out.toString());
+        assertEquals("la la<br> la la <capitalism>LAAAA<BR> LAAAA</capitalism> la la", body.build().getStringContent());
     }
 
     public void testCanAddAttributesToCustomTag() throws IOException {
-        CharArray buffer = new CharArray(64);
         String html = "<h1>Headline</h1>";
-        HTMLProcessor htmlProcessor = new HTMLProcessor(html.toCharArray(), buffer);
+        HTMLProcessor htmlProcessor = createProcessor(html);
         htmlProcessor.addRule(new BasicRule() {
             public boolean shouldProcess(String tag) {
                 return tag.equalsIgnoreCase("h1");
@@ -113,15 +107,15 @@ public class HTMLProcessorTest extends TestCase {
 
             public void process(Tag tag) {
                 if (tag.getType() == Tag.OPEN) {
+                    currentBuffer().delete(tag.getPosition(), tag.getLength());
                     CustomTag ctag = new CustomTag(tag);
                     ctag.addAttribute("class", "y");
                     assertEquals(1, ctag.getAttributeCount());
-                    tag = ctag;
+                    ctag.writeTo(currentBuffer(), tag.getPosition());
                 }
-                tag.writeTo(currentBuffer());
             }
         });
         htmlProcessor.process();
-        assertEquals("<h1 class=\"y\">Headline</h1>", buffer.toString());
+        assertEquals("<h1 class=\"y\">Headline</h1>", body.build().getStringContent());
     }
 }

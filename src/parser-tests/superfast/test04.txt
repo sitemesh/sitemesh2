@@ -8,6 +8,8 @@
 
 ~~~ PROPERTIES ~~~
 
+title=
+
 ~~~ HEAD ~~~
 
 ~~~ BODY ~~~
