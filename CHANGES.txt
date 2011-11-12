@@ -11,7 +11,7 @@
    parsing as soon as it reaches the first body tag, and then scans from the end of the content to find
    the end body tag, and treats everything in between as the body.  Does not allow many of the advanced
    features of Sitemesh to be used, such as filters and and <content> tags.  To use the partial page
-   parser, set the the pageParser in sitemesh.xml to be com.opensymphony.module.sitemesh.parser.HTMLPageParser
+   parser, set the the pageParser in sitemesh.xml to be com.opensymphony.module.sitemesh.parser.PartialPageParser
 
 --------------------------
 -- Changes in 2.4.2     --
