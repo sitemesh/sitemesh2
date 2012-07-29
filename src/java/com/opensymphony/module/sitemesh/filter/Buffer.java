@@ -5,6 +5,7 @@ package com.opensymphony.module.sitemesh.filter;
 
 import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
+import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserver;
 
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class Buffer {
 
     private final PageParser pageParser;
     private final String encoding;
+    private final OutputLengthObserver outputLengthObserver;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
     private SitemeshBufferWriter bufferedWriter;
@@ -28,9 +30,10 @@ public class Buffer {
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
 
-    public Buffer(PageParser pageParser, String encoding) {
+    public Buffer(PageParser pageParser, String encoding, OutputLengthObserver outputLengthObserver) {
         this.pageParser = pageParser;
         this.encoding = encoding;
+        this.outputLengthObserver = outputLengthObserver;
     }
 
     public SitemeshBuffer getContents() throws IOException {
@@ -52,7 +55,7 @@ public class Buffer {
             if (bufferedStream != null) {
                 throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
             }
-            bufferedWriter = new SitemeshBufferWriter(128);
+            bufferedWriter = new SitemeshBufferWriter(128, outputLengthObserver);
             exposedWriter = new SitemeshPrintWriter(bufferedWriter);
         }
         return exposedWriter;
@@ -65,8 +68,25 @@ public class Buffer {
             }
             bufferedStream = new FastByteArrayOutputStream();
             exposedStream = new ServletOutputStream() {
-                public void write(int b) {
+                @Override
+                public void write(int b)
+                {
+                    outputLengthObserver.nBytes(1);
                     bufferedStream.write(b);
+                }
+
+                @Override
+                public void write(byte[] b) throws IOException
+                {
+                    outputLengthObserver.nBytes(b.length);
+                    bufferedStream.write(b);
+                }
+
+                @Override
+                public void write(byte[] b, int off, int len) throws IOException
+                {
+                    outputLengthObserver.nBytes(len);
+                    bufferedStream.write(b, off, len);
                 }
             };
         }

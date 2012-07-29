@@ -2,6 +2,9 @@ package com.opensymphony.sitemesh.webapp;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Factory;
+import com.opensymphony.module.sitemesh.outputlength.MaxOutputLengthExceeded;
+import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserver;
+import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserverFactory;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.Decorator;
 import com.opensymphony.sitemesh.DecoratorSelector;
@@ -25,11 +28,13 @@ public class SiteMeshFilter implements Filter {
 
     private FilterConfig filterConfig;
     private ContainerTweaks containerTweaks;
+    private OutputLengthObserverFactory lengthObserverFactory;
     private static final String ALREADY_APPLIED_KEY = "com.opensymphony.sitemesh.APPLIED_ONCE";
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         containerTweaks = new ContainerTweaks();
+        lengthObserverFactory = new OutputLengthObserverFactory(filterConfig);
     }
 
     public void destroy() {
@@ -74,7 +79,7 @@ public class SiteMeshFilter implements Filter {
 
         try {
 
-            Content content = obtainContent(contentProcessor, webAppContext, request, response, chain);
+            Content content = obtainContent(contentProcessor, webAppContext, lengthObserverFactory.getObserver(), request, response, chain);
 
             if (content == null) {
                 return;
@@ -82,6 +87,12 @@ public class SiteMeshFilter implements Filter {
 
             Decorator decorator = decoratorSelector.selectDecorator(content, webAppContext);
             decorator.render(content, webAppContext);
+
+        } catch (MaxOutputLengthExceeded exceeded) {
+            //
+            // they have sent a response that is bigger than is what acceptable so
+            // we send back an HTTP code to indicate this
+            response.sendError(exceeded.getMaximumOutputExceededHttpCode(),exceeded.getMessage());
 
         } catch (IllegalStateException e) {
             // Some containers (such as WebLogic) throw an IllegalStateException when an error page is served.
@@ -121,11 +132,11 @@ public class SiteMeshFilter implements Filter {
      * into returned {@link com.opensymphony.module.sitemesh.Page} object. If
      * {@link com.opensymphony.module.sitemesh.Page} is not parseable, null is returned.
      */
-    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext,
+    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext, OutputLengthObserver observer,
                                   HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext);
+        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext, observer);
         chain.doFilter(request, contentBufferingResponse);
         // TODO: check if another servlet or filter put a page object in the request
         //            Content result = request.getAttribute(PAGE);

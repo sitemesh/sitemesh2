@@ -6,6 +6,8 @@ package com.opensymphony.module.sitemesh.filter;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParserSelector;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.outputlength.NoopOutputLengthObserver;
+import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserver;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
 
     private final RoutablePrintWriter routablePrintWriter;
     private final RoutableServletOutputStream routableServletOutputStream;
+    private final OutputLengthObserver outputLengthObserver;
     private final PageParserSelector parserSelector;
 
     private Buffer buffer;
@@ -35,7 +38,12 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
     private boolean parseablePage = false;
 
     public PageResponseWrapper(final HttpServletResponse response, PageParserSelector parserSelector) {
+        this(response, new NoopOutputLengthObserver(), parserSelector);
+    }
+
+    public PageResponseWrapper(final HttpServletResponse response, OutputLengthObserver outputLengthObserver, PageParserSelector parserSelector) {
         super(response);
+        this.outputLengthObserver = outputLengthObserver;
         this.parserSelector = parserSelector;
 
         routablePrintWriter = new RoutablePrintWriter(new RoutablePrintWriter.DestinationFactory() {
@@ -74,7 +82,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
         if (parseablePage) {
             return; // already activated
         }
-        buffer = new Buffer(parserSelector.getPageParser(contentType), encoding);
+        buffer = new Buffer(parserSelector.getPageParser(contentType), encoding, outputLengthObserver);
         routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
             public PrintWriter activateDestination() {
                 return buffer.getWriter();
