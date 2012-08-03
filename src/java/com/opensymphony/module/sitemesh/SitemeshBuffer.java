@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh;
 
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -55,4 +57,15 @@ public interface SitemeshBuffer {
      * @return True if it has fragments
      */
     boolean hasFragments();
+
+
+    /**
+     * @return if the buffer is backed by secondary storage
+     */
+    boolean hasSecondaryStorage();
+
+    /**
+     * @return the underlying secondary storage behind the page
+     */
+    SecondaryStorage getSecondaryStorage();
 }

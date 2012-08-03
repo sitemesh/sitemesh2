@@ -4,8 +4,12 @@
 package com.opensymphony.module.sitemesh.filter;
 
 import com.opensymphony.module.sitemesh.*;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
+import com.opensymphony.module.sitemesh.scalability.outputlength.OutputLengthObservantSitemeshWriter;
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorageBufferWriter;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
-import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserver;
+import com.opensymphony.module.sitemesh.scalability.outputlength.OutputLengthObserver;
 
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
@@ -23,17 +27,20 @@ public class Buffer {
     private final PageParser pageParser;
     private final String encoding;
     private final OutputLengthObserver outputLengthObserver;
+    private final SecondaryStorage secondaryStorage;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
-    private SitemeshBufferWriter bufferedWriter;
+    private SitemeshWriter bufferedWriter;
+
     private FastByteArrayOutputStream bufferedStream;
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
 
-    public Buffer(PageParser pageParser, String encoding, OutputLengthObserver outputLengthObserver) {
+    public Buffer(PageParser pageParser, String encoding, ScalabilitySupport scalabilitySupport) {
         this.pageParser = pageParser;
         this.encoding = encoding;
-        this.outputLengthObserver = outputLengthObserver;
+        this.outputLengthObserver = scalabilitySupport.getOutputLengthObserver();
+        this.secondaryStorage = scalabilitySupport.getSecondaryStorage();
     }
 
     public SitemeshBuffer getContents() throws IOException {
@@ -50,13 +57,32 @@ public class Buffer {
         return pageParser.parse(getContents());
     }
 
-    public PrintWriter getWriter() {
-        if (bufferedWriter == null) {
-            if (bufferedStream != null) {
+    private static final int INITIAL_BUFFER_SIZE = 1024 * 8;
+
+    public PrintWriter getWriter()
+    {
+        if (bufferedWriter == null)
+        {
+            if (bufferedStream != null)
+            {
                 throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
             }
-            bufferedWriter = new SitemeshBufferWriter(128, outputLengthObserver);
-            exposedWriter = new SitemeshPrintWriter(bufferedWriter);
+            SitemeshWriter bufferredWriterToUse;
+            if (secondaryStorage != null && secondaryStorage.getMemoryLimitBeforeUse() > 0)
+            {
+                // this can spill over if the request gets too large
+                bufferredWriterToUse = new SecondaryStorageBufferWriter(INITIAL_BUFFER_SIZE, secondaryStorage);
+            }
+            else
+            {
+                // this will use the old SiteMesh behaviour of everything in memory
+                bufferredWriterToUse = new SitemeshBufferWriter(INITIAL_BUFFER_SIZE);
+            }
+            // and wrap with something that can watch the bytes go by
+            bufferredWriterToUse = new OutputLengthObservantSitemeshWriter(outputLengthObserver, bufferredWriterToUse);
+
+            bufferedWriter = bufferredWriterToUse;
+            exposedWriter = new SitemeshPrintWriter(bufferredWriterToUse);
         }
         return exposedWriter;
     }

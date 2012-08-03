@@ -2,9 +2,9 @@ package com.opensymphony.sitemesh.webapp;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Factory;
-import com.opensymphony.module.sitemesh.outputlength.MaxOutputLengthExceeded;
-import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserver;
-import com.opensymphony.module.sitemesh.outputlength.OutputLengthObserverFactory;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupportConfiguration;
+import com.opensymphony.module.sitemesh.scalability.outputlength.MaxOutputLengthExceeded;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.Decorator;
 import com.opensymphony.sitemesh.DecoratorSelector;
@@ -28,13 +28,13 @@ public class SiteMeshFilter implements Filter {
 
     private FilterConfig filterConfig;
     private ContainerTweaks containerTweaks;
-    private OutputLengthObserverFactory lengthObserverFactory;
+    private ScalabilitySupportConfiguration scalabilitySupportConfiguration;
     private static final String ALREADY_APPLIED_KEY = "com.opensymphony.sitemesh.APPLIED_ONCE";
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         containerTweaks = new ContainerTweaks();
-        lengthObserverFactory = new OutputLengthObserverFactory(filterConfig);
+        scalabilitySupportConfiguration = new ScalabilitySupportConfiguration(filterConfig);
     }
 
     public void destroy() {
@@ -79,7 +79,9 @@ public class SiteMeshFilter implements Filter {
 
         try {
 
-            Content content = obtainContent(contentProcessor, webAppContext, lengthObserverFactory.getObserver(), request, response, chain);
+            Content content = obtainContent(contentProcessor, webAppContext,
+                    scalabilitySupportConfiguration.getScalabilitySupport(request),
+                    request, response, chain);
 
             if (content == null) {
                 return;
@@ -92,7 +94,7 @@ public class SiteMeshFilter implements Filter {
             //
             // they have sent a response that is bigger than is what acceptable so
             // we send back an HTTP code to indicate this
-            response.sendError(exceeded.getMaximumOutputExceededHttpCode(),exceeded.getMessage());
+            handleMaximumExceeded(request, response, servletContext, exceeded);
 
         } catch (IllegalStateException e) {
             // Some containers (such as WebLogic) throw an IllegalStateException when an error page is served.
@@ -108,9 +110,23 @@ public class SiteMeshFilter implements Filter {
             throw e;
         } catch (ServletException e) {
             request.setAttribute(ALREADY_APPLIED_KEY, null);
-            throw e;
+            if (e.getCause() instanceof MaxOutputLengthExceeded) {
+                //
+                // they have sent a response that is bigger than is what acceptable so
+                // we send back an HTTP code to indicate this
+                handleMaximumExceeded(request, response, servletContext, (MaxOutputLengthExceeded) e.getCause());
+            } else {
+                throw e;
+            }
         }
 
+    }
+
+    private void handleMaximumExceeded(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext, MaxOutputLengthExceeded exceeded) throws IOException
+    {
+        servletContext.log("Exceeded the maximum SiteMesh page output size", exceeded);
+        request.setAttribute("sitemesh.maximumOutputExceededLength",exceeded.getMaxOutputLength());
+        response.sendError(exceeded.getMaximumOutputExceededHttpCode(),exceeded.getMessage());
     }
 
     protected ContentProcessor initContentProcessor(SiteMeshWebAppContext webAppContext) {
@@ -132,11 +148,11 @@ public class SiteMeshFilter implements Filter {
      * into returned {@link com.opensymphony.module.sitemesh.Page} object. If
      * {@link com.opensymphony.module.sitemesh.Page} is not parseable, null is returned.
      */
-    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext, OutputLengthObserver observer,
+    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext, ScalabilitySupport scalabilitySupport,
                                   HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext, observer);
+        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext, scalabilitySupport);
         chain.doFilter(request, contentBufferingResponse);
         // TODO: check if another servlet or filter put a page object in the request
         //            Content result = request.getAttribute(PAGE);

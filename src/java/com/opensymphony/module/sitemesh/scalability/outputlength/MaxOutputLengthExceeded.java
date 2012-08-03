@@ -1,4 +1,4 @@
-package com.opensymphony.module.sitemesh.outputlength;
+package com.opensymphony.module.sitemesh.scalability.outputlength;
 
 /**
  * An exception that is thrown if the maximum output length is exceeded.

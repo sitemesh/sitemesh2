@@ -1,9 +1,11 @@
 package com.opensymphony.module.sitemesh.parser;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.opensymphony.module.sitemesh.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Page parser that doesn't parse the full page, but rather just parses the head section of the page.
@@ -12,7 +14,8 @@ import com.opensymphony.module.sitemesh.*;
  */
 public class PartialPageParser implements PageParser
 {
-    public Page parse(char[] buffer) throws IOException {
+    public Page parse(char[] buffer) throws IOException
+    {
         return parse(new DefaultSitemeshBuffer(buffer));
     }
 
@@ -38,12 +41,12 @@ public class PartialPageParser implements PageParser
                 else
                 {
                     // The whole thing is the body.
-                    return new PartialPageParserHtmlPage(buffer, new SitemeshBufferFragment(buffer, 0, length), null);
+                    return new PartialPageParserHtmlPage(buffer);
                 }
             }
         }
         // If we're here, we mustn't have found a tag
-        return new PartialPageParserHtmlPage(buffer, new SitemeshBufferFragment(buffer, 0, length), null);
+        return new PartialPageParserHtmlPage(buffer);
     }
 
     private Page parseHtmlPage(SitemeshBuffer buffer, int position)
@@ -212,11 +215,10 @@ public class PartialPageParser implements PageParser
     /**
      * Parse the properties of the current tag
      *
-     * @param data the data
-     * @param dataEnd the end index of the data
+     * @param data     the data
+     * @param dataEnd  the end index of the data
      * @param position our position in the data, this should be the first character after the tag name
-     * @param map to the map to parse the properties into
-     *
+     * @param map      to the map to parse the properties into
      * @return The position of the first character after the tag
      */
     private static int parseProperties(char[] data, int dataEnd, int position, SimpleMap map)
