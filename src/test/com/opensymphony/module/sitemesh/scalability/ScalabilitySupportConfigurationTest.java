@@ -63,11 +63,13 @@ public class ScalabilitySupportConfigurationTest extends TestCase
         configProperties.put("scalability.secondarystorage.limit", "40");
         configProperties.put("scalability.maxoutput.length", "60");
         configProperties.put("scalability.maxoutput.httpcode", "555");
+        configProperties.put("scalability.maxoutput.throw.exception", "true");
 
         ScalabilitySupportConfiguration factory = new ScalabilitySupportConfiguration(new MockFilterConfig(configProperties));
         assertEquals(40L, factory.getScalabilitySupportFactory().getSecondaryStorageLimit());
         assertEquals(60L, factory.getScalabilitySupportFactory().getMaximumOutputLength());
         assertEquals(555, factory.getScalabilitySupportFactory().getMaximumOutputExceededHttpCode());
+        assertEquals(true, factory.getScalabilitySupportFactory().isMaxOutputLengthExceededThrown());
     }
 
     public void testClassFactory() throws Exception
@@ -79,6 +81,7 @@ public class ScalabilitySupportConfigurationTest extends TestCase
         assertEquals(5L, scalabilitySupportFactory.getMaximumOutputLength());
         assertEquals(666, scalabilitySupportFactory.getMaximumOutputExceededHttpCode());
         assertEquals(999, scalabilitySupportFactory.getSecondaryStorageLimit());
+        assertEquals(false, scalabilitySupportFactory.isMaxOutputLengthExceededThrown());
 
         assertTrue(scalabilitySupportFactory.hasCustomSecondaryStorage());
 
@@ -88,6 +91,11 @@ public class ScalabilitySupportConfigurationTest extends TestCase
 
     static class MockScalabilitySupportFactory implements ScalabilitySupportFactory
     {
+        public int getInitialBufferSize()
+        {
+            return 4 * 1024;
+        }
+
         public long getMaximumOutputLength()
         {
             return 5;
@@ -101,6 +109,11 @@ public class ScalabilitySupportConfigurationTest extends TestCase
         public long getSecondaryStorageLimit()
         {
             return 999;
+        }
+
+        public boolean isMaxOutputLengthExceededThrown()
+        {
+            return false;
         }
 
         public boolean hasCustomSecondaryStorage()

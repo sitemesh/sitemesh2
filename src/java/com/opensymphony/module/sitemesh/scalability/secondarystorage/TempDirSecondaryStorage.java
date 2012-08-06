@@ -1,21 +1,32 @@
 package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A SecondaryStorage implementation that uses the File.createTempFile() method
  */
 public class TempDirSecondaryStorage implements SecondaryStorage
 {
+    protected static Logger logger = Logger.getLogger(TempDirSecondaryStorage.class.getName());
+
     private final long memoryLimitBeforeUse;
 
     private PrintWriter pw;
     private Reader reader;
     private File tempFile;
+    private File tempDirectory;
 
     public TempDirSecondaryStorage(long memoryLimitBeforeUse)
     {
+        this(memoryLimitBeforeUse,null);
+    }
+
+    public TempDirSecondaryStorage(long memoryLimitBeforeUse, File tempDirectory)
+    {
         this.memoryLimitBeforeUse = memoryLimitBeforeUse;
+        this.tempDirectory = tempDirectory;
     }
 
     public long getMemoryLimitBeforeUse()
@@ -23,7 +34,12 @@ public class TempDirSecondaryStorage implements SecondaryStorage
         return memoryLimitBeforeUse;
     }
 
-    private void ensureIsOpen()
+    public File getTempDirectory()
+    {
+        return tempDirectory;
+    }
+
+    protected void ensureIsOpen()
     {
         if (pw == null)
         {
@@ -39,9 +55,16 @@ public class TempDirSecondaryStorage implements SecondaryStorage
         }
     }
 
+    /**
+     * By default creates a temporary file in {@link #getTempDirectory()}.  The Java {@link File#createTempFile(String, String, java.io.File)} ensures
+     * that the file is unique.
+     *
+     * @return a write-able temporary file
+     * @throws IOException
+     */
     protected File getTempFile() throws IOException
     {
-        return File.createTempFile("sitemesh-spillover-@" + memoryLimitBeforeUse + "-", ".txt");
+        return File.createTempFile("sitemesh-spillover-@" + memoryLimitBeforeUse + "-", ".txt", tempDirectory);
     }
 
     public void write(int c)
@@ -95,25 +118,31 @@ public class TempDirSecondaryStorage implements SecondaryStorage
         return reader;
     }
 
-    public void close()
+    public void cleanUp()
     {
         try
         {
-            if (pw != null) {
-                pw.close();
-            }
-            if (reader != null) {
-                reader.close();
-            }
-            if (tempFile != null)
-            {
-                tempFile.delete();
-            }
+            cleanupImplementation();
         }
         catch (IOException e)
         {
+            logger.log(Level.SEVERE,"Unable to clean up SiteMesh secondary storage",e);
         }
         pw = null;
         reader = null;
+    }
+
+    protected void cleanupImplementation() throws IOException
+    {
+        if (pw != null) {
+            pw.close();
+        }
+        if (reader != null) {
+            reader.close();
+        }
+        if (tempFile != null)
+        {
+            tempFile.delete();
+        }
     }
 }

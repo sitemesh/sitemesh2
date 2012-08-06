@@ -21,4 +21,14 @@ public class NoopScalabilitySupport implements ScalabilitySupport
     {
         return secondaryStorage;
     }
+
+    public int getInitialBufferSize()
+    {
+        return 8 * 1024;
+    }
+
+    public boolean isMaxOutputLengthExceededThrown()
+    {
+        return false;
+    }
 }

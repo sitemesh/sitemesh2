@@ -5,6 +5,7 @@ import com.opensymphony.module.sitemesh.factory.FilterConfigParameterFactory;
 import com.opensymphony.module.sitemesh.scalability.outputlength.ExceptionThrowingOutputLengthObserver;
 import com.opensymphony.module.sitemesh.scalability.outputlength.NoopOutputLengthObserver;
 import com.opensymphony.module.sitemesh.scalability.outputlength.OutputLengthObserver;
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.NoopSecondaryStorage;
 import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
 import com.opensymphony.module.sitemesh.scalability.secondarystorage.TempDirSecondaryStorage;
 import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
@@ -13,7 +14,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * A factory to give out scalability objects
+ * The factory class to give out scalability objects
  */
 public class ScalabilitySupportConfiguration extends FilterConfigParameterFactory
 {
@@ -48,6 +49,8 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
     {
         final SecondaryStorage secondaryStorage = scalabilitySupportFactory.getSecondaryStorage(httpServletRequest);
         final OutputLengthObserver outputLengthObserver = getOutputLengthObserver();
+        final int initialBufferSize = scalabilitySupportFactory.getInitialBufferSize();
+        final boolean isMaxOutputLengthExceededThrown = scalabilitySupportFactory.isMaxOutputLengthExceededThrown();
         return new ScalabilitySupport()
         {
             public OutputLengthObserver getOutputLengthObserver()
@@ -58,6 +61,16 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
             public SecondaryStorage getSecondaryStorage()
             {
                 return secondaryStorage;
+            }
+
+            public int getInitialBufferSize()
+            {
+                return initialBufferSize;
+            }
+
+            public boolean isMaxOutputLengthExceededThrown()
+            {
+                return isMaxOutputLengthExceededThrown;
             }
         };
     }
@@ -86,26 +99,38 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
      */
     class DefaultScalabilitySupportFactory implements ScalabilitySupportFactory
     {
+
         private final long secondaryStorageLimit;
         private final long maxOutputLength;
         private final int maximumOutputExceededHttpCode;
         private final ScalabilitySupportFactory hostProvidedFactory;
+        private final int initialBufferSize;
+        private final boolean throwsException;
 
         DefaultScalabilitySupportFactory(ScalabilitySupportFactory hostProvidedFactory)
         {
             this.hostProvidedFactory = hostProvidedFactory;
             if (hostProvidedFactory == null)
             {
-                secondaryStorageLimit = getLongVal("scalability.secondarystorage.limit", -1);
-                maxOutputLength = getLongVal("scalability.maxoutput.length", -1);
-                maximumOutputExceededHttpCode = getIntVal("scalability.maxoutput.httpcode", 509);
+                maxOutputLength = longVal("scalability.maxoutput.length", -1);
+                throwsException = booleanVal("scalability.maxoutput.throw.exception", true);
+                maximumOutputExceededHttpCode = intVal("scalability.maxoutput.httpcode", 509);
+                secondaryStorageLimit = longVal("scalability.secondarystorage.limit", -1);
+                initialBufferSize = intVal("scalability.initial.buffer.size", 8 * 1024);
             }
             else
             {
                 secondaryStorageLimit = 0;
                 maxOutputLength = 0;
                 maximumOutputExceededHttpCode = 0;
+                initialBufferSize = 0;
+                throwsException = true;
             }
+        }
+
+        public int getInitialBufferSize()
+        {
+            return hostProvidedFactory != null ? hostProvidedFactory.getInitialBufferSize() : initialBufferSize;
         }
 
         public long getMaximumOutputLength()
@@ -121,6 +146,11 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
         public long getSecondaryStorageLimit()
         {
             return hostProvidedFactory != null ? hostProvidedFactory.getSecondaryStorageLimit() : secondaryStorageLimit;
+        }
+
+        public boolean isMaxOutputLengthExceededThrown()
+        {
+            return hostProvidedFactory != null ? hostProvidedFactory.isMaxOutputLengthExceededThrown() :  throwsException;
         }
 
         public boolean hasCustomSecondaryStorage()
@@ -142,10 +172,7 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
 
         private SecondaryStorage getDefaultSecondaryStorageImpl(HttpServletRequest request)
         {
-            // TODO - remove this hack which is just there for demo purposes.  Its a DOS angle kinda sorta??
-            boolean siteMeshSecondaryStorage = getRequestFlag(request, "siteMeshSecondaryStorage", true);
-
-            if (siteMeshSecondaryStorage && secondaryStorageLimit > 0)
+            if (secondaryStorageLimit > 0)
             {
                 request.setAttribute("sitemesh.secondaryStorageLimit", secondaryStorageLimit);
                 return new TempDirSecondaryStorage(secondaryStorageLimit);
@@ -153,19 +180,8 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
             else
             {
                 request.setAttribute("sitemesh.secondaryStorageLimit", -1L);
-                return new com.opensymphony.module.sitemesh.scalability.secondarystorage.NoopSecondaryStorage();
+                return new NoopSecondaryStorage();
             }
         }
-
-        private boolean getRequestFlag(HttpServletRequest request, final String name, final boolean defaultVal)
-        {
-            String val = request.getParameter(name);
-            if (val == null)
-            {
-                return defaultVal;
-            }
-            return Boolean.parseBoolean(val);
-        }
-
     }
 }

@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 public interface ScalabilitySupportFactory
 {
     /**
+     * @return the initial amount of memory to allocate to the SiteMesh buffer.  This should be the sweet spot of average page size
+     * to prevent excessive re-allocation.
+     */
+    int getInitialBufferSize();
+
+    /**
      * @return the maximum output that SiteMesh will produce.  If this is 0 or less then
      *         no maximum is in play
      */
@@ -20,6 +26,12 @@ public interface ScalabilitySupportFactory
      * @return the HTTP code to return if the maximum output is exceeded
      */
     int getMaximumOutputExceededHttpCode();
+
+    /**
+     * @return if this is true then the code will throw a {@link com.opensymphony.module.sitemesh.scalability.outputlength.MaxOutputLengthExceeded}
+     * if the maximum output length is exceeded instead of sending back {@link #getMaximumOutputExceededHttpCode()}
+     */
+    boolean isMaxOutputLengthExceededThrown();
 
     /**
      * @return the number of bytes to keep in memory before secondary storage is usd.  If this is 0 or below then no secondary storage

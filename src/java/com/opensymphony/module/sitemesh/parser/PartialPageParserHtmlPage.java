@@ -114,12 +114,14 @@ public class PartialPageParserHtmlPage extends AbstractPage implements HTMLPage
                 body.writeTo(out);
                 writeOutSecondaryStorage(out, sitemeshBuffer);
             }
-        } else {
+        }
+        else
+        {
             //
             // if we have no body fragment it means that the whole thing is a body or there is no html or body tags.  Either way
             // we want to write everything out as is.
             //
-            sitemeshBuffer.writeTo(out,0,sitemeshBuffer.getBufferLength());
+            sitemeshBuffer.writeTo(out, 0, sitemeshBuffer.getBufferLength());
             writeOutSecondaryStorage(out, sitemeshBuffer);
         }
     }
@@ -128,21 +130,26 @@ public class PartialPageParserHtmlPage extends AbstractPage implements HTMLPage
     {
         if (sitemeshBuffer.hasSecondaryStorage())
         {
+            SecondaryStorage secondaryStorage = sitemeshBuffer.getSecondaryStorage();
             try
             {
-                SecondaryStorage secondaryStorage = sitemeshBuffer.getSecondaryStorage();
                 Reader reader = secondaryStorage.readBack();
                 char temp[] = new char[8192];
                 int read;
                 while ((read = reader.read(temp)) != -1)
                 {
-                    out.write(temp,0,read);
+                    out.write(temp, 0, read);
                 }
-                secondaryStorage.close();
             }
             catch (IOException e)
             {
                 throw new RuntimeException("Unable to read from SiteMesh secondary storage", e);
+            }
+            finally
+            {
+                // Do this quietly.  For example the client may terminate the stream and hence we
+                // get an exception but we still want to clean up without fuss.
+                secondaryStorage.cleanUp();
             }
         }
 

@@ -58,12 +58,6 @@ public class SecondaryStorageBufferWriter extends CharArrayWriter implements Sit
         return hasWrittenToStorage;
     }
 
-    // visible for testing
-    long getCharsSoFar()
-    {
-        return charsSoFar;
-    }
-
     private void parseChar(int c)
     {
         if (insideBody)

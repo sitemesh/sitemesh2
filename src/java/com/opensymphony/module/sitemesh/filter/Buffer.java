@@ -28,6 +28,7 @@ public class Buffer {
     private final String encoding;
     private final OutputLengthObserver outputLengthObserver;
     private final SecondaryStorage secondaryStorage;
+    private final int initialBufferSize;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
     private SitemeshWriter bufferedWriter;
@@ -41,6 +42,7 @@ public class Buffer {
         this.encoding = encoding;
         this.outputLengthObserver = scalabilitySupport.getOutputLengthObserver();
         this.secondaryStorage = scalabilitySupport.getSecondaryStorage();
+        this.initialBufferSize = scalabilitySupport.getInitialBufferSize();
     }
 
     public SitemeshBuffer getContents() throws IOException {
@@ -57,8 +59,6 @@ public class Buffer {
         return pageParser.parse(getContents());
     }
 
-    private static final int INITIAL_BUFFER_SIZE = 1024 * 8;
-
     public PrintWriter getWriter()
     {
         if (bufferedWriter == null)
@@ -71,12 +71,12 @@ public class Buffer {
             if (secondaryStorage != null && secondaryStorage.getMemoryLimitBeforeUse() > 0)
             {
                 // this can spill over if the request gets too large
-                bufferredWriterToUse = new SecondaryStorageBufferWriter(INITIAL_BUFFER_SIZE, secondaryStorage);
+                bufferredWriterToUse = new SecondaryStorageBufferWriter(initialBufferSize, secondaryStorage);
             }
             else
             {
                 // this will use the old SiteMesh behaviour of everything in memory
-                bufferredWriterToUse = new SitemeshBufferWriter(INITIAL_BUFFER_SIZE);
+                bufferredWriterToUse = new SitemeshBufferWriter(initialBufferSize);
             }
             // and wrap with something that can watch the bytes go by
             bufferredWriterToUse = new OutputLengthObservantSitemeshWriter(outputLengthObserver, bufferredWriterToUse);

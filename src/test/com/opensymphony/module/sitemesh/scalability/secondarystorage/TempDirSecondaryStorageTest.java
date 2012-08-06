@@ -48,7 +48,7 @@ public class TempDirSecondaryStorageTest extends TestCase
         // check that after close the file has been closed and deleted
         assertTrue(tempFile.exists());
 
-        storage.close();
+        storage.cleanUp();
 
         assertFalse(tempFile.exists());
         assertClosed(reader);

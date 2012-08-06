@@ -16,7 +16,6 @@ import java.io.Reader;
  */
 public interface SecondaryStorage
 {
-
     /**
      * Returns the number of characters that should be stored in memory before this secondary storage.  If this value is 0 or below then
      * it is in fact disabled.
@@ -55,7 +54,12 @@ public interface SecondaryStorage
     public Reader readBack();
 
     /**
-     * This allows you to ask the secondary storage to clean up after itself.  A try  / finally would be a good place to put this
+     * This allows you to ask the secondary storage to clean up after itself.  A try  / finally would be a good place to put this.
+     *
+     * This should be able to be called multiple times because we want to be able to always cleanup in case of exceptions
+     * as well an blue sky paths.
+     *
+     * Really no exceptions should be propagated from this method.
      */
-    public void close();
+    public void cleanUp();
 }

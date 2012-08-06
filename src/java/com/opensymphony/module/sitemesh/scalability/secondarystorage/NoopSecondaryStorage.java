@@ -11,7 +11,7 @@ public class NoopSecondaryStorage implements SecondaryStorage
         return -1;
     }
 
-    public void write(int c)
+     public void write(int c)
     {
     }
 
@@ -32,7 +32,7 @@ public class NoopSecondaryStorage implements SecondaryStorage
         throw new IllegalStateException("We do not expect this method to be called since we return -1 in getMemoryLimitBeforeUse()");
     }
 
-    public void close()
+    public void cleanUp()
     {
     }
 }

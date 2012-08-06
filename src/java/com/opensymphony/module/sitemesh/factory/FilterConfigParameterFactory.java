@@ -14,11 +14,11 @@ public abstract class FilterConfigParameterFactory
         this.filterConfig = filterConfig;
     }
 
-    protected long getLongVal(String parameterName, long defaultVal)
+    protected long longVal(String parameterName, long defaultVal)
     {
         String num = trimmed(filterConfig.getInitParameter(parameterName));
         long val = defaultVal;
-        if (num != null)
+        if (! num.isEmpty())
         {
             try
             {
@@ -41,15 +41,32 @@ public abstract class FilterConfigParameterFactory
         return s;
     }
 
-    protected int getIntVal(String parameterName, int defaultVal)
+    protected int intVal(String parameterName, int defaultVal)
     {
         String num = trimmed(filterConfig.getInitParameter(parameterName));
         int val = defaultVal;
-        if (num != null)
+        if (! num.isEmpty())
         {
             try
             {
                 val = Integer.parseInt(num);
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+        return val;
+    }
+
+    protected boolean booleanVal(String parameterName, boolean defaultVal)
+    {
+        String flag = trimmed(filterConfig.getInitParameter(parameterName));
+        boolean val = defaultVal;
+        if (! flag.isEmpty())
+        {
+            try
+            {
+                val = Boolean.parseBoolean(flag);
             }
             catch (NumberFormatException e)
             {

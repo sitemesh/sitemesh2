@@ -47,7 +47,7 @@ public class InMemorySecondaryStorage implements SecondaryStorage
         return sr;
     }
 
-    public void close()
+    public void cleanUp()
     {
     }
 }
