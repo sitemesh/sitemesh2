@@ -94,7 +94,7 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
     }
 
     /**
-     * This default implementation will delegate to the hos provided factory if there is one and otherwise read filterConfig parameters
+     * This default implementation will delegate to the host provided factory if there is one and otherwise read filterConfig parameters
      * for the default values.
      */
     class DefaultScalabilitySupportFactory implements ScalabilitySupportFactory
@@ -160,28 +160,23 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
 
         public SecondaryStorage getSecondaryStorage(HttpServletRequest httpServletRequest)
         {
+            httpServletRequest.setAttribute("sitemesh.secondaryStorageLimit", secondaryStorageLimit);
             if (hostProvidedFactory != null && hostProvidedFactory.hasCustomSecondaryStorage())
             {
                 return hostProvidedFactory.getSecondaryStorage(httpServletRequest);
             }
             else
             {
-                return getDefaultSecondaryStorageImpl(httpServletRequest);
+                if (secondaryStorageLimit > 0)
+                {
+                    return new TempDirSecondaryStorage(secondaryStorageLimit);
+                }
+                else
+                {
+                    return new NoopSecondaryStorage();
+                }
             }
         }
 
-        private SecondaryStorage getDefaultSecondaryStorageImpl(HttpServletRequest request)
-        {
-            if (secondaryStorageLimit > 0)
-            {
-                request.setAttribute("sitemesh.secondaryStorageLimit", secondaryStorageLimit);
-                return new TempDirSecondaryStorage(secondaryStorageLimit);
-            }
-            else
-            {
-                request.setAttribute("sitemesh.secondaryStorageLimit", -1L);
-                return new NoopSecondaryStorage();
-            }
-        }
     }
 }

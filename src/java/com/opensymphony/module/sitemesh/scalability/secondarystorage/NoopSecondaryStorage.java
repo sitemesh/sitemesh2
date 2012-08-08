@@ -1,8 +1,10 @@
 package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
 import java.io.Reader;
+import java.io.StringReader;
 
 /**
+ * A secondary storage that does nothing.
   */
 public class NoopSecondaryStorage implements SecondaryStorage
 {
@@ -29,7 +31,7 @@ public class NoopSecondaryStorage implements SecondaryStorage
 
     public Reader readBack()
     {
-        throw new IllegalStateException("We do not expect this method to be called since we return -1 in getMemoryLimitBeforeUse()");
+        return new StringReader("");
     }
 
     public void cleanUp()
