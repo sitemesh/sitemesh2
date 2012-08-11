@@ -133,13 +133,7 @@ public class PartialPageParserHtmlPage extends AbstractPage implements HTMLPage
             SecondaryStorage secondaryStorage = sitemeshBuffer.getSecondaryStorage();
             try
             {
-                Reader reader = secondaryStorage.readBack();
-                char temp[] = new char[8192];
-                int read;
-                while ((read = reader.read(temp)) != -1)
-                {
-                    out.write(temp, 0, read);
-                }
+                secondaryStorage.writeTo(out);
             }
             catch (IOException e)
             {

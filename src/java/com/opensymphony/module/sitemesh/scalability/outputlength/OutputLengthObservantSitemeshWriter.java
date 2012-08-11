@@ -27,13 +27,13 @@ public class OutputLengthObservantSitemeshWriter extends Writer implements Sitem
         return this;
     }
 
-    public void write(int c)
+    public void write(int c) throws IOException
     {
         outputLengthObserver.nChars(1);
         delegate.write(c);
     }
 
-    public void write(char[] chars, int off, int len)
+     public void write(char[] chars, int off, int len)  throws IOException
     {
         outputLengthObserver.nChars(len - off);
         delegate.write(chars, off, len);
@@ -45,7 +45,7 @@ public class OutputLengthObservantSitemeshWriter extends Writer implements Sitem
         delegate.write(chars);
     }
 
-    public void write(String str, int off, int len)
+    public void write(String str, int off, int len)  throws IOException
     {
         outputLengthObserver.nChars(len - off);
         delegate.write(str, off, len);

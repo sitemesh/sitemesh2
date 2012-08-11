@@ -1,7 +1,6 @@
 package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.Writer;
 
 /**
  * A secondary storage that does nothing.
@@ -29,9 +28,9 @@ public class NoopSecondaryStorage implements SecondaryStorage
     {
     }
 
-    public Reader readBack()
+    public void writeTo(Writer out)
     {
-        return new StringReader("");
+
     }
 
     public void cleanUp()

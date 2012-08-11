@@ -22,7 +22,7 @@ public interface SitemeshWriter {
      *
      * @param c the character to write
      */
-    public void write(int c);
+    public void write(int c)  throws IOException;
 
     /**
      * Taken from {@link Writer}
@@ -31,7 +31,7 @@ public interface SitemeshWriter {
      * @param off the offset to write from
      * @param len the length to write
      */
-    public void write(char[] chars, int off, int len);
+    public void write(char[] chars, int off, int len)  throws IOException;
 
     /**
      * Taken from {@link Writer}
@@ -47,7 +47,7 @@ public interface SitemeshWriter {
      * @param off the offset to write from
      * @param len the length to write
      */
-    public void write(String str, int off, int len);
+    public void write(String str, int off, int len)  throws IOException;
 
     /**
      * Taken from {@link Writer}

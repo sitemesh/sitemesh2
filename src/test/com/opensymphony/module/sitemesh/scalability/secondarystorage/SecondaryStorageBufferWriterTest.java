@@ -147,17 +147,13 @@ public class SecondaryStorageBufferWriterTest extends TestCase
         return sb;
     }
 
-    private void addTo(StringBuilder sb, com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage secondaryStorage)
+    private void addTo(StringBuilder sb, SecondaryStorage secondaryStorage)
     {
-        Reader r = secondaryStorage.readBack();
+        StringWriter sw = new StringWriter();
         try
         {
-            int read;
-            while ((read = r.read()) != -1)
-            {
-                sb.append((char) read);
-            }
-            r.close();
+            secondaryStorage.writeTo(sw);
+            sb.append(sw.toString());
         }
         catch (IOException e)
         {

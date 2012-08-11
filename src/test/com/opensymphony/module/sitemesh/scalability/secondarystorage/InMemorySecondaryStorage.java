@@ -1,8 +1,8 @@
 package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 
 /**
  */
@@ -41,10 +41,9 @@ public class InMemorySecondaryStorage implements SecondaryStorage
         sw.write(str);
     }
 
-    public Reader readBack()
+    public void writeTo(Writer out) throws IOException
     {
-        StringReader sr = new StringReader(sw.toString());
-        return sr;
+       out.write(sw.toString());
     }
 
     public void cleanUp()

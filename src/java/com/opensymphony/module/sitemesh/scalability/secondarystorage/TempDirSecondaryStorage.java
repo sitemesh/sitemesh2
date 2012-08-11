@@ -1,6 +1,15 @@
 package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,17 +19,17 @@ import java.util.logging.Logger;
 public class TempDirSecondaryStorage implements SecondaryStorage
 {
     protected static Logger logger = Logger.getLogger(TempDirSecondaryStorage.class.getName());
+    private static final String UTF_8 = "UTF-8";
 
     private final long memoryLimitBeforeUse;
 
-    private PrintWriter pw;
-    private Reader reader;
+    private Writer captureWriter;
     private File tempFile;
     private File tempDirectory;
 
     public TempDirSecondaryStorage(long memoryLimitBeforeUse)
     {
-        this(memoryLimitBeforeUse,null);
+        this(memoryLimitBeforeUse, null);
     }
 
     public TempDirSecondaryStorage(long memoryLimitBeforeUse, File tempDirectory)
@@ -41,12 +50,12 @@ public class TempDirSecondaryStorage implements SecondaryStorage
 
     protected void ensureIsOpen()
     {
-        if (pw == null)
+        if (captureWriter == null)
         {
             try
             {
                 tempFile = getTempFile();
-                pw = new PrintWriter(new FileWriter(tempFile));
+                captureWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8"));
             }
             catch (IOException e)
             {
@@ -60,62 +69,67 @@ public class TempDirSecondaryStorage implements SecondaryStorage
      * that the file is unique.
      *
      * @return a write-able temporary file
+     *
      * @throws IOException
      */
     protected File getTempFile() throws IOException
     {
-        return File.createTempFile("sitemesh-spillover-@" + memoryLimitBeforeUse + "-", ".txt", tempDirectory);
+        return File.createTempFile("sitemesh-spillover-" + memoryLimitBeforeUse + "-", ".txt", tempDirectory);
     }
 
-    public void write(int c)
+    public void write(int c) throws IOException
     {
         ensureIsOpen();
-        pw.write(c);
+        captureWriter.write(c);
     }
 
-    public void write(char[] chars, int off, int len)
+    public void write(char[] chars, int off, int len) throws IOException
     {
         ensureIsOpen();
-        pw.write(chars, off, len);
+        captureWriter.write(chars, off, len);
     }
 
-    public void write(String str, int off, int len)
+    public void write(String str, int off, int len) throws IOException
     {
         ensureIsOpen();
-        pw.write(str, off, len);
+        captureWriter.write(str, off, len);
     }
 
-    public void write(String str)
+    public void write(String str) throws IOException
     {
         ensureIsOpen();
-        pw.write(str);
+        captureWriter.write(str);
     }
 
-    public Reader readBack()
+    public void writeTo(Writer out) throws IOException
     {
-        if (reader != null)
+        if (captureWriter != null)
         {
-            throw new IllegalStateException("You have asked for the SecondaryStorage reader twice.  You cant read streamed data twice");
-        }
-        if (pw == null)
-        {
-            // it was never written to so give them no content back
-            reader = new StringReader("");
-        }
-        else
-        {
-            pw.close();
-            pw = null;
+            captureWriter.close();
+            captureWriter = null;
+            Reader reader = null;
             try
             {
-                reader = new BufferedReader(new FileReader(tempFile));
+                reader = new InputStreamReader(new FileInputStream(tempFile), UTF_8);
+                int read;
+                char temp[] = new char[8192];
+                while ((read = reader.read(temp)) != -1)
+                {
+                    out.write(temp, 0, read);
+                }
             }
             catch (FileNotFoundException e)
             {
-                throw new RuntimeException("Unable to read temporary SiteMesh storage file " + tempFile, e);
+                throw new RuntimeException("Unable to open temporary SiteMesh storage file " + tempFile, e);
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.close();
+                }
             }
         }
-        return reader;
     }
 
     public void cleanUp()
@@ -126,19 +140,16 @@ public class TempDirSecondaryStorage implements SecondaryStorage
         }
         catch (IOException e)
         {
-            logger.log(Level.SEVERE,"Unable to clean up SiteMesh secondary storage",e);
+            logger.log(Level.SEVERE, "Unable to clean up SiteMesh secondary storage", e);
         }
-        pw = null;
-        reader = null;
+        captureWriter = null;
     }
 
     protected void cleanupImplementation() throws IOException
     {
-        if (pw != null) {
-            pw.close();
-        }
-        if (reader != null) {
-            reader.close();
+        if (captureWriter != null)
+        {
+            captureWriter.close();
         }
         if (tempFile != null)
         {

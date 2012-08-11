@@ -2,10 +2,9 @@ package com.opensymphony.module.sitemesh.scalability.secondarystorage;
 
 import junit.framework.TestCase;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.StringWriter;
 
 /**
  */
@@ -41,8 +40,9 @@ public class TempDirSecondaryStorageTest extends TestCase
 
         storage.write(THE_QUICK_BROWN_FOX_JUMPED_OVER_THE_LAZY_DOG);
 
-        Reader reader = storage.readBack();
-        assertReader(reader,THE_QUICK_BROWN_FOX_JUMPED_OVER_THE_LAZY_DOG);
+        StringWriter out = new StringWriter();
+        storage.writeTo(out);
+        assertData(out.toString(), THE_QUICK_BROWN_FOX_JUMPED_OVER_THE_LAZY_DOG);
 
 
         // check that after close the file has been closed and deleted
@@ -51,25 +51,10 @@ public class TempDirSecondaryStorageTest extends TestCase
         storage.cleanUp();
 
         assertFalse(tempFile.exists());
-        assertClosed(reader);
     }
 
-    private void assertReader(Reader reader, String expected) throws IOException
+    private void assertData(String result, String expected) throws IOException
     {
-        BufferedReader br = new BufferedReader(reader);
-        String line = br.readLine();
-        assertEquals(expected,line);
-    }
-
-    private void assertClosed(Reader reader)
-    {
-        try
-        {
-            reader.read();
-            fail("Should have thrown IOF as its already closed");
-        }
-        catch (IOException expected)
-        {
-        }
+        assertEquals(expected,result);
     }
 }

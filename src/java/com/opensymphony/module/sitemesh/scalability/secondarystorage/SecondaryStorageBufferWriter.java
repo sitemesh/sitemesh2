@@ -135,7 +135,14 @@ public class SecondaryStorageBufferWriter extends CharArrayWriter implements Sit
         {
             if (weShouldSpillToStorage())
             {
-                secondaryStorage.write(c);
+                try
+                {
+                    secondaryStorage.write(c);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
                 hasWrittenToStorage = true;
             }
             else
@@ -158,7 +165,14 @@ public class SecondaryStorageBufferWriter extends CharArrayWriter implements Sit
         {
             if (weShouldSpillToStorage())
             {
-                secondaryStorage.write(chars, off, len);
+                try
+                {
+                    secondaryStorage.write(chars, off, len);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
                 hasWrittenToStorage = true;
             }
             else
@@ -190,7 +204,14 @@ public class SecondaryStorageBufferWriter extends CharArrayWriter implements Sit
         {
             if (weShouldSpillToStorage())
             {
-                secondaryStorage.write(str, off, len);
+                try
+                {
+                    secondaryStorage.write(str, off, len);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
                 hasWrittenToStorage = true;
             }
             else
