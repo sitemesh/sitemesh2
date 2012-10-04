@@ -43,6 +43,14 @@ public class ContentBufferingResponse extends HttpServletResponseWrapper {
         this.contentProcessor = contentProcessor;
         this.webAppContext = webAppContext;
         pageResponseWrapper = (PageResponseWrapper) getResponse();
+
+        // We can't guarantee that response.setContentType will not be
+        // called before this constructor, so we must check the type now.
+        String existingContentType = response.getContentType();
+        if (existingContentType != null)
+        {
+            pageResponseWrapper.setContentType(existingContentType);
+        }
     }
 
     public boolean isUsingStream() {
