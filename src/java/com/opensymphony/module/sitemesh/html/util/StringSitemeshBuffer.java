@@ -2,6 +2,7 @@ package com.opensymphony.module.sitemesh.html.util;
 
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -45,4 +46,13 @@ public class StringSitemeshBuffer implements SitemeshBuffer {
         return new SitemeshBufferFragment(new StringSitemeshBuffer(buffer), 0, buffer.length());
     }
 
+    public boolean hasSecondaryStorage()
+    {
+        return false;
+    }
+
+    public SecondaryStorage getSecondaryStorage()
+    {
+        return null;
+    }
 }

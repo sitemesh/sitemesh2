@@ -1,5 +1,6 @@
 package com.opensymphony.sitemesh.webapp;
 
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 import com.opensymphony.module.sitemesh.PageParserSelector;
@@ -24,8 +25,8 @@ public class ContentBufferingResponse extends HttpServletResponseWrapper {
     private final ContentProcessor contentProcessor;
     private final SiteMeshWebAppContext webAppContext;
 
-    public ContentBufferingResponse(HttpServletResponse response, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext) {
-        super(new PageResponseWrapper(response, new PageParserSelector() {
+    public ContentBufferingResponse(HttpServletResponse response, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext, final ScalabilitySupport scalabilitySupport) {
+        super(new PageResponseWrapper(response, scalabilitySupport, new PageParserSelector() {
             public boolean shouldParsePage(String contentType) {
                 return contentProcessor.handles(contentType);
             }

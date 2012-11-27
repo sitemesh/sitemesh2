@@ -2,6 +2,10 @@ package com.opensymphony.sitemesh.webapp;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Factory;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupportConfiguration;
+import com.opensymphony.module.sitemesh.scalability.outputlength.MaxOutputLengthExceeded;
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
 import com.opensymphony.sitemesh.Content;
 import com.opensymphony.sitemesh.Decorator;
 import com.opensymphony.sitemesh.DecoratorSelector;
@@ -25,11 +29,13 @@ public class SiteMeshFilter implements Filter {
 
     private FilterConfig filterConfig;
     private ContainerTweaks containerTweaks;
+    private ScalabilitySupportConfiguration scalabilitySupportConfiguration;
     private static final String ALREADY_APPLIED_KEY = "com.opensymphony.sitemesh.APPLIED_ONCE";
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         containerTweaks = new ContainerTweaks();
+        scalabilitySupportConfiguration = new ScalabilitySupportConfiguration(filterConfig);
     }
 
     public void destroy() {
@@ -72,9 +78,10 @@ public class SiteMeshFilter implements Filter {
             request.getSession(true);
         }
 
+        ScalabilitySupport scalabilitySupport = scalabilitySupportConfiguration.getScalabilitySupport(request);
         try {
 
-            Content content = obtainContent(contentProcessor, webAppContext, request, response, chain);
+            Content content = obtainContent(contentProcessor, webAppContext,scalabilitySupport,request, response, chain);
 
             if (content == null) {
                 return;
@@ -82,6 +89,12 @@ public class SiteMeshFilter implements Filter {
 
             Decorator decorator = decoratorSelector.selectDecorator(content, webAppContext);
             decorator.render(content, webAppContext);
+
+        } catch (MaxOutputLengthExceeded exceeded) {
+            //
+            // they have sent a response that is bigger than is what acceptable so
+            // we send back an HTTP code to indicate this
+            handleMaximumExceeded(scalabilitySupport, request, response, servletContext, exceeded);
 
         } catch (IllegalStateException e) {
             // Some containers (such as WebLogic) throw an IllegalStateException when an error page is served.
@@ -97,9 +110,47 @@ public class SiteMeshFilter implements Filter {
             throw e;
         } catch (ServletException e) {
             request.setAttribute(ALREADY_APPLIED_KEY, null);
-            throw e;
+            if (e.getCause() instanceof MaxOutputLengthExceeded) {
+                //
+                // they have sent a response that is bigger than is what acceptable so
+                // we send back an HTTP code to indicate this
+                handleMaximumExceeded(scalabilitySupport, request, response, servletContext, (MaxOutputLengthExceeded) e.getCause());
+            } else {
+                throw e;
+            }
+        } finally {
+            cleanupSecondaryStorage(scalabilitySupport.getSecondaryStorage(), servletContext);
         }
 
+    }
+
+    private void handleMaximumExceeded(ScalabilitySupport scalabilitySupport, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext, MaxOutputLengthExceeded exceeded) throws IOException
+    {
+        request.setAttribute("sitemesh.maximumOutputExceededLength", exceeded.getMaxOutputLength());
+        if (scalabilitySupport.isMaxOutputLengthExceededThrown())
+        {
+            throw exceeded;
+        }
+        else
+        {
+            servletContext.log("Exceeded the maximum SiteMesh page output size", exceeded);
+            response.sendError(exceeded.getMaximumOutputExceededHttpCode(), exceeded.getMessage());
+        }
+    }
+
+    private void cleanupSecondaryStorage(SecondaryStorage secondaryStorage, ServletContext servletContext)
+    {
+        // we want to cleanup without exception.  The request may already be in exception and we don't want to make
+        // make it any worse.  Also we have told the implementer NOT to propagate an exception and hence we are going to
+        // hold them to that contract
+        try
+        {
+            secondaryStorage.cleanUp();
+        }
+        catch (Exception e)
+        {
+            servletContext.log("Unable to clean up secondary storage properly.  Ignoring exception ", e);
+        }
     }
 
     protected ContentProcessor initContentProcessor(SiteMeshWebAppContext webAppContext) {
@@ -121,18 +172,12 @@ public class SiteMeshFilter implements Filter {
      * into returned {@link com.opensymphony.module.sitemesh.Page} object. If
      * {@link com.opensymphony.module.sitemesh.Page} is not parseable, null is returned.
      */
-    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext,
+    private Content obtainContent(ContentProcessor contentProcessor, SiteMeshWebAppContext webAppContext, ScalabilitySupport scalabilitySupport,
                                   HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext);
+        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext, scalabilitySupport);
         chain.doFilter(request, contentBufferingResponse);
-        // TODO: check if another servlet or filter put a page object in the request
-        //            Content result = request.getAttribute(PAGE);
-        //            if (result == null) {
-        //                // parse the page
-        //                result = pageResponse.getPage();
-        //            }
         webAppContext.setUsingStream(contentBufferingResponse.isUsingStream());
         return contentBufferingResponse.getContent();
     }

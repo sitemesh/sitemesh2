@@ -7,6 +7,7 @@ import com.opensymphony.module.sitemesh.SitemeshWriter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 /**
  * A sitemesh print writer
@@ -15,9 +16,14 @@ public class SitemeshPrintWriter extends PrintWriter implements SitemeshWriter {
 
     private final SitemeshWriter sitemeshWriter;
 
-    public SitemeshPrintWriter(SitemeshBufferWriter sitemeshWriter) {
-        super(sitemeshWriter);
+    public SitemeshPrintWriter(SitemeshWriter sitemeshWriter) {
+        super(sitemeshWriter.getUnderlyingWriter());
         this.sitemeshWriter = sitemeshWriter;
+    }
+
+    public Writer getUnderlyingWriter()
+    {
+        return this;
     }
 
     public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException {

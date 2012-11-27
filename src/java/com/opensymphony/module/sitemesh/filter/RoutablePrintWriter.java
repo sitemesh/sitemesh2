@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import com.opensymphony.module.sitemesh.SitemeshBufferFragment;
 import com.opensymphony.module.sitemesh.SitemeshWriter;
@@ -51,6 +50,11 @@ public class RoutablePrintWriter extends PrintWriter implements SitemeshWriter {
     public void updateDestination(DestinationFactory factory) {
         destination = null;
         this.factory = factory;
+    }
+
+    public Writer getUnderlyingWriter()
+    {
+        return getDestination();
     }
 
     public void close() {
@@ -159,29 +163,6 @@ public class RoutablePrintWriter extends PrintWriter implements SitemeshWriter {
 
     public void flush() {
         getDestination().flush();
-    }
-
-    /**
-     * Just to keep super constructor for PrintWriter happy - it's never actually used.
-     */
-    private static class NullWriter extends Writer {
-
-        protected NullWriter() {
-            super();
-        }
-
-        public void write(char cbuf[], int off, int len) throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
-        public void flush() throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
-        public void close() throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
     }
 
     public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException

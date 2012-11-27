@@ -1,5 +1,7 @@
 package com.opensymphony.module.sitemesh;
 
+import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -12,6 +14,7 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     private final char[] buffer;
     private final int length;
     private final TreeMap<Integer, SitemeshBufferFragment> bufferFragments;
+    private final SecondaryStorage secondaryStorage;
 
     public DefaultSitemeshBuffer(char[] buffer) {
         this(buffer, buffer.length);
@@ -22,9 +25,14 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
     }
 
     public DefaultSitemeshBuffer(char[] buffer, int length, TreeMap<Integer, SitemeshBufferFragment> bufferFragments) {
+        this(buffer,length,bufferFragments,null);
+    }
+
+    public DefaultSitemeshBuffer(char[] buffer, int length, TreeMap<Integer, SitemeshBufferFragment> bufferFragments, SecondaryStorage secondaryStorage) {
         this.buffer = buffer;
         this.length = length;
         this.bufferFragments = bufferFragments;
+        this.secondaryStorage = secondaryStorage;
     }
 
     public void writeTo(Writer writer, int start, int length) throws IOException {
@@ -80,6 +88,16 @@ public class DefaultSitemeshBuffer implements SitemeshBuffer {
 
     public boolean hasFragments() {
         return !bufferFragments.isEmpty();
+    }
+
+    public boolean hasSecondaryStorage()
+    {
+        return secondaryStorage != null;
+    }
+
+    public SecondaryStorage getSecondaryStorage()
+    {
+        return secondaryStorage;
     }
 
     public static Builder builder() {

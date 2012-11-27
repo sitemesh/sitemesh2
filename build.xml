@@ -113,7 +113,7 @@
         <replace dir="dist/docs" token="@VERSION@" value="${version}"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile,sources">
         <mkdir dir="dist"/>
         <copy todir="build/classes">
              <fileset dir="src/java" excludes="**/*.java,**/*.flex"/>
@@ -121,6 +121,17 @@
         <jar jarfile="dist/${name}-${version}.jar" basedir="build/classes" excludes="**/servlets/**">
             <metainf dir="src/etc/tld/jsp1.2" includes="*.tld"/>
         </jar>
+
+        <echo>
+        To deploy to maven :
+
+        mvn deploy:deploy-file -Dfile=./dist/${name}-${version}.jar -DpomFile=./pom.xml -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
+        mvn deploy:deploy-file -Dfile=./dist/${name}-${version}-sources.jar -DpomFile=./pom.xml -Dclassifier=sources -Durl=https://maven.atlassian.com/public -DrepositoryId=atlassian-public
+
+        To install locally :
+
+        mvn install:install-file -Dfile=./dist/${name}-${version}.jar -DpomFile=./pom.xml
+        </echo>
     </target>
 
     <target name="sources" depends="compile">

@@ -6,6 +6,8 @@ package com.opensymphony.module.sitemesh.filter;
 import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.PageParserSelector;
 import com.opensymphony.module.sitemesh.SitemeshBuffer;
+import com.opensymphony.module.sitemesh.scalability.NoopScalabilitySupport;
+import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +35,15 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
     private Buffer buffer;
     private boolean aborted = false;
     private boolean parseablePage = false;
+    private final ScalabilitySupport scalabilitySupport;
 
-    public PageResponseWrapper(final HttpServletResponse response, PageParserSelector parserSelector) {
+    public PageResponseWrapper(final HttpServletResponse response, final PageParserSelector parserSelector) {
+        this(response, new NoopScalabilitySupport(), parserSelector);
+    }
+
+    public PageResponseWrapper(final HttpServletResponse response, final ScalabilitySupport scalabilitySupport, final PageParserSelector parserSelector) {
         super(response);
+        this.scalabilitySupport = scalabilitySupport;
         this.parserSelector = parserSelector;
 
         routablePrintWriter = new RoutablePrintWriter(new RoutablePrintWriter.DestinationFactory() {
@@ -74,7 +82,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
         if (parseablePage) {
             return; // already activated
         }
-        buffer = new Buffer(parserSelector.getPageParser(contentType), encoding);
+        buffer = new Buffer(parserSelector.getPageParser(contentType), encoding, scalabilitySupport);
         routablePrintWriter.updateDestination(new RoutablePrintWriter.DestinationFactory() {
             public PrintWriter activateDestination() {
                 return buffer.getWriter();
