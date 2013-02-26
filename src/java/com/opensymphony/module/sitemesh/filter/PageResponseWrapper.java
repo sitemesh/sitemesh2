@@ -215,4 +215,16 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
             return buffer.getContents();
         }
     }
+
+    public Buffer getBuffer() {
+        return buffer;
+    }
+
+    public boolean isAborted() {
+        return aborted;
+    }
+
+    public boolean isParseablePage() {
+        return parseablePage;
+    }
 }
