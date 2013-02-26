@@ -8,6 +8,10 @@
     ant clean jar sources
     mvn org.apache.maven.plugins:maven-deploy-plugin:2.7:deploy-file -Dfile=./dist/sitemesh-2.5-atlassian-7.jar -Dsources=./dist/sitemesh-2.5-atlassian-7-sources.jar -DpomFile=./pom.xml -Durl=https://maven.atlassian.com/3rdparty -DrepositoryId=atlassian-3rdparty
 
+    to run integration tests:
+    1) (cd testsuite ; ant clean 2.3-web.xml)
+    2) Run testsuite.sitemesh.SiteMeshTestSuite.OnEmbeddedTomcatServer in your IDE
+       - you need to ensure the current working directory is ./testsuite/
 
     to deploy locally
 
