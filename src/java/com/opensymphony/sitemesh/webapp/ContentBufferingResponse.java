@@ -8,6 +8,7 @@ import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.sitemesh.ContentProcessor;
 import com.opensymphony.sitemesh.Content;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,8 +26,8 @@ public class ContentBufferingResponse extends HttpServletResponseWrapper {
     private final ContentProcessor contentProcessor;
     private final SiteMeshWebAppContext webAppContext;
 
-    public ContentBufferingResponse(HttpServletResponse response, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext, final ScalabilitySupport scalabilitySupport) {
-        super(new PageResponseWrapper(response, scalabilitySupport, new PageParserSelector() {
+    public ContentBufferingResponse(HttpServletResponse response, HttpServletRequest request, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext, final ScalabilitySupport scalabilitySupport) {
+        super(new PageResponseWrapper(response, request,  scalabilitySupport, new PageParserSelector() {
             public boolean shouldParsePage(String contentType) {
                 return contentProcessor.handles(contentType);
             }

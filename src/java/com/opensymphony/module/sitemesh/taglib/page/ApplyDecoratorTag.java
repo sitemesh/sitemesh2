@@ -217,7 +217,7 @@ public class ApplyDecoratorTag extends BodyTagSupport implements RequestConstant
                 // include page using filter response
                 RequestDispatcher rd = pageContext.getServletContext().getRequestDispatcher(fullPath);
                 PageRequestWrapper pageRequest = new PageRequestWrapper((HttpServletRequest) pageContext.getRequest());
-                PageResponseWrapper pageResponse = new PageResponseWrapper((HttpServletResponse) pageContext.getResponse(), factory);
+                PageResponseWrapper pageResponse = new PageResponseWrapper((HttpServletResponse) pageContext.getResponse(), pageRequest, factory);
 
                 StringBuffer sb = new StringBuffer(contentType != null ? contentType : "text/html");
                 if (encoding != null) {

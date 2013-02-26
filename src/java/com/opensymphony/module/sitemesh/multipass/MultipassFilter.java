@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MultipassFilter extends SiteMeshFilter {
 
     protected void writeDecorator(final HttpServletResponse response, final Page page, RequestDispatcher dispatcher, HttpServletRequest request) throws ServletException, IOException {
-        PageResponseWrapper pageResponse = new PageResponseWrapper(response, new PageParserSelector() {
+        PageResponseWrapper pageResponse = new PageResponseWrapper(response, request, new PageParserSelector() {
             public boolean shouldParsePage(String contentType) {
                 return true;
             }

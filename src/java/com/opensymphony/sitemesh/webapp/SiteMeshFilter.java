@@ -2,6 +2,7 @@ package com.opensymphony.sitemesh.webapp;
 
 import com.opensymphony.module.sitemesh.Config;
 import com.opensymphony.module.sitemesh.Factory;
+import com.opensymphony.module.sitemesh.RequestConstants;
 import com.opensymphony.module.sitemesh.scalability.ScalabilitySupport;
 import com.opensymphony.module.sitemesh.scalability.ScalabilitySupportConfiguration;
 import com.opensymphony.module.sitemesh.scalability.outputlength.MaxOutputLengthExceeded;
@@ -126,7 +127,7 @@ public class SiteMeshFilter implements Filter {
 
     private void handleMaximumExceeded(ScalabilitySupport scalabilitySupport, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext, MaxOutputLengthExceeded exceeded) throws IOException
     {
-        request.setAttribute("sitemesh.maximumOutputExceededLength", exceeded.getMaxOutputLength());
+        request.setAttribute(RequestConstants.MAXIMUM_OUTPUT_EXCEEDED_LENGTH, exceeded.getMaxOutputLength());
         if (scalabilitySupport.isMaxOutputLengthExceededThrown())
         {
             throw exceeded;
@@ -176,7 +177,7 @@ public class SiteMeshFilter implements Filter {
                                   HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, contentProcessor, webAppContext, scalabilitySupport);
+        ContentBufferingResponse contentBufferingResponse = new ContentBufferingResponse(response, request, contentProcessor, webAppContext, scalabilitySupport);
         chain.doFilter(request, contentBufferingResponse);
         webAppContext.setUsingStream(contentBufferingResponse.isUsingStream());
         return contentBufferingResponse.getContent();
