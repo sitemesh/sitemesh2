@@ -116,10 +116,15 @@ public class SimpleDecoratorTest extends WebTest {
         assertStringContains("START", rs.getText());
     }
 
+    public void testDisablingDecorationWithRequestAttribute() throws Exception {
+        WebResponse rs = wc.getResponse( baseUrl + "/simple/DifferentWaysOfSpecifyingContentType?approach=setContentType&kill=yes" );
+        assertEquals("<html><head><title>content-type</title><body>body</body></html>", rs.getText().trim());
+    }
+
     // Test that proves SIM-168 (error pages not decorated correctly)
     public void testErrorPageDecoratedCorrectly() throws Exception {
         WebResponse rs = wc.getResponse( baseUrl + "/basic/error-exception.jsp" );
-        assertEquals( "[:: An error has occurred ::]", rs.getTitle() );
+        assertEquals( "[-- An error has occurred --]", rs.getTitle() );
     }
 
 

@@ -1,5 +1,7 @@
 package testsuite.servlets;
 
+import com.opensymphony.module.sitemesh.RequestConstants;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

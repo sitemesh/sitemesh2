@@ -55,6 +55,10 @@ public class Buffer {
         }
     }
 
+    public boolean hasBeenOpened() {
+        return exposedStream != null || exposedWriter != null;
+    }
+
     public Page parse() throws IOException {
         return pageParser.parse(getContents());
     }

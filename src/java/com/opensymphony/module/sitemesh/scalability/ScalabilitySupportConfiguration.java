@@ -1,5 +1,6 @@
 package com.opensymphony.module.sitemesh.scalability;
 
+import com.opensymphony.module.sitemesh.RequestConstants;
 import com.opensymphony.module.sitemesh.factory.FactoryException;
 import com.opensymphony.module.sitemesh.factory.FilterConfigParameterFactory;
 import com.opensymphony.module.sitemesh.scalability.outputlength.ExceptionThrowingOutputLengthObserver;
@@ -160,7 +161,7 @@ public class ScalabilitySupportConfiguration extends FilterConfigParameterFactor
 
         public SecondaryStorage getSecondaryStorage(HttpServletRequest httpServletRequest)
         {
-            httpServletRequest.setAttribute("sitemesh.secondaryStorageLimit", secondaryStorageLimit);
+            httpServletRequest.setAttribute(RequestConstants.SECONDARY_STORAGE_LIMIT, secondaryStorageLimit);
             if (hostProvidedFactory != null && hostProvidedFactory.hasCustomSecondaryStorage())
             {
                 return hostProvidedFactory.getSecondaryStorage(httpServletRequest);

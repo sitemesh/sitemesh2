@@ -45,7 +45,8 @@ public class ContentLengthTest extends WebTest {
     public void testContentLengthSetCorrectlyWithNoneDecorator() throws Exception { 
         int contentLength = 10;
         WebResponse rs = wc.getResponse( baseUrl + "/contentlength/ContentLengthNoDecorator?content-length=" + contentLength);
-        assertEquals("Content Length Header should equal " + contentLength, String.valueOf(contentLength) ,rs.getHeaderField("Content-Length"));
+        // we don't send content-length for none any more, see JRADEV-6607 and commit:4fcde51c60dfa43b60884291cb68e70851255b94
+//        assertEquals("Content Length Header should equal " + contentLength, String.valueOf(contentLength) ,rs.getHeaderField("Content-Length"));
         assertEquals("Content Length should equal " + contentLength + " but was " + rs.getText().length(), contentLength, rs.getText().length());
     }
 
@@ -62,6 +63,7 @@ public class ContentLengthTest extends WebTest {
         int simpleDecoratorLen = 387;
         int expectedLength = simpleDecoratorLen + decoratedContentLen;
 
+        System.out.println("rs.getText() = " + rs.getText());
         assertEquals("Content Length should equal " + expectedLength + " but was " + rs.getText().length(), expectedLength, rs.getText().length());
         String contentLengthHeader = rs.getHeaderField("Content-Length");
         if (contentLengthHeader != null) // not setting the content length header is fine as well
