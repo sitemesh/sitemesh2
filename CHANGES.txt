@@ -1,9 +1,17 @@
 --------------------------
 -- Changes in 2.5       --
 --------------------------
- * Single buffer parsing
- * Buffer chaining
- * PartialPageParser that only parses the <head> section of bodies
+ * Single buffer parsing. This is supported by the HTMLPageParser and the PartialPageParser, and means
+   that the parsing process will never copy the content into another buffer, thus increasing
+   performance and reducing the amount of garbage the garbage collector has to clean up after a parsing
+ * Buffer chaining. This allows multiple nested decorators (for example, using the JSP tags) to not
+   need to rebuffer or reparse the HTML of the chained buffer.
+ * PartialPageParser that only parses the <head> section of bodies. This is a very high performance
+   buffer for simple sitemesh use cases, that don't need any content extracted from the body. It stops
+   parsing as soon as it reaches the first body tag, and then scans from the end of the content to find
+   the end body tag, and treats everything in between as the body.  Does not allow many of the advanced
+   features of Sitemesh to be used, such as filters and and <content> tags.  To use the partial page
+   parser, set the the pageParser in sitemesh.xml to be com.opensymphony.module.sitemesh.parser.PartialPageParser
 
 --------------------------
 -- Changes in 2.4.2     --

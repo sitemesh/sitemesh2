@@ -167,5 +167,8 @@ Thank these guys:
 * Joseph Ottinger         <joeoNOSPAM@adjacency.org>
 * Hani Suleiman           <NOSPAMfate@users.sourceforge.net>
 * Scott Farquhar          <scottNOSPAM@atlassian.com>
+* James Roper             <jamesNOSPAM@jazzy.id.au>
+* Matt Quail              <mquailNOSPAM@atlasian.com>
+* Charles Miller          <cmillerNOSPAM@atlassian.com>
 
                                             - Joe Walnes <joe@NOSPAMtruemesh.com>
