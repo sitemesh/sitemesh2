@@ -6,7 +6,7 @@
     <!--
     ant clean test
     ant clean jar sources
-    mvn org.apache.maven.plugins:maven-deploy-plugin:2.7:deploy-file -Dfile=./dist/sitemesh-2.5-atlassian-9.jar -Dsources=./dist/sitemesh-2.5-atlassian-9-sources.jar -DpomFile=./pom.xml -Durl=https://maven.atlassian.com/3rdparty -DrepositoryId=atlassian-3rdparty
+    ## Then read the TWO "echo" hints on the screen to mvn deploy the jar and sources.
 
     to run integration tests:
     1) (cd testsuite ; ant clean 2.3-web.xml)
