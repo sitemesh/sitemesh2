@@ -26,6 +26,10 @@ public class ContentBufferingResponse extends HttpServletResponseWrapper {
     private final ContentProcessor contentProcessor;
     private final SiteMeshWebAppContext webAppContext;
 
+    public ContentBufferingResponse(HttpServletResponse response, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext, final ScalabilitySupport scalabilitySupport) {
+        this(response, null, contentProcessor, webAppContext, scalabilitySupport);
+    }
+
     public ContentBufferingResponse(HttpServletResponse response, HttpServletRequest request, final ContentProcessor contentProcessor, final SiteMeshWebAppContext webAppContext, final ScalabilitySupport scalabilitySupport) {
         super(new PageResponseWrapper(response, request,  scalabilitySupport, new PageParserSelector() {
             public boolean shouldParsePage(String contentType) {

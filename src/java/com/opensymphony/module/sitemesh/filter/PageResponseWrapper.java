@@ -40,8 +40,16 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
     private final ScalabilitySupport scalabilitySupport;
     private final HttpServletRequest request;
 
+    public PageResponseWrapper(final HttpServletResponse response, final PageParserSelector parserSelector) {
+        this(response, null, new NoopScalabilitySupport(), parserSelector);
+    }
+
     public PageResponseWrapper(final HttpServletResponse response, final HttpServletRequest request, final PageParserSelector parserSelector) {
         this(response, request, new NoopScalabilitySupport(), parserSelector);
+    }
+
+    public PageResponseWrapper(final HttpServletResponse response, final ScalabilitySupport scalabilitySupport, final PageParserSelector parserSelector) {
+        this(response, null, scalabilitySupport, parserSelector);
     }
 
     public PageResponseWrapper(final HttpServletResponse response, final HttpServletRequest request, final ScalabilitySupport scalabilitySupport, final PageParserSelector parserSelector) {
@@ -101,7 +109,7 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
     }
 
     private boolean lazyDisable() {
-        if (request.getAttribute(RequestConstants.DISABLE_BUFFER_AND_DECORATION) != null) {
+        if (null != request && request.getAttribute(RequestConstants.DISABLE_BUFFER_AND_DECORATION) != null) {
             parseablePage = false;
             buffer = null;
             return true;
