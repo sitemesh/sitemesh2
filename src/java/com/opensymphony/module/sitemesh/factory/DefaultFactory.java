@@ -1,11 +1,11 @@
 /*
- * Title:        DefaultFactory
- * Description:
- *
- * This software is published under the terms of the OpenSymphony Software
- * License version 1.1, of which a copy has been included with this
- * distribution in the LICENSE.txt file.
- */
+* Title: DefaultFactory
+* Description:
+*
+* This software is published under the terms of the OpenSymphony Software
+* License version 1.1, of which a copy has been included with this
+* distribution in the LICENSE.txt file.
+*/
 
 package com.opensymphony.module.sitemesh.factory;
 
@@ -25,23 +25,23 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * DefaultFactory, reads configuration from the <code>sitemesh.configfile</code> init param,
- * or <code>/WEB-INF/sitemesh.xml</code> if not specified, or uses the
- * default configuration if <code>sitemesh.xml</code> does not exist.
- *
- * <p>To use the <code>sitemesh.configfile</code> parameter, add the following to your web.xml:
- * <pre>
- * &lt;context-param&gt;
- *      &lt;param-name&gt;sitemesh.configfile&lt;/param-name&gt;
- *      &lt;param-value&gt;/WEB-INF/etc/sitemesh.xml&lt;/param-value&gt;
- *  &lt;/context-param&gt;
- * </pre>
- * </p>
- * 
- * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
- * @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
- * @version $Revision: 1.8 $
- */
+* DefaultFactory, reads configuration from the <code>sitemesh.configfile</code> init param,
+* or <code>/WEB-INF/sitemesh.xml</code> if not specified, or uses the
+* default configuration if <code>sitemesh.xml</code> does not exist.
+*
+* <p>To use the <code>sitemesh.configfile</code> parameter, add the following to your web.xml:
+* <pre>
+* &lt;context-param&gt;
+* &lt;param-name&gt;sitemesh.configfile&lt;/param-name&gt;
+* &lt;param-value&gt;/WEB-INF/etc/sitemesh.xml&lt;/param-value&gt;
+* &lt;/context-param&gt;
+* </pre>
+* </p>
+*
+* @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
+* @author <a href="mailto:pathos@pandora.be">Mathias Bogaert</a>
+* @version $Revision: 1.8 $
+*/
 public class DefaultFactory extends BaseFactory {
     String configFileName;
     private static final String DEFAULT_CONFIG_FILENAME = "/WEB-INF/sitemesh.xml";
@@ -143,7 +143,7 @@ public class DefaultFactory extends BaseFactory {
             is = config.getServletContext().getResourceAsStream(configFileName);
         }
         else if (configFile.exists() && configFile.canRead()) {
-            is = configFile.toURL().openStream();
+            is = configFile.toURI().toURL().openStream();
         }
 
         if (is == null){ // load the default sitemesh configuration
@@ -181,7 +181,7 @@ public class DefaultFactory extends BaseFactory {
             is = config.getServletContext().getResourceAsStream(excludesFileName);
         }
         else if (excludesFile.exists() && excludesFile.canRead()) {
-            is = excludesFile.toURL().openStream();
+            is = excludesFile.toURI().toURL().openStream();
         }
 
         if (is == null){
@@ -253,8 +253,8 @@ public class DefaultFactory extends BaseFactory {
     }
 
     /**
-     * Reads in all the url patterns to exclude from decoration.
-     */
+* Reads in all the url patterns to exclude from decoration.
+*/
     private void loadExcludeUrls(NodeList nodes) {
         clearExcludeUrls();
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -284,13 +284,13 @@ public class DefaultFactory extends BaseFactory {
     }
 
     /**
-     * Replaces any properties that appear in the supplied string
-     * with their actual values
-     *
-     * @param str the string to replace the properties in
-     * @return the same string but with any properties expanded out to their
-     * actual values
-     */
+* Replaces any properties that appear in the supplied string
+* with their actual values
+*
+* @param str the string to replace the properties in
+* @return the same string but with any properties expanded out to their
+* actual values
+*/
     private String replaceProperties(String str) {
         Set props = configProps.entrySet();
         for (Iterator it = props.iterator(); it.hasNext();)
