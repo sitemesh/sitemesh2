@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 public class OutputServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if ("yes".equals(request.getParameter("kill"))) {
-            request.setAttribute(RequestConstants.DISABLE_BUFFER_AND_DECORATION, true);
+            request.setAttribute(RequestConstants.DISABLE_BUFFER_AND_DECORATION, Boolean.TRUE);
         }
 
         String mode = request.getParameter("out");
