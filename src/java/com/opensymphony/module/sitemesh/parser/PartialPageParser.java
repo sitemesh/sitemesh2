@@ -51,6 +51,7 @@ public class PartialPageParser implements PageParser
 
     private Page parseHtmlPage(SitemeshBuffer buffer, int position)
     {
+
         char[] data = buffer.getCharArray();
         int length = buffer.getBufferLength();
         int bodyStart = -1;
@@ -68,21 +69,7 @@ public class PartialPageParser implements PageParser
                     position = findEndOf(data, length, position + 4, ">");
                     headStart = position;
                     // Find end of head
-                    while (position < length - 2)
-                    {
-                        // quickly search for closing tag markers
-                        if(data[position] == '<')
-                        {
-                            if (data[position + 1] == '/')
-                            {
-                                if (compareLowerCase(data, length, position, "</head>"))
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        position++;
-                    }
+                    position = findEndTag(position, data, length, "head");
                     headLength = position - headStart;
                     position += 7;
                 }
@@ -180,6 +167,35 @@ public class PartialPageParser implements PageParser
         {
             return new PartialPageParserHtmlPage(buffer, new SitemeshBufferFragment(buffer, bodyStart, bodyLength), bodyProperties);
         }
+    }
+
+    private int findEndTag(final int position, final char[] data, final int dataEnd, final String tagName)
+    {
+        String endTag = "</" + tagName + ">";
+        final int remainingTagLength = endTag.length() - 1;
+        int i = position;
+        while (i < dataEnd - remainingTagLength)
+        {
+            // quickly search for closing tag markers
+            if(data[i] == '<')
+            {
+                if (data[i + remainingTagLength] == '>')
+                {
+                    if (data[i + 1] == '/')
+                    {
+                        if (compareLowerCase(data, dataEnd, i, endTag))
+                        {
+                            return i;
+                        }
+                    }
+                    // Because we found a complete tag but we know it is not what we are looking for,
+                    // we can just jump over this tag.
+                    i += remainingTagLength;
+                }
+            }
+            i++;
+        }
+        return dataEnd;
     }
 
     private static boolean compareLowerCase(final char[] data, final int dataEnd, int position, String token)
