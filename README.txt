@@ -44,7 +44,7 @@ Currently known containers that support this and SiteMesh was tested with:
 -- Installation         --
 --------------------------
 
-* Copy sitemesh-@VERSION@.jar to the WEB-INF/lib/ directory of your web-app.
+* Copy sitemesh-<VERSION>.jar to the WEB-INF/lib/ directory of your web-app.
 
 * OPTIONAL: Copy sitemesh.xml to the WEB-INF/ directory if you need to specify a custom
   decorator mapper configuration then the default configuration.
