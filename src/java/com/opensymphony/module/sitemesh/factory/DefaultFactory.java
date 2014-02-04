@@ -143,7 +143,7 @@ public class DefaultFactory extends BaseFactory {
             is = config.getServletContext().getResourceAsStream(configFileName);
         }
         else if (configFile.exists() && configFile.canRead()) {
-            is = configFile.toURL().openStream();
+            is = configFile.toURI().toURL().openStream();
         }
 
         if (is == null){ // load the default sitemesh configuration
@@ -181,7 +181,7 @@ public class DefaultFactory extends BaseFactory {
             is = config.getServletContext().getResourceAsStream(excludesFileName);
         }
         else if (excludesFile.exists() && excludesFile.canRead()) {
-            is = excludesFile.toURL().openStream();
+            is = excludesFile.toURI().toURL().openStream();
         }
 
         if (is == null){
