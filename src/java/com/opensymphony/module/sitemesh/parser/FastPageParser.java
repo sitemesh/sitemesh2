@@ -153,6 +153,32 @@ public final class FastPageParser implements PageParser
                   _currentTaggedContent.append('<').append(_buffer).append('>');
                }
             }
+            else if (_tokenType == TOKEN_COMMENT)
+            {
+               if(_buffer.length() > 0)
+               {
+                  _currentTaggedContent.append("<!--");
+                  _currentTaggedContent.append(_buffer);
+                  _currentTaggedContent.append("-->");
+               }
+            }
+            else if (_tokenType == TOKEN_CDATA)
+            {
+               if(_buffer.length() > 0)
+               {
+                  _currentTaggedContent.append("<![CDATA[");
+                  _currentTaggedContent.append(_buffer);
+                  _currentTaggedContent.append("]]>");
+               }
+            }
+            else if (_tokenType == TOKEN_SCRIPT)
+            {
+               if(_buffer.length() > 0)
+               {
+                  _currentTaggedContent.append('<');
+                  _currentTaggedContent.append(_buffer);
+               }
+            }
             else
             {
                if(_buffer.length() > 0) _currentTaggedContent.append(_buffer);
