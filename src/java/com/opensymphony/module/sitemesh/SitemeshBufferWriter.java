@@ -28,4 +28,10 @@ public class SitemeshBufferWriter extends CharArrayWriter implements SitemeshWri
     public SitemeshBuffer getSitemeshBuffer() {
         return new DefaultSitemeshBuffer(buf, count, fragments);
     }
+
+    @Override
+    public void reset() {
+        super.reset();
+        fragments.clear();
+    }
 }
