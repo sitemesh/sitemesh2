@@ -10,6 +10,7 @@ import com.opensymphony.module.sitemesh.SitemeshBuffer;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -191,6 +192,24 @@ public class PageResponseWrapper extends HttpServletResponseWrapper {
             return null;
         } else {
             return buffer.getContents();
+        }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+
+        if (this.buffer != null) {
+            this.buffer.reset();
+        }
+    }
+
+    @Override
+    public void resetBuffer() {
+        super.resetBuffer();
+
+        if (this.buffer != null) {
+            this.buffer.resetBuffer();
         }
     }
 }

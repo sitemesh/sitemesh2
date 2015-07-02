@@ -7,6 +7,7 @@ import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
 
 import javax.servlet.ServletOutputStream;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -23,10 +24,13 @@ public class Buffer {
     private final String encoding;
     private final static TextEncoder TEXT_ENCODER = new TextEncoder();
 
-    private SitemeshBufferWriter bufferedWriter;
-    private FastByteArrayOutputStream bufferedStream;
+    private final FastByteArrayOutputStream bufferedStream = new FastByteArrayOutputStream();
+    private final SitemeshBufferWriter bufferedWriter = new SitemeshBufferWriter(128);
     private PrintWriter exposedWriter;
     private ServletOutputStream exposedStream;
+
+    private boolean usingWriter = false;
+    private boolean usingOutputStream = false;
 
     public Buffer(PageParser pageParser, String encoding) {
         this.pageParser = pageParser;
@@ -34,9 +38,9 @@ public class Buffer {
     }
 
     public SitemeshBuffer getContents() throws IOException {
-        if (bufferedWriter != null) {
+        if (bufferedWriter.size() > 0) {
             return bufferedWriter.getSitemeshBuffer();
-        } else if (bufferedStream != null) {
+        } else if (bufferedStream.size() > 0) {
             return new DefaultSitemeshBuffer(TEXT_ENCODER.encode(bufferedStream.toByteArray(), encoding));
         } else {
             return new DefaultSitemeshBuffer(new char[0]);
@@ -48,32 +52,50 @@ public class Buffer {
     }
 
     public PrintWriter getWriter() {
-        if (bufferedWriter == null) {
-            if (bufferedStream != null) {
-                throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
-            }
-            bufferedWriter = new SitemeshBufferWriter(128);
+        if (usingOutputStream) {
+            throw new IllegalStateException("response.getWriter() called after response.getOutputStream()");
+        }
+        if (exposedWriter == null) {
             exposedWriter = new SitemeshPrintWriter(bufferedWriter);
         }
+        usingWriter = true;
         return exposedWriter;
     }
 
     public ServletOutputStream getOutputStream() {
-        if (bufferedStream == null) {
-            if (bufferedWriter != null) {
-                throw new IllegalStateException("response.getOutputStream() called after response.getWriter()");
-            }
-            bufferedStream = new FastByteArrayOutputStream();
+        if (usingWriter) {
+            throw new IllegalStateException("response.getOutputStream() called after response.getWriter()");
+        }
+        if (exposedStream == null) {
             exposedStream = new ServletOutputStream() {
+
+                @Override
                 public void write(int b) {
                     bufferedStream.write(b);
                 }
+
+                @Override
+                public void write(byte[] b, int off, int len) throws IOException {
+                    bufferedStream.write(b, off, len);
+                }
             };
         }
+        usingOutputStream = true;
         return exposedStream;
     }
 
     public boolean isUsingStream() {
-        return bufferedStream != null;
+        return usingOutputStream;
+    }
+
+    public void resetBuffer() {
+        bufferedWriter.reset();
+        bufferedStream.reset();
+    }
+
+    public void reset() {
+        usingOutputStream = false;
+        usingWriter = false;
+        resetBuffer();
     }
 }

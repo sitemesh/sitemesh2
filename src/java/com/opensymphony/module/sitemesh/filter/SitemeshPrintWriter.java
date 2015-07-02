@@ -20,6 +20,24 @@ public class SitemeshPrintWriter extends PrintWriter implements SitemeshWriter {
         this.sitemeshWriter = sitemeshWriter;
     }
 
+    @Override
+    public void write(int c) {
+        super.write(c);
+        super.flush();
+    }
+
+    @Override
+    public void write(char[] buf, int off, int len) {
+        super.write(buf, off, len);
+        super.flush();
+    }
+
+    @Override
+    public void write(String s, int off, int len) {
+        super.write(s, off, len);
+        super.flush();
+    }
+
     public boolean writeSitemeshBufferFragment(SitemeshBufferFragment bufferFragment) throws IOException {
         return sitemeshWriter.writeSitemeshBufferFragment(bufferFragment);
     }
