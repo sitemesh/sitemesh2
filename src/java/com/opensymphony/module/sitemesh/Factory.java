@@ -14,7 +14,6 @@ import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
 import com.opensymphony.module.sitemesh.util.Container;
 
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -89,9 +88,8 @@ public abstract class Factory implements PageParserSelector {
             if (Container.get() != Container.JRUN) {
                 // TODO: JRun really isn't happy with this
                 InitialContext ctx = new InitialContext();
-                Object o = ctx.lookup("java:comp/env/" + envEntry);
+                result = (String) ctx.lookup("java:comp/env/" + envEntry);
                 ctx.close();
-                result = (String)PortableRemoteObject.narrow(o, String.class); // rmi-iiop friendly.
             }
         }
         catch (Exception e) { } // failed - don't moan, just return default.
