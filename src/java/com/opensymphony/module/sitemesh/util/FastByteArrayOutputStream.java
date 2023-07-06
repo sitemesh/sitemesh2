@@ -9,7 +9,6 @@
 
 package com.opensymphony.module.sitemesh.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +24,7 @@ import java.util.LinkedList;
  * @author <a href="mailto:scott@atlassian.com">Scott Farquhar</a>
  * @version $Revision: 1.2 $
  */
-public class FastByteArrayOutputStream extends ByteArrayOutputStream {
+public class FastByteArrayOutputStream extends OutputStream {
     private static final int DEFAULT_BLOCK_SIZE = 8192;
 
     /** Internal buffer. */
@@ -125,8 +124,9 @@ public class FastByteArrayOutputStream extends ByteArrayOutputStream {
         }
     }
 
-    public synchronized void reset() {
-        buffer = new byte[blockSize];
+    public void reset() {
+        index = 0;
+        size = 0;
         buffers = null;
     }
 
@@ -136,13 +136,5 @@ public class FastByteArrayOutputStream extends ByteArrayOutputStream {
 
     public String toString() {
         return new String(toByteArray());
-    }
-
-    public void flush() throws IOException {
-        // does nothing
-    }
-
-    public void close() throws IOException {
-        // does nothing
     }
 }
