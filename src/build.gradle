@@ -1,0 +1,27 @@
+plugins {
+    id 'war'
+    id "org.gretty" version "3.1.1"
+}
+
+gretty {
+    contextPath = '/'
+}
+defaultTasks 'jettyRun'
+
+webAppDirName = 'example-webapp'
+buildDir = '../build'
+description = 'SiteMesh2: Example Web-app'
+
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'opensymphony:sitemesh:2.5.0-SNAPSHOT'
+    implementation 'org.freemarker:freemarker:2.3.32'
+    implementation 'velocity:velocity-dep:1.4'
+    implementation 'velocity-tools:velocity-tools:1.4'
+    implementation 'tapestry:tapestry:3.0.3'
+}
+

@@ -23,6 +23,15 @@ The latest version of SiteMesh can be obtained from:
 
     http://www.opensymphony.com/sitemesh/
 
+See the latest snapshot in action by running:
+../gradlew
+or for Windows run:
+../gradlew.bat
+from the src directory.
+
+To force refreshing a snapshot, run:
+../gradlew --refresh-dependencies
+
 --------------------------
 -- Requirements         --
 --------------------------
