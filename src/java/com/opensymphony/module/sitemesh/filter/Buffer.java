@@ -7,6 +7,7 @@ import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -65,6 +66,16 @@ public class Buffer {
             }
             bufferedStream = new FastByteArrayOutputStream();
             exposedStream = new ServletOutputStream() {
+                @Override
+                public boolean isReady() {
+                    return true;
+                }
+
+                @Override
+                public void setWriteListener(WriteListener writeListener) {
+                    // TODO Servlet API 3.1 method
+                }
+
                 public void write(int b) {
                     bufferedStream.write(b);
                 }
@@ -76,4 +87,6 @@ public class Buffer {
     public boolean isUsingStream() {
         return bufferedStream != null;
     }
+
+
 }

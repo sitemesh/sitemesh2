@@ -4,6 +4,7 @@
 package com.opensymphony.module.sitemesh.filter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import java.io.IOException;
 
 /**
@@ -120,5 +121,24 @@ public class RoutableServletOutputStream extends ServletOutputStream {
 
     public void flush() throws IOException {
         getDestination().flush();
+    }
+
+    @Override
+    public boolean isReady() {
+        try {
+            return getDestination().isReady();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+        try {
+            getDestination().setWriteListener(writeListener);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
