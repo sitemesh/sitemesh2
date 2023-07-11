@@ -6,3 +6,5 @@ out
 *.iws
 .idea
 dist
+.gradle
+gradle.properties
