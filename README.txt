@@ -21,7 +21,7 @@ things.
 
 The latest version of SiteMesh can be obtained from:
 
-    http://www.opensymphony.com/sitemesh/
+    https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/
 
 --------------------------
 -- Requirements         --
