@@ -44,8 +44,8 @@
             debug="${compile.debug}"
             nowarn="${compile.nowarn}"
             deprecation="${compile.deprecation}"
-            source="1.5"
-            target="1.5"
+            source="1.8"
+            target="1.8"
             >
             <src path="src/java"/>
             <src path="build/java"/>
