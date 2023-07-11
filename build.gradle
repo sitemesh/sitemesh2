@@ -1,0 +1,84 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0-rc-1'
+}
+
+group = 'opensymphony'
+version = '2.5.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+configurations {
+    lexer
+}
+
+sourceSets.main.java.srcDirs += ['src/java','build/generated-sources/jflex']
+
+jar {
+    metaInf {
+        from('src/etc/tld/jsp1.2') {
+            include '*.tld'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.3'
+    implementation 'org.freemarker:freemarker:2.3.32'
+    implementation 'velocity:velocity-dep:1.4'
+    implementation 'velocity-tools:velocity-tools:1.4'
+    implementation 'tapestry:tapestry:3.0.3'
+
+    lexer 'de.jflex:jflex:1.3.5'
+}
+
+task generateLexer {
+    ant.taskdef classname: 'JFlex.anttask.JFlexTask', name: 'jflex', classpath: configurations.lexer.asPath
+    ant.jflex(file: 'src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex', destdir: 'build/generated-sources/jflex')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            pom {
+                name = 'Sitemesh'
+                description = 'SiteMesh is a web-page layout and decoration framework and web- application integration framework to aid in creating large sites consisting of many pages for which a consistent look/feel, navigation and layout scheme is required.'
+                url = 'https://github.com/sitemesh/sitemesh2'
+                licenses {
+                    license {
+                        name =  'The Apache Software License, Version 1.1'
+                        url = 'https://raw.githubusercontent.com/sitemesh/sitemesh2/master/LICENSE.txt'
+                        distribution =  'repo'
+                    }
+                }
+                organization {
+                    name = 'Opensymphony'
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/sitemesh/sitemesh2.git'
+                    developerConnection = 'scm:git:git@github.com:sitemesh/sitemesh2.git'
+                    url = 'https://github.com/sitemesh/sitemesh2/'
+                }
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/sitemesh/sitemesh2/issues'
+                }
+            }
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
