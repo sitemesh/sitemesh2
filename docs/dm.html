@@ -1,0 +1,222 @@
+<html>
+	<head>
+		<title>SiteMesh DecoratorMappers</title>
+	</head>
+	<body>
+
+		<p>When a page has been parsed, it then has to be mapped to a decorator.
+		This mapping is performed by a chain of <a
+		href="api/com/opensymphony/module/sitemesh/DecoratorMapper.html">DecoratorMappers</a>
+		(referred to as mappers from here on).</p>
+
+		<p>For each request, the first mapper in the chain is asked which
+		decorator should be used. It is passed across a reference to the Page
+		object and HttpServletRequest. It returns either a Decorator object, if
+		it knows which decorator to be used, or null. If null is returned, the
+		next mapper in the chain is queried. This whole process is repeated
+		until there are no more mappers in the chain, or one of the mappers
+		returns a valid decorator. If no mappers return a decorator, the page is
+		not decorated at all and served in its original state.</p>
+
+		<p>This way the mappers are chained together and queried is known as the
+		Chain of Responsibility design pattern.</p>
+
+		<p>Examples of mappers:</p>
+
+		<ul>
+			<li>Determine decorator based on path of requested page.</li>
+			<li>Use different decorators based on time, locale or browser.</li>
+			<li>Use simplified decorators for search-engine robots.</li>
+			<li>Switch decorators based on a URL parameter, request attribute or meta-tag.</li>
+			<li>Use custom decorators based on user's saved settings...</li>
+		</ul>
+
+		<p>The main implementation of DecoratorMapper is <a href="api/com/opensymphony/module/sitemesh/mapper/ConfigDecoratorMapper.html">ConfigDecoratorMapper</a> which
+		reads the decorators and mappings from <code>/WEB-INF/decorators.xml</code>. The appropriate decorator is then applied
+		depending on the URL pattern.</p>
+
+		<p>DecoratorMappers are simple to write and the distribution includes some
+		samples that demonstrate how to write them and how flexible they can be.
+		These are:
+
+		<table border="0" cellspacing="10">
+		    <tr>
+		        <td valign="top"><strong>AgentDecoratorMapper</strong></td>
+
+		        <td>Can determine the user-agent (i.e. web-browser) requesting a page,
+		        and map to a suitable Decorator.</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>ConfigDecoratorMapper</strong></td>
+
+		        <td>Default implementation of DecoratorMapper. Reads decorators and
+		        mappings from the <code>config</code> property (default '/WEB-
+		        INF/decorators.xml').</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>CookieDecoratorMapper</strong></td>
+
+		        <td>Will map a suitable decorator based on a cookie value.</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>EnvEntryDecoratorMapper</strong></td>
+
+		        <td>Allows the reference to a web-app environment entry for the decorator name,
+		        and falls back to ConfigDecoratorMapper's behavior if no matching environment
+		        entry is found.</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>FileDecoratorMapper</strong></td>
+
+		        <td>Will treat the name of the decorator as a file-name to use (in the
+		        context of the web-app).</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>FrameSetDecoratorMapper</strong></td>
+
+		        <td>Will use the specified decorator when the Page is an instance of HTMLPage and
+		        isFrameSet() returns true. The
+		        name of this decorator should be supplied in the <code>decorator</code>
+		        property - if no decorator property is supplied, no decorator is applied
+		        to frame based pages.</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>InlineDecoratorMapper</strong></td>
+
+		        <td>Used to determine the correct Decorator when using inline decorators.</td>
+		    </tr>
+		    <tr>
+		        <td><strong>LanguageDecoratorMapper</strong></td>
+
+		        <td>Can determine the preferred language set in the browser requesting a page,
+		        and map to a suitable Decorator (using the "Accept-Language" HTTP header).</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>PageDecoratorMapper</strong></td>
+
+		        <td>The actual Page determines the Decorator to be used.
+		        <p>The 'meta.decorator' and 'decorator' properties
+		        of the page are accessed and if any of them contain the name of a valid
+		        Decorator, that Decorator shall be applied.</p></td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>ParameterDecoratorMapper</strong></td>
+		        <td>Will choose the decorator based on request parameters.
+		        <p>The ParameterDecoratorMapper is configured via three properties.</p>
+		        <p><code>decorator.parameter</code> - the parameter which contains the name
+		        of the decorator which will be mapped. The default is "decorator".</p>
+                <p>For example if <code>decorator.parameter</code> is "foobar" then
+                myurl.jsp?foobar=mydecorator will map to the decorator named "mydecorator".</p>
+                <p>You can also supply an optional 'confirmation parameter'.
+                The decorator will only be mapped if the parameter named <code>parameter.name</code> is
+                in the request URI and the value of that parameter is equal to the
+                <code>parameter.value</code> property.</p>
+                <p>For example assuming parameter.name=confirm and parameter.value=true
+                the URI myurl.jsp?decorator=mydecorator&confirm=true will map the decorator mydecorator.
+                where as the URIs myurl.jsp?decorator=mydecorator and myurl.jsp?decorator=mydecorator&confirm=false will
+                not return any decorator.</p>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>SessionDecoratorMapper</strong></td>
+		        <td><p>Will look at a session attribute to find the name of an appropriate decorator to use. If the 
+		        session attribute is present, the mapper will not do anything and allow the next mapper in the chain
+		        to select a decorator.</p>
+		        <p>By default, it will look at the 'decorator' session attribute, however this can be overriden by
+		        configuring the mapper with a 'decorator.parameter' property.</p></td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>PrintableDecoratorMapper</strong></td>
+
+		        <td>Will check to see whether 'printable=true' is supplied as a request parameter
+		        and if so, use the specified decorator instead. The name of this
+		        decorator should be supplied in the <code>decorator</code> property.</td>
+		    </tr>
+		    <tr>
+		        <td valign="top"><strong>RobotDecoratorMapper</strong></td>
+
+		        <td>Will use the specified decorator when the
+		        requester is identified as a robot (also known as spider, crawler,
+		        ferret) of a search engine. The name of this decorator should be
+		        supplied in the <code>decorator</code> property.</td>
+		    </tr>
+		</table>
+
+		<p>An example of a custom DecoratorMapper could be one that displays different
+		Decorators based on time (e.g. morning, afternoon, Christmas, etc).</p>
+
+		<h3>Custom mapper configuration</h3>
+
+		<p>To be able to specify which mappers will be applied to a request, create the
+		file <code>[web-app]/WEB-INF/sitemesh.xml</code> that contains the following:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;sitemesh&gt;
+    &lt;property name=&quot;decorators-file&quot; value=&quot;/WEB-INF/decorators.xml&quot; /&gt;
+    &lt;excludes file=&quot;${decorators-file}&quot; /&gt;
+
+    &lt;page-parsers&gt;
+        &lt;parser content-type=&quot;text/html&quot;
+            class=&quot;com.opensymphony.module.sitemesh.parser.HTMLPageParser&quot; /&gt;
+        &lt;parser content-type=&quot;text/html;charset=ISO-8859-1&quot;
+            class=&quot;com.opensymphony.module.sitemesh.parser.HTMLPageParser&quot; /&gt;
+    &lt;/page-parsers&gt;
+
+    &lt;decorator-mappers&gt;
+        &lt;mapper class=&quot;com.opensymphony.module.sitemesh.mapper.ConfigDecoratorMapper&quot;&gt;
+            &lt;param name=&quot;config&quot; value=&quot;${decorators-file}&quot; /&gt;
+        &lt;/mapper&gt;
+    &lt;/decorator-mappers&gt;
+&lt;/sitemesh&gt;
+</pre>
+
+		<p>In this example, the only mapper that will be applied is the <code>ConfigDecoratorMapper</code>,
+		and that will only be applied to responses of type <code>text/html</code> or
+		<code>text/html;charset=ISO-8859-1</code>. Responses of any other content type (eg
+		<code>image/gif</code>) will be ignored by Sitemesh. Additionally, any files that match a
+		pattern specified in the <code>excludes</code> file (in this case <code>'/WEB-INF/decorators.xml'</code>)
+		will not be touched by Sitemesh.</p>
+		<p>The excludes file points to an XML file that contains an <code>&lt;excludes /&gt;</code> block
+		similar to the following:</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;decorators&gt;
+    &lt;excludes&gt;
+        &lt;pattern&gt;/plainPage.jsp&lt;/pattern&gt;
+        &lt;pattern&gt;/plain/*.jsp&lt;/pattern&gt;
+    &lt;/excludes&gt;
+&lt;/decorators&gt;
+</pre>
+		<p>The above example would prevent <code>/plainPage.jsp</code> and any JSP pages in the
+		<code>/plain</code> directory from being decorated. (Note that the pattern matching follows
+		exactly the same rules as the decorator mappings used by the <code>ConfigDecoratorMapper</code>.)</p>
+		<p>Typically the <code>&lt;excludes /&gt;</code> block is just added at the start of the
+		<code>decorators.xml</code> file, however this is not a requirement and any other XML
+		file can be specified instead by changing the excludes file specified in <code>sitemesh.xml</code>.
+		This might be useful if for example the <code>ConfigDecoratorMapper</code> is not being used
+		in your deployment.</p>
+		<p>Note that preventing pages from being decorated by adding them to the excludes list
+		superceeds, and is a better approach than, the old method of mapping the pages to a
+		non-existent decorator. This is because when pages were mapped to a non-existent decorator
+		they were still buffered internally by Sitemesh. By using the exclude list Sitemesh will not
+		let the request pass straight through to the servlet container without any buffering.</p>
+
+
+		<h3>Default mapper configuration</h3>
+
+		<p>If <code>sitemesh.xml</code> is not found in the <code>WEB-INF</code> dir,
+		the default mapper configuration will be used. The default mapper configuration is
+		defined in sitemesh-default.xml (packaged inside the jar) and consists of the
+		following mappers:</p>
+
+		<ul>
+		    <li>PageDecoratorMapper</li>
+		    <li>FrameSetDecoratorMapper</li>
+		    <li>PrintableDecoratorMapper</li>
+		    <li>FileDecoratorMapper</li>
+		    <li>ConfigDecoratorMapper</li>
+		</ul>
+
+		By default only content of type <code>text/html</code> will be decorated by Sitemesh.
+	</body>
+</html>

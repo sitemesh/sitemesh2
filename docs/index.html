@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <title>SiteMesh Overview</title>
+        <meta name="keywords" content="sitemesh, opensymphony, decorator, decoration, framework, layout, consistent look and feel, integration, java, j2ee" />
+	    <meta name="description" content="Opensymphony SiteMesh - Web-page layout and decoration framework and web-application integration framework to aid in creating large sites consisting of many pages for which a consistent look/feel, navigation and layout scheme is required." />
+    </head>
+
+    <body>
+        <table align="right" cellpadding="6" cellspacing="0" border="0" style="border: 1 black solid;">
+            <tr>
+                <td width="180" bgcolor="#eeeeee">
+                    <a href="http://www.amazon.com/exec/obidos/ASIN/1861005512">
+                        <img align=left width=111 height=140 alt="JSP Site Design" border="0" src="http://images.amazon.com/images/P/1861005512.01.MZZZZZZZ.jpg"></a>
+                        <small>SiteMesh is featured in a chapter of <b><a href="http://www.amazon.com/exec/obidos/ASIN/1861005512">Professional JSP Site Design</a></b>.</small>
+                </td>
+            </tr>
+            <tr>
+                <td width="180" bgcolor="#eeeeee">
+                    <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0471463620/qid=1061085068/sr=8-1/ref=sr_8_1/103-7730642-5726207?v=glance&s=books&n=507846">
+                        <img align="left" width="111" height="140" alt="Java Open Source Programming : with XDoclet, JUnit, WebWork, Hibernate" border="0" src="http://images.amazon.com/images/P/0471463620.01._PE30_PI_SCMZZZZZZZ_.jpg"></a>
+                        <small>SiteMesh is featured in a chapter of <b><a href="http://www.amazon.com/exec/obidos/tg/detail/-/0471463620/qid=1061085068/sr=8-1/ref=sr_8_1/103-7730642-5726207?v=glance&s=books&n=507846">Java Open Source Programming</a></b>.</small>
+                </td>
+            </tr>
+        </table>
+
+        <p><i>You can also start by reading Will Iverson's <a
+				href="http://today.java.net/pub/a/today/2004/03/11/sitemesh.html">Introduction
+				to SiteMesh</a> over at java.net or skip all this and <a href="download.html">download SiteMesh right away</a>.</i></p>
+
+        <h4>What Is It?</h4>
+
+        <ul>
+
+        <li><p>SiteMesh is a web-page layout and decoration framework and web-
+        application integration framework to aid in creating large sites
+        consisting of many pages for which a consistent look/feel, navigation
+        and layout scheme is required.</p></li>
+
+        <li><p>SiteMesh intercepts requests to any static or dynamically
+        generated HTML page requested through the web-server, parses the page,
+        obtains properties and data from the content and generates an
+        appropriate final page with modifications to the original. This is based
+        upon the well-known <i><a
+        href="http://c2.com/cgi/wiki?GangOfFour">GangOfFour</a> Decorator</i>
+        design pattern.</p></li>
+
+        <li><p>SiteMesh can also include entire HTML pages as a <b>Panel</b>
+        within another page. This is similar to a Server-Side Include, except
+        that the HTML document will be modified to create a visual window (using
+        the document's <b>Meta-data</b> as an aid) within a page. Using this
+        feature, <i>Portal</i> type web sites can be built very quickly and
+        effectively. This is based upon the well-known <i><a
+        href="http://c2.com/cgi/wiki?GangOfFour">GangOfFour</a> Composite</i>
+        design pattern.</p></li>
+
+        <li><p>SiteMesh is built using Java 2 with Servlet, JSP and XML
+        technologies. This makes it ideal for use with J2EE applications, however it
+        can be integrated with server-side web architectures that are not Java based
+        such as CGI (Perl/Python/C/C++/etc), PHP, Cold Fusion, etc...</p></li>
+
+        <li><p>SiteMesh is very extensible and is designed in a way in which it is
+        easy to extend for custom needs. </p></li>
+        </ul>
+
+        <h3>The Problem</h3>
+
+        <p>There are many web application platforms that are in common use, and even
+        more frameworks. Typically, a web-application is built for a specific
+        framework on a specific platform (e.g. using custom JSP tag-libraries on the
+        J2EE platform, a custom Perl collaboration API using CGI, or a pre-written
+        application using PHP). A web-site may usually consist of many web-
+        applications built with a variety of technologies.</p>
+
+        <p>However, while individually each of these web-applications may look and
+        perform as expected, they are often hard to integrate with the page layout
+        of the existing site and can often end up isolated, attached to the site
+        merely by a hyperlink. </p>
+
+        <p>The most common reason for this is if a site is a mixture of custom
+        developed pages/applications and pre-written 'out-of-the-box' software. This
+        software may not be configurable enough to be given the desired look and
+        feel of the rest of the site, or may be developed using a different
+        technology to the rest of the site, restricting the developer from using
+        fragments of the application in other pages of the site.</p>
+
+        <p>For example, how many times have you been to a site that has a very
+        consistent feel all the way through, only to get to the 'search-results'
+        page and wonder if you were still on the same site? Or how many times have
+        you seen a framework or web-application that you would love to use on your
+        site but it will not integrate with what you already have?</p>
+
+        <h3>The Solution</h3>
+
+        <p>The solution is to work with the HTML that is generated by the various
+        web-apps instead of hacking at the underlying code (although SiteMesh is
+        primarily geared towards HTML based sites, it is built in an extensible
+        manner allowing it to be easily adapted to other mediums such as XML, WML,
+        PDF, etc). </p>
+
+        <p>Each application should produce a plain vanilla version of the HTML
+        content it wants to display. How this is achieved does not matter - it could
+        be a static HTML page, XML/XSL transformation, Servlet, CGI script, etc.
+        </p>
+
+        <p>The HTML content is intercepted on its way back to the web-browser where
+        it is parsed. The contents of the <code>&lt;head&gt;</code> tag and the
+        <code>&lt;body&gt;</code> tag are extracted as well as meta-data properties
+        of the page (such as title, <code>&lt;meta&gt;</code> tags and attributes of
+        the <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code> tags).</p>
+
+        <p>From the extracted meta-data, an appropriate <b>Decorator</b> is
+        determined. A decorator can be thought of as a skin for a page - it wraps a
+        plain looking page with a consistent look and feel. This decorator then
+        overlays the original page.</p>
+
+        <p>To use SiteMesh, it needs to be <a href="install.html">installed,
+        configured</a> and <a href="decorators.html">have some decorators
+        created</a>. This process can be completed in minutes, and no coding
+        experience is required. No changes need to be made to your existing web-
+        pages/applications!</p>
+
+        <h3>Visual Example</h3>
+
+        <p>2 pages are produced from different systems (one is a JSP and the other
+        is a pre-written CGI script). Both pages are parsed and have a decorator
+        overlaid to produce final page of a consistent look.</p>
+
+        <p align="center"><img src="images/overview.gif" border="0"></p>
+    </body>
+</html>

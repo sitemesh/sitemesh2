@@ -1,0 +1,268 @@
+<html>
+	<head>
+		<title>SiteMesh Tag Reference</title>
+	</head>
+	<body>
+		<p><b>SiteMesh</b> is bundled with 2 tag-libraries.</p>
+
+		<p>For installation instructions, see <a href="install.html">Installation and Configuration</a>, and for usage instructions and examples see <a href="decorators.html">Building Decorators</a>.</p>
+
+		<p>Note that the tags below are listed without the namespace prefixes as these are defined by the user when importing the tag library into the JSP page.</p>
+
+		<table align="center" width="80%" style="background: #eeeeee; border: 1 black solid;">
+			<tr>
+				<td valign="top">
+					<b>Decorator Tags</b>
+				</td>
+				<td valign="top">
+					<b>Page Tags</b>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top">
+					Used to create decorator pages.
+				</td>
+				<td valign="top">
+					Used to access decorators from content pages.
+				</td>
+			</tr>
+			<tr>
+				<td valign="top">
+					<a href="#decorator:head"><code>&lt;decorator:head /&gt;</code></a><br>
+					<a href="#decorator:body"><code>&lt;decorator:body /&gt;</code></a><br>
+					<a href="#decorator:title"><code>&lt;decorator:title /&gt;</code></a><br>
+					<a href="#decorator:getProperty"><code>&lt;decorator:getProperty /&gt;</code></a><br>
+					<a href="#decorator:usePage"><code>&lt;decorator:usePage /&gt;</code></a><br>
+				</td>
+				<td valign="top">
+					<a href="#page:applyDecorator"><code>&lt;page:applyDecorator /&gt;</code></a><br>
+					<a href="#page:param"><code>&lt;page:param /&gt;</code></a><br>
+				</td>
+			</tr>
+		</table>
+
+		<h2>Decorator Tags</h2>
+
+		<p>
+			These tags are used to create page Decorators.
+			A Decorator is typically built up from an HTML layout (or
+			whatever is appropriate for the original page content-type)
+			with these tags inserted to provide place-holders for the
+			data from the original (undecorated) page.
+		</p>
+
+		<p>
+			For more details, see <a href="decorators.html">Building Decorators</a>.
+		<h4><a name="decorator:head">&lt;decorator:head /&gt;</a></h4>
+
+		<div class="tagDef">
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Insert contents of original page's HTML <code>&lt;head&gt;</code>
+				tag. The enclosing tag will not be be written, but its
+				contents will.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li><i>None</i></li>
+			</ul>
+
+		</div>
+
+		<h4><a name="decorator:body">&lt;decorator:body /&gt;</a></h4>
+
+		<div class="tagDef">
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Insert contents of original page's HTML <code>&lt;body&gt;</code>
+				tag. The enclosing tag will not be be written, but its
+				contents will.<br>
+                                <br>
+                                Note: the content of the body onload and onunload events (and other body attributes) can be included in the decorator
+                                by getting the property <code>body.onload</code> and <code>body.onunload</code> (the named attributes).<br>
+                                For example (the decorator): <code>&lt;body onload="&lt;decorator:getProperty property="body.onload" /&gt;"&gt;</code><br>
+                                <br>
+                                For more information: see <a href="#decorator:getProperty">getProperty</a>.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li><i>None</i></li>
+			</ul>
+
+		</div>
+
+		<h4><a name="decorator:title">&lt;decorator:title [ default=&quot;...&quot; ] /&gt;</a></h4>
+
+		<div class="tagDef">
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Insert title of original page (obtained from
+				<code>&lt;title&gt;</code> tag).
+				will be used instead.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li>
+			  	<p>
+			  		<b>default</b> <i>(optional)</i><br>
+			  		Value to be inserted if title not found.
+			  	</p>
+			  </li>
+			</ul>
+
+		</div>
+
+		<h4><a name="decorator:getProperty">&lt;decorator:getProperty property=&quot;...&quot; [ default=&quot;...&quot; ] [ writeEntireProperty=&quot;...&quot; ]/&gt;</a></h4>
+
+		<div class="tagDef">
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Insert property of original page. See API reference for
+				<a href="api/com/opensymphony/module/sitemesh/HTMLPage.html">HTMLPage</a> for details
+				of how properties are obtained from a page.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li>
+			  	<p>
+			  		<b>property</b> <i>(required)</i><br>
+			  		Name (key) of property to insert.
+			  	</p>
+			  </li>
+			  <li>
+			  	<p>
+			  		<b>default</b> <i>(optional)</i><br>
+			  		Value to be inserted if property not found.
+			  	</p>
+			  </li>
+			  <li>
+			  	<p>
+			  		<b>writeEntireProperty</b> <i>(optional)</i><br>
+			  		This writes the property with a <strong>space in front</strong> including the name ( propertyName="propertyValue")<br>
+                                        Accepted values are <code>true</code>, <code>yes</code> and <code>1</code>.<br>
+                                        For example:<br>
+                                        The decorator: <code>&lt;body bgcolor="White"&lt;decorator:getProperty property="body.onload" writeEntireProperty="true" /&gt;&gt;</code><br>
+                                        The undecorated page: <code>&lt;body onload="document.someform.somefield.focus();"&gt;</code><br>
+                                        The decorated page: <code>&lt;body bgcolor="White" onload="document.someform.somefield.focus();"&gt;</code>
+			  	</p>
+			  </li>
+			</ul>
+		</div>
+
+		<h4><a name="decorator:usePage">&lt;decorator:usePage id=&quot;...&quot; /&gt;</a><br></h4>
+
+		<div class="tagDef">
+
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Expose the <a href="api/com/opensymphony/module/sitemesh/Page.html">Page</a> object as
+				a variable to the decorator JSP.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li>
+			  	<p>
+			  		<b>id</b> <i>(required)</i><br>
+			  			Name of variable to assign to.
+			  	</p>
+			  </li>
+			</ul>
+
+			<p><b>Example:</b></p>
+			<blockquote>
+				<code>
+					&lt;decorator:usePage id=&quot;myPage&quot; /&gt;<br>
+					&lt;% if ( myPage.getIntProperty(&quot;rating&quot;) == 10 ) { %&gt;<br>
+					&nbsp;&nbsp;&lt;b&gt;10 out of 10!&lt;/b&gt;<br>
+					&lt;% } %&gt;<br>
+				</code>
+			</blockquote>
+
+		</div>
+
+		<h2>Page Tags</h2>
+
+		<p>The page tags, are used to apply decorators to inline or external content from within the current page.</p>
+
+		<h4><a name="page:applyDecorator">&lt;page:applyDecorator name=&quot;...&quot; [ page=&quot;...&quot; title=&quot;...&quot; ] &gt;<br>
+		&nbsp;&nbsp;&nbsp;.....<br>&lt;/page:applyDecorator&gt;</a></h4>
+
+		<div class="tagDef">
+
+			<p><b>Description:</b></p>
+			<blockquote>
+				Apply a Decorator to specified content. The content can either be inline by specifying a body to the tag,
+				<i>or</i> by using the result of another page by specifying the <code>page</code> attribute.<br>
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li>
+			  	<p>
+			  		<b>name</b> <i>(required)</i><br>
+						Name of the Decorator to apply to the included page.
+					</p>
+			  </li>
+			  <li>
+			  	<p>
+			  		<b>page</b> <i>(optional)</i><br>
+						Points to the external resource
+						which should expose an entire page (<i>e.g.</i> another JSP file producing
+						a valid page). This attribute can be relative to the page it is being called
+						from, or an absolute path from the context-root.
+			  	</p>
+			  </li>
+			  <li>
+			  	<p>
+			  		<b>title</b> <i>(optional)</i><br>
+						Override the title of the page available as <nobr><code>Page.getTitle()</code></nobr>
+						or <code>&lt;decorator:title/&gt;</code> from within the Decorator. This is identical to
+						specifying <code>&lt;page:param name=&quot;title&quot;&gt;...&lt;page:param&gt;</code>.
+			  	</p>
+			  </li>
+			</ul>
+
+			<p><b>Body:</b></p>
+			<blockquote>
+				The content to have the Decorator applied to.
+			</blockquote>
+
+		</div>
+
+		<h4><a name="page:param">&lt;page:param name=&quot;...&quot;&gt; ... &lt;/page:param&gt;</a></h4>
+
+		<div class="tagDef">
+			<p><b>Description:</b></p>
+			<blockquote>
+				Pass a parameter to a Decorator. This will override the value called from <nobr><code>Page.getProperty()</code></nobr>
+				or <code>&lt;decorator:getProperty/&gt;</code>. This tag is only valid inside a <code>&lt;page:applyDecorator&gt;</code>
+				tag.
+			</blockquote>
+
+			<p><b>Attributes:</b></p>
+			<ul>
+			  <li>
+			  	<p>
+			  		<b>name</b> <i>(required)</i><br>
+			  		The name of the parameter to override.
+					</p>
+			  </li>
+			</ul>
+
+			<p><b>Body:</b></p>
+			<blockquote>
+				The value of the parameter.
+			</blockquote>
+		</div>
+	</body>
+</html>

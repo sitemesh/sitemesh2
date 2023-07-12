@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DTD Version: 1.5
+
+This is the DTD for the SiteMesh 1.5 decorator.xml file.
+
+It's style and order are based on the web.xml DTD file
+listed in the Servlet 2.3 specification. This means that
+the declaration of decorators and mappings follows the same
+format as servlets / servlet mappings or filters / filter
+mappings.
+
+Valid decorator.xml files must contain the following DOCTYPE
+declaration
+
+<!DOCTYPE decorators PUBLIC "-//OpenSymphony//SiteMesh 1.5 Decorators//EN" "http://www.opensymphony.com/sitemesh/dtd/sitemesh_1_5_decorators.dtd">
+-->
+
+<!--
+The decorators element is the root element of the file.
+It contains decorator and decorator mapping elements.
+-->
+<!ELEMENT decorators (excludes?, decorator+)>
+<!ATTLIST decorators
+	defaultdir CDATA #IMPLIED
+>
+
+<!--
+A list of patterns to exclude
+-->
+<!ELEMENT excludes (pattern*)>
+
+<!--
+The decorator element contains the declarative data of a
+decorator.
+-->
+<!ELEMENT decorator (pattern*)>
+<!ATTLIST decorator
+	name CDATA #REQUIRED
+	page CDATA  #IMPLIED
+	webapp CDATA  #IMPLIED
+>
+
+<!--
+The url-pattern element contains the url pattern of the
+mapping.
+-->
+<!ELEMENT pattern (#PCDATA)>

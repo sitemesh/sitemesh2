@@ -1,0 +1,251 @@
+<project>
+    <name>SiteMesh</name>
+    <jiraId>10000</jiraId>
+    <jiraName>SIM</jiraName>
+    <confluenceName>SIM</confluenceName>
+
+    <forums>
+        <usersId>3</usersId>
+        <devId>7</devId>
+        <cvsId>8</cvsId>
+    </forums>
+
+    <evaluating>
+        <item>
+            <name>Requirements</name>
+            <url>requirements.html</url>
+        </item>
+        <item>
+            <name>Feature List</name>
+            <url>features.html</url>
+        </item>
+        <item>
+            <name>Installation and Configuration</name>
+            <url>install.html</url>
+        </item>
+    </evaluating>
+
+    <docs>
+        <url>index.html</url>
+        <doesNotUseWiki>true</doesNotUseWiki>
+        <items>
+            <item>
+                <name>Flow Diagram</name>
+                <url>flow.html</url>
+            </item>
+            <item>
+                <name>Character Sets</name>
+                <url>charsets.html</url>
+            </item>
+            <item>
+                <name>Building Decorators</name>
+                <url>decorators.html</url>
+            </item>
+            <item>
+                <name>Velocity Decorators</name>
+                <url>velocity-decorators.html</url>
+            </item>
+            <item>
+                <name>Freemarker Decorators</name>
+                <url>freemarker-decorators.html</url>
+            </item>
+            <item>
+                <name>Decorator Mappers</name>
+                <url>dm.html</url>
+            </item>
+            <item>
+                <name>Test Suite</name>
+                <url>testsuite.html</url>
+            </item>
+            <item>
+                <name>FAQ</name>
+                <url>faq.html</url>
+            </item>
+            <item>
+                <name>Tag Reference</name>
+                <url>tags.html</url>
+            </item>
+        </items>
+    </docs>
+
+    <owners>
+        <person>
+            <name>Joe Walnes</name>
+            <email>joe at truemesh dot com</email>
+            <role>Creator and maintainer</role>
+        </person>
+    </owners>
+
+    <developers>
+        <person>
+            <name>Mathias Bogaert</name>
+            <email>m.bogaert at memenco dot com</email>
+        </person>
+        <person>
+            <name>Scott Farquhar</name>
+            <email>scott at atlassian dot com</email>
+        </person>
+        <person>
+            <name>Mike Cannon-Brookes</name>
+            <email>mike at atlassian dot com</email>
+        </person>
+        <person>
+            <name>Victor Salaman</name>
+            <email>salaman at teknos dot com</email>
+        </person>
+        <person>
+            <name>Joseph Ottinger</name>
+            <email>joeo at adjacency dot org</email>
+        </person>
+        <person>
+            <name>Hani Suleiman</name>
+            <email>fate at users dot sourceforge dot net</email>
+        </person>
+        <person>
+            <name>Chris Miller</name>
+            <email>chris_overseas at hotmail dot com</email>
+        </person>
+    </developers>
+
+    <releases>
+        <release>
+            <version>2.4.2</version>
+            <date>4/16/2009</date>
+            <jiraId>21822</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132512/sitemesh-2.4.2.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132511/sitemesh-2.4.2.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132513/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/132514/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
+            <version>2.4.1</version>
+            <date>3/15/2009</date>
+            <jiraId>21821</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/129891/sitemesh-2.4.1.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/129892/sitemesh-2.4.1.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/129893/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/129894/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
+            <version>2.4</version>
+            <date>1/22/2009</date>
+            <jiraId>21683</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/124378/sitemesh-2.4.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/124379/sitemesh-2.4.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/124380/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/124381/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
+            <version>2.3</version>
+            <date>10/22/2006</date>
+            <jiraId>21480</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/43017/sitemesh-2.3.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/43018/sitemesh-2.3.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/43019/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/43020/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
+            <version>2.2.1</version>
+            <date>10/08/2004</date>
+            <jiraId>21380</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7635/sitemesh-2.2.1.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7636/sitemesh-2.2.1.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7637/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7638/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+        <release>
+            <version>2.2</version>
+            <date>7/22/2004</date>
+            <jiraId>21280</jiraId>
+            <downloads>
+                <download>
+                    <name>JAR</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7112/sitemesh-2.2.jar</url>
+                </download>
+                <download>
+                    <name>Full</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7115/sitemesh-2.2.zip</url>
+                </download>
+                <download>
+                    <name>Blank app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7113/sitemesh-blank.war</url>
+                </download>
+                <download>
+                    <name>Example app</name>
+                    <url>https://sitemesh.dev.java.net/files/documents/887/7114/sitemesh-example.war</url>
+                </download>
+            </downloads>
+        </release>
+    </releases>
+
+</project>
