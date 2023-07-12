@@ -26,6 +26,9 @@ https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.
 Docs:
 https://sitemesh.github.io/sitemesh2/
 
+JavaDocs:
+https://sitemesh.github.io/sitemesh2/api/
+
 See the latest snapshot in action by running:
 ../gradlew
 or for Windows run:
