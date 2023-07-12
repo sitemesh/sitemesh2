@@ -21,7 +21,10 @@ things.
 
 The latest version of SiteMesh can be obtained from:
 
-    https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/
+https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/
+
+Docs:
+https://sitemesh.github.io/sitemesh2/
 
 See the latest snapshot in action by running:
 ../gradlew
