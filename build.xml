@@ -75,11 +75,11 @@
     </target>
 
     <target name="javadocs" description="Generates JavaDoc">
-        <mkdir dir="dist/docs/api"/>
+        <mkdir dir="docs/api"/>
 
+        <!-- stylesheetfile="src/docs/api.css" -->
         <javadoc sourcepath="src/java"
-            destdir="dist/docs/api"
-            stylesheetfile="docs/api.css"
+            destdir="docs/api"
             packagenames="com.opensymphony.*"
             classpathref="cp"
             author="true"
@@ -99,18 +99,18 @@
     </target>
 
     <target name="docs" depends="javadocs">
-        <copy todir="dist/docs">
-            <fileset dir="docs" excludes="*.css"/>
+        <copy todir="docs">
+            <fileset dir="src/docs" excludes="*.css"/>
         </copy>
 
-        <mkdir dir="dist/docs/dtd"/>
-        <copy todir="dist/docs" file="README.txt"/>
-        <copy todir="dist/docs" file="CHANGES.txt"/>
-        <copy todir="dist/docs/dtd">
+        <mkdir dir="docs/dtd"/>
+        <copy todir="docs" file="README.txt"/>
+        <copy todir="docs" file="CHANGES.txt"/>
+        <copy todir="docs/dtd">
             <fileset dir="src/etc/dtd"/>
         </copy>
 
-        <replace dir="dist/docs" token="@VERSION@" value="${version}"/>
+        <replace dir="docs" token="@VERSION@" value="${version}"/>
     </target>
 
     <target name="jar" depends="compile">
@@ -180,7 +180,7 @@
                 <include name="${name}-example.war"/>
                 <include name="${name}-blank.war"/>
             </zipfileset>
-            <zipfileset dir="dist/docs" prefix="docs"/>
+            <zipfileset dir="docs" prefix="docs"/>
         </zip>
     </target>
 
