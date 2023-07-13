@@ -41,7 +41,7 @@ dependencies {
     lexer 'de.jflex:jflex:1.3.5'
 }
 
-task generateLexer {
+compileJava.doFirst {
     ant.taskdef classname: 'JFlex.anttask.JFlexTask', name: 'jflex', classpath: configurations.lexer.asPath
     ant.jflex(file: 'src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex', destdir: 'build/generated-sources/jflex')
 }
