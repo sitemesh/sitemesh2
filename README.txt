@@ -21,7 +21,11 @@ things.
 
 The latest version of SiteMesh can be obtained from:
 
+2.5.0 SNAPSHOT - Java 1.8 / Servlet 4.0.1 API Compatible
 https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/
+
+2.4.3 SNAPSHOT - Java 1.6 / Servlet 4.0.1 API Compatible
+https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.4.3-SNAPSHOT/
 
 Docs:
 https://sitemesh.github.io/sitemesh2/
