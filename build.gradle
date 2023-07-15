@@ -24,6 +24,9 @@ jar {
             include '*.tld'
         }
     }
+    from('src/java') {
+        include '**/*.xml'
+    }
 }
 
 repositories {
