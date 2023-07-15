@@ -65,16 +65,17 @@ public class DefaultFactory extends BaseFactory {
 
         // configFilePath is null if loaded from war file
         String initParamConfigFile = config.getConfigFile();
-        if(initParamConfigFile != null) {
+        if (initParamConfigFile != null) {
           configFileName = initParamConfigFile;
         }
-        
-        String configFilePath = config.getServletContext().getRealPath(configFileName);
 
-        if (configFilePath != null) { // disable config auto reloading for .war files
-            configFile = new File(configFilePath);
+        if (!configFileName.startsWith("classpath:")) {
+            String configFilePath = config.getServletContext().getRealPath(configFileName);
+
+            if (configFilePath != null) { // disable config auto reloading for .war files
+                configFile = new File(configFilePath);
+            }
         }
-
         loadConfig();
     }
 
@@ -140,18 +141,21 @@ public class DefaultFactory extends BaseFactory {
         InputStream is = null;
 
         if (configFile == null) {
-            is = config.getServletContext().getResourceAsStream(configFileName);
-        }
-        else if (configFile.exists() && configFile.canRead()) {
+            if (!configFileName.startsWith("classpath:")) {
+                is = config.getServletContext().getResourceAsStream(configFileName);
+            }
+        } else if (configFile.exists() && configFile.canRead()) {
             is = configFile.toURI().toURL().openStream();
         }
 
+        String classPathResource = configFileName.startsWith("classpath:")? configFileName.replaceFirst("classpath:","") :
+                "com/opensymphony/module/sitemesh/factory/sitemesh-default.xml";
         if (is == null){ // load the default sitemesh configuration
-            is = getClass().getClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
+            is = getClass().getClassLoader().getResourceAsStream(classPathResource);
         }
 
         if (is == null){ // load the default sitemesh configuration using another classloader
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(classPathResource);
         }
 
         if (is == null){
