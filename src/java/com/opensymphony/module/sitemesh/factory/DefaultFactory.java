@@ -126,16 +126,13 @@ public class DefaultFactory extends BaseFactory {
                         if (!"".equals(name) && !"".equals(value)) {
                             configProps.put("${" + name + "}", value);
                         }
-                    }
-                    else if ("page-parsers".equalsIgnoreCase(curr.getTagName())) {
+                    } else if ("page-parsers".equalsIgnoreCase(curr.getTagName())) {
                         // handle <page-parsers>
                         loadPageParsers(children);
-                    }
-                    else if ("decorator-mappers".equalsIgnoreCase(curr.getTagName())) {
+                    } else if ("decorator-mappers".equalsIgnoreCase(curr.getTagName())) {
                         // handle <decorator-mappers>
                         loadDecoratorMappers(children);
-                    }
-                    else if ("excludes".equalsIgnoreCase(curr.getTagName())) {
+                    } else if ("excludes".equalsIgnoreCase(curr.getTagName())) {
                         // handle <excludes>
                         String fileName = replaceProperties(curr.getAttribute("file"));
                         if (!"".equals(fileName)) {
@@ -145,21 +142,17 @@ public class DefaultFactory extends BaseFactory {
                     }
                 }
             }
-        }
-        catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             throw new FactoryException("Could not get XML parser", e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new FactoryException("Could not read config file : " + configFileName, e);
-        }
-        catch (SAXException e) {
+        } catch (SAXException e) {
             throw new FactoryException("Could not parse config file : " + configFileName, e);
         }
     }
 
     private Element loadSitemeshXML()
-            throws ParserConfigurationException, IOException, SAXException
-    {
+            throws ParserConfigurationException, IOException, SAXException {
         InputStream is = loadStream(configFile, configFileName);
         if (is == null) {
             is = loadClasspathStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
@@ -179,8 +172,7 @@ public class DefaultFactory extends BaseFactory {
     }
 
     private void loadExcludes()
-            throws ParserConfigurationException, IOException, SAXException
-    {
+            throws ParserConfigurationException, IOException, SAXException {
         excludesFile = loadFile(excludesFileName);
         InputStream is = loadStream(excludesFile, excludesFileName);
         if (is == null) {
@@ -274,11 +266,14 @@ public class DefaultFactory extends BaseFactory {
     /** Check if configuration file has been modified, and if so reload it. */
     public void refresh() {
         long time = System.currentTimeMillis();
-        if (time - configLastCheck < configCheckMillis)
+        if (time - configLastCheck < configCheckMillis) {
             return;
+        }
         configLastCheck = time;
 
-        if (configFile != null && configLastModified != configFile.lastModified()) loadConfig();
+        if (configFile != null && configLastModified != configFile.lastModified()) {
+            loadConfig();
+        }
     }
 
     /**
@@ -291,8 +286,7 @@ public class DefaultFactory extends BaseFactory {
      */
     private String replaceProperties(String str) {
         Set props = configProps.entrySet();
-        for (Iterator it = props.iterator(); it.hasNext();)
-        {
+        for (Iterator it = props.iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
             int idx;
