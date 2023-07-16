@@ -163,9 +163,9 @@ public class DefaultFactory extends BaseFactory {
         InputStream is = loadStream(configFile, configFileName);
         if (is == null) {
             is = loadClasspathStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
-        }
-        if (is == null){
-            throw new IllegalStateException("Cannot load default configuration from jar");
+            if (is == null) {
+                throw new IllegalStateException("Cannot load default configuration from jar");
+            }
         }
 
         if (configFile != null) configLastModified = configFile.lastModified();
