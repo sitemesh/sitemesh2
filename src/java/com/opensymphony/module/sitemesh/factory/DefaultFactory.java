@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
@@ -43,9 +42,9 @@ import java.util.*;
  * @version $Revision: 1.8 $
  */
 public class DefaultFactory extends BaseFactory {
-    String configFileName;
-    private static final String DEFAULT_CONFIG_FILENAME = "/WEB-INF/sitemesh.xml";
 
+    private static final String DEFAULT_CONFIG_FILENAME = "/WEB-INF/sitemesh.xml";
+    String configFileName;
     File configFile;
     long configLastModified;
     private long configLastCheck = 0L;
@@ -66,17 +65,43 @@ public class DefaultFactory extends BaseFactory {
         // configFilePath is null if loaded from war file
         String initParamConfigFile = config.getConfigFile();
         if (initParamConfigFile != null) {
-          configFileName = initParamConfigFile;
+            configFileName = initParamConfigFile;
         }
 
-        if (!configFileName.startsWith("classpath:")) {
-            String configFilePath = config.getServletContext().getRealPath(configFileName);
-
-            if (configFilePath != null) { // disable config auto reloading for .war files
-                configFile = new File(configFilePath);
-            }
-        }
+        configFile = loadFile(configFileName);
         loadConfig();
+    }
+
+    private File loadFile(String fileName) {
+        if (fileName.startsWith("classpath:")) {
+            return null;
+        }
+        String filePath = config.getServletContext().getRealPath(fileName);
+        return filePath != null? new File(filePath) : null;
+    }
+
+    private InputStream loadStream(File file, String fileName) throws IOException {
+        if (file != null && file.exists() && file.canRead()) {
+            return file.toURI().toURL().openStream();
+        }
+        if (fileName.startsWith("classpath:")) {
+            return loadClasspathStream(fileName.substring("classpath:".length()));
+        }
+        return config.getServletContext().getResourceAsStream(fileName);
+    }
+
+    private InputStream loadClasspathStream(String classPathResource) {
+        // load the configuration
+        InputStream is = getClass().getClassLoader().getResourceAsStream(classPathResource);
+        if (is == null){ // load the configuration using another classloader
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(classPathResource);
+        }
+        return is;
+    }
+
+    private Element loadRootElement(InputStream is) throws ParserConfigurationException, IOException, SAXException {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+        return document.getDocumentElement();
     }
 
     /** Load configuration from file. */
@@ -135,37 +160,17 @@ public class DefaultFactory extends BaseFactory {
     private Element loadSitemeshXML()
             throws ParserConfigurationException, IOException, SAXException
     {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        InputStream is = null;
-
-        if (configFile == null) {
-            if (!configFileName.startsWith("classpath:")) {
-                is = config.getServletContext().getResourceAsStream(configFileName);
-            }
-        } else if (configFile.exists() && configFile.canRead()) {
-            is = configFile.toURI().toURL().openStream();
+        InputStream is = loadStream(configFile, configFileName);
+        if (is == null) {
+            is = loadClasspathStream("com/opensymphony/module/sitemesh/factory/sitemesh-default.xml");
         }
-
-        String classPathResource = configFileName.startsWith("classpath:")? configFileName.replaceFirst("classpath:","") :
-                "com/opensymphony/module/sitemesh/factory/sitemesh-default.xml";
-        if (is == null){ // load the default sitemesh configuration
-            is = getClass().getClassLoader().getResourceAsStream(classPathResource);
-        }
-
-        if (is == null){ // load the default sitemesh configuration using another classloader
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(classPathResource);
-        }
-
         if (is == null){
             throw new IllegalStateException("Cannot load default configuration from jar");
         }
 
         if (configFile != null) configLastModified = configFile.lastModified();
 
-        Document doc = builder.parse(is);
-        Element root = doc.getDocumentElement();
+        Element root = loadRootElement(is);
         // Verify root element
         if (!"sitemesh".equalsIgnoreCase(root.getTagName())) {
             throw new FactoryException("Root element of sitemesh configuration file not <sitemesh>", null);
@@ -176,24 +181,13 @@ public class DefaultFactory extends BaseFactory {
     private void loadExcludes()
             throws ParserConfigurationException, IOException, SAXException
     {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        InputStream is = null;
-
-        if (excludesFile == null) {
-            is = config.getServletContext().getResourceAsStream(excludesFileName);
-        }
-        else if (excludesFile.exists() && excludesFile.canRead()) {
-            is = excludesFile.toURI().toURL().openStream();
-        }
-
-        if (is == null){
+        excludesFile = loadFile(excludesFileName);
+        InputStream is = loadStream(excludesFile, excludesFileName);
+        if (is == null) {
             throw new IllegalStateException("Cannot load excludes configuration file \"" + excludesFileName + "\" as specified in \"sitemesh.xml\" or \"sitemesh-default.xml\"");
         }
 
-        Document document = builder.parse(is);
-        Element root = document.getDocumentElement();
+        Element root = loadRootElement(is);
         NodeList sections = root.getChildNodes();
 
         // Loop through child elements of root node looking for the <excludes> block
