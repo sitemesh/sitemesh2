@@ -1,5 +1,6 @@
-<?xml version="1.0"?>
-<project name="sitemesh" default="jar">
+<project xmlns:resolver="antlib:org.apache.maven.resolver.ant" name="sitemesh" default="jar">
+    <taskdef uri="antlib:org.apache.maven.resolver.ant" resource="org/apache/maven/resolver/ant/antlib.xml"
+             classpath="lib/maven-resolver-ant-tasks-1.4.0-uber.jar" />
 
     <property name="build.compiler" value="modern" />
     <property file="build.properties"/>
@@ -11,10 +12,30 @@
         </fileset>
     </path>
 
+    <resolver:resolve>
+        <dependencies>
+            <dependency groupId="javax.servlet" artifactId="javax.servlet-api" version="4.0.1" type="jar" scope="compile" />
+            <dependency groupId="javax.servlet.jsp" artifactId="javax.servlet.jsp-api" version="2.3.3" type="jar" scope="compile" />
+            <dependency groupId="org.freemarker" artifactId="freemarker" version="2.3.32" type="jar" scope="compile" />
+            <dependency groupId="velocity" artifactId="velocity-dep" version="1.4" type="jar" scope="compile" />
+            <dependency groupId="velocity-tools" artifactId="velocity-tools" version="1.4" type="jar" scope="compile" />
+            <dependency groupId="tapestry" artifactId="tapestry" version="3.0.3" type="jar" scope="compile" />
+            <dependency groupId="junit" artifactId="junit" version="4.5" type="jar" scope="compile" />
+        </dependencies>
+        <path refid="cp" classpath="compile"/>
+    </resolver:resolve>
+
+    <resolver:resolve>
+        <dependencies>
+            <dependency groupId="de.jflex" artifactId="jflex" version="1.3.5" type="jar" scope="compile" />
+        </dependencies>
+        <path refid="jflexcp" classpath="compile"/>
+    </resolver:resolve>
+
     <target name="jflex" unless="lexer.uptodate" description="Generate Lexer class">
         <echo message="Generating HTML lexer using JFlex"/>
         <mkdir dir="build/java"/>
-        <java classpath="lib/jflex.jar" classname="JFlex.Main" fork="yes">
+        <java classpathref="jflexcp" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
             <arg value="build/java/com/opensymphony/module/sitemesh/html/tokenizer"/>
             <arg value="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"/>
