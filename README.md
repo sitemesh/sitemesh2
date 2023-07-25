@@ -1,6 +1,6 @@
-*************************************
-** OpenSymphony SiteMesh 2.5       **
-*************************************
+***
+# OpenSymphony SiteMesh 2.5
+***
 
 SiteMesh is a web-page layout system that can be used to abstract common look
 and feel from the functionality of a web-application and to assemble large
@@ -15,16 +15,16 @@ with existing frameworks.
 Forget the hype - just try it! You'll be impressed with how it can simplify
 things.
 
---------------------------
--- Obtaining            --
---------------------------
+
+## Obtaining
+***
 
 The latest version of SiteMesh can be obtained from:
 
-2.5.0 SNAPSHOT - Java 1.8 / Servlet 4.0.1 API Compatible
+2.5.0 SNAPSHOT - Java 1.8 / Servlet API 3.1 to 4.0.1 Compatible
 https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/
 
-2.4.3 SNAPSHOT - Java 1.6 / Servlet 4.0.1 API Compatible
+2.4.3 SNAPSHOT - Java 1.7 / Servlet API 3.1 to 4.0.1 Compatible
 https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.4.3-SNAPSHOT/
 
 Docs:
@@ -34,19 +34,25 @@ JavaDocs:
 https://sitemesh.github.io/sitemesh2/api/
 
 See the latest snapshot in action by running:
+```
 ../gradlew
+```
 or for Windows run:
+```
 ../gradlew.bat
-from the src directory.
+```
+from the `src` directory.
 
 To force refreshing a snapshot, run:
+```
 ../gradlew --refresh-dependencies
+```
 
---------------------------
--- Requirements         --
---------------------------
 
-SiteMesh requires a Java Servlet container conforming to the Servlet 2.3
+## Requirements
+***
+
+SiteMesh requires a Java Servlet container conforming to the Servlet 3.1
 specification. Versions prior to 2.3 are not enough.
 
 Currently known containers that support this and SiteMesh was tested with:
@@ -59,125 +65,128 @@ Currently known containers that support this and SiteMesh was tested with:
 * WebSphere 5.0                              - http://www.ibm.com
 * Jetty 4.2.20                               - http://jetty.mortbay.org
 
---------------------------
--- Installation         --
---------------------------
+## Installation
+***
 
-* Copy sitemesh-@VERSION@.jar to the WEB-INF/lib/ directory of your web-app.
+* Copy `sitemesh-@VERSION@.jar` to the `WEB-INF/lib/` directory of your web-app.
 
-* OPTIONAL: Copy sitemesh.xml to the WEB-INF/ directory if you need to specify a custom
+* OPTIONAL: Copy `sitemesh.xml` to the `WEB-INF/` directory if you need to specify a custom
   decorator mapper configuration then the default configuration.
 
-* Add the following to WEB-INF/web.xml:
+* Add the following to `WEB-INF/web.xml`:
+```xml
+<filter>
+    <filter-name>sitemesh</filter-name>
+    <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+</filter>
 
-    <filter>
-        <filter-name>sitemesh</filter-name>
-        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>sitemesh</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+<filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```    
 
  * ORION USERS ONLY. For performance reasons, Orion does not auto-load tab library descriptors
-   from Jars by default. To get passed this you will also have to copy sitemesh-decorator.tld
-   and sitemesh-page.tld to WEB-INF/lib and add the following to WEB-INF/web.xml:
+   from Jars by default. To get passed this you will also have to copy `sitemesh-decorator.tld`
+   and sitemesh-page.tld to `WEB-INF/lib` and add the following to `WEB-INF/web.xml`:
+ ```xml
+<taglib>
+    <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
+    <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
+</taglib>
 
-    <taglib>
-        <taglib-uri>http://www.opensymphony.com/sitemesh/decorator</taglib-uri>
-        <taglib-location>/WEB-INF/lib/sitemesh-decorator.tld</taglib-location>
-    </taglib>
+<taglib>
+    <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
+    <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
+</taglib>
+ ```
 
-    <taglib>
-        <taglib-uri>http://www.opensymphony.com/sitemesh/page</taglib-uri>
-        <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
-    </taglib>
-
-
---------------------------
--- Getting started      --
---------------------------
+## Getting started
+***
 
 Ok, let's assume you have some basic JSPs already on the site.
 These should contain vanilla HTML.
 
-If you don't, here's a JSP to get you started (test.jsp).
+If you don't, here's a JSP to get you started (`test.jsp`).
 
-    <html>
-        <head>
-            <title>Hello world</title>
-        </head>
-        <body>
-            <p>Today is <%= new java.util.Date() %>.</p>
-        </body>
-    </html>
+```html
+<html>
+    <head>
+        <title>Hello world</title>
+    </head>
+    <body>
+        <p>Today is <%= new java.util.Date() %>.</p>
+    </body>
+</html>
+```    
 
 Once you have some content (preferably more imaginative than the example above),
-a decorator should be created (decorator.jsp).
+a decorator should be created (`decorator.jsp`).
 
-    <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
-    <html>
-        <head>
-            <title>My Site - <decorator:title default="Welcome!" /></title>
-            <decorator:head />
-        </head>
-        <body>
-            <decorator:body />
-        </body>
-    </html>
+```html
+<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
+<html>
+    <head>
+        <title>My Site - <decorator:title default="Welcome!" /></title>
+        <decorator:head />
+    </head>
+    <body>
+        <decorator:body />
+    </body>
+</html>
+```     
 
 Now you need tell SiteMesh about that decorator and when to use it. Create the
-file WEB-INF/decorators.xml:
+file `WEB-INF/decorators.xml`:
 
-    <decorators>
+```xml
+<decorators>
+    <decorator name="mydecorator" page="/decorator.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>
+```    
 
-        <decorator name="mydecorator" page="/decorator.jsp">
-            <pattern>/*</pattern>
-        </decorator>
-
-    </decorators>
-
-Access your original JSP (test.jsp) though your web-browser and it should look
+Access your original JSP (`test.jsp`) though your web-browser and it should look
 pretty normal. Now if you add some styling to your decorator it shall
 automatically be applied to all the other pages in your web-app.
 
-You can define as many decorators as you want in decorators.xml. Example:
+You can define as many decorators as you want in `decorators.xml`. Example:
 
-    <decorators defaultdir="/decorators">
+```xml
+<decorators defaultdir="/decorators">
 
-        <decorator name="default" page="default.jsp">
-            <pattern>/*</pattern>
-        </decorator>
+    <decorator name="default" page="default.jsp">
+        <pattern>/*</pattern>
+    </decorator>
 
-        <decorator name="anotherdecorator" page="decorator2.jsp">
-            <pattern>/subdir/*</pattern>
-        </decorator>
+    <decorator name="anotherdecorator" page="decorator2.jsp">
+        <pattern>/subdir/*</pattern>
+    </decorator>
 
-        <decorator name="htmldecorator" page="html.jsp">
-            <pattern>*.html</pattern>
-            <pattern>*.htm</pattern>
-        </decorator>
+    <decorator name="htmldecorator" page="html.jsp">
+        <pattern>*.html</pattern>
+        <pattern>*.htm</pattern>
+    </decorator>
 
-        <decorator name="none">
-            <!-- These files will not get decorated. -->
-            <pattern>/anotherdir/*</pattern>
-        </decorator>
+    <decorator name="none">
+        <!-- These files will not get decorated. -->
+        <pattern>/anotherdir/*</pattern>
+    </decorator>
 
-    </decorators>
+</decorators>
+```    
 
---------------------------
--- Further support      --
---------------------------
+## Further support
+***
 
 You get the idea. Play around. See the SiteMesh website for
 full documentation.
 
-    http://www.opensymphony.com/sitemesh/
+https://github.com/sitemesh/sitemesh2/issues
 
---------------------------
--- Credits              --
---------------------------
+## Credits
+***
 
 Thank these guys:
 * Mathias Bogaert         <NOSPAMm.bogaert@memenco.com>
