@@ -19,9 +19,13 @@ configurations {
 sourceSets.main.java.srcDirs += ['src/java','build/generated-sources/jflex']
 sourceSets.test.java.srcDir file('src/test')
 
+javadoc {
+    failOnError = false
+}
+
 java {
     withSourcesJar()
-//    withJavadocJar()
+    withJavadocJar()
 }
 
 jar {
@@ -73,8 +77,19 @@ publishing {
                         distribution =  'repo'
                     }
                 }
+                developers {
+                    developer {
+                        id = 'joewalnes'
+                        name = 'Joe Walnes'
+                        email = 'joe dot walnes at gmail'
+                    }
+                    developer {
+                        id = 'codeconsole'
+                        name = 'Scott Murphy'
+                    }
+                }
                 organization {
-                    name = 'Opensymphony'
+                    name = 'OpenSymphony'
                 }
                 scm {
                     connection = 'scm:git:git://github.com/sitemesh/sitemesh2.git'
@@ -90,8 +105,15 @@ publishing {
     }
 }
 
+signing {
+    sign publishing.publications.mavenJava
+}
+
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
     }
 }
