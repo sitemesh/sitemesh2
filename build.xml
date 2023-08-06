@@ -21,6 +21,7 @@
             <dependency groupId="velocity-tools" artifactId="velocity-tools" version="1.4" type="jar" scope="compile" />
             <dependency groupId="tapestry" artifactId="tapestry" version="3.0.3" type="jar" scope="compile" />
             <dependency groupId="junit" artifactId="junit" version="4.5" type="jar" scope="compile" />
+            <dependency groupId="org.mockito" artifactId="mockito-all" version="1.9.5" type="jar" scope="compile" />
         </dependencies>
         <path refid="cp" classpath="compile"/>
     </resolver:resolve>
