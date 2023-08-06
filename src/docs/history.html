@@ -1,0 +1,86 @@
+<html>
+	<head>
+		<title>SiteMesh History and Crew</title>
+	</head>
+
+	<body>
+	    <h3>History</h3>
+
+        <p>SiteMesh was originally written about 6 years ago, after Joe Walnes
+        downloaded the first sun servlet engine and wrote it using servlet
+        chains (before filters).</p>
+
+        <p>He had been using it internally for about 2 years and by the time it
+        was open sourced it was quite mature. Over the years, the basic design
+        remained the same; content was intercepted, parsed, a decorator mapper
+        was used to find a decorator and they were merged together.</p>
+
+<p>The original version used a bunch of regular expressions to extract the necessary
+chunks of text from the document. This was easy to get running, but very error prone 
+as the matches had no context about where they were in a document. For example, a 
+&lt;title&gt; element in a &lt;head&gt; block is very important to SiteMesh, however sometimes
+they appear elsewhere, such as in a comment, &lt;script> or &lt;xml&gt; block.
+</p>
+<p>This was dumped, in favour of a DOM based parser, which initially used JTidy
+to convert HTML to XHTML so it could be traversed as a standard DOM tree. Much nicer, 
+but very, very sloow. Too slow, so sitemesh was switched to use OpenXML, an XML parser 
+that was tolerant to nasty HTML, giving a slight boost to performance. </p>
+<p>
+By this time, SiteMesh had been open-sourced, and along came Victor Salaman, 
+who was the third user to discover it (after Mike Cannon-Brookes and Joseph Ottinger). 
+He saw the potential but hated the parser. About three hours later, he'd produced
+his own version that used low-level string manipulation. It wasn't pretty, but it
+was very, very fast - twelve times faster than the OpenXML one, with the bonus
+feature of not rewriting great chunks of the document. This brought SiteMesh into
+the mainstream as it was now ready for use on high-traffic sites. 1.0 was released.</p>
+
+<p>There were 2 main leaps that helped make it successful - the rewrite
+        from servlet-chain to servlet-filter when the first draft of the Servlet
+        2.3 API came out and Victor Salaman rewriting the parser to make it
+        about 12 times faster. In December 2003, Chris Miller and Hani Suleiman
+        improved the parser to make it again 6 times faster and further 
+        minimize memory usage.</p>
+
+		<h3>The SiteMesh Crew</h3>
+
+		<ul>
+		    <li>Joe Walnes &lt;joe at truemesh dot com&gt;</li>
+		    <li>Mathias Bogaert &lt;pathos at pandora dot be&gt;</li>
+		    <li>Scott Farquhar &lt;scott at atlassian dot com&gt;</li>
+		    <li>Mike Cannon-Brookes &lt;mike at atlassian dot com&gt;</li>
+		    <li>Victor Salaman &lt;salaman at teknos dot com&gt;</li>
+		    <li>Joseph Ottinger &lt;joeo at adjacency dot org&gt;</li>
+		    <li>Hani Suleiman &lt;fate at users dot sourceforge dot net&gt;</li>
+		    <li>Chris Miller &lt;chris_overseas at hotmail dot com&gt;</li>
+		</ul>
+
+		For any inquiries involving SiteMesh, please send an email to
+		<a href="mailto:users@sitemesh.dev.java.net">users@sitemesh.dev.java.net</a>.
+
+		<h3>Who's using SiteMesh? What sites are using Sitemesh?</h3>
+
+		<p>The following companies use (develop J2EE applications using) SiteMesh:</p>
+		<ul>
+		    <li><a href="http://www.atlassian.com" target="_blank">Atlassian</a></li>
+		    <li><a href="http://www.transwide.com" target="_blank">Transwide</a></li>
+		    <li><a href="http://www.jboss.org" target="_blank">JBOSS.org</a></li>
+		    <li><a href="http://www.intrasoft-intl.com" target="_blank">Intrasoft International</a></li>
+		    <li><a href="http://www.fercomsys.be" target="_blank">Ferranti Computer Systems</a></li>
+		</ul>
+
+		<p>The following sites use SiteMesh:</p>
+        <ul>
+            <li>http://opensymphony.com/, surprisingly</li>
+            <li><a href="http://www.theserverside.com" target="_blank">theserverside.com</a></li>
+            <li><a href="http://orionsupport.com/" target="_blank">orionsupport.com</a></li>
+            <li><a href="http://enigmastation.com/" target="_blank">enigmastation.com</a></li>
+            <li><a href="http://portalwizard.com/" target="_blank">portalwizard.com</a></li>
+            <li><a href="http://thebeancontainer.com/" target="_blank">thebeancontainer.com</a></li>
+            <li><a href="http://www.terimerijodi.com" target="_blank">www.terimerijodi.com</a></li>
+            <li><a href="http://www.unitracc.de" target="_blank">www.unitracc.de</a></li>
+            <li><a href="http://www.talyllyn.co.uk" target="_blank">www.talyllyn.co.uk</a></li>
+        </ul>
+
+		<p>Are you using Sitemesh? Please <a href="mailto:users@sitemesh.dev.java.net">let us know</a>, so that we can include you in this list!</p>
+	</body>
+</html>

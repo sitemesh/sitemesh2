@@ -1,0 +1,10 @@
+<%
+String userAgent = request.getHeader("User-Agent");
+
+if (userAgent != null && userAgent.indexOf("MSIE") == -1) {
+	out.print("<link href=\"" + request.getContextPath() + "/styles/ns4.css\" rel=\"stylesheet\" type=\"text/css\">");
+}
+else {
+	out.print("<link href=\"" + request.getContextPath() + "/styles/ie4.css\" rel=\"stylesheet\" type=\"text/css\">");
+}
+%>

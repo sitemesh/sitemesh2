@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <title>SiteMesh FAQ</title>
+    </head>
+    <body>
+        <h4>How fast is SiteMesh?</h4>
+
+        <p>Fast enough! SiteMesh typically has a 10-20 ms processing time,
+        centering well around 10ms. You're more likely to have process timing
+        issues in the pages being decorated.</p>
+
+        <h4>Can I change rendering order on the fly like a portal with Sitemesh?</h4>
+
+        <p>Yes. The decorator isn't hardcoded; it can choose what panels to
+        include, and in what order, <a href="dm.html">at runtime</a>.</p>
+
+        <h4>What languages can panels be made from?</h4>
+
+        <p>Any active content your appllication server can create: CGI, PHP,
+        JSPs, servlets, velocity pages, freemarker tages, Tea, etc.</p>
+
+        <h4>What is the advantage of using SiteMesh over Struts Tiles?</h4>
+        <p>Tiles seems to just replicate the <a
+        href="tags.html">&lt;page:applyDecorator&gt; tag</a> (albeit without
+        the advanced page parsing of SiteMesh). However this is a very small
+        part of what SiteMesh.</p>
+
+        <p>The strongest attribute of SiteMesh is that the decorators are applied
+        with a filter - therefore you can decorate pages without the pages
+        themselves knowing they are being decorated (so you can apply a single
+        SiteMesh decorator to a site that uses PHP, JSP and ASP if you want).</p>
+
+        <p>Also using DecoratorMappers you can map which decorator/s are used in a
+        number of different ways (ie have one decorator for printable pages, another
+        for robots and another for Netscape users - all without changing the
+        underlying page).</p>
+
+        <p>That said, you can also alter which decorator is applied from the
+        underlying page (note, the decorated page doesn't need to know it's being
+        decorated - however if it does know it can pass parameters and choose
+        decorators in SiteMesh - powerful).</p>
+
+        <p>Also SiteMesh has a full property system (ie decoratedPage.getTitle() or
+        decoratedPage.getProperty(meta.description)) which allows you to build very
+        advanced and flexible decorators.</p>
+
+        <p>More info available <a href="http://wiki.opensymphony.com/space/Compare+Sitemesh+%26+Tiles">here</a>.</p>
+
+        <h4>Where can I find more information on Java Servlet 2.3 Filters?</h4>
+        <ul>
+            <li><a href="http://www.javaworld.com/javaworld/jw-06-2001/jw-0622-filters.html" target="_blank">A JavaWorld article on filters by Jason Hunter</a></li>
+            <li>IBM's developerWorks has an <a href="http://www-106.ibm.com/developerworks/java/library/j-tomcat/?open&l=101,t=grj,p=TomcatTricks" target="_blank">article on Tomcat Filters</a></li>
+            <li>A step by step tutorial <a href="http://www.orionserver.com/tutorials/filters/" target="_blank">here</a> by the OrionServer guys.</li>
+        </ul>
+
+        <h4>I need this functionality, but I want an offline version!</h4>
+        <p>See <a href="http://www.pols.co.uk/downloads/static-mesh/">StaticMesh</a>.</p>
+
+        <h4>What ports of are available?</h4>
+        <ul>
+            <li>Microsoft .NET (stable) and ISAPI C++ (unstable): <a href="http://sf.net/projects/sitemesh/">http://sf.net/projects/sitemesh/</a>, see the <a href="http://wiki.truemesh.com/sitemesh.net/">wiki</a> for more information.</li>
+            <li><a href="http://xaoza.net/software/phpmesh/">PHP-Mesh</a></li>
+        </ul>
+
+        <h4>Does SiteMesh support HTML frames?</h4>
+        <p>If the <a href="api/com/opensymphony/module/sitemesh/mapper/FrameSetDecoratorMapper.html">FrameSetDecoratorMapper</a> sits in the decorator chain (sitemesh.xml) the frame definition page and the frame pages are <b>not</b> decorated.</p>
+
+        <h4>How do you get a reference to the (parent) request from inside an inline decorator?</h4>
+        <p>
+            You can use Page.getRequest() to access the HttpServletRequest of the original page.<br/>
+            For example:
+            <blockquote>
+                <code>&lt;decorator:usePage id="p" /&gt;<br/>
+                Path Info = &lt;%= p.getRequest().getPathInfo() %&gt;</code>
+            </blockquote>
+        </p>
+
+        <h4>Is there a way for a decorator to pull a property (&lt;page:param&gt; value) via Java code, not just via the taglib?</h4>
+        <p>
+            You can access the Page.getProperty() method. A Page can be accessed either via a JSP tag, or through an attribute in the request.
+
+            <blockquote>
+                Example 1 (using JSP tag):
+                <p>
+                <code>&lt;%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;<br/>
+                &lt;decorator:usePage id="thePage" /&gt;<br/>
+                &lt;% String author = thePage.getProperty("meta.author"); %&gt;</code>
+                </p>
+                Example 2 (pure Java):<br/>
+                <p>
+                <code>import com.opensymphony.module.sitemesh.Page;<br/>
+                import com.opensymphony.module.sitemesh.RequestConstants;<br/>
+                ...<br/>
+                Page thePage = request.getAttribute(RequestConstants.PAGE);<br/>
+                String author = thePage.getProperty("meta.author");</code>
+                </p>
+                Example 3 (<a href="velocity-decorators.html">Velocity</a>):<br/>
+                <p>
+                $page.getProperty("meta.author")
+                </p>
+            </blockquote>
+        </p>
+
+        <h4>Howcome I cannot decorate my error pages on Orion?</h4>
+        <p>
+            Orion applies <a href="http://jira.opensymphony.com/ViewIssue.jspa?id=10180">filters incorrectly to error pages</a>.
+            For more information, consult the mail archives.
+        </p>
+
+        <h4>How do I enable SiteMesh to decorate error pages on Tomcat 5?</h4>
+        <p>Replace the <code>&lt;filter-mapping&gt;</code> element in <code>web.xml</code> with this:
+            <blockquote><pre><xmp><filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+</filter-mapping></xmp></pre></blockquote>
+        </p>
+
+    </body>
+</html>

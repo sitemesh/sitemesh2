@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>SiteMesh TestSuite</title>
+	</head>
+	
+	<body>
+		<p>The idea behind the SiteMesh testsuite is that a full unit test can be
+		performed on SiteMesh for all servers in one step. Whenever any changes are
+		made, the full test-suite should be re-run. When new features are added, the
+		test-suite should be modified and then SiteMesh modified until the tests pass
+		again.</p>
+		
+		<p>It consists of:</p>
+		
+		<ul>
+		    <li>A <b>web application</b> that demonstrates all aspects of SiteMesh.</li>
+		
+		    <li>A <b>set of unit tests</b> built on top of JUnit and HttpUnit that check the correct
+		        output is being generated from the web-app.</li>
+		
+		    <li>A configurable <b>deployment system</b> that shall automate deployment of the web-app
+		        to lots of different app-servers/servlet-engines.</li>
+		
+		    <li>A configurable <b>test-runner</b> that shall run the unit tests against the web-apps
+		        deployed on the various servers.</li>
+		</ul>
+		
+		<h3>What are the standalone tests?</h3>
+		
+		The standalone tests consist at this moment mostly out of tests that try to
+		break the HTMLPageParser by throwing a whole lot of very badly written HTML
+		pages at it. Take a look at the testsuite/parser-tests directory for the
+		testcases. Make sure you read the readme.txt file in that directory before you
+		start writing your own tests. Here is a small overview of what we currenly test
+		for:
+		
+		<ul>
+		    <li>not using html or body tags, see test5.txt, test6.txt and test15.txt</li>
+		    <li>upper/lower case tag combinations, see test8.txt</li>
+		    <li>not enclosing the attribute with double quotes (")</li>
+		    <li>specifying a title more than once (the first one is used), see test11.txt</li>
+		    <li>empty tags (&lt;&gt; and &lt;&nbsp;&gt;), see test10.txt</li>
+		    <li>javascripts (containing &gt; and &lt;), see test16.txt and test25.txt</li>
+		    <li>xmp tags, see test17.txt</li>
+		</ul>
+		
+		<p>If you would like to ignore certain tests (because they would break
+		(fail) the nightly build), put the file name in the ignore.txt file.</p>
+		
+		<p>Each time a modification is made to SiteMesh or the test-suite run 'ant
+		test-standalone' (it will recompile and use the modified SiteMesh sources).</p>
+		
+		<h3>How do I test on multiple containers?</h3>
+		
+		<p>First, install all the app-servers/servlet-engines you wish to test with. The
+		servers don't need to be on the same machine - so long as you can access the
+		directory the web-apps are to be deployed to, they can be on other machines on
+		the network.</p>
+		
+		<p>Build the web-app with 'ant webapp-build'. Deploy the resulting .war file in
+		the dist directory to each server. Fire up all the servers (and leave them
+		running). Make sure they are not all trying to listen on the same port :)</p>
+		
+		<p>Edit <b>tests.xml</b>. For each server, an entry should be made saying where the
+		web-app is deployed to on the filesystem (the app can be a .war, .ear or
+		unpacked directory) and what the URL to access it is.</p>
+		
+		<p>Each time a modification is made to SiteMesh or the test-suite a two step
+		process must be performed:</p>
+		
+		<ol>
+		    <li>Run 'ant deploy' to rebuild the web-app and redeploy it to each server.</li>
+		    <li>Run 'ant test' to run the testsuite against the new server.</li>
+		</ol>
+		
+		<p>It is important that the deployment process has completed on all servers
+		before running the second step - this takes longer on some servers.</p>
+	</body>
+</html>

@@ -32,9 +32,9 @@ public abstract class BaseWebAppDecorator implements Decorator {
         try {
             render(content, webAppContext.getRequest(), webAppContext.getResponse(), webAppContext.getServletContext(), webAppContext);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Unexpected exception during rendering", e);
         } catch (ServletException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Unexpected exception during rendering", e);
         }
     }
 }

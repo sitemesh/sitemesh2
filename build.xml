@@ -1,5 +1,6 @@
-<?xml version="1.0"?>
-<project name="sitemesh" default="jar">
+<project xmlns:resolver="antlib:org.apache.maven.resolver.ant" name="sitemesh" default="jar">
+    <taskdef uri="antlib:org.apache.maven.resolver.ant" resource="org/apache/maven/resolver/ant/antlib.xml"
+             classpath="lib/maven-resolver-ant-tasks-1.4.0-uber.jar" />
 
     <property name="build.compiler" value="modern" />
     <property file="build.properties"/>
@@ -11,10 +12,30 @@
         </fileset>
     </path>
 
+    <resolver:resolve>
+        <dependencies>
+            <dependency groupId="javax.servlet" artifactId="javax.servlet-api" version="4.0.1" type="jar" scope="compile" />
+            <dependency groupId="javax.servlet.jsp" artifactId="javax.servlet.jsp-api" version="2.3.3" type="jar" scope="compile" />
+            <dependency groupId="org.freemarker" artifactId="freemarker" version="2.3.32" type="jar" scope="compile" />
+            <dependency groupId="velocity" artifactId="velocity-dep" version="1.4" type="jar" scope="compile" />
+            <dependency groupId="velocity-tools" artifactId="velocity-tools" version="1.4" type="jar" scope="compile" />
+            <dependency groupId="tapestry" artifactId="tapestry" version="3.0.3" type="jar" scope="compile" />
+            <dependency groupId="junit" artifactId="junit" version="4.5" type="jar" scope="compile" />
+        </dependencies>
+        <path refid="cp" classpath="compile"/>
+    </resolver:resolve>
+
+    <resolver:resolve>
+        <dependencies>
+            <dependency groupId="de.jflex" artifactId="jflex" version="1.3.5" type="jar" scope="compile" />
+        </dependencies>
+        <path refid="jflexcp" classpath="compile"/>
+    </resolver:resolve>
+
     <target name="jflex" unless="lexer.uptodate" description="Generate Lexer class">
         <echo message="Generating HTML lexer using JFlex"/>
         <mkdir dir="build/java"/>
-        <java classpath="lib/jflex.jar" classname="JFlex.Main" fork="yes">
+        <java classpathref="jflexcp" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
             <arg value="build/java/com/opensymphony/module/sitemesh/html/tokenizer"/>
             <arg value="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"/>
@@ -44,8 +65,8 @@
             debug="${compile.debug}"
             nowarn="${compile.nowarn}"
             deprecation="${compile.deprecation}"
-            source="1.5"
-            target="1.5"
+            source="1.8"
+            target="1.8"
             >
             <src path="src/java"/>
             <src path="build/java"/>
@@ -75,11 +96,11 @@
     </target>
 
     <target name="javadocs" description="Generates JavaDoc">
-        <mkdir dir="dist/docs/api"/>
+        <mkdir dir="docs/api"/>
 
+        <!-- stylesheetfile="src/docs/api.css" -->
         <javadoc sourcepath="src/java"
-            destdir="dist/docs/api"
-            stylesheetfile="docs/api.css"
+            destdir="docs/api"
             packagenames="com.opensymphony.*"
             classpathref="cp"
             author="true"
@@ -99,18 +120,18 @@
     </target>
 
     <target name="docs" depends="javadocs">
-        <copy todir="dist/docs">
-            <fileset dir="docs" excludes="*.css"/>
+        <copy todir="docs">
+            <fileset dir="src/docs" excludes="*.css"/>
         </copy>
 
-        <mkdir dir="dist/docs/dtd"/>
-        <copy todir="dist/docs" file="README.txt"/>
-        <copy todir="dist/docs" file="CHANGES.txt"/>
-        <copy todir="dist/docs/dtd">
+        <mkdir dir="docs/dtd"/>
+        <copy todir="docs" file="README.txt"/>
+        <copy todir="docs" file="CHANGES.txt"/>
+        <copy todir="docs/dtd">
             <fileset dir="src/etc/dtd"/>
         </copy>
 
-        <replace dir="dist/docs" token="@VERSION@" value="${version}"/>
+        <replace dir="docs" token="@VERSION@" value="${version}"/>
     </target>
 
     <target name="jar" depends="compile,sources">
@@ -199,7 +220,7 @@
                 <include name="${name}-example.war"/>
                 <include name="${name}-blank.war"/>
             </zipfileset>
-            <zipfileset dir="dist/docs" prefix="docs"/>
+            <zipfileset dir="docs" prefix="docs"/>
         </zip>
     </target>
 

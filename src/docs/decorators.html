@@ -1,0 +1,149 @@
+<html>
+	<head>
+		<title>Building SiteMesh Decorators</title>
+	</head>
+	<body>
+
+	<p>Once SiteMesh has been <a href="install.html">installed and
+	configured</a>, you can begin writing decorators for your web
+	application.</p>
+
+	<h3>Introduction</h3>
+
+	Decorators are the pages that "decorate" the original, requested page (the
+	page that is <a href="flow.html">handed to the SiteMesh filter from the web
+	container</a>). Most (HTML) decorators are a combination of:
+
+	<ul>
+		<li>meta tags (keywords, description, author)</li>
+		<li>stylesheet (CSS)</li>
+		<li>header</li>
+		<li>navigation</li>
+		<li>footer</li>
+		<li>copyright notice</li>
+	</ul>
+
+	First, define what different navigation/layout schemes you need. For
+	example: Do I need a default decorator (a standard one for all pages)? Do I
+	have a special layout for the index page? Is the header needed for my
+	documentation files? Do I need printable version of my website?
+
+	<h3>Web Application Structure</h3>
+
+	<p>Here is an example structure of a web application. This is not needed for SiteMesh to work.</p>
+
+	<table align="center" width="80%" cellpadding="4" style="background: #eeeeee; border: 1 black solid;">
+		<tr>
+			<td width="15%"><b><code>/decorators</code></b></td>
+			<td><p>Directory containing all decorator files (e.g. <code>main.jsp</code>, <code>printable.jsp</code>).</p></td>
+		</tr>
+		<tr>
+			<td width="15%"><b><code>/includes</code></b></td>
+			<td><p>Directory containing all files to be included into other files (e.g. <code>header.jsp</code>, <code>footer.jsp</code>, <code>copyright.jsp</code>).</p></td>
+		</tr>
+		<tr>
+			<td width="15%"><b><code>/images</code></b></td>
+			<td><p>Directory containing all images (e.g. <code>background.gif</code>, <code>logo.gif</code>).</p></td>
+		</tr>
+		<tr>
+			<td width="15%"><b><code>/styles</code></b></td>
+			<td><p>Directory containing all .CSS styles (e.g. <code>ie4.css</code>, <code>ns4.css</code>).</p></td>
+		</tr>
+		<tr>
+			<td width="15%"><b><code>/scripts</code></b></td>
+			<td><p>Directory containing all scripts (JavaScript, VBScript files).</p></td>
+		</tr>
+	</table>
+
+	<p>Good practices:</p>
+
+	<ul>
+		<li>Define a stylesheet to use in the entire application and include it using <a href="style.jsp.txt">this script</a>.</li>
+		<li>Use includes in your decorators (e.g. <code>includes/navigation.jsp</code>, <code>includes/style.jsp</code>).</li>
+		<li>Try not to refer to the absolute root ("<code>/</code>") path. Use <code>&lt;%=request.getContextPath()%&gt;/</code> instead.
+		This will make life easier when moving your web application under another context path.</li>
+		<li>Making your decorators compatible with multiple browsers (IE, Mozilla, Opera, ...) will (probably) make your entire application (all decorated pages) compatible.</li>
+		<li>Be careful when using frames, because decorators may NOT be applied to frames (<a href="api/com/opensymphony/module/sitemesh/mapper/FrameSetDecoratorMapper.html">FrameSetDecoratorMapper</a>).</li>
+	</ul>
+
+	<h3>My First Decorator</h3>
+
+	Basically, all you need to know is what <a href="tags.html">decorator tags</a> you can use.
+	The <a href="tags.html#decorator:title">title</a>, <a href="tags.html#decorator:head">head</a> and <a href="tags.html#decorator:body">body</a> tags are most used.<br>
+
+	Here is an example of a decorator (save it as /decorators/main.jsp):
+<p>
+<code>
+1:	&lt;%--<br>
+2:	 % This is the main decorator for all SOMECOMPANY INTRANET pages.<br>
+3:	 % It includes standard caching, style sheet, header, footer and copyright notice.<br>
+4:	--%&gt;<br>
+5:	<b>&lt;%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;</b><br>
+6:	&lt;%@ include file="<a href="cache.jsp.txt">/includes/cache.jsp</a>" %&gt;<br>
+7:	&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"&gt;<br>
+8:	&lt;html&gt;<br>
+9:	&lt;head&gt;<br>
+10:	&lt;title&gt;<b><font color="Maroon">&lt;decorator:title default="INTRANET" /&gt;</font></b>&lt;/title&gt;<br>
+11:	<b><font color="Maroon">&lt;decorator:head /&gt;</font></b><br>
+12:	<b>&lt;%@ include file="<a href="style.jsp.txt">/includes/style.jsp</a>" %&gt;</b><br>
+13:	&lt;/head&gt;<br>
+14:	&lt;body bgcolor="#FFFFFF" background="&lt;%=request.getContextPath()%&gt;/images/bg.gif"&gt;<br>
+15:	&lt;script type="text/javascript"&gt;window.status = "Loading: <b><font color="Maroon">&lt;decorator:title default="INTRANET" /&gt;</font></b>...";&lt;/script&gt;<br>
+16:	&lt;%@ include file="/includes/header.jsp"%&gt;<br>
+17:	&lt;table width="100%" border="0" cellspacing="0" cellpadding="0"&gt;<br>
+18:	 &lt;tr&gt;<br>
+19:	   &lt;td height="20" nowrap&gt; &lt;/td&gt;<br>
+20:	 &lt;/tr&gt;<br>
+21:	 &lt;tr&gt;<br>
+22:	   &lt;td width="1%" nowrap&gt; &lt;/td&gt;<br>
+23:	   &lt;td width="16%" valign="top" nowrap&gt;<br>
+23:	     &lt;script type="text/javascript"&gt;window.status = "Loading: Navigation...";&lt;/script&gt;<br>
+24:	     &lt;%@ include file="/includes/navigation.jsp" %&gt;<br>
+25:	   &lt;/td&gt;<br>
+26:	   &lt;td width="2%" nowrap&gt; &lt;/td&gt;<br>
+27:	   &lt;td valign="top"&gt;<br>
+28:	     &lt;br&gt;<br>
+29:	     &lt;script type="text/javascript"&gt;window.status = "Loading: Document body...";&lt;/script&gt;<br>
+30:	     &lt;div class="docBody"&gt;<b><font color="Maroon">&lt;decorator:body /&gt;</font></b>&lt;/div&gt;<br>
+31:	   &lt;/td&gt;<br>
+32:	   &lt;td width="1%" nowrap&gt; &lt;/td&gt;<br>
+33:	  &lt;/tr&gt;<br>
+34:	&lt;/table&gt;<br>
+35:	&lt;br&gt;<br>
+36:	<b>&lt;%@ include file="/includes/footer.jsp" %&gt;</b><br>
+37:	<b>&lt;%@ include file="/includes/copyright.jsp" %&gt;</b><br>
+38:	&lt;script type="text/javascript"&gt;window.status = "Done";&lt;/script&gt;<br>
+39:	&lt;/body&gt;<br>
+40:	&lt;/html&gt;<br>
+</code>
+</p>
+	<ul>
+		<li>Line <strong>1-4</strong>:<br>An explanation of the decorator. This way different people working on the decorator are quickly up to speed.</li>
+		<li>Line <strong>5</strong>:<br>This is needed for the <code>decorator:</code> tags to work (also needed on all pages that work with inline decorators (<a href="tags.html#page:applyDecorator">page:applyDecorator</a>).</li>
+		<li>Line <strong>6</strong>:<br>Sets the necessary response headers to let the browser cache the page. Omit this line if your application is real dynamic (changing data).</li>
+		<li>Line <strong>10</strong>:<br>If the requested page doesn't have a title, the default title is used ("INTRANET").</li>
+		<li>Line <strong>15</strong>:<br>The status bar gets a message when the page is loading.</li>
+		<li>Line <strong>30</strong>:<br>The entire body of the requested page has the <code>docBody</code> class. This way the navigation and body do not have to have the same font.</li>
+	</ul>
+
+	<p>Now open <code>WEB-INF/decorators.xml</code> with your favorite editor
+	and let SiteMesh know there is a decorator (with a mapping):</p>
+
+<pre style="border: 1px solid #999999; padding: 5px">
+&lt;decorators defaultdir="/decorators"&gt;
+    &lt;decorator name="main" page="<b>main.jsp</b>"&gt;
+        &nbsp;&nbsp;&lt;pattern&gt;<b>/*</b>&lt;/pattern&gt;
+    &lt;/decorator&gt;
+&lt;/decorators&gt;
+</pre>
+
+	<p>Now deploy the web application, go to the welcome page, and the main decorator will be applied.</p>
+
+	<h3>More examples</h3>
+
+	<p>More examples are included with the SiteMesh distribution, under the
+	<a href="https://sitemesh.dev.java.net/source/browse/sitemesh/src/example-webapp/">src/example-webapp</a> directory.
+	If the examples don't give you enough to go on, take a look at SiteMesh in action, download the petsoar-app at
+	<a href="http://www.wiley.com/legacy/compbooks/walnes/">http://www.wiley.com/legacy/compbooks/walnes/</a>.</p>
+</body>
+</html>
