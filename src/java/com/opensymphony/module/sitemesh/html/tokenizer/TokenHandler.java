@@ -14,7 +14,7 @@ public interface TokenHandler {
     /**
      * Before attempting to parse a tag, the tokenizer will ask the handler whether the tag should be processed - avoiding
      * additional tag parsing makes the tokenizer quicker.
-     * <p/>
+     * <br>
      * If true is returned, the tokenizer will fully parse the tag and pass it into the {@link #tag(com.opensymphony.module.sitemesh.html.Tag)} method.
      * If false is returned, the tokenizer will not try to parse the tag and pass it to the #{@link #text(com.opensymphony.module.sitemesh.html.Text)} method,
      * untouched.

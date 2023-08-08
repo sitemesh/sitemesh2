@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 
 /**
  * A leaner, meaner version of StringBuffer.
- * <p/>
+ * <br>
  * It provides basic functionality to handle dynamically-growing
  * char arrays as quickly as possible. This class is not threadsafe.
  * 
@@ -57,7 +57,7 @@ public class CharArray
     * If the new size is less than the current size, the data in the
     * internal array will be truncated. If the new size is &lt;= 0,
     * the array will be reset to empty (but, unlike StringBuffer, the
-    * internal array will NOT be shrunk). If the new size is &gt the
+    * internal array will NOT be shrunk). If the new size is &gt; the
     * current size, the array will be padded out with null characters
     * (<tt>'&#92;u0000'</tt>).
     *
@@ -226,11 +226,11 @@ public class CharArray
     *
     * This is a specialized method to help speed up the FastPageParser
     * slightly.
-    * <p/>
+    * <br>
     * The supplied string is assumed to contain only uppercase ASCII
     * characters. The offset indicates the offset into the character
     * array that the comparison should start from.
-    * <p/>
+    * <br>
     * If (and only if) the supplied string and the relevant portion of the
     * character array are considered equal, this method will return <tt>true</tt>.
     */

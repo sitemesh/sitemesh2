@@ -40,10 +40,10 @@ public interface Tag {
     String getName();
 
     /**
-     * Type of tag: <br/>
-     * &lt;blah&gt; - Tag.OPEN<br/>
-     * &lt;/blah&gt; - Tag.CLOSE<br/>
-     * &lt;blah/&gt; - Tag.EMPTY<br/>
+     * Type of tag: <br>
+     * &lt;blah&gt; - Tag.OPEN<br>
+     * &lt;/blah&gt; - Tag.CLOSE<br>
+     * &lt;blah/&gt; - Tag.EMPTY<br>
      */
     int getType();
 

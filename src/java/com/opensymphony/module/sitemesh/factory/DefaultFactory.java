@@ -29,12 +29,12 @@ import java.util.*;
  * default configuration if <code>sitemesh.xml</code> does not exist.
  *
  * <p>To use the <code>sitemesh.configfile</code> parameter, add the following to your web.xml:
- * <pre>
+ * <code>
  * &lt;context-param&gt;
  *      &lt;param-name&gt;sitemesh.configfile&lt;/param-name&gt;
  *      &lt;param-value&gt;/WEB-INF/etc/sitemesh.xml&lt;/param-value&gt;
  *  &lt;/context-param&gt;
- * </pre>
+ * </code>
  * </p>
  * 
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>

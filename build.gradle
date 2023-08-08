@@ -21,6 +21,7 @@ sourceSets.test.java.srcDir file('src/test')
 
 javadoc {
     failOnError = false
+    exclude '**/Lexer.java'
 }
 
 java {

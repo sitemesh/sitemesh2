@@ -7,11 +7,11 @@ import java.io.Writer;
  * This is a mechanism that allows large SiteMesh requests to be spilled out of memory
  * and into secondary storage.  This means that a fixed amount of memory can be used for a SiteMesh
  * request instead of filling till memory is exhausted.
- * <p/>
+ * <br>
  * An implementation of this interface should be LAZY.  It should not open its secondary storage
  * until the first char has been written to it.  This will ensure its as cheap as possible
  * IF there is no need to spill into it.
- * <p/>
+ * <br>
  * And implementation MUST also assume that it lives for the life of a request.  A new one will be constructed on
  * every request, another reason to be LAZY on file creation say.
  */
@@ -57,10 +57,10 @@ public interface SecondaryStorage
 
     /**
      * This allows you to ask the secondary storage to clean up after itself.  A try  / finally would be a good place to put this.
-     * <p/>
+     * <br>
      * This should be able to be called multiple times because we want to be able to always cleanup in case of exceptions
      * as well an blue sky paths.
-     * <p/>
+     * <br>
      * Really no exceptions should be propagated from this method.
      */
     public void cleanUp();

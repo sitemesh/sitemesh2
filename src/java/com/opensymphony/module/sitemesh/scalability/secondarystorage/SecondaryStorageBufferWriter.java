@@ -12,12 +12,12 @@ import java.util.TreeMap;
 
 /**
  * This writer allows for secondary storage to be use If the body of the response its really large
- * <p/>
- * It will ensure that everything up to the <body> tage is in memory before spilling over, so that further parsing can
+ * <br>
+ * It will ensure that everything up to the &lt;body&gt; tage is in memory before spilling over, so that further parsing can
  * use memory access to find important page details.  But if the page gets really large then it will spill into the
  * secondary storage area.
- * <p/>
- * This of course falls down if the <head> section was megabytes in size say but we are deliberately not catering for
+ * <br>
+ * This of course falls down if the &lt;head&gt; section was megabytes in size say but we are deliberately not catering for
  * this situation and hence it would be worse than SiteMesh without spill over.
  */
 public class SecondaryStorageBufferWriter extends CharArrayWriter implements SitemeshWriter

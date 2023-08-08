@@ -112,11 +112,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">TagTokenizer</span>
 extends java.lang.Object</pre>
 <div class="block">Splits a chunk of HTML into 'text' and 'tag' tokens, for easy processing. Is VERY tolerant to badly formed HTML.
- <p/>
+ <br>
  <h3>Usage</h3>
- <p/>
+ <br>
  You need to supply a custom <a href="../../../../../../com/opensymphony/module/sitemesh/html/tokenizer/TokenHandler.html" title="interface in com.opensymphony.module.sitemesh.html.tokenizer"><code>TokenHandler</code></a> that will receive callbacks as text and tags are processed.
- <p/>
+ <br>
  <pre>char[] input = ...;
  HTMLTagTokenizer tokenizer = new HTMLTagTokenizer(input);
  TokenHandler handler = new MyTokenHandler();

@@ -35,8 +35,8 @@ import java.util.Properties;
  * <code>parameter.value</code> property.</p>
  *
  * <p>For example assuming parameter.name=confirm and parameter.value=true
- * the URI myurl.jsp?decorator=mydecorator&confirm=true will map the decorator mydecorator.
- * where as the URIs myurl.jsp?decorator=mydecorator and myurl.jsp?decorator=mydecorator&confirm=false will
+ * the URI myurl.jsp?decorator=mydecorator&amp;confirm=true will map the decorator mydecorator.
+ * where as the URIs myurl.jsp?decorator=mydecorator and myurl.jsp?decorator=mydecorator&amp;confirm=false will
  * not return any decorator.</p>
  *
  * @author <a href="mailto:mcannon@internet.com">Mike Cannon-Brookes</a>

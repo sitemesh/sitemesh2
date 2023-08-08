@@ -49,28 +49,28 @@ import java.io.Writer;
  *     <code>body</code> prefix.
  *   </li>
  * </ul>
- * <h4>Example</h4>
- * <pre>
- *   <xmp>
- *     <html template="funky">
- *       <head>
- *         <title>My Funky Page</title>
- *         <meta name="description" content="Description of my page.">
- *         <meta name="author" content="Bob">
+ * <h3>Example</h3>
+ * <code>
+ *   &lt;xmp&gt;
+ *     &lt;html template="funky"&gt;
+ *       &lt;head&gt;
+ *         &lt;title&gt;My Funky Page&lt;/title&gt;
+ *         &lt;meta name="description" content="Description of my page."&gt;
+ *         &lt;meta name="author" content="Bob"&gt;
  *         ...
- *       </head>
- *       <body text="#ff00ff" bgcolor="green">
+ *       &lt;/head&gt;
+ *       &lt;body text="#ff00ff" bgcolor="green"&gt;
  *         ...
- *       </body>
- *     </html>
- *   </xmp>
+ *       &lt;/body&gt;
+ *     &lt;/html&gt;
+ *   &lt;/xmp&gt;
  * template=funky
  * title=My Funky Page
  * meta.description=Description of my page.
  * meta.author=Bob
  * body.text=#ff00ff
  * body.bgcolor=green
- * </pre>
+ * </code>
  *
  * @author <a href="mailto:joe@truemesh.com">Joe Walnes</a>
  * @version $Revision: 1.3 $
