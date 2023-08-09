@@ -7,9 +7,9 @@
     </head>
 
     <body onload="window.print();">
-        Printed on <%=new java.util.Date()%>.<br/>
+        Printed on <%=new java.util.Date()%>.<br>
         <hr noshade="noshade" size="1"/>
-        <br/>
+        <br>
         <decorator:body />
     </body>
 </html>

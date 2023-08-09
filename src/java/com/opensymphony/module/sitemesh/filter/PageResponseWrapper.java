@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 /**
  * Implementation of HttpServletResponseWrapper that captures page data instead of
  * sending to the writer.
- * <p/>
+ * <br>
  * <p>Should be used in filter-chains or when forwarding/including pages
  * using a RequestDispatcher.</p>
  *

@@ -23,10 +23,10 @@ public class CustomTag implements Tag {
 
 
     /**
-     * Type of tag: <br/>
-     * &lt;blah&gt; - Tag.OPEN<br/>
-     * &lt;/blah&gt; - Tag.CLOSE<br/>
-     * &lt;blah/&gt; - Tag.EMPTY<br/>
+     * Type of tag: <br>
+     * &lt;blah&gt; - Tag.OPEN<br>
+     * &lt;/blah&gt; - Tag.CLOSE<br>
+     * &lt;blah/&gt; - Tag.EMPTY<br>
      */
     public CustomTag(String name, int type) {
         setName(name);
@@ -162,10 +162,10 @@ public class CustomTag implements Tag {
     }
 
     /**
-     * Type of tag: <br/>
-     * &lt;blah&gt; - Tag.OPEN<br/>
-     * &lt;/blah&gt; - Tag.CLOSE<br/>
-     * &lt;blah/&gt; - Tag.EMPTY<br/>
+     * Type of tag: <br>
+     * &lt;blah&gt; - Tag.OPEN<br>
+     * &lt;/blah&gt; - Tag.CLOSE<br>
+     * &lt;blah/&gt; - Tag.EMPTY<br>
      */
     public int getType() {
         return type;
@@ -187,10 +187,10 @@ public class CustomTag implements Tag {
     /**
      * Change the type of the tag.
      *
-     * Type of tag: <br/>
-     * &lt;blah&gt; - Tag.OPEN<br/>
-     * &lt;/blah&gt; - Tag.CLOSE<br/>
-     * &lt;blah/&gt; - Tag.EMPTY<br/>
+     * Type of tag: <br>
+     * &lt;blah&gt; - Tag.OPEN<br>
+     * &lt;/blah&gt; - Tag.CLOSE<br>
+     * &lt;blah/&gt; - Tag.EMPTY<br>
      */
     public void setType(int type) {
         if (type == Tag.OPEN || type == Tag.CLOSE || type == Tag.EMPTY) {

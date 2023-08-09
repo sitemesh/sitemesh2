@@ -67,10 +67,10 @@
 
         <h4>How do you get a reference to the (parent) request from inside an inline decorator?</h4>
         <p>
-            You can use Page.getRequest() to access the HttpServletRequest of the original page.<br/>
+            You can use Page.getRequest() to access the HttpServletRequest of the original page.<br>
             For example:
             <blockquote>
-                <code>&lt;decorator:usePage id="p" /&gt;<br/>
+                <code>&lt;decorator:usePage id="p" /&gt;<br>
                 Path Info = &lt;%= p.getRequest().getPathInfo() %&gt;</code>
             </blockquote>
         </p>
@@ -82,19 +82,19 @@
             <blockquote>
                 Example 1 (using JSP tag):
                 <p>
-                <code>&lt;%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;<br/>
-                &lt;decorator:usePage id="thePage" /&gt;<br/>
+                <code>&lt;%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %&gt;<br>
+                &lt;decorator:usePage id="thePage" /&gt;<br>
                 &lt;% String author = thePage.getProperty("meta.author"); %&gt;</code>
                 </p>
-                Example 2 (pure Java):<br/>
+                Example 2 (pure Java):<br>
                 <p>
-                <code>import com.opensymphony.module.sitemesh.Page;<br/>
-                import com.opensymphony.module.sitemesh.RequestConstants;<br/>
-                ...<br/>
-                Page thePage = request.getAttribute(RequestConstants.PAGE);<br/>
+                <code>import com.opensymphony.module.sitemesh.Page;<br>
+                import com.opensymphony.module.sitemesh.RequestConstants;<br>
+                ...<br>
+                Page thePage = request.getAttribute(RequestConstants.PAGE);<br>
                 String author = thePage.getProperty("meta.author");</code>
                 </p>
-                Example 3 (<a href="velocity-decorators.html">Velocity</a>):<br/>
+                Example 3 (<a href="velocity-decorators.html">Velocity</a>):<br>
                 <p>
                 $page.getProperty("meta.author")
                 </p>
