@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'opensymphony'
-version = '2.4.3'
+version = '2.4.4'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
