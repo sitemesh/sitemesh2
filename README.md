@@ -25,9 +25,9 @@ The latest version of SiteMesh can be obtained from:
 | --------------- | --------------- |
 | Java 7+ | Java 8+ |
 | Servlet API 3.1-4.0.1 | Servlet API 3.1-4.0.1 |
-|[2.4.x](https://github.com/sitemesh/sitemesh2/tree/2.4.x)| [Master Branch](https://github.com/sitemesh/sitemesh2)|
+|[2.4.x](https://github.com/sitemesh/sitemesh2/tree/2.4.x)| [2.5.x](https://github.com/sitemesh/sitemesh2/tree/2.5.x)|
 ||[Java Docs](https://sitemesh.github.io/sitemesh2/api/)|
-| [Download 2.4.3](https://github.com/sitemesh/sitemesh2/releases/tag/2.4.3) | [Download 2.5.0-SNAPSHOT](https://oss.sonatype.org/content/repositories/snapshots/opensymphony/sitemesh/2.5.0-SNAPSHOT/)|
+| [Download 2.4.4](https://github.com/sitemesh/sitemesh2/releases/tag/2.4.4) | [Download 2.5.0](https://github.com/sitemesh/sitemesh2/releases/tag/2.5.0)|
 
 
 Docs:
