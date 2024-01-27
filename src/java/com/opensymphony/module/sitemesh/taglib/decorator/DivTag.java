@@ -11,7 +11,7 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 
 import java.io.IOException;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;

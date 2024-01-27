@@ -14,7 +14,7 @@ import com.opensymphony.module.sitemesh.Decorator;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The EnvEntryDecoratorMapper allows the reference to a web-app environment entry for the

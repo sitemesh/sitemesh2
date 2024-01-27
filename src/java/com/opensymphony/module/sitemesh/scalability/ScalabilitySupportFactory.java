@@ -2,7 +2,7 @@ package com.opensymphony.module.sitemesh.scalability;
 
 import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondaryStorage;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * A host application can provide an instance of this interface that provides configuration

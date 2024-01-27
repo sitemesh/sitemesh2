@@ -13,12 +13,12 @@ import com.opensymphony.module.sitemesh.*;
 import com.opensymphony.module.sitemesh.filter.PageRequestWrapper;
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

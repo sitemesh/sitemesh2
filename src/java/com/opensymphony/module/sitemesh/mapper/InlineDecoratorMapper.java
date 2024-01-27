@@ -14,7 +14,7 @@ import com.opensymphony.module.sitemesh.Page;
 import com.opensymphony.module.sitemesh.RequestConstants;
 import com.opensymphony.module.sitemesh.factory.FactoryException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The InlineDecoratorMapper is used to determine the correct Decorator when

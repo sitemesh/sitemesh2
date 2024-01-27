@@ -1,6 +1,6 @@
 package com.opensymphony.module.sitemesh.factory;
 
-import javax.servlet.FilterConfig;
+import jakarta.servlet.FilterConfig;
 
 /**
  * A base class for factories that know about filterConfig parameters

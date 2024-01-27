@@ -11,8 +11,8 @@ import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondarySt
 import com.opensymphony.module.sitemesh.util.FastByteArrayOutputStream;
 import com.opensymphony.module.sitemesh.scalability.outputlength.OutputLengthObserver;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 

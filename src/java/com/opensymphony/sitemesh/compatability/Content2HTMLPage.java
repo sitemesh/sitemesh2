@@ -3,7 +3,7 @@ package com.opensymphony.sitemesh.compatability;
 import com.opensymphony.module.sitemesh.HTMLPage;
 import com.opensymphony.sitemesh.Content;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;

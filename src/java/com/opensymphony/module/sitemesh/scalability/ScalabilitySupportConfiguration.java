@@ -11,8 +11,8 @@ import com.opensymphony.module.sitemesh.scalability.secondarystorage.SecondarySt
 import com.opensymphony.module.sitemesh.scalability.secondarystorage.TempDirSecondaryStorage;
 import com.opensymphony.module.sitemesh.util.ClassLoaderUtil;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The factory class to give out scalability objects

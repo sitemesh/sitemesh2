@@ -8,9 +8,9 @@ import com.opensymphony.module.sitemesh.PageParser;
 import com.opensymphony.sitemesh.ContentProcessor;
 import com.opensymphony.sitemesh.Content;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**

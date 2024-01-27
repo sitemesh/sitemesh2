@@ -1,7 +1,7 @@
 package com.opensymphony.module.sitemesh.scalability;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletContext;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;

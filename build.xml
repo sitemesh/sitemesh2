@@ -14,8 +14,8 @@
 
     <resolver:resolve>
         <dependencies>
-            <dependency groupId="javax.servlet" artifactId="javax.servlet-api" version="4.0.1" type="jar" scope="compile" />
-            <dependency groupId="javax.servlet.jsp" artifactId="javax.servlet.jsp-api" version="2.3.3" type="jar" scope="compile" />
+            <dependency groupId="jakarta.servlet" artifactId="jakarta.servlet-api" version="4.0.1" type="jar" scope="compile" />
+            <dependency groupId="jakarta.servlet.jsp" artifactId="jakarta.servlet.jsp-api" version="2.3.3" type="jar" scope="compile" />
             <dependency groupId="org.freemarker" artifactId="freemarker" version="2.3.32" type="jar" scope="compile" />
             <dependency groupId="velocity" artifactId="velocity-dep" version="1.4" type="jar" scope="compile" />
             <dependency groupId="velocity-tools" artifactId="velocity-tools" version="1.4" type="jar" scope="compile" />

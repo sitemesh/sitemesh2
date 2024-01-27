@@ -9,7 +9,7 @@
 
 package com.opensymphony.module.sitemesh;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;

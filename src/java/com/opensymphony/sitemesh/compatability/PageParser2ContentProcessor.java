@@ -7,7 +7,7 @@ import com.opensymphony.sitemesh.SiteMeshContext;
 import com.opensymphony.sitemesh.webapp.SiteMeshWebAppContext;
 import com.opensymphony.sitemesh.ContentProcessor;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**

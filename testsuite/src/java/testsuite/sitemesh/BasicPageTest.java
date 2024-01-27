@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 import com.meterware.httpunit.*;
 import testsuite.tester.WebTest;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Test basic capabilities of web-app - no sitemesh specific stuff.

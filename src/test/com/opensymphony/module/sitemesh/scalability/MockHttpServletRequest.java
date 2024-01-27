@@ -1,7 +1,7 @@
 package com.opensymphony.module.sitemesh.scalability;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -493,6 +493,21 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     @Override
     public DispatcherType getDispatcherType() {
+        return null;
+    }
+
+    @Override
+    public String getRequestId() {
+        return null;
+    }
+
+    @Override
+    public String getProtocolRequestId() {
+        return null;
+    }
+
+    @Override
+    public ServletConnection getServletConnection() {
         return null;
     }
 

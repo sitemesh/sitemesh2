@@ -14,7 +14,7 @@ import com.opensymphony.module.sitemesh.Decorator;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The FileDecoratorMapper will treat the name of the decorator as a file-name to use
