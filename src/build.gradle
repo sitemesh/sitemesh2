@@ -18,6 +18,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'opensymphony:sitemesh:2.6.0-SNAPSHOT'
+    implementation 'opensymphony:sitemesh:2.7.0-SNAPSHOT'
 }
 
