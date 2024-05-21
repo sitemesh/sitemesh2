@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 /**
  * TextFilter that substitutes content using a JDK 1.4 regular expression.
  *
- * <h3>Example</h3>
+ * <h2>Example</h2>
  *
  * This will substitute 'Google:Blah' for a link to a google search.
  *

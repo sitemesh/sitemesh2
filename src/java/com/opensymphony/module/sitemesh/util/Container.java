@@ -18,7 +18,7 @@ import java.util.Map;
  * Currently supported containers: Tomcat, Resin, Orion, OC4J, WebLogic, HPAS, JRun,
  * Websphere.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  *
  * <code>if (Container.get() == Container.TOMCAT) { .... }</code>
  *

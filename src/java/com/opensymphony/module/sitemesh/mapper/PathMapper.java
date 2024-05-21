@@ -19,7 +19,7 @@ import java.util.Iterator;
  * in the Servlet 2.3 API on the whole. Wildcard patterns are also supported, using
  * any combination of * and ?.
  *
- * <h3>Example</h3>
+ * <h2>Example</h2>
  *
  * <blockquote><code>
  * PathMapper pm = new PathMapper();<br>

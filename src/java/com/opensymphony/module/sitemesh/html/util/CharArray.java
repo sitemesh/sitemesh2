@@ -59,7 +59,7 @@ public class CharArray
     * the array will be reset to empty (but, unlike StringBuffer, the
     * internal array will NOT be shrunk). If the new size is &gt; the
     * current size, the array will be padded out with null characters
-    * (<tt>'&#92;u0000'</tt>).
+    * (<code>'&#92;u0000'</code>).
     *
     * @param newSize the new size of the character array
     */
@@ -95,7 +95,7 @@ public class CharArray
    /**
     * Appends an existing CharArray on to this one.
     *
-    * Passing in a <tt>null</tt> CharArray will result in a <tt>NullPointerException</tt>.
+    * Passing in a <code>null</code> CharArray will result in a <code>NullPointerException</code>.
     */
    public CharArray append(CharArray chars)
    {
@@ -134,7 +134,7 @@ public class CharArray
    /**
     * Appends the supplied string to the end of this character array.
     *
-    * Passing in a <tt>null</tt> string will result in a <tt>NullPointerException</tt>.
+    * Passing in a <code>null</code> string will result in a <code>NullPointerException</code>.
     */
    public CharArray append(String str)
    {
@@ -207,7 +207,7 @@ public class CharArray
     * Returns the hashcode for a <em>lowercase</em> version of the array's substring
     * (as set by the {@link #setSubstr(int, int)} method).
     *
-    * This uses the same calculation as the <tt>String.hashCode()</tt> method
+    * This uses the same calculation as the <code>String.hashCode()</code> method
     * so that it remains compatible with the hashcodes of normal strings.
     */
    public int substrHashCode()
@@ -232,7 +232,7 @@ public class CharArray
     * array that the comparison should start from.
     * <br>
     * If (and only if) the supplied string and the relevant portion of the
-    * character array are considered equal, this method will return <tt>true</tt>.
+    * character array are considered equal, this method will return <code>true</code>.
     */
    public boolean compareLower(String lowerStr, int offset)
    {
