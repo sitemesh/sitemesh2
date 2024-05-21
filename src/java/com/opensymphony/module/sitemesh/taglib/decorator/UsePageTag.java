@@ -11,8 +11,8 @@ package com.opensymphony.module.sitemesh.taglib.decorator;
 
 import com.opensymphony.module.sitemesh.taglib.AbstractTag;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * Expose the Page as a bean to the page which can then be accessed

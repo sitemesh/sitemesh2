@@ -9,8 +9,8 @@
 
 package com.opensymphony.module.sitemesh.taglib.page;
 
-import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.tagext.BodyTagSupport;
+import jakarta.servlet.jsp.tagext.Tag;
 
 /**
  * Add a parameter to the inline Decorator, as if specified in the Page.

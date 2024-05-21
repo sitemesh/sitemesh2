@@ -1,6 +1,6 @@
 package com.opensymphony.sitemesh.webapp.decorator;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 /**
  * Decorator that dispatches to another path in A DIFFERENT WEB-APP in the same Servlet Container (such as a JSP or path mapped to a Servlet).

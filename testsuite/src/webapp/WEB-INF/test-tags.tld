@@ -14,7 +14,7 @@
 
     <tag>
         <name>testTag</name>
-        <tag-class>javax.servlet.jsp.tagext.BodyTagSupport</tag-class>
+        <tag-class>jakarta.servlet.jsp.tagext.BodyTagSupport</tag-class>
         <body-content>JSP</body-content>
     </tag>
 
