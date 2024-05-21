@@ -16,8 +16,7 @@ configurations {
     lexer
 }
 
-sourceSets.main.java.srcDirs += ['src/java','build/generated-sources/jflex']
-sourceSets.test.java.srcDir file('src/test')
+sourceSets.main.java.srcDirs += ['build/generated-sources/jflex']
 
 javadoc {
     failOnError = false
@@ -35,7 +34,7 @@ jar {
             include '*.tld'
         }
     }
-    from('src/java') {
+    from('src/main/java') {
         include '**/*.xml'
     }
 }
@@ -61,7 +60,7 @@ dependencies {
 
 compileJava.doFirst {
     ant.taskdef classname: 'JFlex.anttask.JFlexTask', name: 'jflex', classpath: configurations.lexer.asPath
-    ant.jflex(file: 'src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex', destdir: 'build/generated-sources/jflex')
+    ant.jflex(file: 'src/main/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex', destdir: 'build/generated-sources/jflex')
 }
 
 publishing {
