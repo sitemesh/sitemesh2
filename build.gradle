@@ -7,10 +7,10 @@ plugins {
 }
 
 group = 'opensymphony'
-version = '2.6.0-SNAPSHOT'
+version = '2.7.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 configurations {
     lexer
