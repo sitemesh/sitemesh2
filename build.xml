@@ -38,7 +38,7 @@
         <java classpathref="jflexcp" classname="JFlex.Main" fork="yes">
             <arg value="-d"/>
             <arg value="build/java/com/opensymphony/module/sitemesh/html/tokenizer"/>
-            <arg value="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"/>
+            <arg value="src/main/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"/>
         </java>
         <delete file="build/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java~"/>
     </target>
@@ -53,7 +53,7 @@
         <!-- Determine if lexer needs regenerating -->
         <uptodate
             property="lexer.uptodate"
-            srcfile="src/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"
+            srcfile="src/main/java/com/opensymphony/module/sitemesh/html/tokenizer/lexer.flex"
             targetfile="build/java/com/opensymphony/module/sitemesh/html/tokenizer/Lexer.java"/>
         <antcall target="jflex"/>
 
@@ -68,7 +68,7 @@
             source="1.8"
             target="1.8"
             >
-            <src path="src/java"/>
+            <src path="src/main/java"/>
             <src path="build/java"/>
         </javac>
     </target>
@@ -76,7 +76,7 @@
     <target name="test" depends="compile" description="Run all unit tests">
         <mkdir dir="build/test-classes"/>
         <mkdir dir="build/test-results"/>
-        <javac srcdir="src/test" destdir="build/test-classes" classpathref="cp" classpath="build/classes"/>
+        <javac srcdir="src/test/java" destdir="build/test-classes" classpathref="cp" classpath="build/classes"/>
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" classpathref="cp"/>
         <echo message="Running unit tests..."/>
         <junit printsummary="no" haltonfailure="yes" fork="yes" forkmode="once" dir=".">
@@ -88,7 +88,7 @@
             <formatter type="brief" usefile="no"/>
             <formatter type="xml"/>
             <batchtest todir="build/test-results">
-                <fileset dir="src/test">
+                <fileset dir="src/test/java">
                     <include name="**/*Test.java"/>
                 </fileset>
             </batchtest>
@@ -99,7 +99,7 @@
         <mkdir dir="docs/api"/>
 
         <!-- stylesheetfile="src/docs/api.css" -->
-        <javadoc sourcepath="src/java"
+        <javadoc sourcepath="src/main/java"
             destdir="docs/api"
             packagenames="com.opensymphony.*"
             classpathref="cp"
@@ -137,7 +137,7 @@
     <target name="jar" depends="compile">
         <mkdir dir="dist"/>
         <copy todir="build/classes">
-             <fileset dir="src/java" excludes="**/*.java,**/*.flex"/>
+             <fileset dir="src/main/java" excludes="**/*.java,**/*.flex"/>
         </copy>
         <jar jarfile="dist/${name}-${version}.jar" basedir="build/classes" excludes="**/servlets/**">
             <metainf dir="src/etc/tld/jsp1.2" includes="*.tld"/>
