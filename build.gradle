@@ -30,7 +30,7 @@ java {
 
 jar {
     metaInf {
-        from('src/etc/tld/jsp1.2') {
+        from('src/etc/tld') {
             include '*.tld'
         }
     }
