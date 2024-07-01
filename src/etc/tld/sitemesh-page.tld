@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-jsptaglibrary_3_0.xsd"
+    version="3.0">
 
-<taglib>
-
-	<tlibversion>1.0</tlibversion>
-	<jspversion>1.1</jspversion>
-	<shortname>sitemesh-page-tags</shortname>
+	<tlib-version>3.0</tlib-version>
+	<short-name>sitemesh-page-tags</short-name>
 	<uri>http://www.opensymphony.com/sitemesh/page</uri>
 
 	<tag>
 		<name>applyDecorator</name>
-		<tagclass>com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag</tagclass>
-		<bodycontent>JSP</bodycontent>
+		<tag-class>com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag</tag-class>
+		<body-content>JSP</body-content>
 		<attribute>
 			<name>name</name>
 			<required>false</required>
@@ -37,18 +37,18 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-    <attribute>
-      <name>encoding</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
+		<attribute>
+			<name>encoding</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 
 	<!-- Deprecated tag: use applyDecorator instead -->
 	<tag>
 		<name>apply-decorator</name>
-		<tagclass>com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag</tagclass>
-		<bodycontent>JSP</bodycontent>
+		<tag-class>com.opensymphony.module.sitemesh.taglib.page.ApplyDecoratorTag</tag-class>
+		<body-content>JSP</body-content>
 		<attribute>
 			<name>name</name>
 			<required>false</required>
@@ -69,22 +69,22 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-    <attribute>
+    	<attribute>
 			<name>contentType</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-    <attribute>
-      <name>encoding</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
+    	<attribute>
+      		<name>encoding</name>
+      		<required>false</required>
+      		<rtexprvalue>true</rtexprvalue>
+    	</attribute>
 	</tag>
 
 	<tag>
 		<name>param</name>
-		<tagclass>com.opensymphony.module.sitemesh.taglib.page.ParamTag</tagclass>
-		<bodycontent>JSP</bodycontent>
+		<tag-class>com.opensymphony.module.sitemesh.taglib.page.ParamTag</tag-class>
+		<body-content>JSP</body-content>
 		<attribute>
 			<name>name</name>
 			<required>false</required>
