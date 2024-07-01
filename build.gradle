@@ -29,11 +29,6 @@ java {
 }
 
 jar {
-    metaInf {
-        from('src/etc/tld') {
-            include '*.tld'
-        }
-    }
     from('src/main/java') {
         include '**/*.xml'
     }

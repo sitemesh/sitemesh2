@@ -3,9 +3,8 @@ plugins {
     id "org.gretty" version "4.1.4"
 }
 
-gretty {
-    contextPath = '/'
-}
+gretty.contextPath = '/'
+
 defaultTasks 'jettyRun'
 
 description = 'SiteMesh2: Example Web-app'
@@ -16,6 +15,5 @@ repositories {
 }
 
 dependencies {
-    implementation 'opensymphony:sitemesh:2.7.0-SNAPSHOT'
+    implementation "opensymphony:sitemesh:${rootProject.version}"
 }
-
