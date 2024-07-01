@@ -8,8 +8,6 @@ gretty {
 }
 defaultTasks 'jettyRun'
 
-webAppDirName = 'example-webapp'
-buildDir = '../build'
 description = 'SiteMesh2: Example Web-app'
 
 repositories {
