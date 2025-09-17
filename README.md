@@ -36,10 +36,12 @@ https://sitemesh.github.io/sitemesh2/
 
 See the latest snapshot in action by running:
 ```
+cd example
 ../gradlew
 ```
 or for Windows run:
 ```
+cd example
 ../gradlew.bat
 ```
 from the `src` directory.
