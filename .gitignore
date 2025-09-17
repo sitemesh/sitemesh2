@@ -7,5 +7,4 @@ out
 .idea
 dist
 .gradle
-gradle.properties
 .DS_Store
